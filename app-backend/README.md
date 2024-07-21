@@ -54,8 +54,6 @@ $ docker compose up -d
 # list docker that running
 $ docker ps
 
-# production mode
-$ npm run start:prod
 ```
 
 ```yml
