@@ -45,18 +45,48 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## วิธีใช้ Docker
 
 ```bash
-# unit tests
-$ npm run test
+# start docker
+$ docker compose up -d
 
-# e2e tests
-$ npm run test:e2e
+# list docker that running
+$ docker ps
 
-# test coverage
-$ npm run test:cov
+# production mode
+$ npm run start:prod
 ```
+
+```yml
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: <Username>
+      MONGO_INITDB_ROOT_PASSWORD: <Password>
+    ports:
+      - '<Port>:27017'
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+    driver: local
+```
+
+กรณีต้องการเปลี่ยน username password port ให้เปลี่ยนที่ 'docker-compose.yml'
+
+## Mongodb Compass
+
+เมื่อเปิด run Docker เสร็จแล้วสามารถเชื่อมต่อ mongodb ได้ด้วยการใส่ URI : mongodb://<Username>:<Password>@localhost:<Port>/
+ในกรณีปกติจะใช้ค่าดังนี้
+Username : root
+Password : example
+Port : 27017
+mongodb://root:example@localhost:27017/
+ถ้าสามารถเชื่อมต่อได้แล้วก็สามารถเริ่มทำงานได้
 
 ## Support
 
