@@ -14,6 +14,13 @@ export class User {
 
   @Column({ name: 'password' })
   password: string;
+
+  @Column({ name: 'firstname' })
+  firstname: string;
+
+  @Column({ name: 'lastname' })
+  lastname: string;
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
@@ -22,10 +29,4 @@ export class User {
       this.password = await bcrypt.hash(this.password, saltRounds);
     }
   }
-
-  @Column({ name: 'firstname' })
-  firstname: string;
-
-  @Column({ name: 'lastname' })
-  lastname: string;
 }
