@@ -1,6 +1,6 @@
 import { Entity, Column, ObjectIdColumn, Unique } from 'typeorm';
-import { BeforeInsert, BeforeUpdate } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+// import { BeforeInsert, BeforeUpdate } from 'typeorm';
+// import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb';
 
 @Entity()
@@ -21,12 +21,15 @@ export class User {
   @Column({ name: 'lastname' })
   lastname: string;
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    if (this.password) {
-      const saltRounds = 10;
-      this.password = await bcrypt.hash(this.password, saltRounds);
-    }
-  }
+  @Column({ name: 'role' })
+  role: string;
+
+  // @BeforeInsert()
+  // @BeforeUpdate()
+  // async hashPassword() {
+  //   if (this.password) {
+  //     const saltRounds = 10;
+  //     this.password = await bcrypt.hash(this.password, saltRounds);
+  //   }
+  // }
 }

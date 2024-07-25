@@ -12,7 +12,8 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    return this.userRepository.save(createUserDto);
+    const user = { ...createUserDto, role: 'default' };
+    return this.userRepository.save(user);
   }
 
   async findAll() {
