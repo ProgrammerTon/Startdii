@@ -1,4 +1,11 @@
-import { Entity, Column, ObjectIdColumn, Unique } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ObjectIdColumn,
+  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 // import { BeforeInsert, BeforeUpdate } from 'typeorm';
 // import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb';
@@ -28,6 +35,12 @@ export class User {
 
   @Column({ name: 'roles' })
   roles: Role[];
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 
   // @BeforeInsert()
   // @BeforeUpdate()
