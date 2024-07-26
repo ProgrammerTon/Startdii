@@ -4,10 +4,9 @@ import { Entity, Column, ObjectIdColumn, Unique } from 'typeorm';
 import { ObjectId } from 'mongodb';
 
 export enum Role {
-  Admin = "admin",
-  Customer = "customer",
+  Admin = 'admin',
+  Customer = 'customer',
 }
-
 
 @Entity()
 @Unique(['email'])
@@ -27,8 +26,8 @@ export class User {
   @Column({ name: 'lastname' })
   lastname: string;
 
-  @Column({ name: 'role' })
-  role: Role;
+  @Column({ name: 'roles' })
+  roles: Role[];
 
   // @BeforeInsert()
   // @BeforeUpdate()

@@ -15,6 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     // This payload will be the decrypted token payload you provided when signing the token
-    return { userId: payload.sub, email: payload.email };
+    // console.log('At Validate : ', payload);
+    return { id: payload.sub, email: payload.email, roles: payload.roles };
   }
 }

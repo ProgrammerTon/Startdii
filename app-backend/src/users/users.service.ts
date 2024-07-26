@@ -14,7 +14,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = plainToInstance(User, createUserDto);
-    user.role = Role.Customer;
+    user.roles = [Role.Customer];
     return this.userRepository.save(user);
   }
 
