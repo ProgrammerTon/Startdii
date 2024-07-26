@@ -3,7 +3,11 @@ import { Entity, Column, ObjectIdColumn, Unique } from 'typeorm';
 // import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb';
 
-export type UserRoleType = 'admin' | 'default';
+export enum Role {
+  Admin = "admin",
+  Customer = "customer",
+}
+
 
 @Entity()
 @Unique(['email'])
@@ -24,7 +28,7 @@ export class User {
   lastname: string;
 
   @Column({ name: 'role' })
-  role: UserRoleType;
+  role: Role;
 
   // @BeforeInsert()
   // @BeforeUpdate()

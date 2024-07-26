@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User, Role } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 
@@ -14,7 +14,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = plainToInstance(User, createUserDto);
-    user.role = 'default';
+    user.role = Role.Customer;
     return this.userRepository.save(user);
   }
 
