@@ -41,13 +41,4 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  // @BeforeInsert()
-  // @BeforeUpdate()
-  // async hashPassword() {
-  //   if (this.password) {
-  //     const saltRounds = 10;
-  //     this.password = await bcrypt.hash(this.password, saltRounds);
-  //   }
-  // }
 }
