@@ -1,10 +1,10 @@
-import { View, Text, SafeAreaView } from "react-native";
+import { View, Text, SafeAreaView, StatusBar } from "react-native";
 import React from "react";
 import { Slot } from "expo-router";
 
 export default function RootLayout() {
   return (
-    <View>
+    <View className="w-full h-full flex-1">
       <Slot />
     </View>
   );
