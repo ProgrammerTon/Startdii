@@ -1,11 +1,13 @@
 import { View, Text, SafeAreaView, StatusBar } from "react-native";
 import React from "react";
-import { Slot } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 
 export default function RootLayout() {
   return (
-    <View className="w-full h-full flex-1">
-      <Slot />
-    </View>
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+    </Stack>
   );
 }
