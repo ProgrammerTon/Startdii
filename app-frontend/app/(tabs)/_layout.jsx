@@ -7,19 +7,19 @@ export default function TabsLayout() {
     <View className="h-full">
       <Tabs>
         <Tabs.Screen
-          name="home/index"
+          name="home"
           options={{ title: "Home", headerShown: false }}
         />
         <Tabs.Screen
-          name="profile/index"
+          name="profile"
           options={{ title: "Profile", headerShown: false }}
         />
         <Tabs.Screen
-          name="guild/index"
+          name="guild"
           options={{ title: "Guild", headerShown: false }}
         />
         <Tabs.Screen
-          name="source/index"
+          name="source"
           options={{ title: "Source", headerShown: false }}
         />
       </Tabs>
