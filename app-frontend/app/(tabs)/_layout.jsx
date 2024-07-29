@@ -18,6 +18,10 @@ export default function TabsLayout() {
           name="guild"
           options={{ title: "Guild", headerShown: false }}
         />
+        <Tabs.Screen
+          name="source"
+          options={{ title: "Source", headerShown: false }}
+        />
       </Tabs>
     </View>
   );
