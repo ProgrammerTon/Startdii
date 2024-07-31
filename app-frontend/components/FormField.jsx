@@ -12,7 +12,7 @@ const FormField = ({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <View className={`space-y-2 ${otherStyles}`}>
+    <View className={`space-y-2 drop-shadow-xl ${otherStyles}`}>
       <Text className="text-base text-black font-medium">{title}</Text>
 
       <View className="bg-white rounded-[50px] border-none shadow-lg flex flex-row items-center w-11/12 h-[40px]">

@@ -12,6 +12,7 @@ import { useState } from "react";
 import { ScrollView } from "react-native";
 import UserService from "../../services/UserService";
 import { router } from "expo-router";
+import CustomButton from "../../components/CustomButton";
 
 export default function SignUp() {
   const [submitting, setSubmitting] = useState(false);
@@ -60,13 +61,13 @@ export default function SignUp() {
     <SafeAreaView className="h-full bg-[#FEDD3A]">
       <ScrollView>
         <View
-          className="flex-1 justify-center items-center px-11 my-6"
+          className="flex-1 justify-center items-center px-2 my-6"
           style={{
             minHeight: Dimensions.get("window").height - 100,
           }}
         >
           <Text className="text-2xl font-bold text-black">Sign up</Text>
-          <View className=" mx-4 my-5 p-5 rounded-[10px] bg-[#F6F6F6] w-full flex justify-center items-center">
+          <View className=" mx-4 my-5 p-5 rounded-[10px] bg-[#F6F6F6] w-full flex justify-center items-center drop-shadow-2xl max-w-[311px]">
             <FormField
               title="Firstname"
               value={form.firstname}
@@ -101,21 +102,21 @@ export default function SignUp() {
               handleChangeText={(e) => setForm({ ...form, confirmPassword: e })}
               otherStyles="mt-3"
             />
-            <View className="flex flex-row justify-between px-2 gap-11 mt-0.5">
-              <TouchableOpacity
-                className="bg-[#D9D9D9] h-[44px] w-[92px] flex justify-center items-center rounded-xl mt-5"
-                onPress={() => {
+            <View className="mt-3 relative w-10/12">
+              <CustomButton
+                title="Cancel"
+                containerStyles="absolute left-0 -bottom-11 bg-[#D9D9D9]"
+                textStyles={"text-black font-semibold"}
+                handlePress={() => {
                   router.replace("/");
                 }}
-              >
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="bg-[#0270ED] h-[44px] w-[92px] flex justify-center items-center rounded-xl mt-5"
-                onPress={submit}
-              >
-                <Text className="text-white">Create</Text>
-              </TouchableOpacity>
+              />
+              <CustomButton
+                title="Create"
+                handlePress={submit}
+                textStyles={"text-white"}
+                containerStyles="absolute right-0 -bottom-11"
+              />
             </View>
           </View>
           <View>
