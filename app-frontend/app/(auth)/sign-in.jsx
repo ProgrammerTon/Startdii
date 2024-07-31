@@ -1,10 +1,97 @@
-import { View, Text } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Dimensions,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import FormField from "../../components/FormField";
 import React from "react";
+import { useState } from "react";
+import { ScrollView } from "react-native";
+import AuthService from "../../services/AuthService"
+import { router } from "expo-router";
 
-export default function SignIn() {
+export default function SignUp() {
+  const [submitting, setSubmitting] = useState(false);
+  const [user, setUser] = useState(null);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const submit = async () => {
+    if (
+      form.email === "" ||
+      form.password === ""
+    ) {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+    setSubmitting(true);
+    try {
+      const result = await AuthService.loginUser(
+        form.email,
+        form.password,
+      )
+      setUser(result);
+      // setIsLogged(true);
+
+      // router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <View>
-      <Text>SignIn</Text>
-    </View>
+    <SafeAreaView className="h-full bg-[#FEDD3A]">
+      <ScrollView>
+        <View
+          className="flex-1 justify-center items-center px-11 my-6"
+          style={{
+            minHeight: Dimensions.get("window").height - 100,
+          }}
+        >
+          <Text className="text-2xl font-bold text-black">Sign in</Text>
+          <View className=" mx-4 my-5 p-5 rounded-[10px] bg-[#F6F6F6] w-full flex justify-center items-center">
+            <FormField
+              title="Email"
+              value={form.email}
+              handleChangeText={(e) => setForm({ ...form, email: e })}
+              otherStyles="mt-3"
+              keyboardType="email-address"
+            />
+
+            <FormField
+              title="Password"
+              value={form.password}
+              handleChangeText={(e) => setForm({ ...form, password: e })}
+              otherStyles="mt-3"
+            />
+            <View className="flex flex-row justify-between px-2 gap-11 mt-0.5">
+              <TouchableOpacity
+                className="bg-[#D9D9D9] h-[44px] w-[92px] flex justify-center items-center rounded-xl mt-5"
+                onPress={() => {
+                  router.replace("/");
+                }}
+              >
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="bg-[#0270ED] h-[44px] w-[92px] flex justify-center items-center rounded-xl mt-5"
+                onPress={submit}
+              >
+                <Text className="text-white">Sign in</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            <Text className="text-xl text-black">{user?.email}</Text>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

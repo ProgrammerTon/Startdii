@@ -22,6 +22,12 @@ export default function App() {
       >
         <Text className="text-lg">Sign Up</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/sign-in")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Sign In</Text>
+      </TouchableHighlight>
     </SafeAreaView>
   );
 }

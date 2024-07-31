@@ -65,7 +65,7 @@ export default function SignUp() {
             minHeight: Dimensions.get("window").height - 100,
           }}
         >
-          <Text className="text-2xl font-bold text-black">SignUp</Text>
+          <Text className="text-2xl font-bold text-black">Sign up</Text>
           <View className=" mx-4 my-5 p-5 rounded-[10px] bg-[#F6F6F6] w-full flex justify-center items-center">
             <FormField
               title="Firstname"
