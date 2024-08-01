@@ -12,3 +12,6 @@
 
 ## Front-end
 ตอนนี้ยังไม่มีอะไรUpdateนอกจากใช้ React-Native นะครับ
+- NodeJs : https://nodejs.org/en/download/package-manager (Front/Back) [สำหรับรันJavaScript ที่เครื่อง🏃🏾‍♂️ ]
+- Git : https://git-scm.com/downloads (Front/Back) [ไว้สำหรับฝากโค้ด / ทำงานร่วมกัน🤼 ]
+- Android Emulator(Optional) : https://docs.expo.dev/get-started/set-up-your-environment/?mode=expo-go&platform=android&device=simulated
