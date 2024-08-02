@@ -37,6 +37,24 @@ const comments = [
     created_at: "22/07/24",
     content: "This is content",
   },
+  {
+    id: "5",
+    ownerName: "Juaz",
+    created_at: "22/07/24",
+    content: "This is content",
+  },
+  {
+    id: "6",
+    ownerName: "Juaz",
+    created_at: "22/07/24",
+    content: "This is content",
+  },
+  {
+    id: "7",
+    ownerName: "Juaz",
+    created_at: "22/07/24",
+    content: "This is content",
+  },
 ];
 
 export default function SourceDetail() {
@@ -49,33 +67,32 @@ export default function SourceDetail() {
   const score = 4.8;
   const count = 999;
   return (
-    <SafeAreaView className="flex-1 justify-center items-center">
-      <ScrollView className="flex flex-col w-11/12">
-        <Text className="text-3xl">{title}</Text>
-        <Text className="text-xl">{description}</Text>
-        <TagList tags={tags} title={title}></TagList>
-        <View className="flex flex-row justify-between items-baseline">
-          <Text>{updated_at}</Text>
-          <View className="border-[#0270ED] border-opacity-100 border-2 p-2 rounded-xl bg-white">
-            <Text>By {ownerName}</Text>
-          </View>
+    <ScrollView className="w-full">
+      <Text className="text-3xl">{title}</Text>
+      <Text className="text-xl">{description}</Text>
+      <TagList tags={tags} title={title}></TagList>
+      <View className="flex flex-row justify-between items-baseline">
+        <Text>{updated_at}</Text>
+        <View className="border-[#0270ED] border-opacity-100 border-2 p-2 rounded-xl bg-white">
+          <Text>By {ownerName}</Text>
         </View>
-        <View className="flex flex-row gap-4 justify-evenly">
-          <TouchableOpacity>
-            <Text>Preview</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Download</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>Share</Text>
-          </TouchableOpacity>
-        </View>
-        <View className="flex flex-row items-baseline">
-          <Text className="font-bold text-xl">{score}</Text>
-          <Text>({count})</Text>
-        </View>
-      </ScrollView>
+      </View>
+      <View className="flex flex-row gap-4 justify-evenly">
+        <TouchableOpacity>
+          <Text>Preview</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text>Download</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text>Share</Text>
+        </TouchableOpacity>
+      </View>
+      <View className="flex flex-row items-baseline">
+        <Text className="font-bold text-xl">{score}</Text>
+        <Text>({count})</Text>
+      </View>
+
       <FormField placeholder="comment" />
       <FlatList
         data={comments}
@@ -89,6 +106,6 @@ export default function SourceDetail() {
         keyExtractor={(item) => item.id}
         className="w-10/12"
       />
-    </SafeAreaView>
+    </ScrollView>
   );
 }
