@@ -28,6 +28,7 @@ export default function Source() {
         data={DATA}
         renderItem={({ item }) => <Item title={item.title} />}
         keyExtractor={(item) => item.id}
+        className="w-10/12"
       />
     </SafeAreaView>
   );
