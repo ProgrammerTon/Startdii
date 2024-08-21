@@ -1,44 +1,35 @@
-import {
-  Entity,
-  Column,
-  ObjectIdColumn,
-  Unique,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
 // import { BeforeInsert, BeforeUpdate } from 'typeorm';
 // import * as bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb';
+import { Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export enum Role {
   Admin = 'admin',
   Customer = 'customer',
 }
 
-@Entity()
-@Unique(['email'])
+export type UserDocument = User & Document;
+
+@Schema({ timestamps: true })
 export class User {
-  @ObjectIdColumn()
+  @Prop({ type: ObjectId, auto: true })
   id?: ObjectId;
 
-  @Column({ name: 'email' })
+  @Prop({ name: 'email', unique: true })
   email: string;
 
-  @Column({ name: 'password' })
+  @Prop({ name: 'password' })
   password: string;
 
-  @Column({ name: 'firstname' })
+  @Prop({ name: 'firstname' })
   firstname: string;
 
-  @Column({ name: 'lastname' })
+  @Prop({ name: 'lastname' })
   lastname: string;
 
-  @Column({ name: 'roles' })
+  @Prop({ name: 'roles' })
   roles: Role[];
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);

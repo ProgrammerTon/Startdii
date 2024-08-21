@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User, Role } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { User, Role, UserDocument } from './entities/user.entity';
 import { plainToInstance } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectModel(User.name)
+    private userModel: Model<UserDocument>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = plainToInstance(User, createUserDto);
     user.roles = [Role.Customer];
     user.password = await this.hashPassword(user.password);
-    return this.userRepository.save(user);
+    const createdUser = new this.userModel(user);
+    return createdUser.save();
   }
 
   async hashPassword(password: string): Promise<string> {
@@ -31,10 +32,10 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.userRepository.find();
+    return this.userModel.find().exec();
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
-    return this.userRepository.findOneBy({ email });
+    return this.userModel.findOne({ email }).exec();
   }
 }
