@@ -6,9 +6,11 @@ import { CoursesModule } from './courses/courses.module';
 import { DataSource } from 'typeorm';
 import { Course } from './courses/entities/course.entity';
 import { User } from './users/entities/user.entity';
+import { Tag } from './tags/entities/tag.entity';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -18,18 +20,14 @@ import { AuthModule } from './auth/auth.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      host: 'localhost',
-      port: 27017,
-      username: 'root',
-      password: 'example',
+      url: 'mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
       database: 'test',
-      entities: [Course, User],
-      synchronize: true,
-      authSource: 'admin',
+      entities: [Course, User, Tag],
     }),
     CoursesModule,
     AuthModule,
     UsersModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

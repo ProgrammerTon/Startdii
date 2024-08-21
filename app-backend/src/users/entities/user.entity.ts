@@ -19,7 +19,7 @@ export enum Role {
 @Unique(['email'])
 export class User {
   @ObjectIdColumn()
-  id?: ObjectId;
+  id: ObjectId;
 
   @Column({ name: 'email' })
   email: string;
