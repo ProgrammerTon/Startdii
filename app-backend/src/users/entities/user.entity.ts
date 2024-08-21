@@ -21,7 +21,7 @@ export class User {
   @ObjectIdColumn()
   id?: ObjectId;
 
-  @Column({ name: 'email' })
+  @Column({ name: 'email', unique: true })
   email: string;
 
   @Column({ name: 'password' })
