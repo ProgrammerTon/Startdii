@@ -20,7 +20,7 @@ export class TagsService {
   }
 
   findAll() {
-    return `This action returns all tags`;
+    return this.tagModel.find().exec();
   }
 
   async findOne(name: string): Promise<Tag> {
