@@ -1,24 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTagDto } from './dto/create-tag.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateTagDto } from './dto/update-tag.dto';
-import { Repository } from 'typeorm';
-import { Tag } from './entities/tag.entity';
+import { Tag, TagDocument } from './entities/tag.entity';
 import { plainToInstance } from 'class-transformer';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+
 @Injectable()
 export class TagsService {
   constructor(
-    @InjectRepository(Tag)
-    private tagRepository: Repository<Tag>,
+    @InjectModel(Tag.name)
+    private tagModel: Model<TagDocument>,
   ) {}
 
-  async create(createUserDto: CreateTagDto): Promise<Tag> {
-    const data = await this.findOne(createUserDto.name)
-    if (!data){
-      const tag = plainToInstance(Tag, createUserDto);
-      return this.tagRepository.save(tag);
-    }
-    return data
+  async create(createTagDto: CreateTagDto): Promise<Tag> {
+    const tag = plainToInstance(Tag, createTagDto);
+    const createdTag = new this.tagModel(tag);
+    return createdTag.save();
   }
 
   findAll() {
@@ -26,7 +24,7 @@ export class TagsService {
   }
 
   async findOne(name: string): Promise<Tag> {
-    return this.tagRepository.findOne({ where: { name } });
+    return this.tagModel.findOne({ where: { name } });
   }
   
   update(id: number, updateTagDto: UpdateTagDto) {
