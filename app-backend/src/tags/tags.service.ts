@@ -26,7 +26,7 @@ export class TagsService {
   async findOne(name: string): Promise<Tag> {
     return this.tagModel.findOne({ where: { name } });
   }
-  
+
   update(id: number, updateTagDto: UpdateTagDto) {
     return `This action updates a #${id} tag`;
   }
