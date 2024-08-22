@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoursesModule } from './courses/courses.module';
-import { DataSource } from 'typeorm';
-import { Course } from './courses/entities/course.entity';
-import { User } from './users/entities/user.entity';
-import { Tag } from './tags/entities/tag.entity';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { MongooseModule } from '@nestjs/mongoose';
 import { TagsModule } from './tags/tags.module';
 
 @Module({
@@ -18,12 +14,7 @@ import { TagsModule } from './tags/tags.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    TypeOrmModule.forRoot({
-      type: 'mongodb',
-      url: 'mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-      database: 'test',
-      entities: [Course, User, Tag],
-    }),
+    MongooseModule.forRoot('mongodburl'),
     CoursesModule,
     AuthModule,
     UsersModule,
@@ -32,6 +23,4 @@ import { TagsModule } from './tags/tags.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}
