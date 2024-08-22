@@ -1,21 +1,18 @@
-import {
-    Entity,
-    Column,
-    ObjectIdColumn,
-    Unique,
-    CreateDateColumn,
-} from 'typeorm';
 import { ObjectId } from 'mongodb';
+import { Document } from 'mongoose';
+import { Prop,Schema,SchemaFactory } from '@nestjs/mongoose';
 
-@Entity()
-@Unique(['name'])
+
+export type TagDocument = Tag & Document;
+
+@Schema({ timestamps: true })
 export class Tag {
-  @ObjectIdColumn()
+  @Prop({ type: ObjectId, auto: true })
   id: ObjectId;
 
-  @Column({ name: 'name' })
+  @Prop({ name: 'name', unique: true })
   name: string;
 
-  @CreateDateColumn()
-  created_at: Date;
 }
+
+export const TagSchema = SchemaFactory.createForClass(Tag);
