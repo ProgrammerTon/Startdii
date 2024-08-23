@@ -4,6 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  StyleSheet
 } from "react-native";
 import React from "react";
 import { useLocalSearchParams } from "expo-router";
@@ -11,6 +12,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import TagList from "../../components/TagList";
 import FormField from "../../components/FormField";
 import CommentList from "../../components/CommentCard";
+
+const styles = StyleSheet.create({
+    titleContainer: {
+        flex: 1
+    }
+}) 
+    
 
 const comments = [
   {
