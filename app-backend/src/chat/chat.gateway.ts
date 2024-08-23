@@ -6,39 +6,39 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
+import { Logger } from '@nestjs/common';
 
 @WebSocketGateway(3002, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
+  private logger: Logger = new Logger('MessageGateway');
+
   handleConnection(client: Socket) {
-    console.log('Client Connect', client.id);
+    return this.logger.log(`Client connected: ${client.id}`);
   }
 
   handleDisconnect(client: Socket) {
-    console.log('Client Disconnect', client.id);
+    return this.logger.log(`Client disconnected: ${client.id}`);
   }
 
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, room: string) {
     client.join(room);
-    console.log(`Client ${client.id} joined room ${room}`);
     client.emit('message', `Joined room ${room}`);
+    return this.logger.log(`Client ${client.id} joined room ${room}`);
   }
 
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, room: string) {
     client.leave(room);
-    console.log(`Client ${client.id} left room ${room}`);
     client.emit('message', `Left room ${room}`);
+    return this.logger.log(`Client ${client.id} left room ${room}`);
   }
 
   @SubscribeMessage('newMessage')
   handleMessage(client: Socket, payload: any) {
     const data = JSON.parse(payload);
-    console.log(data.rooms);
     this.server.to(data.rooms).emit('message', data.message);
-    // this.server.emit('reply', 'This message is Boardcast');
-    // return 'Hello world!';
   }
 }
