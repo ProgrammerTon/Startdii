@@ -15,7 +15,9 @@ import { SourcesModule } from './sources/sources.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot('mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
+    MongooseModule.forRoot('mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+      ,{dbName : "test"}
+    ),
     CoursesModule,
     AuthModule,
     UsersModule,

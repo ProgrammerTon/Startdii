@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Request , Param} from '@nestjs/common';
+import { Controller, Post, Body, Get, Request , Param, Patch} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UseGuards } from '@nestjs/common';
@@ -26,6 +26,16 @@ export class UsersController {
   @Get('sources/:ownerId')
   findSourcesByUserId(@Param('ownerId') id: ObjectId) {
     return this.usersService.findSourcesByUserId(id);
+  }
+
+  @Patch('favorite_sources/add/:userId/:sourceId')
+  addFavoriteSources(@Param('userId') userId: ObjectId, @Param('sourceId') sourceId: ObjectId){
+    return this.usersService.addFavoriteSource(userId,sourceId);
+  }
+
+  @Patch('favorite_sources/remove/:userId/:sourceId')
+  removeFavoriteSources(@Param('userId') userId: ObjectId, @Param('sourceId') sourceId: ObjectId){
+    return this.usersService.removeFavoriteSource(userId,sourceId);
   }
 
   @Roles(Role.Customer)
