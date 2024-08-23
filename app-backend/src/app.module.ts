@@ -15,7 +15,7 @@ import { SourcesModule } from './sources/sources.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot('mongodburl'),
+    MongooseModule.forRoot('mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
     CoursesModule,
     AuthModule,
     UsersModule,

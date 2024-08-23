@@ -1,26 +1,53 @@
 import { Injectable } from '@nestjs/common';
+import { ObjectId } from 'mongodb';
 import { CreateSourceDto } from './dto/create-source.dto';
 import { UpdateSourceDto } from './dto/update-source.dto';
-
+import { Source , SourceDocument } from './entities/source.entity';
+import { plainToInstance } from 'class-transformer';
+import * as bcrypt from 'bcrypt';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class SourcesService {
-  create(createSourceDto: CreateSourceDto) {
-    return 'This action adds a new source';
+  constructor(
+    @InjectModel(Source.name)
+    private sourceModel: Model<SourceDocument>,
+  ) {}
+
+  async create(createSourceDto: CreateSourceDto): Promise<Source> {
+    const source = plainToInstance(Source, createSourceDto);
+    source.ownerId = new ObjectId(source.ownerId)
+    const createdSource = new this.sourceModel(source);
+    return createdSource.save();
   }
 
-  findAll() {
-    return `This action returns all sources`;
+  async delete(id: ObjectId): Promise<void> {
+    await this.sourceModel.findByIdAndDelete({ id }).exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} source`;
+  async update(updateSourceDto: UpdateSourceDto): Promise<Source> {
+    const { id, ...updateFields } = updateSourceDto;
+
+    // Find the document by ID and apply the updates
+    const updatedSource = await this.sourceModel.findByIdAndUpdate(
+      id,
+      { $set: updateFields },
+      { new: true, useFindAndModify: false }, // Return the updated document
+    ).exec();
+
+    // Return the updated document, or null if not found
+    return updatedSource;
   }
 
-  update(id: number, updateSourceDto: UpdateSourceDto) {
-    return `This action updates a #${id} source`;
+  async findById(id: ObjectId): Promise<Source | null> {
+    return this.sourceModel.findById(id).exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} source`;
+  async findByUserId(ownerId: ObjectId) {
+    return this.sourceModel.find({ ownerId }).exec();
+  }
+  
+  async findAll() {
+    return this.sourceModel.find().exec();
   }
 }

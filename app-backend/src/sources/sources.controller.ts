@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ObjectId } from 'mongodb';
 import { SourcesService } from './sources.service';
 import { CreateSourceDto } from './dto/create-source.dto';
 import { UpdateSourceDto } from './dto/update-source.dto';
@@ -26,17 +27,22 @@ export class SourcesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sourcesService.findOne(+id);
+  findById(@Param('id') id: ObjectId) {
+    return this.sourcesService.findById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSourceDto: UpdateSourceDto) {
-    return this.sourcesService.update(+id, updateSourceDto);
+  @Get(':ownerId')
+  findByUserId(@Param('ownerId') ownerId: ObjectId) {
+    return this.sourcesService.findByUserId(ownerId);
+  }
+
+  @Patch()
+  update(@Body() updateSourceDto: UpdateSourceDto) {
+    return this.sourcesService.update(updateSourceDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sourcesService.remove(+id);
+  delete(@Param('id') id: ObjectId) {
+    return this.sourcesService.delete(id);
   }
 }
