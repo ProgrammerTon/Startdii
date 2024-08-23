@@ -29,12 +29,12 @@ export class UsersController {
   }
 
   @Patch('favorite_sources/add/:userId/:sourceId')
-  addFavoriteSources(@Param('userId') userId: ObjectId, @Param('sourceId') sourceId: ObjectId){
+  addFavoriteSource(@Param('userId') userId: ObjectId, @Param('sourceId') sourceId: ObjectId){
     return this.usersService.addFavoriteSource(userId,sourceId);
   }
 
   @Patch('favorite_sources/remove/:userId/:sourceId')
-  removeFavoriteSources(@Param('userId') userId: ObjectId, @Param('sourceId') sourceId: ObjectId){
+  removeFavoriteSource(@Param('userId') userId: ObjectId, @Param('sourceId') sourceId: ObjectId){
     return this.usersService.removeFavoriteSource(userId,sourceId);
   }
 
