@@ -31,14 +31,11 @@ export class SourcesController {
     return this.sourcesService.findById(id);
   }
 
-  @Get(':ownerId')
-  findByUserId(@Param('ownerId') ownerId: ObjectId) {
-    return this.sourcesService.findByUserId(ownerId);
-  }
+  
 
-  @Patch()
-  update(@Body() updateSourceDto: UpdateSourceDto) {
-    return this.sourcesService.update(updateSourceDto);
+  @Patch(':id')
+  update(@Param('id') id: ObjectId, @Body() updateSourceDto: UpdateSourceDto) {
+    return this.sourcesService.update(id,updateSourceDto);
   }
 
   @Delete(':id')

@@ -3,8 +3,6 @@ import { ObjectId } from 'mongodb';
 import { Tag } from '../../tags/entities/tag.entity';
 
 export class UpdateSourceDto{
-    @IsNotEmpty()
-    id: ObjectId;
 
     @IsOptional()
     title?: string;

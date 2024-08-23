@@ -4,9 +4,9 @@ import { CreateSourceDto } from './dto/create-source.dto';
 import { UpdateSourceDto } from './dto/update-source.dto';
 import { Source , SourceDocument } from './entities/source.entity';
 import { plainToInstance } from 'class-transformer';
-import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+
 @Injectable()
 export class SourcesService {
   constructor(
@@ -25,13 +25,11 @@ export class SourcesService {
     await this.sourceModel.findByIdAndDelete({ id }).exec();
   }
 
-  async update(updateSourceDto: UpdateSourceDto): Promise<Source> {
-    const { id, ...updateFields } = updateSourceDto;
-
+  async update(id: ObjectId, updateSourceDto: UpdateSourceDto): Promise<Source> {
     // Find the document by ID and apply the updates
     const updatedSource = await this.sourceModel.findByIdAndUpdate(
       id,
-      { $set: updateFields },
+      { $set: updateSourceDto },
       { new: true, useFindAndModify: false }, // Return the updated document
     ).exec();
 
@@ -43,9 +41,7 @@ export class SourcesService {
     return this.sourceModel.findById(id).exec();
   }
 
-  async findByUserId(ownerId: ObjectId) {
-    return this.sourceModel.find({ ownerId }).exec();
-  }
+  
   
   async findAll() {
     return this.sourceModel.find().exec();
