@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { ObjectId } from 'mongodb';
 import { ParseObjectIdPipe } from 'src/common/pipes';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Comment')
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
@@ -19,9 +21,11 @@ export class CommentsController {
   }
 
   @Post(':ownerId/:sourceId')
-  create(@Param("ownerId", ParseObjectIdPipe) ownerId: ObjectId,
-         @Param("sourceId", ParseObjectIdPipe) sourceId: ObjectId,
-         @Body() createCommentDto: CreateCommentDto) {
+  create(
+    @Param('ownerId', ParseObjectIdPipe) ownerId: ObjectId,
+    @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
+    @Body() createCommentDto: CreateCommentDto,
+  ) {
     createCommentDto.ownerId = ownerId;
     createCommentDto.sourceId = sourceId;
     return this.commentsService.create(createCommentDto);
