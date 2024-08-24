@@ -3,10 +3,14 @@ import {
   UploadedFile,
   Controller,
   Post,
+  Get,
+  StreamableFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as fs from 'fs';
 import * as path from 'path';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller('files')
 export class FilesController {
@@ -28,4 +32,37 @@ export class FilesController {
 
     return { message: 'File uploaded successfully!', filePath };
   }
+
+  @Get()
+  getFile(): StreamableFile {
+    const file = createReadStream(join(process.cwd(), 'sample.pdf'));
+    return new StreamableFile(file, {
+      type: 'application/pdf',
+      disposition: 'inline; filename="sample.pdf"',
+      // If you want to define the Content-Length value to another value instead of file's length:
+      // length: 123,
+    });
+  }
+
+  // @Get('download/:filename')
+  // async downloadFile(
+  //   @Param('filename') filename: string,
+  //   @Res() res: Response,
+  // ) {
+  //   const filePath = path.join(__dirname, '..', 'uploads', filename);
+
+  //   // Check if the file exists
+  //   if (fs.existsSync(filePath)) {
+  //     return res.download(filePath);
+  //   } else {
+  //     throw new NotFoundException('File not found');
+  //   }
+  // }
+
+  // @Get(':filename')
+  // async getFile(@Param('filename') filename: string, @Res() res: Response) {
+  //   const filePath = path.join(__dirname, '..', 'uploads/pdf', filename);
+  //   res.sendFile(filePath);
+  //   res.blob
+  // }
 }
