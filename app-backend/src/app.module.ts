@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TagsModule } from './tags/tags.module';
 import { SourcesModule } from './sources/sources.module';
+import { ChatGateway } from './chat/chat.gateway';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -15,16 +17,18 @@ import { SourcesModule } from './sources/sources.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot('mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-      ,{dbName : "test"}
+    MongooseModule.forRoot(
+      'mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+      { dbName: 'testbefore' },
     ),
     CoursesModule,
     AuthModule,
     UsersModule,
     TagsModule,
     SourcesModule,
+    CommentsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway],
 })
 export class AppModule {}

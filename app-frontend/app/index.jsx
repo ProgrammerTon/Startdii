@@ -34,6 +34,12 @@ export default function App() {
       >
         <Text className="text-lg">Create Note</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/chat")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Chat Button</Text>
+      </TouchableHighlight>
     </SafeAreaView>
   );
 }
