@@ -31,7 +31,7 @@ export class User {
   @Prop({ name: 'roles' })
   roles: Role[];
 
-  @Prop({ name: 'roles' })
+  @Prop({ name: 'favorite_sources' })
   favorite_sources: ObjectId[];
 }
 
