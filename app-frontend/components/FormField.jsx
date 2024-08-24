@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
+import fonts from "../constants/font";
 
 const FormField = ({
   title,
@@ -13,7 +14,7 @@ const FormField = ({
 
   return (
     <View className={`space-y-2 drop-shadow-xl ${otherStyles}`}>
-      <Text className="text-base text-black font-medium">{title}</Text>
+      <Text style={fonts.EngMedium14}>{title}</Text>
 
       <View className="bg-white rounded-[50px] border-none shadow-lg flex flex-row items-center w-11/12 h-[40px]">
         <TextInput
