@@ -31,11 +31,9 @@ export class SourcesController {
     return this.sourcesService.findById(id);
   }
 
-  
-
   @Patch(':id')
   update(@Param('id') id: ObjectId, @Body() updateSourceDto: UpdateSourceDto) {
-    return this.sourcesService.update(id,updateSourceDto);
+    return this.sourcesService.update(id, updateSourceDto);
   }
 
   @Delete(':id')

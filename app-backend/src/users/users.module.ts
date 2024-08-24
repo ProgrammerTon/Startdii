@@ -8,7 +8,10 @@ import { SourcesModule } from 'src/sources/sources.module';
 import { Source, SourceSchema } from 'src/sources/entities/source.entity';
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema },{ name: Source.name, schema: SourceSchema }])
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Source.name, schema: SourceSchema },
+    ]),
   ],
   providers: [UsersService],
   exports: [UsersService],

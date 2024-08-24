@@ -1,4 +1,4 @@
-import { IsNotEmpty , IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { Tag } from '../../tags/entities/tag.entity';
 export class CreateSourceDto {
@@ -13,7 +13,7 @@ export class CreateSourceDto {
 
   @IsOptional()
   content: string = '';
-  
+
   @IsOptional()
   published: boolean = false;
 

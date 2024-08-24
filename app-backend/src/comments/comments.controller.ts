@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { ObjectId } from 'mongodb';
@@ -19,9 +27,11 @@ export class CommentsController {
   }
 
   @Post(':ownerId/:sourceId')
-  create(@Param("ownerId", ParseObjectIdPipe) ownerId: ObjectId,
-         @Param("sourceId", ParseObjectIdPipe) sourceId: ObjectId,
-         @Body() createCommentDto: CreateCommentDto) {
+  create(
+    @Param('ownerId', ParseObjectIdPipe) ownerId: ObjectId,
+    @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
+    @Body() createCommentDto: CreateCommentDto,
+  ) {
     createCommentDto.ownerId = ownerId;
     createCommentDto.sourceId = sourceId;
     return this.commentsService.create(createCommentDto);
