@@ -16,6 +16,7 @@ import { Role } from './entities/user.entity';
 import { RolesGuard } from 'src/auth/roles/role.guard';
 import { ObjectId } from 'mongodb';
 import { ApiTags } from '@nestjs/swagger';
+import { ParseObjectIdPipe } from 'src/common/pipes';
 
 @ApiTags('User')
 @Controller('users')
@@ -33,22 +34,22 @@ export class UsersController {
   }
 
   @Get('sources/:ownerId')
-  findSourcesByUserId(@Param('ownerId') id: ObjectId) {
+  findSourcesByUserId(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
     return this.usersService.findSourcesByUserId(id);
   }
 
   @Patch('favorite_sources/add/:userId/:sourceId')
   addFavoriteSource(
-    @Param('userId') userId: ObjectId,
-    @Param('sourceId') sourceId: ObjectId,
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
   ) {
     return this.usersService.addFavoriteSource(userId, sourceId);
   }
 
   @Patch('favorite_sources/remove/:userId/:sourceId')
   removeFavoriteSource(
-    @Param('userId') userId: ObjectId,
-    @Param('sourceId') sourceId: ObjectId,
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
   ) {
     return this.usersService.removeFavoriteSource(userId, sourceId);
   }
