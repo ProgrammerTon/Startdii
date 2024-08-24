@@ -3,8 +3,6 @@ import { UsersService } from './users.service';
 import { User, UserSchema } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-
-import { SourcesModule } from 'src/sources/sources.module';
 import { Source, SourceSchema } from 'src/sources/entities/source.entity';
 @Module({
   imports: [
