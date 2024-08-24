@@ -12,7 +12,8 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ObjectId } from 'mongodb';
 import { ParseObjectIdPipe } from 'src/common/pipes';
-
+import { ApiTags } from '@nestjs/swagger';
+ApiTags('Course');
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
