@@ -2,6 +2,7 @@
 # compiled output
 /app-backend/dist
 /app-backend/node_modules
+/app-backend/.env
 
 # Logs
 logs
