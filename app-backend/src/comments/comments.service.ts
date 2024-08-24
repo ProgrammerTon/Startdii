@@ -17,7 +17,7 @@ export class CommentsService {
   }
 
   async findBySourceId(sourceId: ObjectId): Promise<Comment[]> {
-    return this.commentModel.find({sourceId: sourceId}).exec();
+    return this.commentModel.find({ sourceId: sourceId }).exec();
   }
 
   async create(createCommentDto: CreateCommentDto) {

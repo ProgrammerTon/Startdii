@@ -6,7 +6,9 @@ import { ObjectId } from 'mongodb';
 export class ParseObjectIdPipe implements PipeTransform<any, ObjectId> {
   public transform(value: any): ObjectId {
     try {
-      const transformedObjectId: ObjectId = new Types.ObjectId(ObjectId.createFromHexString(value));
+      const transformedObjectId: ObjectId = new Types.ObjectId(
+        ObjectId.createFromHexString(value),
+      );
       return transformedObjectId;
     } catch (error) {
       throw new BadRequestException('validation Failed need ObjectId');
