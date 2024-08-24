@@ -10,6 +10,7 @@ import { TagsModule } from './tags/tags.module';
 import { SourcesModule } from './sources/sources.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { CommentsModule } from './comments/comments.module';
+import { FilesController } from './files/files.controller';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { CommentsModule } from './comments/comments.module';
     SourcesModule,
     CommentsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, FilesController],
   providers: [AppService, ChatGateway],
 })
 export class AppModule {}
