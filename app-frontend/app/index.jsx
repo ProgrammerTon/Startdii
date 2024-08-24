@@ -30,7 +30,7 @@ export default function App() {
     loadFonts();
   }, []);
 
-  if (!fontsLoaded) {
+  if (fontsLoaded) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center">
         <StatusBar style="auto" />
