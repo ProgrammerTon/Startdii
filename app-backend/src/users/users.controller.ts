@@ -15,7 +15,9 @@ import { Roles } from 'src/auth/roles/roles.decorator';
 import { Role } from './entities/user.entity';
 import { RolesGuard } from 'src/auth/roles/role.guard';
 import { ObjectId } from 'mongodb';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
