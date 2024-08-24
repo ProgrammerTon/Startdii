@@ -34,11 +34,22 @@ export class FilesController {
   }
 
   @Get()
-  getFile(): StreamableFile {
+  getPdf(): StreamableFile {
     const file = createReadStream(join(process.cwd(), 'sample.pdf'));
     return new StreamableFile(file, {
       type: 'application/pdf',
       disposition: 'inline; filename="sample.pdf"',
+      // If you want to define the Content-Length value to another value instead of file's length:
+      // length: 123,
+    });
+  }
+
+  @Get()
+  getImage(): StreamableFile {
+    const file = createReadStream(join(process.cwd(), 'sample-image.png'));
+    return new StreamableFile(file, {
+      type: 'image/png',
+      disposition: 'inline; filename="sample-image.png"',
       // If you want to define the Content-Length value to another value instead of file's length:
       // length: 123,
     });
