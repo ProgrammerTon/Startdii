@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TagsModule } from './tags/tags.module';
+import { SourcesModule } from './sources/sources.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { CommentsModule } from './comments/comments.module';
 
@@ -16,11 +17,15 @@ import { CommentsModule } from './comments/comments.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot('mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {dbName: "testbefore"}),
+    MongooseModule.forRoot(
+      'mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+      { dbName: 'testbefore' },
+    ),
     CoursesModule,
     AuthModule,
     UsersModule,
     TagsModule,
+    SourcesModule,
     CommentsModule,
   ],
   controllers: [AppController],

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, Request , Param, Patch} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UseGuards } from '@nestjs/common';
@@ -6,10 +6,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/roles/roles.decorator';
 import { Role } from './entities/user.entity';
 import { RolesGuard } from 'src/auth/roles/role.guard';
+import { ObjectId } from 'mongodb';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService,
+  ) {}
 
   @Post('register')
   register(@Body() createUserDto: CreateUserDto) {
@@ -19,6 +21,21 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get('sources/:ownerId')
+  findSourcesByUserId(@Param('ownerId') id: ObjectId) {
+    return this.usersService.findSourcesByUserId(id);
+  }
+
+  @Patch('favorite_sources/add/:userId/:sourceId')
+  addFavoriteSource(@Param('userId') userId: ObjectId, @Param('sourceId') sourceId: ObjectId){
+    return this.usersService.addFavoriteSource(userId,sourceId);
+  }
+
+  @Patch('favorite_sources/remove/:userId/:sourceId')
+  removeFavoriteSource(@Param('userId') userId: ObjectId, @Param('sourceId') sourceId: ObjectId){
+    return this.usersService.removeFavoriteSource(userId,sourceId);
   }
 
   @Roles(Role.Customer)
