@@ -11,7 +11,8 @@ import { ObjectId } from 'mongodb';
 import { SourcesService } from './sources.service';
 import { CreateSourceDto } from './dto/create-source.dto';
 import { UpdateSourceDto } from './dto/update-source.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Source')
 @Controller('sources')
 export class SourcesController {
   constructor(private readonly sourcesService: SourcesService) {}
