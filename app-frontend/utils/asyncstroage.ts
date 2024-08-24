@@ -7,6 +7,7 @@ export async function getCurrentUser(token: string) {
     let currentTokenAccount;
     if (token) {
       currentTokenAccount = token;
+      await AsyncStorage.setItem("jwt", token);
     } else {
       currentTokenAccount = await AsyncStorage.getItem("jwt");
     }
