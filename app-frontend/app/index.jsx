@@ -40,6 +40,24 @@ export default function App() {
       >
         <Text className="text-lg">Chat Button</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/ArchiveSystem/ArchiveMainPage")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Archive</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/ArchiveSystem/C1_AddNotePage")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">AddNote</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/ArchiveSystem/D1_AddQuizPage")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">AddQuiz</Text>
+      </TouchableHighlight>
     </SafeAreaView>
   );
 }
