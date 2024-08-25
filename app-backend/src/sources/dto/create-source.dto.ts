@@ -26,5 +26,5 @@ export class CreateSourceDto {
 
   @ApiProperty()
   @IsOptional()
-  tags: Tag[] = [];
+  tags: string[] = [];
 }

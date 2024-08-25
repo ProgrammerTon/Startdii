@@ -1,7 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Tag } from '../../tags/entities/tag.entity';
 
 export type SourceDocument = Source & Document;
 
@@ -29,7 +28,7 @@ export class Source {
   published: boolean;
 
   @Prop({ name: 'tags' })
-  tags: Tag[];
+  tags: string[];
 }
 
 export const SourceSchema = SchemaFactory.createForClass(Source);
