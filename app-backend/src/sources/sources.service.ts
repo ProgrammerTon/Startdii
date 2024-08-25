@@ -6,18 +6,29 @@ import { Source, SourceDocument } from './entities/source.entity';
 import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { Tag } from 'src/tags/entities/tag.entity';
 
 @Injectable()
 export class SourcesService {
   constructor(
     @InjectModel(Source.name)
     private sourceModel: Model<SourceDocument>,
+    @InjectModel(Tag.name)
+    private tagModel: Model<Tag>,
   ) {}
 
   async create(createSourceDto: CreateSourceDto): Promise<Source> {
     const source = plainToInstance(Source, createSourceDto);
     source.ownerId = new ObjectId(source.ownerId);
     const createdSource = new this.sourceModel(source);
+    var tag
+    for (var i = 0; i < createSourceDto.tags.length; i++){
+      tag = await this.tagModel.findOne({ where: { name: createSourceDto.tags[i] } }).exec();
+      if (!tag) {
+        tag = await this.tagModel.create({ name: createSourceDto.tags[i] });
+      }
+      tag.push(source.id);
+    }
     return createdSource.save();
   }
 
@@ -49,4 +60,16 @@ export class SourcesService {
   async findAll() {
     return this.sourceModel.find().exec();
   }
+
+  async findByTag(tagname: string): Promise<Source[]> {
+    var sources = new Array<Source>;
+    const tag = await this.tagModel.findOne({ where: { name: tagname } }).exec();
+    if (tag) {
+      for (var i = 0; i < tag.sources.length; i++) {
+        sources.push(await this.sourceModel.findById(tag.sources[i]).exec());
+      }
+    }
+    return sources
+  }
+  
 }
