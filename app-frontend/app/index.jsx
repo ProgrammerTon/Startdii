@@ -5,9 +5,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useState, useEffect } from "react";
 import * as Font from 'expo-font';
+import { useGlobalContext } from "../context/GlobalProvider";
+
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const { user, isLogged } = useGlobalContext();
 
   useEffect(() => {
     async function loadFonts() {
@@ -60,7 +63,8 @@ export default function App() {
         >
           <Text className="text-lg">Create Note</Text>
         </TouchableHighlight>
+        {isLogged ? <Text>Already Login</Text> : <Text>Not Login</Text>}
+        {isLogged ? <Text>{user?.email}</Text> : null}
       </SafeAreaView>
     );
   }
-}

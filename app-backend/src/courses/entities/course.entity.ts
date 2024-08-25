@@ -1,14 +1,19 @@
-import { Entity, Column, ObjectIdColumn } from 'typeorm';
 import { ObjectId } from 'mongodb';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-@Entity()
+export type CourseDocument = Course & Document;
+
+@Schema()
 export class Course {
-  @ObjectIdColumn()
+  @Prop({ type: ObjectId, auto: true })
   id?: ObjectId;
 
-  @Column()
+  @Prop({ name: 'number', unique: true })
   number: string;
 
-  @Column()
+  @Prop({ name: 'title' })
   title: string;
 }
+
+export const CourseSchema = SchemaFactory.createForClass(Course);
