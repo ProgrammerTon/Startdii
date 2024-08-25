@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import UploadCompleteWindow from './UploadCompleteWindow';
+import UploadCompleteWindow from '../../components/UploadCompleteWindow';
+import ErrorEmptyFieldWindow from '../../components/ErrorEmptyFieldWindow';
 
 const AddNotePage = () => {
   const [name, setName] = useState('');
@@ -9,6 +10,7 @@ const AddNotePage = () => {
   const [content, setContent] = useState('');
 
   const [AddUploadWindowVisible, setAddUploadWindowVisible] = useState(false);
+  const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
 
   const ShowUploadComplete = () => {
     setAddUploadWindowVisible(true);
@@ -18,11 +20,32 @@ const AddNotePage = () => {
     setAddUploadWindowVisible(false);
   };
 
+  const ShowErrorEmptyFieldWindow = () => {
+    setAddErrorEmptyFieldWindow(true);
+  };
+
+  const CloseErrorEmptyFieldWindow = () => {
+    setAddErrorEmptyFieldWindow(false);
+  };
+
   const resetFields = () => {
     setName('');
     setDescription('');
     setTag('');
     setContent('');
+  };
+
+  const Publish = async () => {
+    if (
+      name === "" ||
+      description === "" ||
+      tag === "" ||
+      content === ""
+    ) {
+      ShowErrorEmptyFieldWindow();
+    } else {
+      ShowUploadComplete();
+    };
   };
 
   return (
@@ -71,9 +94,10 @@ const AddNotePage = () => {
           <Text style={styles.resetButtonText}>Reset</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.publishButton} onPress={ShowUploadComplete}>
+        <TouchableOpacity style={styles.publishButton} onPress={Publish}>
           <Text style={styles.publishButtonText}>Publish</Text>
         </TouchableOpacity>
+      <ErrorEmptyFieldWindow visible={AddErrorEmptyFieldWindow} onClose={CloseErrorEmptyFieldWindow} />
       <UploadCompleteWindow visible={AddUploadWindowVisible} onClose={CloseUploadComplete} />
       </View>
     </View>

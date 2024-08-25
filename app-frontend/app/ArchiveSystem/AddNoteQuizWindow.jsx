@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
+import { Redirect, router } from "expo-router";
 
 const AddNoteQuizWindow = ({ visible, onClose }) => {
   return (
@@ -11,10 +12,10 @@ const AddNoteQuizWindow = ({ visible, onClose }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Pressable style={styles.InteractButton} onPress={onClose}>
+          <Pressable style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/C1_AddNotePage")}>
             <Text style={styles.InteractButtonText}>Notes</Text>
           </Pressable>
-          <Pressable style={styles.InteractButton} onPress={onClose}>
+          <Pressable style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/D1_AddQuizPage")}>
             <Text style={styles.InteractButtonText}>Quiz</Text>
           </Pressable>
           <Pressable style={styles.InteractButton} onPress={onClose}>

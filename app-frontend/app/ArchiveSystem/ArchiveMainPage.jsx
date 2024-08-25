@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import AddNoteQuizWindow from './AddNoteQuizWindow.jsx';
+import SearchBar from '../../components/SearchBar';
 
 const ArchiveMainPage = () => {
   const [ActiveFilter,setActiveFilter] = useState('Relevance');
@@ -20,13 +21,7 @@ const ArchiveMainPage = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search"
-          placeholderTextColor="#c4c4c4"
-        />
-      </View>
+      <SearchBar />
       <View style={styles.filterContainer}>
         <TouchableOpacity style={ActiveFilter === 'Relevance' ? styles.filterButton : styles.inactiveFilterButton}
           onPress={() => ToggleFilterChange('Relevance')}>
@@ -59,18 +54,6 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: '#f8f8f8',
     padding: 20,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginBottom: 20,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
   },
   filterContainer: {
     flexDirection: 'row',
