@@ -16,6 +16,7 @@ import { router } from "expo-router";
 import fonts from "../../constants/font";
 import { Shadow } from 'react-native-shadow-2';
 import colors from "../../constants/color";
+import Babypinksvg from "../../components/Babypinksvg";
 
 export default function SignUp() {
   const [submitting, setSubmitting] = useState(false);
@@ -114,11 +115,22 @@ export default function SignUp() {
       alignItems: 'center',
       top: '8%',
     },
+    svgLayer: {
+      position: 'absolute',
+      top: '27%',
+      left: '20%',
+      width: '100%',
+      height: '100%',
+      zIndex: -1,
+    },
   };
 
   return (
     <SafeAreaView style={styles.bg}>
       <ScrollView>
+        <View style={styles.svgLayer}>
+          <Babypinksvg width={Dimensions.get('window').width} height={170} />
+        </View>
         <View style={styles.container}>
           <Text style={[fonts.EngBold22, styles.signInText]}>Sign in</Text>
           <View style={styles.frame}>
