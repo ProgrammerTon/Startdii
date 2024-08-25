@@ -33,7 +33,7 @@ export class FilesController {
     return { message: 'File uploaded successfully!', filePath };
   }
 
-  @Get()
+  @Get('pdf')
   getPdf(): StreamableFile {
     const file = createReadStream(join(process.cwd(), 'sample.pdf'));
     return new StreamableFile(file, {
@@ -44,7 +44,7 @@ export class FilesController {
     });
   }
 
-  @Get()
+  @Get('image')
   getImage(): StreamableFile {
     const file = createReadStream(join(process.cwd(), 'sample-image.png'));
     return new StreamableFile(file, {
