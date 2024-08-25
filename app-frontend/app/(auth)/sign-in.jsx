@@ -78,13 +78,13 @@ export default function SignUp() {
       justifyContent: 'center',
       alignItems: 'center',
       shadowColor: colors.gray_bgblur,
-      shadowOffset: { width: 0, height: 0 },
+      shadowOffset: [{ width: 0, height: 0 }],
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
     },
     signInText: {
-      fontSize: 34,
+      fontSize: 36,
       color: colors.black,
       textAlign: "left",
       alignSelf: "flex-start",
@@ -92,8 +92,8 @@ export default function SignUp() {
     },
     box: {
       position: 'absolute',
-      top: '183%',
-      left: '55%',
+      top: '181%',
+      left: '52%',
       transform: [{ translateX: -50 }, { translateY: -50 }], // This will center the box
     },
     box2: {
@@ -117,7 +117,7 @@ export default function SignUp() {
     },
     svgLayer: {
       position: 'absolute',
-      top: '27%',
+      top: '26%',
       left: '20%',
       width: '100%',
       height: '100%',
@@ -129,7 +129,7 @@ export default function SignUp() {
     <SafeAreaView style={styles.bg}>
       <ScrollView>
         <View style={styles.svgLayer}>
-          <Babypinksvg width={Dimensions.get('window').width} height={170} />
+          <Babypinksvg width={Dimensions.get('window').width} height={185} />
         </View>
         <View style={styles.container}>
           <Text style={[fonts.EngBold22, styles.signInText]}>Sign in</Text>
