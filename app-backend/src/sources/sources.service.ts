@@ -34,7 +34,7 @@ export class SourcesService {
   }
 
   async delete(id: ObjectId): Promise<void> {
-    await this.sourceModel.findByIdAndDelete({ _id: id }).exec();
+    await this.sourceModel.findByIdAndDelete(id).exec();
   }
 
   async update(
