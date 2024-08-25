@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { SourcesService } from './sources.service';
 import { CreateSourceDto } from './dto/create-source.dto';
 import { UpdateSourceDto } from './dto/update-source.dto';
 import { ApiTags } from '@nestjs/swagger';
+
 @ApiTags('Source')
 @Controller('sources')
 export class SourcesController {
@@ -23,8 +25,10 @@ export class SourcesController {
   }
 
   @Get()
-  findAll() {
-    return this.sourcesService.findAll();
+  findByOffset(@Query() query: {offset: number}) {
+    if (!query.offset) return this.sourcesService.findAll();
+    const offset = query.offset
+    return this.sourcesService.findByOffset(offset);
   }
 
   @Get(':id')
@@ -41,4 +45,12 @@ export class SourcesController {
   delete(@Param('id') id: ObjectId) {
     return this.sourcesService.delete(id);
   }
+
+  
+
+  @Get('search/:tagName')
+  findByTag(@Param('tagName') tagName: string) {
+    return this.sourcesService.findByTag(tagName);
+  }
+
 }

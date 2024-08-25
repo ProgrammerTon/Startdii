@@ -16,7 +16,7 @@ import { RolesGuard } from './roles/role.guard';
     JwtModule.registerAsync({
       imports: [ConfigModule], // Import ConfigModule
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('dawjdoawjdoiawjdowjad'), // Use ConfigService to get the secret
+        secret: configService.get('JWT_SECRET'), // Use ConfigService to get the secret
         signOptions: { expiresIn: '60m' },
       }),
       inject: [ConfigService], // Inject ConfigService
