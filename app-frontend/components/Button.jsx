@@ -6,7 +6,7 @@ import colors from "../constants/color";
 const Button = ({ onPress, title, style, textStyle }) => {
   return (
     <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      <Text style={[fonts.EngMedium16, styles.buttonText, textStyle]}>{title}</Text>
+      <Text style={[fonts.EngMedium18, styles.buttonText, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -14,8 +14,8 @@ const Button = ({ onPress, title, style, textStyle }) => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.blue,
-    height: 44,
-    width: 92,
+    height: '100%',
+    width: '195%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
