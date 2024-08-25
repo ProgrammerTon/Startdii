@@ -25,9 +25,9 @@ export class SourcesController {
   }
 
   @Get()
-  findByOffset(@Query() query: {offset: number}) {
+  findByOffset(@Query() query: { offset: number }) {
     if (!query.offset) return this.sourcesService.findAll();
-    const offset = query.offset
+    const offset = query.offset;
     return this.sourcesService.findByOffset(offset);
   }
 
@@ -46,11 +46,8 @@ export class SourcesController {
     return this.sourcesService.delete(id);
   }
 
-  
-
   @Get('search/:tagName')
   findByTag(@Param('tagName') tagName: string) {
     return this.sourcesService.findByTag(tagName);
   }
-
 }
