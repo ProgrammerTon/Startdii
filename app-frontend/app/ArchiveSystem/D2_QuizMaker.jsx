@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity , ScrollView} from 'react-native';
 import { Redirect, router } from "expo-router";
+import UploadCompleteWindow from '../../components/UploadCompleteWindow';
+import ErrorEmptyFieldWindow from '../../components/ErrorEmptyFieldWindow';
+import QuestionComponent from './QuestionComponent';
 
 const QuizMakerPage = () => {
   const [name, setName] = useState('');
@@ -13,43 +16,66 @@ const QuizMakerPage = () => {
     setTag('');
   };
 
+  const [AddUploadWindowVisible, setAddUploadWindowVisible] = useState(false);
+  const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
+
+  const ShowUploadComplete = () => {
+    setAddUploadWindowVisible(true);
+  };
+
+  const CloseUploadComplete = () => {
+    setAddUploadWindowVisible(false);
+  };
+
+  const ShowErrorEmptyFieldWindow = () => {
+    setAddErrorEmptyFieldWindow(true);
+  };
+
+  const CloseErrorEmptyFieldWindow = () => {
+    setAddErrorEmptyFieldWindow(false);
+  };
+
+  const [questions, setQuestions] = useState([1]);
+  const addNewQuestion = () => {
+    setQuestions([...questions, questions.length + 1]);
+  };
+
+  const Publish = async () => {
+    if (
+      name === "" ||
+      description === "" ||
+      tag === "" ||
+      content === ""
+    ) {
+      ShowErrorEmptyFieldWindow();
+    } else {
+      ShowUploadComplete();
+    };
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quiz</Text>
-      
-      <Text style={styles.label}>Name</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Name"
-      />
-      
-      <Text style={styles.label}>Description</Text>
-      <TextInput
-        style={styles.textarea}
-        value={description}
-        onChangeText={setDescription}
-        placeholder="Description"
-        multiline
-      />
-      
-      <Text style={styles.label}>Tag</Text>
-      <TextInput
-        style={styles.input}
-        value={tag}
-        onChangeText={setTag}
-        placeholder="Tag"
-      />
+      <ScrollView>
+        {questions.map((_, index) => (
+          <QuestionComponent key={index} questionNumber={index + 1} />
+        ))}
+
+        <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
+          <Text style={styles.plusText}>+</Text>
+        </TouchableOpacity>
+      </ScrollView>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.resetButton} onPress={resetFields}>
-          <Text style={styles.resetButtonText}>Reset</Text>
+        <TouchableOpacity style={styles.resetButton}>
+          <Text style={styles.buttonText}>Reset</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.publishButton}>
-          <Text style={styles.publishButtonText}>Next</Text>
+        <TouchableOpacity style={styles.saveButton}>
+          <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.publishButton} onPress={Publish}>
+          <Text style={styles.buttonText}>Publish</Text>
+        </TouchableOpacity>
+        <UploadCompleteWindow visible={AddUploadWindowVisible} onClose={CloseUploadComplete} />
       </View>
     </View>
   );
@@ -61,76 +87,41 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f4f4f4',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 20,
-    color: '#000',
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#000',
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    backgroundColor: '#fff',
-  },
-  textarea: {
-    height: 80,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 15,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    backgroundColor: '#fff',
-  },
-  uploadButton: {
-    width: 100,
-    height: 40,
-    backgroundColor: '#4d90fe',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 30,
-  },
-  uploadButtonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+    marginTop: 20,
   },
   resetButton: {
-    width: 100,
-    height: 40,
     backgroundColor: '#ccc',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 10,
+    borderRadius: 5,
   },
-  resetButtonText: {
-    color: '#000',
-    fontSize: 16,
+  saveButton: {
+    backgroundColor: '#f39c12',
+    padding: 10,
+    borderRadius: 5,
   },
   publishButton: {
-    width: 100,
-    height: 40,
-    backgroundColor: '#3367d6',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#3498db',
+    padding: 10,
+    borderRadius: 5,
   },
-  publishButtonText: {
+  buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  addButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+    marginVertical: 20,
+  },
+  plusText: {
+    color: '#fff',
+    fontSize: 24,
   },
 });
 

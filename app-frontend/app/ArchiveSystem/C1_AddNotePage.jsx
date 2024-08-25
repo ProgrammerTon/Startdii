@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
 import UploadCompleteWindow from '../../components/UploadCompleteWindow';
 import ErrorEmptyFieldWindow from '../../components/ErrorEmptyFieldWindow';
 
@@ -50,6 +50,7 @@ const AddNotePage = () => {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
       <Text style={styles.title}>Note</Text>
       
       <Text style={styles.label}>Name</Text>
@@ -78,6 +79,7 @@ const AddNotePage = () => {
       />
       
       <Text style={styles.label}>Content</Text>
+      
       <TextInput
         style={styles.textarea}
         value={content}
@@ -85,6 +87,7 @@ const AddNotePage = () => {
         placeholder="Description"
         multiline
       />
+      
       <TouchableOpacity style={styles.uploadButton} >
         <Text style={styles.uploadButtonText}>Upload</Text>
       </TouchableOpacity>
@@ -99,7 +102,9 @@ const AddNotePage = () => {
         </TouchableOpacity>
       <ErrorEmptyFieldWindow visible={AddErrorEmptyFieldWindow} onClose={CloseErrorEmptyFieldWindow} />
       <UploadCompleteWindow visible={AddUploadWindowVisible} onClose={CloseUploadComplete} />
+      
       </View>
+      </ScrollView>
     </View>
   );
 };
