@@ -30,6 +30,9 @@ export class User {
 
   @Prop({ name: 'roles' })
   roles: Role[];
+
+  @Prop({ name: 'favorite_sources' })
+  favorite_sources: ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
