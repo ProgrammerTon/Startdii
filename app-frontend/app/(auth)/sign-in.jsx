@@ -121,7 +121,7 @@ export default function SignUp() {
     buttonContainer: {
       position: 'absolute',
       alignItems: 'center',
-      bottom: '57%'
+      bottom: '50.5%'
     },
   };
 
