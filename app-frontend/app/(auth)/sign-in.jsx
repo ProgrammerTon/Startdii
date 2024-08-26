@@ -112,8 +112,8 @@ export default function SignUp() {
     },
     svgLayer: {
       position: 'absolute',
-      top: '20.5%',
-      left: '20%',
+      top: '42%',
+      left: '22%',
       width: '100%',
       height: '100%',
       zIndex: -1,
@@ -128,10 +128,10 @@ export default function SignUp() {
   return (
     <SafeAreaView style={styles.bg}>
       <ScrollView>
+        <View style={styles.container}>
         <View style={styles.svgLayer}>
           <Babypinksvg width={Dimensions.get('window').width} height={185} />
         </View>
-        <View style={styles.container}>
           <Text style={[fonts.EngBold22, styles.signInText]}>Sign in</Text>
           <View style={styles.frame}>
 
