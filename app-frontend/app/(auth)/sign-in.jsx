@@ -161,6 +161,8 @@ export default function SignUp() {
           <View style={styles.buttonContainer}>
             <Button
               title="Sign in"
+              color={colors.blue}
+              textcolor={colors.white}
               onPress={submit}
             />
             <Text className="text-xl text-black">{user?.email}</Text>
