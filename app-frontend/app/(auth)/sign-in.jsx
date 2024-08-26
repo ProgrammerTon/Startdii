@@ -14,7 +14,6 @@ import { ScrollView } from "react-native";
 import AuthService from "../../services/AuthService";
 import { router } from "expo-router";
 import fonts from "../../constants/font";
-import { Shadow } from 'react-native-shadow-2';
 import colors from "../../constants/color";
 import Babypinksvg from "../../components/Babypinksvg";
 
