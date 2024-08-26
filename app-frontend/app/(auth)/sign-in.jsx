@@ -60,15 +60,15 @@ export default function SignUp() {
       justifyContent: 'center', // Equivalent to justify-center
       alignItems: 'center', // Equivalent to items-center
       paddingHorizontal: '3%',
-      paddingVertical: '80%',
+      paddingVertical: '55%',
       marginVertical: '3%',
       minHeight: Dimensions.get('window').height - 100,
     },
     frame: {
       margin: '3%',
       paddingHorizontal: '1%',
-      paddingTop: '18%',
-      paddingBottom: '20%',
+      paddingTop: '13%',
+      paddingBottom: '16%',
       borderRadius: 10, // Equivalent to rounded-[10px]
       backgroundColor: colors.gray_bg,
       width: '95%',
@@ -76,6 +76,8 @@ export default function SignUp() {
       flex: 1, // Assuming you want to use flex to fill available space
       justifyContent: 'center',
       alignItems: 'center',
+      position: 'relative',
+      gap: 25,
       shadowColor: colors.gray_bgblur,
       shadowOffset: [{ width: 0, height: 0 }],
       shadowOpacity: 0.25,
@@ -83,22 +85,16 @@ export default function SignUp() {
       elevation: 5,
     },
     signInText: {
-      fontSize: 36,
+      fontSize: 38,
       color: colors.black,
       textAlign: "left",
       alignSelf: "flex-start",
       marginLeft: '7%',
     },
     box: {
-      position: 'absolute',
-      top: '181%',
-      left: '52%',
-      transform: [{ translateX: -50 }, { translateY: -50 }], // This will center the box
-    },
-    box2: {
       alignSelf: 'flex-end',
       right: '5%',
-      bottom: '5%',
+      bottom: '4%',
     },
     text: {
       color: colors.blue,
@@ -108,19 +104,24 @@ export default function SignUp() {
       color: colors.black,
       marginRight: '3%',
     },
-    box3: {
+    box2: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      top: '8%',
+      top: '10%',
     },
     svgLayer: {
       position: 'absolute',
-      top: '26%',
+      top: '20.5%',
       left: '20%',
       width: '100%',
       height: '100%',
       zIndex: -1,
+    },
+    buttonContainer: {
+      position: 'absolute',
+      alignItems: 'center',
+      bottom: '57%'
     },
   };
 
@@ -150,21 +151,21 @@ export default function SignUp() {
             />
 
             <TouchableOpacity
-              style={styles.box2}
+              style={styles.box}
               onPress={submit}
             >
               <Text style={[fonts.EngMedium12, styles.text]}>Forgot Password ?</Text>
             </TouchableOpacity>
 
           </View>
-          <View style={styles.box}>
+          <View style={styles.buttonContainer}>
             <Button
               title="Sign in"
               onPress={submit}
             />
             <Text className="text-xl text-black">{user?.email}</Text>
           </View>
-          <View style={styles.box3}>
+          <View style={styles.box2}>
             <Text style={[fonts.EngMedium14, styles.text2]}>Don’t have an account?</Text>
             <TouchableOpacity onPress={submit}>
               <Text style={[fonts.EngMedium14, styles.text]}>Create an account</Text>
