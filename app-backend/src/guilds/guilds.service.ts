@@ -64,7 +64,6 @@ export class GuildsService {
 
   async addViceLeader(id: ObjectId, viceLeaderId: ObjectId): Promise<Guild> {
     const guild = await this.guildModel.findById({ _id: id });
-    console.log(typeof(guild.viceLeaderIdList));
     guild.viceLeaderIdList.push(viceLeaderId);
 
     return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();    
