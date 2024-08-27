@@ -8,12 +8,35 @@ import {
   Dimensions,
 } from "react-native";
 import Componentchatuser from "./Componentchatuser";
+import { router } from "expo-router";
 
 // Get screen width for responsive design
 const { width } = Dimensions.get("window");
 
 const ChatH1 = () => {
-  const [chatComponents, setChatComponents] = useState([{ id: Date.now() }]);
+  const [chatComponents, setChatComponents] = useState([
+    {
+      id: Date.now(),
+      username: "Mr.BOB",
+      message: "Sample message",
+      time: "12:51",
+      url: "/chatroom/1",
+    },
+    {
+      id: Date.now(),
+      username: "Room 1",
+      message: "Sample message",
+      time: "12:51",
+      url: "/chatroom/2",
+    },
+    {
+      id: Date.now(),
+      username: "Room 2",
+      message: "Sample message",
+      time: "12:51",
+      url: "/chatroom/3",
+    },
+  ]);
 
   const addChatComponent = () => {
     setChatComponents([...chatComponents, { id: Date.now() }]);
@@ -33,9 +56,17 @@ const ChatH1 = () => {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        {chatComponents.map((chatComponent) => (
-          <View key={chatComponent.id} style={styles.chatItemContainer}>
-            <Componentchatuser />
+        {chatComponents.map((chatComponent, ind) => (
+          <View
+            key={`${chatComponent.id}-${ind}`}
+            style={styles.chatItemContainer}
+          >
+            <Componentchatuser
+              username={chatComponent.username}
+              message={chatComponent.message}
+              time={chatComponent.time}
+              url={chatComponent.url}
+            />
             <TouchableOpacity
               style={styles.deleteButton}
               onPress={() => deleteChatComponent(chatComponent.id)}
@@ -46,7 +77,10 @@ const ChatH1 = () => {
         ))}
       </ScrollView>
 
-      <TouchableOpacity style={styles.addButton} onPress={addChatComponent}>
+      {/* <TouchableOpacity style={styles.addButton} onPress={addChatComponent}>
+        <Text style={styles.addButtonText}>Add Chat</Text>
+      </TouchableOpacity> */}
+      <TouchableOpacity style={styles.addButton} onPress={() => {}}>
         <Text style={styles.addButtonText}>Add Chat</Text>
       </TouchableOpacity>
     </View>

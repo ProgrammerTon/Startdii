@@ -1,13 +1,25 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { router } from "expo-router";
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 
 // Get screen width for responsive design
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
-const Componentchatuser = ({ username = 'Mr.BOB', message = 'Sample message', time = '12:51' }) => {
+const Componentchatuser = ({ username, message, time, url }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.chatItem}>
+      <TouchableOpacity
+        style={styles.chatItem}
+        onPress={() => {
+          router.push(url);
+        }}
+      >
         <View style={styles.textContainer}>
           <Text style={styles.username}>{username}</Text>
           <Text style={styles.message}>{message}</Text>
@@ -21,14 +33,14 @@ const Componentchatuser = ({ username = 'Mr.BOB', message = 'Sample message', ti
 const styles = StyleSheet.create({
   container: {
     width: width - 40, // Responsive width with padding
-    alignSelf: 'center',
+    alignSelf: "center",
     marginVertical: 5, // Space between components
   },
   chatItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#f9f9f9',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#f9f9f9",
     paddingVertical: 12,
     paddingHorizontal: 15,
     borderRadius: 10,
@@ -39,16 +51,16 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   message: {
     fontSize: 14,
-    color: '#555',
+    color: "#555",
     marginTop: 2,
   },
   time: {
     fontSize: 12,
-    color: '#999',
+    color: "#999",
   },
 });
 

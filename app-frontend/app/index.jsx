@@ -65,51 +65,50 @@ export default function App() {
         {isLogged ? <Text>Already Login</Text> : <Text>Not Login</Text>}
         {isLogged ? <Text>{user?.email}</Text> : null}
         <TouchableHighlight
-        onPress={() => router.push("/chat")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">Chat Button</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/ArchiveSystem/ArchiveMainPage")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">Archive</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/ArchiveSystem/QuestionComponent")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">QuestionComponent</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/ArchiveSystem/D2_QuizMaker")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">D2_QuizMaker</Text>
-      </TouchableHighlight>
+          onPress={() => router.push("/chat")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Chat Button</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/ArchiveSystem/ArchiveMainPage")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Archive</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/ArchiveSystem/QuestionComponent")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">QuestionComponent</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/ArchiveSystem/D2_QuizMaker")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">D2_QuizMaker</Text>
+        </TouchableHighlight>
 
-      <TouchableHighlight
-        onPress={() => router.push("/chatsystem/H1_user")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">chat1</Text>
-      </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/chatsystem/H1_user")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">chat1</Text>
+        </TouchableHighlight>
 
-      <TouchableHighlight
-        onPress={() => router.push("/chatsystem/componentchatuser")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">componentchat1</Text>
-      </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/chatsystem/componentchatuser")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">componentchat1</Text>
+        </TouchableHighlight>
 
-      <TouchableHighlight
-        onPress={() => router.push("/chatsystem/H2_user")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">chat2</Text>
-      </TouchableHighlight>
-
+        <TouchableHighlight
+          onPress={() => router.push("/chatsystem/H2_user")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">chat2</Text>
+        </TouchableHighlight>
       </SafeAreaView>
     );
   }
