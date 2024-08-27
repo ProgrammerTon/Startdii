@@ -112,7 +112,7 @@ export default function SignUp() {
     },
     svgLayer: {
       position: 'absolute',
-      top: '4%',
+      top: '41%',
       left: '22%',
       width: '100%',
       height: '100%',
