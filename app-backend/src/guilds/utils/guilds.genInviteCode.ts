@@ -1,4 +1,4 @@
-import base10ToBase35 from "./guilds.base10ToBases35";
+import base10ToBase36 from "./guilds.base10ToBase36";
 
 const genInviteCode = () => {
   const now = new Date();
@@ -12,7 +12,7 @@ const genInviteCode = () => {
 
   let inviteCode = "";
   for (const substring of substrings) {
-    inviteCode += base10ToBase35(substring);
+    inviteCode += base10ToBase36(substring);
   }
 
   return inviteCode;

@@ -1,5 +1,5 @@
-const base10ToBase35 = (num) => {
-  const base = 35;
+const base10ToBase36 = (num) => {
+  const base = 36;
   const digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   if (num === 0) {
@@ -17,4 +17,4 @@ const base10ToBase35 = (num) => {
   return output.padStart(2, "0");
 }
 
-export default base10ToBase35;
+export default base10ToBase36;

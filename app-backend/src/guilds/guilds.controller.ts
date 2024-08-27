@@ -8,7 +8,6 @@ import { GuildsService } from './guilds.service';
 import { ParseObjectIdPipe } from 'src/common/pipes';
 import genInviteCode from './utils/guilds.genInviteCode';
 
-// TODO: getUserUsername
 @Controller('guilds')
 export class GuildsController {
   constructor(private readonly guildsService: GuildsService) {}
