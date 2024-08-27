@@ -31,11 +31,12 @@ export default function SignUp() {
   const submit = async () => {
     if (
       form.firstname === "" ||
-      form.lastname ||
+      form.lastname === "" ||
       form.email === "" ||
       form.password === "" ||
       form.confirmPassword === ""
     ) {
+      console.log(form);
       Alert.alert("Error", "Please fill in all fields");
     }
     if (form.password !== form.confirmPassword) {
