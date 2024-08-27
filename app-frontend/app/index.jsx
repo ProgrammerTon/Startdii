@@ -88,6 +88,28 @@ export default function App() {
       >
         <Text className="text-lg">D2_QuizMaker</Text>
       </TouchableHighlight>
+
+      <TouchableHighlight
+        onPress={() => router.push("/chatsystem/H1_user")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">chat1</Text>
+      </TouchableHighlight>
+
+      <TouchableHighlight
+        onPress={() => router.push("/chatsystem/componentchatuser")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">componentchat1</Text>
+      </TouchableHighlight>
+
+      <TouchableHighlight
+        onPress={() => router.push("/chatsystem/H2_user")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">chat2</Text>
+      </TouchableHighlight>
+
       </SafeAreaView>
     );
   }
