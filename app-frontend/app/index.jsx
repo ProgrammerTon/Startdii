@@ -3,8 +3,10 @@ import { Redirect, router } from "expo-router";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { useGlobalContext } from "../context/GlobalProvider";
 
 export default function App() {
+  const { user, isLogged } = useGlobalContext();
   return (
     <SafeAreaView className="flex-1 items-center justify-center">
       <StatusBar style="auto" />
@@ -40,6 +42,8 @@ export default function App() {
       >
         <Text className="text-lg">Chat Button</Text>
       </TouchableHighlight>
+      {isLogged ? <Text>Already Login</Text> : <Text>Not Login</Text>}
+      {isLogged ? <Text>{user?.email}</Text> : null}
     </SafeAreaView>
   );
 }

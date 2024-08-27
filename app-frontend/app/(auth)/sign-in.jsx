@@ -10,34 +10,33 @@ import FormField from "../../components/FormField";
 import React from "react";
 import { useState } from "react";
 import { ScrollView } from "react-native";
-import AuthService from "../../services/AuthService"
+import AuthService from "../../services/AuthService";
 import { router } from "expo-router";
+import { getCurrentUser } from "../../utils/asyncstroage";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
-export default function SignUp() {
+export default function SignIn() {
+  const { setUser, setIsLogged } = useGlobalContext();
   const [submitting, setSubmitting] = useState(false);
-  const [user, setUser] = useState(null);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
   const submit = async () => {
-    if (
-      form.email === "" ||
-      form.password === ""
-    ) {
+    if (form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
     }
     setSubmitting(true);
     try {
-      const result = await AuthService.loginUser(
-        form.email,
-        form.password,
-      )
-      setUser(result);
-      // setIsLogged(true);
+      const result = await AuthService.loginUser(form.email, form.password);
+      console.log("Get Result From Login", result);
+      const user = await getCurrentUser(result);
+      console.log("Get User", user);
+      setUser(user);
+      setIsLogged(true);
 
-      // router.replace("/home");
+      router.replace("/");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -86,9 +85,6 @@ export default function SignUp() {
                 <Text className="text-white">Sign in</Text>
               </TouchableOpacity>
             </View>
-          </View>
-          <View>
-            <Text className="text-xl text-black">{user?.email}</Text>
           </View>
         </View>
       </ScrollView>
