@@ -116,7 +116,7 @@ export default function SignUp() {
       justifyContent: 'space-between',
       gap: 30,
       alignItems: 'center',
-      bottom: '9%',
+      bottom: '10.5%',
       position: 'absolute',
     },
   };
