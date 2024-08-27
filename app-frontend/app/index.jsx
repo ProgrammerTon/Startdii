@@ -97,13 +97,6 @@ export default function App() {
         </TouchableHighlight>
 
         <TouchableHighlight
-          onPress={() => router.push("/chatsystem/componentchatuser")}
-          className="bg-green-600 p-2 rounded-xl"
-        >
-          <Text className="text-lg">componentchat1</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight
           onPress={() => router.push("/chatsystem/H2_user")}
           className="bg-green-600 p-2 rounded-xl"
         >
