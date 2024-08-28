@@ -43,6 +43,10 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async findByUsername(username: string): Promise<User | undefined> {
+    return this.userModel.findOne({ username }).exec();
+  }
+
   async findSourcesByUserId(ownerId: ObjectId) {
     return await this.sourceModel.find({ ownerId }).exec();
   }
