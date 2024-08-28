@@ -32,6 +32,20 @@ export async function registerUser(
   }
 }
 
+export async function getUserByUsername(username: string) {
+  const res = await fetch(`${baseUrl}/users/${username}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data: any = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return data;
+}
+
 export async function getUser(token: string): Promise<any> {
   const res = await fetch(`${baseUrl}/users/profile`, {
     method: "GET",
