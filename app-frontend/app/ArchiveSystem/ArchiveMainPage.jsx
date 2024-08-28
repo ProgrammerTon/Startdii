@@ -41,7 +41,7 @@ const ArchiveMainPage = () => {
         </TouchableOpacity>
         <AddNoteQuizWindow visible={AddWindowVisible} onClose={closeAddWindow} />
       <View style={styles.emptyContainer}>
-        {/* The space below filters would be empty */}
+        {/* Waiting For System Traversal Tab*/}
       </View>
     </View>
   );
@@ -96,3 +96,4 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
 });
+

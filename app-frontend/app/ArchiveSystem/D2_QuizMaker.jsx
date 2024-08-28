@@ -1,63 +1,40 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity , ScrollView} from 'react-native';
-import { Redirect, router } from "expo-router";
+import { Text, View, TouchableOpacity, ScrollView, StyleSheet, SafeAreaView, Dimensions } from 'react-native';
 import UploadCompleteWindow from '../../components/UploadCompleteWindow';
 import ErrorEmptyFieldWindow from '../../components/ErrorEmptyFieldWindow';
 import QuestionComponent from './QuestionComponent';
 
+const { width } = Dimensions.get('window');
+
 const QuizMakerPage = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [tag, setTag] = useState('');
+  const [questions, setQuestions] = useState([{ id: Date.now() }]);
 
-  const resetFields = () => {
-    setName('');
-    setDescription('');
-    setTag('');
-  };
-
-  const [AddUploadWindowVisible, setAddUploadWindowVisible] = useState(false);
-  const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
-
-  const ShowUploadComplete = () => {
-    setAddUploadWindowVisible(true);
-  };
-
-  const CloseUploadComplete = () => {
-    setAddUploadWindowVisible(false);
-  };
-
-  const ShowErrorEmptyFieldWindow = () => {
-    setAddErrorEmptyFieldWindow(true);
-  };
-
-  const CloseErrorEmptyFieldWindow = () => {
-    setAddErrorEmptyFieldWindow(false);
-  };
-
-  const [questions, setQuestions] = useState([1]);
   const addNewQuestion = () => {
-    setQuestions([...questions, questions.length + 1]);
+    setQuestions([...questions, { id: Date.now() }]);
   };
 
-  const Publish = async () => {
-    if (
-      name === "" ||
-      description === "" ||
-      tag === "" ||
-      content === ""
-    ) {
-      ShowErrorEmptyFieldWindow();
-    } else {
-      ShowUploadComplete();
-    };
+  const deleteQuestion = (idToRemove) => {
+    const updatedQuestions = questions.filter(question => question.id !== idToRemove);
+    setQuestions(updatedQuestions);
+  };
+
+  const Publish = () => {
+    // Publish logic
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
-        {questions.map((_, index) => (
-          <QuestionComponent key={index} questionNumber={index + 1} />
+        <Text style={styles.counterText}>Total Questions: {questions.length}</Text>
+
+        {questions.map((question, index) => (
+          <View key={question.id} style={styles.questionContainer}>
+            <Text style={styles.questionNumber}>Question {index + 1}</Text>
+            <QuestionComponent questionNumber={index + 1} />
+            <TouchableOpacity style={styles.deleteButton} onPress={() => deleteQuestion(question.id)}>
+              <Text style={styles.deleteText}>Delete</Text>
+            </TouchableOpacity>
+          </View>
         ))}
 
         <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
@@ -75,9 +52,8 @@ const QuizMakerPage = () => {
         <TouchableOpacity style={styles.publishButton} onPress={Publish}>
           <Text style={styles.buttonText}>Publish</Text>
         </TouchableOpacity>
-        <UploadCompleteWindow visible={AddUploadWindowVisible} onClose={CloseUploadComplete} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -87,6 +63,35 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f4f4f4',
   },
+  counterText: {
+    fontSize: width * 0.05, // Adjust font size based on screen width
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  questionContainer: {
+    marginBottom: 20,
+    padding: width * 0.05, // Adjust padding based on screen width
+    backgroundColor: '#fff',
+    borderRadius: 5,
+  },
+  questionNumber: {
+    fontSize: width * 0.045, // Adjust font size
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  deleteButton: {
+    backgroundColor: '#e74c3c',
+    padding: width * 0.03, // Adjust padding for button
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  deleteText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -94,17 +99,17 @@ const styles = StyleSheet.create({
   },
   resetButton: {
     backgroundColor: '#ccc',
-    padding: 10,
+    padding: width * 0.03,
     borderRadius: 5,
   },
   saveButton: {
     backgroundColor: '#f39c12',
-    padding: 10,
+    padding: width * 0.03,
     borderRadius: 5,
   },
   publishButton: {
     backgroundColor: '#3498db',
-    padding: 10,
+    padding: width * 0.03,
     borderRadius: 5,
   },
   buttonText: {
@@ -113,7 +118,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: '#4CAF50',
-    padding: 10,
+    padding: width * 0.05,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
@@ -121,7 +126,7 @@ const styles = StyleSheet.create({
   },
   plusText: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: width * 0.08,
   },
 });
 
