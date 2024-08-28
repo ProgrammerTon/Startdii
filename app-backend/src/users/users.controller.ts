@@ -34,6 +34,14 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    const user = this.usersService.findByEmail(req.user.email);
+    return user;
+  }
+
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -80,14 +88,6 @@ export class UsersController {
     @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
   ) {
     return this.usersService.removeFavoriteSource(userId, sourceId);
-  }
-
-  @Roles(Role.Customer)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    const user = this.usersService.findByEmail(req.user.email);
-    return user;
   }
 
   // @Patch(':id')
