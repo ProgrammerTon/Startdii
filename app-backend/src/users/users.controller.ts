@@ -17,11 +17,17 @@ import { RolesGuard } from 'src/auth/roles/role.guard';
 import { ObjectId } from 'mongodb';
 import { ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe } from 'src/common/pipes';
+import { ChatListService } from './chatlist.service';
+import { Types } from 'mongoose';
+import { CreateChatDto } from './dto/create-chatlist.dto';
 
 @ApiTags('User')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly chatListService: ChatListService,
+  ) {}
 
   @Post('register')
   register(@Body() createUserDto: CreateUserDto) {
@@ -31,6 +37,19 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('chatlist')
+  findChatList(@Request() req) {
+    const ownerId = new Types.ObjectId(req.user.id);
+    return this.chatListService.findAllChatList(ownerId);
+  }
+
+  @Post('chatlist')
+  addChatList(@Body() createChatListDto: CreateChatDto) {
+    return this.chatListService.create(createChatListDto);
   }
 
   @Get('sources/:ownerId')
