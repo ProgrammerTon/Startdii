@@ -7,7 +7,8 @@ import { Tag, TagSchema } from 'src/tags/entities/tag.entity';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Source.name, schema: SourceSchema },
+    MongooseModule.forFeature([
+      { name: Source.name, schema: SourceSchema },
       { name: Tag.name, schema: TagSchema },
     ]),
   ],
