@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/roles/roles.decorator';
 import { Role } from './entities/user.entity';
@@ -39,8 +39,12 @@ export class UsersController {
   }
 
   @Get(':username')
-  findUserByUsername(@Param('username') username: string) {
-    return this.usersService.findByUsername(username);
+  async findUserByUsername(@Param('username') username: string) {
+    const data = await this.usersService.findByUsername(username);
+    if (data == null) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+    return data;
   }
 
   @Patch('favorite_sources/add/:userId/:sourceId')
