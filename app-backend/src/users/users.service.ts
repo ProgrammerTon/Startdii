@@ -7,8 +7,6 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Source, SourceDocument } from 'src/sources/entities/source.entity';
 import { ObjectId } from 'mongodb';
-import { ChatList, ChatListDocument } from './entities/chatlist.entity';
-import { CreateChatLitDto } from './dto/create-chatlist.dto';
 
 @Injectable()
 export class UsersService {
@@ -17,8 +15,6 @@ export class UsersService {
     private userModel: Model<UserDocument>,
     @InjectModel(Source.name)
     private sourceModel: Model<SourceDocument>,
-    @InjectModel(ChatList.name)
-    private chatListModel: Model<ChatListDocument>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -46,9 +42,9 @@ export class UsersService {
   //   return createdGuild.save();
   // }
 
-  async findAllChatList(ownerId: string) {
-    return this.chatListModel.find({ ownerId }).populate('userId').exec();
-  }
+  // async findAllChatList(ownerId: string) {
+  //   return this.chatListModel.find({ ownerId }).populate('userId').exec();
+  // }
 
   async findAll() {
     return this.userModel.find().exec();
