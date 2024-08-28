@@ -32,9 +32,10 @@ const ArchiveMainPage = () => {
   } = useGlobalContext();
 
   useEffect(() => {
-    if (!isLogged) {
+    if (!isLogged || !user) {
       router.replace("/sign-in");
     } else {
+      console.log("My bad", user);
       setName(user.firstname);
     }
     console.log("Join Room", room);
