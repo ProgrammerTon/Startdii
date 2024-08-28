@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import AddNoteQuizWindow from './AddNoteQuizWindow.jsx';
 import SearchBar from '../../components/SearchBar';
+import ToggleNoteQuiz from '../../components/ToggleNoteQuiz.jsx';
 
 const ArchiveMainPage = () => {
   const [ActiveFilter,setActiveFilter] = useState('Relevance');
   const [AddWindowVisible, setAddWindowVisible] = useState(false);
+  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] = useState(false);
   const ToggleFilterChange = (filter) => {
     setActiveFilter(filter); 
   };
@@ -18,9 +20,25 @@ const ArchiveMainPage = () => {
     setAddWindowVisible(false);
   };
 
+  const openAddToggleNoteQuizVisible = () => {
+    setAddToggleNoteQuizVisible(true);
+  };
+
+  const closeAddToggleNoteQuizVisible = () => {
+    setAddToggleNoteQuizVisible(false);
+  };
+
 
   return (
     <View style={styles.container}>
+      {/*
+      <TouchableOpacity style={styles.toggleButton}
+          onPress={openAddToggleNoteQuizVisible}>
+          <Text style={styles.filterText}>T</Text>
+        </TouchableOpacity>
+        
+        <ToggleNoteQuiz visible={AddToggleNoteQuizVisible} onClose={closeAddToggleNoteQuizVisible} />
+        */}
       <SearchBar />
       <View style={styles.filterContainer}>
         <TouchableOpacity style={ActiveFilter === 'Relevance' ? styles.filterButton : styles.inactiveFilterButton}
@@ -84,16 +102,29 @@ const styles = StyleSheet.create({
   circle: {
     width: 40,       
     height: 40,      
-    borderRadius: 30, 
+    borderRadius: 20,  
     backgroundColor: '#ef6d11',
-    top: 470,              
-    left: 300,
+    position: 'absolute',  
+    bottom: 10,           
+    right: 20,          
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  toggleButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#ef6d11',
+    position: 'absolute',
+    top: 10,         // Distance from the top of the screen
+    left: 20,        // Distance from the left of the screen
     justifyContent: 'center',
     alignItems: 'center',
   },
   PlusText: {
     color: '#ffffff',
     fontSize: 30,
+    textAlign: 'center',  
   },
 });
 

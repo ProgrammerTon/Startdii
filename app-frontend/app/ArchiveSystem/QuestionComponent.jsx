@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Dimensions } from 'react-native';
+import QuestionTemplate from './QuestionTemplate';
 
 const { width } = Dimensions.get('window');
 
@@ -14,6 +15,7 @@ const QuestionComponent = ({ questionNumber }) => {
         onChangeText={setQuestion}
         placeholder="Question"
       />
+      <QuestionTemplate />
     </View>
   );
 };
@@ -21,7 +23,7 @@ const QuestionComponent = ({ questionNumber }) => {
 const styles = StyleSheet.create({
   input: {
     height: 120,
-    width: '100%', // Make the width responsive
+    width: '100%', 
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 30,

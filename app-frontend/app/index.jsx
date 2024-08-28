@@ -77,16 +77,16 @@ export default function App() {
         <Text className="text-lg">Archive</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/ArchiveSystem/QuestionComponent")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">QuestionComponent</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
         onPress={() => router.push("/ArchiveSystem/D2_QuizMaker")}
         className="bg-green-600 p-2 rounded-xl"
       >
         <Text className="text-lg">D2_QuizMaker</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">UserFinder</Text>
       </TouchableHighlight>
       </SafeAreaView>
     );
