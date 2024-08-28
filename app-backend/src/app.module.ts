@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoursesModule } from './courses/courses.module';
 import { UsersModule } from './users/users.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TagsModule } from './tags/tags.module';
@@ -18,10 +18,14 @@ import { FilesController } from './files/files.controller';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot(
-      'mongodb+srv://best:best@cluster0.i9ydoci.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-      { dbName: 'testbefore' },
-    ),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+        dbName: configService.get<string>('MONGODB_DATABASE'),
+      }),
+      inject: [ConfigService],
+    }),
     CoursesModule,
     AuthModule,
     UsersModule,

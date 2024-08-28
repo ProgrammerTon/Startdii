@@ -11,6 +11,9 @@ export class Tag {
 
   @Prop({ name: 'name', unique: true })
   name: string;
+
+  @Prop({ name: 'sources' })
+  sources: ObjectId[];
 }
 
 export const TagSchema = SchemaFactory.createForClass(Tag);
