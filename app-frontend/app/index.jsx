@@ -65,29 +65,35 @@ export default function App() {
         {isLogged ? <Text>Already Login</Text> : <Text>Not Login</Text>}
         {isLogged ? <Text>{user?.email}</Text> : null}
         <TouchableHighlight
-        onPress={() => router.push("/chat")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">Chat Button</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/ArchiveSystem/ArchiveMainPage")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">Archive</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/ArchiveSystem/D2_QuizMaker")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">D2_QuizMaker</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">UserFinder</Text>
-      </TouchableHighlight>
+          onPress={() => router.push("/chat")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Chat Button</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/ArchiveSystem/ArchiveMainPage")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Archive</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/ArchiveSystem/D2_QuizMaker")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">D2_QuizMaker</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/chatsystem/H1_user")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Chat 2</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">UserFinder</Text>
+        </TouchableHighlight>
       </SafeAreaView>
     );
   }

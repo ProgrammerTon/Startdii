@@ -54,9 +54,17 @@ export async function getUser(token: string): Promise<any> {
       Authorization: `Bearer ${token}`,
     },
   });
-  const data: any = await res.json();
+  if (res.status === 404) {
+    console.log("User not found (404).");
+    return null; // or return a specific message or throw an error
+  }
+
   if (!res.ok) {
+    console.error("Fetch error:", res.status, res.statusText);
     return null;
   }
+
+  const data: any = await res.json();
+  console.log("User Data from fetch", data);
   return data;
 }

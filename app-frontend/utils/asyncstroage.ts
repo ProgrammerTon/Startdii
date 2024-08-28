@@ -14,10 +14,21 @@ export async function getCurrentUser(token: string) {
     if (!currentTokenAccount) throw Error;
     const currentUser = await getUser(currentTokenAccount);
     console.log(currentUser);
-    if (!currentUser) throw Error;
+    if (!currentUser) throw Error("Cant get Current User");
     const data = JSON.stringify(currentUser);
     await AsyncStorage.setItem("user", data);
     return currentUser;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function getCurrentToken() {
+  try {
+    const currentTokenAccount = await AsyncStorage.getItem("jwt");
+    if (!currentTokenAccount) throw Error;
+    return currentTokenAccount;
   } catch (error) {
     console.log(error);
     return null;

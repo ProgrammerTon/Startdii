@@ -21,11 +21,18 @@ const ArchiveMainPage = () => {
   const [message, setMessage] = useState("");
   const [room, setRoom] = useState("default");
   const [name, setName] = useState("");
-  const { joinRoom, leaveRoom, messages, sendMessage, clearMessage, user, isLogged } =
-    useGlobalContext();
+  const {
+    joinRoom,
+    leaveRoom,
+    messages,
+    sendMessage,
+    clearMessage,
+    user,
+    isLogged,
+  } = useGlobalContext();
 
   useEffect(() => {
-    if (!isLogged) {
+    if (!isLogged || !user) {
       router.replace("/sign-in");
     } else {
       setName(user.firstname);
