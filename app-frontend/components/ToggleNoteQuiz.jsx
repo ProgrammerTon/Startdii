@@ -1,8 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
-import { Redirect, router } from "expo-router";
 
-const AddNoteQuizWindow = ({ visible, onClose }) => {
+const ToggleNoteQuiz = ({ visible, onClose }) => {
   return (
     <Modal
       animationType="slide"
@@ -12,10 +11,10 @@ const AddNoteQuizWindow = ({ visible, onClose }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Pressable style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/C1_AddNotePage")}>
+          <Pressable style={styles.InteractButton}>
             <Text style={styles.InteractButtonText}>N</Text>
           </Pressable>
-          <Pressable style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/D1_AddQuizPage")}>
+          <Pressable style={styles.InteractButton}>
             <Text style={styles.InteractButtonText}>Q</Text>
           </Pressable>
           <Pressable style={styles.InteractButton} onPress={onClose}>
@@ -28,26 +27,20 @@ const AddNoteQuizWindow = ({ visible, onClose }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   modalContainer: {
     flex: 1,
-    justifyContent: 'flex-end',  
-    alignItems: 'flex-end',    
+    justifyContent: 'center', 
+    alignItems: 'center',     
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
   },
   modalContent: {
-    width: '30%',               
-    maxWidth: 400,              
+    width: '80%',            
+    maxWidth: 400,           
     padding: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0)',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
     alignItems: 'center',
-    margin: 10,  
-    bottom: 20,                  
-    right: -30,          
+    elevation: 5,             // Optional: adds a shadow for Android
   },
   modalText: {
     fontSize: 18,
@@ -58,7 +51,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
-    margin: 5,      
+    margin: 5,
   },
   InteractButtonText: {
     color: '#ffffff',
@@ -66,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddNoteQuizWindow;
+export default ToggleNoteQuiz;
