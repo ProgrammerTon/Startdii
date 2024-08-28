@@ -5,6 +5,7 @@ import { UpdateGuildDto } from './dto/update-guild.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ObjectId } from 'mongodb';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class GuildsService {
@@ -15,6 +16,10 @@ export class GuildsService {
 
   async findAll(): Promise<Guild[]> {
     return this.guildModel.find().exec();
+  }
+  
+  async getAllMembersInGuild(id: ObjectId): Promise<any> {
+    return this.guildModel.findById({ _id: id }).select('memberIdList').populate('memberIdList').exec();
   }
 
   async findGuildByMemberId(memberId: ObjectId): Promise<Guild[]> {

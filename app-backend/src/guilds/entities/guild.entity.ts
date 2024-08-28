@@ -15,13 +15,13 @@ export class Guild {
   @Prop({ name: 'inviteCode' })
   inviteCode: string;
   
-  @Prop({ type: ObjectId, name: 'memberIdList' })
+  @Prop({ type: [ObjectId], name: 'memberIdList', ref: 'User' })
   memberIdList: ObjectId[];
 
   @Prop({ type: ObjectId, name: 'leaderId' })
   leaderId: ObjectId;
 
-  @Prop({ type: ObjectId, name: 'viceLeaderIdList' })
+  @Prop({ type: [ObjectId], name: 'viceLeaderIdList' })
   viceLeaderIdList: ObjectId[];
 
   @Prop({ name: 'name' })

@@ -17,9 +17,14 @@ export class GuildsController {
     return this.guildsService.findAll();
   }
 
-  @Get(':memberId')
-  findGuildByMemberId(@Param('memberId', ParseObjectIdPipe) memberId: ObjectId) {
-    return this.guildsService.findGuildByMemberId(memberId);
+  // @Get(':memberId')
+  // findGuildByMemberId(@Param('memberId', ParseObjectIdPipe) memberId: ObjectId) {
+  //   return this.guildsService.findGuildByMemberId(memberId);
+  // }
+
+  @Get(':id')
+  getAllMembersInGuild(@Param('id', ParseObjectIdPipe) id: ObjectId) {
+    return this.guildsService.getAllMembersInGuild(id);
   }
 
   @Get(':id/:memberId')
