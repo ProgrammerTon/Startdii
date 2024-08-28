@@ -39,13 +39,12 @@ export class UsersService {
     }
   }
 
-  async addChatList(createChatListDto: CreateChatLitDto) {
-    const chatlist = plainToInstance(ChatList, createChatListDto);
-    chatlist.chatroom = new ObjectId()
-    const createdGuild = new this.chatListModel.create(createChatListDto);
-    return createdGuild.save();
-    this.chatListModel.
-  }
+  // async addChatList(createChatListDto: CreateChatLitDto) {
+  //   const chatlist = plainToInstance(ChatList, createChatListDto);
+  //   chatlist.chatroom = new ObjectId();
+  //   const createdGuild = new this.chatListModel.create(createChatListDto);
+  //   return createdGuild.save();
+  // }
 
   async findAllChatList(ownerId: string) {
     return this.chatListModel.find({ ownerId }).populate('userId').exec();
