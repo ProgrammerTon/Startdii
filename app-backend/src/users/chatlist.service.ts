@@ -22,6 +22,17 @@ export class ChatListService {
     chat.ownerId = new Types.ObjectId(chat.ownerId);
     chat.userId = new Types.ObjectId(chat.userId);
     chat.chatroom = new Types.ObjectId();
+
+    const existingChat = await this.chatListModel
+      .findOne({
+        ownerId: chat.ownerId,
+        userId: chat.userId,
+      })
+      .exec();
+
+    if (existingChat) {
+      throw Error('Chat already exists');
+    }
     const createdChat = new this.chatListModel(chat);
 
     //save two way
