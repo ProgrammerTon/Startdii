@@ -38,6 +38,11 @@ export class UsersController {
     return this.usersService.findSourcesByUserId(id);
   }
 
+  @Get(':username')
+  findUserByUsername(@Param('username') username: string) {
+    return this.usersService.findByUsername(username);
+  }
+
   @Patch('favorite_sources/add/:userId/:sourceId')
   addFavoriteSource(
     @Param('userId', ParseObjectIdPipe) userId: ObjectId,

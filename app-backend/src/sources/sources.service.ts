@@ -21,8 +21,8 @@ export class SourcesService {
     const source = plainToInstance(Source, createSourceDto);
     source.ownerId = new ObjectId(source.ownerId);
     const createdSource = new this.sourceModel(source);
-    var tag;
-    for (var i = 0; i < createdSource.tags.length; i++) {
+    let tag;
+    for (let i = 0; i < createdSource.tags.length; i++) {
       tag = await this.tagModel.findOne({ name: createdSource.tags[i] }).exec();
       if (!tag) {
         tag = await this.tagModel.create({ name: createdSource.tags[i] });
@@ -43,7 +43,7 @@ export class SourcesService {
   ): Promise<Source> {
     // Find the document by ID and apply the updates
     const source = await this.sourceModel.findById(id).exec();
-    var tag;
+    let tag;
     for (var i = 0; i < source.tags.length; i++) {
       tag = await this.tagModel.findOne({ name: source.tags[i] }).exec();
       if (!tag) {
@@ -85,17 +85,20 @@ export class SourcesService {
 
   async findByOffset(offset: number): Promise<Source[] | null> {
     const size = 10;
-    var sources = await this.sourceModel.find().sort({ createdAt: -1 }).exec();
+    const sources = await this.sourceModel
+      .find()
+      .sort({ createdAt: -1 })
+      .exec();
     offset--;
     offset *= size;
     return sources.slice(offset, offset + size);
   }
 
   async findByTag(tagname: string): Promise<Source[]> {
-    var sources = new Array<Source>();
+    const sources = new Array<Source>();
     const tag = await this.tagModel.findOne({ name: tagname }).exec();
     if (tag) {
-      for (var i = 0; i < tag.sources.length; i++) {
+      for (let i = 0; i < tag.sources.length; i++) {
         sources.push(await this.sourceModel.findById(tag.sources[i]).exec());
       }
     }
