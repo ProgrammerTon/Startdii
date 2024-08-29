@@ -16,10 +16,9 @@ export enum QType {
 }
 export class Question {
   question: string;
-  points: number;
   qType: QType;
   choices: string[];
-  answers: number[];
+  answers: number[] | number;
 }
 
 
@@ -28,22 +27,22 @@ export class Quiz {
   @Prop({ type: ObjectId, auto: true })
   id: ObjectId;
 
-  @Prop({ type: ObjectId, required: true })
+  @Prop({ type: ObjectId, required: true, name: "ownerId"})
   ownerId: ObjectId;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, name: "title" })
   title: string;
 
-  @Prop()
+  @Prop({ name: "questions" })
   questions: Question[];
 
-  @Prop({ type: String, enum: Object.values(Status), default: Status.private })
+  @Prop({ name: "published" })
   published: Status;
 
   @Prop({ type: ObjectId, required: false })
-  guildId?: ObjectId;
+  guildId: ObjectId;
 
-  @Prop({ type: [String], default: [] })
+  @Prop({ name: "tags" })
   tags: string[];
 }
 

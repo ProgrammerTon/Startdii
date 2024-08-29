@@ -13,10 +13,6 @@ class QuestionDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  points: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
   @IsEnum(QType)
   qType: QType;
 
@@ -26,33 +22,36 @@ class QuestionDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  answers: number[];
+  answers: number[] | number;
 }
 
 export class CreateQuizDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsMongoId()
   ownerId: ObjectId;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @IsArray()
+
+  @ApiProperty()
   @ValidateNested({ each: true })
   @Type(() => QuestionDto)
   questions: QuestionDto[];
 
+  @ApiProperty()
   @IsOptional()
-  @IsEnum(Status)
-  published?: Status;
+  published?: Status = Status.private;
 
+  @ApiProperty()
   @IsOptional()
   @IsMongoId()
   guildId?: ObjectId;
 
+  @ApiProperty()
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  tags?: string[];
+  tags?: string[] = [];
 }

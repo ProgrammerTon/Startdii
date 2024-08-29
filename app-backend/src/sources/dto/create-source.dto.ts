@@ -18,6 +18,14 @@ export class CreateSourceDto {
 
   @ApiProperty()
   @IsOptional()
+  published: Status = Status.private;
+
+  @ApiProperty()
+  @IsOptional()
+  guildId: ObjectId;
+  
+  @ApiProperty()
+  @IsOptional()
   content: string = '';
 
   @ApiProperty()
