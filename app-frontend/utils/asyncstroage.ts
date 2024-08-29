@@ -1,6 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUser } from "../services/UserService";
 
+export async function logoutUser() {
+  try {
+    await AsyncStorage.removeItem("jwt");
+    await AsyncStorage.removeItem("user");
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 export async function getCurrentUser(token: string) {
   try {
     console.log("token", token);
