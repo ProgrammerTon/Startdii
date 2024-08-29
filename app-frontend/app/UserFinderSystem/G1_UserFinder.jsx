@@ -57,6 +57,7 @@ const UserFinderPage = () => {
       {userFound.map((user, ind) => {
         return (
           <UserNameComponent
+            key={user._id}
             id={user._id}
             username={user.username}
             onPress={onAdd}

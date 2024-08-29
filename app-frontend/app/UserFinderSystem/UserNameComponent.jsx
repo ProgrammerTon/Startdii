@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 const UserNameComponent = ({ id, username, onPress }) => {
   return (
-    <View id={id} style={styles.container}>
+    <View key={id} style={styles.container}>
       <Text style={styles.username}>{username}</Text>
       <TouchableOpacity style={styles.button} onPress={() => onPress(id)}>
         <Text style={styles.buttonText}>Add User</Text>
