@@ -185,7 +185,7 @@ export default function SignUp() {
               title="Cancel"
               color={colors.gray_button}
               textcolor={colors.black}
-              onPress={submit}
+              onPress={() => router.push("/")}
             />
             <Button
               title="Create"
