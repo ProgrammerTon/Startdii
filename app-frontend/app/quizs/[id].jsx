@@ -59,6 +59,7 @@ const comments = [
   },
 ];
 
+
 export default function SourceDetail() {
   const { id } = useLocalSearchParams();
   const title = "Title";
@@ -70,6 +71,36 @@ export default function SourceDetail() {
   const count = 999;
   const questionamount = 10;
   const isanswer = true;
+  const quizData = [
+    {
+      questionId: 1,
+      question: "What does the cat says?",
+      choicecount: 4,
+      choice: ["Meaw", "AOUUU", "Miau", "Nyan"],
+      answer : ["AOUUU"]
+    },
+    {
+      questionId: 2,
+      question: "How many legs does cat have",
+      choicecount: 2,
+      choice: ["2", "4"],
+      answer : ["4"]
+    },
+    {
+      questionId: 3,
+      question: "Urmm, What the sigma?",
+      choicecount: 3,
+      choice: ["Skibidi", "Edge", "Rizz"],
+      answer : ["Skibidi"]
+    },
+    {
+      questionId: 4,
+      question: "Admin Best oshi who?",
+      choicecount: 0,
+      choice: [],
+      answer : ["Bell Warisara"]
+    }
+  ]
   return (
     <ScrollView className="w-full">
       <Text className="text-3xl">{title}</Text>

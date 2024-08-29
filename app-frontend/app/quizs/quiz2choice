@@ -1,0 +1,19 @@
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
+import React from "react";
+import { useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import TagList from "../../components/TagList";
+import FormField from "../../components/FormField";
+import CommentList from "../../components/CommentCard";
+import images from "../../constants/images";
+import { Image } from "expo-image";
+
+export default function Quiz2choice() {
+  
+}
