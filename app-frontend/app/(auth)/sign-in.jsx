@@ -16,10 +16,12 @@ import { router } from "expo-router";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
 import Babypinksvg from "../../components/Babypinksvg";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { getCurrentUser } from "../../utils/asyncstroage";
 
 export default function SignIn() {
+  const { setUser, setIsLogged } = useGlobalContext();
   const [submitting, setSubmitting] = useState(false);
-  const [user, setUser] = useState(null);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -32,10 +34,13 @@ export default function SignIn() {
     setSubmitting(true);
     try {
       const result = await AuthService.loginUser(form.email, form.password);
-      setUser(result);
-      // setIsLogged(true);
+      console.log("Get Result From Login", result);
+      const user = await getCurrentUser(result);
+      console.log("Get User", user);
+      setUser(user);
+      setIsLogged(true);
 
-      // router.replace("/home");
+      router.replace("/");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -156,7 +161,6 @@ export default function SignIn() {
               textcolor={colors.white}
               onPress={submit}
             />
-            <Text className="text-xl text-black">{user?.email}</Text>
           </View>
           <View style={styles.box2}>
             <Text style={[fonts.EngMedium14, styles.text2]}>

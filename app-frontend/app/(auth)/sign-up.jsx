@@ -19,7 +19,6 @@ import { registerUser } from "../../services/UserService";
 
 export default function SignUp() {
   const [submitting, setSubmitting] = useState(false);
-  const [user, setUser] = useState(null);
   const [form, setForm] = useState({
     firstname: "",
     lastname: "",
