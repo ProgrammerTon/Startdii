@@ -20,6 +20,7 @@ import { ParseObjectIdPipe } from 'src/common/pipes';
 import { ChatListService } from './chatlist.service';
 import { Types } from 'mongoose';
 import { CreateChatDto } from './dto/create-chatlist.dto';
+import { GuildsService } from 'src/guilds/guilds.service';
 
 @ApiTags('User')
 @Controller('users')
@@ -27,6 +28,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly chatListService: ChatListService,
+    private readonly guildsService: GuildsService,
   ) {}
 
   @Post('register')
@@ -45,6 +47,14 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('guild')
+  findGuildByMemberId(@Request() req) {
+    const memberId = req.user.id;
+    return this.guildsService.findGuildByMemberId(memberId);
   }
 
   @Roles(Role.Customer)

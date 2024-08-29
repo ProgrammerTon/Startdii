@@ -8,9 +8,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Guild.name, schema: GuildSchema }]),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [GuildsController],
   providers: [GuildsService],
+  exports: [GuildsService],
 })
 export class GuildsModule {}
