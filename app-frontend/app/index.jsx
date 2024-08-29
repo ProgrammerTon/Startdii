@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import { useGlobalContext } from "../context/GlobalProvider";
+import LogoutButton from "../components/LogoutButton";
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -94,6 +95,7 @@ export default function App() {
         >
           <Text className="text-lg">UserFinder</Text>
         </TouchableHighlight>
+        {isLogged ? <LogoutButton /> : null}
       </SafeAreaView>
     );
   }
