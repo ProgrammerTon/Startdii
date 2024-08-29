@@ -109,7 +109,12 @@ const ChatH1 = () => {
       {/* <TouchableOpacity style={styles.addButton} onPress={addChatComponent}>
         <Text style={styles.addButtonText}>Add Chat</Text>
       </TouchableOpacity> */}
-      <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => {
+          router.push("/UserFinderSystem/G1_UserFinder");
+        }}
+      >
         <Text style={styles.addButtonText}>Add Chat</Text>
       </TouchableOpacity>
     </View>

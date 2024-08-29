@@ -11,6 +11,7 @@ type UserRespond = {
 export async function registerUser(
   email: string,
   password: string,
+  username: string,
   firstname: string,
   lastname: string
 ): Promise<any | null> {
@@ -20,6 +21,7 @@ export async function registerUser(
     body: JSON.stringify({
       email: email,
       password: password,
+      username: username,
       firstname: firstname,
       lastname: lastname,
     }),
