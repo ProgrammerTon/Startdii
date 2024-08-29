@@ -32,9 +32,14 @@ export class TagsController {
     return this.tagsService.findOne(name);
   }
 
+  @Get('sources/:name')
+  getSources(@Param('name') name: string) {
+    return this.tagsService.getSources(name);
+  }
+
   @Patch(':name')
-  update(@Param('name') name: string, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagsService.update(+name, updateTagDto);
+  update(@Param('name') name: string) {
+    return this.tagsService.patchSources(name);
   }
 
   @Delete(':name')

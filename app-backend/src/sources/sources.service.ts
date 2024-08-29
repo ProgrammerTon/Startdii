@@ -4,9 +4,9 @@ import { CreateSourceDto } from './dto/create-source.dto';
 import { UpdateSourceDto } from './dto/update-source.dto';
 import { Source, SourceDocument } from './entities/source.entity';
 import { plainToInstance } from 'class-transformer';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Tag } from 'src/tags/entities/tag.entity';
+import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
 
 @Injectable()
 export class SourcesService {
@@ -14,33 +14,37 @@ export class SourcesService {
     @InjectModel(Source.name)
     private sourceModel: Model<SourceDocument>,
     @InjectModel(Tag.name)
-    private tagModel: Model<Tag>,
+    private tagModel: Model<TagDocument>,
   ) {}
 
   async create(createSourceDto: CreateSourceDto): Promise<Source> {
     const source = plainToInstance(Source, createSourceDto);
     source.ownerId = new ObjectId(source.ownerId);
     const createdSource = new this.sourceModel(source);
-    let tag;
-    for (let i = 0; i < createdSource.tags.length; i++) {
-      tag = await this.tagModel.findOne({ name: createdSource.tags[i] }).exec();
-      if (!tag) {
-        tag = await this.tagModel.create({ name: createdSource.tags[i] });
-      }
-      tag.sources.push(createdSource._id);
-      tag.save();
-    }
-    return createdSource.save();
+    await createdSource.save();
+    this.addSourceFromTags(createdSource._id as ObjectId);
+    return createdSource;
   }
 
   async delete(id: ObjectId): Promise<void> {
+    await this.removeSourceFromTags(id)
     await this.sourceModel.findByIdAndDelete(id).exec();
   }
 
-  async update(
-    id: ObjectId,
-    updateSourceDto: UpdateSourceDto,
-  ): Promise<Source> {
+  async addSourceFromTags(id: ObjectId){
+    const source = await this.sourceModel.findById(id).exec();
+    let tag;
+    for (var i = 0; i < source.tags.length; i++) {
+      tag = await this.tagModel.findOne({ name: source.tags[i] }).exec();
+      if (!tag) {
+        tag = await this.tagModel.create({ name: source.tags[i] });
+      }
+      tag.sources.push(id);
+      tag.save();
+    }
+  }
+
+  async removeSourceFromTags(id: ObjectId){
     // Find the document by ID and apply the updates
     const source = await this.sourceModel.findById(id).exec();
     let tag;
@@ -54,6 +58,13 @@ export class SourcesService {
       );
       tag.save();
     }
+  }
+
+  async update(
+    id: ObjectId,
+    updateSourceDto: UpdateSourceDto,
+  ): Promise<Source> {
+    this.removeSourceFromTags(id)
 
     const updatedSource = await this.sourceModel
       .findByIdAndUpdate(
@@ -63,14 +74,7 @@ export class SourcesService {
       )
       .exec();
 
-    for (var i = 0; i < updatedSource.tags.length; i++) {
-      tag = await this.tagModel.findOne({ name: updatedSource.tags[i] }).exec();
-      if (!tag) {
-        tag = await this.tagModel.create({ name: updatedSource.tags[i] });
-      }
-      tag.sources.push(id);
-      tag.save();
-    }
+    this.addSourceFromTags(updatedSource.id)
     // Return the updated document, or null if not found
     return updatedSource;
   }
@@ -94,7 +98,11 @@ export class SourcesService {
     return sources.slice(offset, offset + size);
   }
 
-  async findByTag(tagname: string): Promise<Source[]> {
+  async searchByTitle(keyword: string): Promise<Source[]> {
+    return this.sourceModel.find({ $text: { $search: keyword } }).exec();
+  }
+
+  /*async findByTag(tagname: string): Promise<Source[]> {
     const sources = new Array<Source>();
     const tag = await this.tagModel.findOne({ name: tagname }).exec();
     if (tag) {
@@ -103,5 +111,5 @@ export class SourcesService {
       }
     }
     return sources;
-  }
+  }*/
 }

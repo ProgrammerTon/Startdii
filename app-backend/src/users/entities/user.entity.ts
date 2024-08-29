@@ -36,6 +36,9 @@ export class User {
 
   @Prop({ name: 'favorite_sources' })
   favorite_sources: ObjectId[];
+
+  @Prop({ name: 'quizHistory' })
+  quizHistory: ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

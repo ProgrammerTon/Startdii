@@ -9,6 +9,7 @@ export class QuizsController {
 
   @Post()
   create(@Body() createQuizDto: CreateQuizDto) {
+    console.log(createQuizDto)
     return this.quizsService.create(createQuizDto);
   }
 
