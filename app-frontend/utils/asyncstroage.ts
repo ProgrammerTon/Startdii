@@ -21,10 +21,14 @@ export async function getCurrentUser(token: string) {
     } else {
       currentTokenAccount = await AsyncStorage.getItem("jwt");
     }
+    // console.log("Token Check", currentTokenAccount);
     if (!currentTokenAccount) throw Error;
     const currentUser = await getUser(currentTokenAccount);
-    console.log(currentUser);
-    if (!currentUser) throw Error("Cant get Current User");
+    // console.log(currentUser);
+    if (!currentUser) {
+      await logoutUser();
+      throw Error("Cant get Current User");
+    }
     const data = JSON.stringify(currentUser);
     await AsyncStorage.setItem("user", data);
     return currentUser;

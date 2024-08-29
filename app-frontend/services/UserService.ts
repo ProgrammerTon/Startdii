@@ -47,6 +47,9 @@ export async function getUserByUsername(username: string) {
 }
 
 export async function getUser(token: string): Promise<any> {
+  if (!token) {
+    throw new Error("Token Needed");
+  }
   const res = await fetch(`${baseUrl}/users/profile`, {
     method: "GET",
     headers: {
