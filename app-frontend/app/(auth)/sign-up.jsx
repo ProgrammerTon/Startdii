@@ -11,11 +11,11 @@ import Button from "../../components/Button";
 import React from "react";
 import { useState } from "react";
 import { ScrollView } from "react-native";
-import UserService from "../../services/UserService";
 import { router } from "expo-router";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
 import Babypinksvg from "../../components/Babypinksvg";
+import { registerUser } from "../../services/UserService";
 
 export default function SignUp() {
   const [submitting, setSubmitting] = useState(false);
@@ -24,6 +24,7 @@ export default function SignUp() {
     firstname: "",
     lastname: "",
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
@@ -34,7 +35,8 @@ export default function SignUp() {
       form.lastname === "" ||
       form.email === "" ||
       form.password === "" ||
-      form.confirmPassword === ""
+      form.confirmPassword === "" ||
+      form.username === ""
     ) {
       console.log(form);
       Alert.alert("Error", "Please fill in all fields");
@@ -44,13 +46,19 @@ export default function SignUp() {
     }
     setSubmitting(true);
     try {
-      const result = await UserService.registerUser(
+      const result = await registerUser(
         form.email,
         form.password,
+        form.username,
         form.firstname,
         form.lastname
       );
-      setUser(result);
+      console.log(result);
+      if (!result) {
+        Alert.alert("Server Error");
+      } else {
+        router.push("/sign-in");
+      }
       // setIsLogged(true);
 
       // router.replace("/home");
@@ -63,32 +71,32 @@ export default function SignUp() {
 
   const styles = {
     bg: {
-      height: '100%',
+      height: "100%",
       backgroundColor: colors.yellow,
     },
     container: {
-      position: 'relative',
+      position: "relative",
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: '3%',
-      paddingVertical: '22%',
-      marginVertical: '3%',
-      minHeight: Dimensions.get('window').height - 20,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingHorizontal: "3%",
+      paddingVertical: "22%",
+      marginVertical: "3%",
+      minHeight: Dimensions.get("window").height - 20,
     },
     frame: {
-      margin: '3%',
-      paddingHorizontal: '1%',
-      paddingTop: '10%',
-      paddingBottom: '18%',
+      margin: "3%",
+      paddingHorizontal: "1%",
+      paddingTop: "10%",
+      paddingBottom: "18%",
       borderRadius: 10,
       backgroundColor: colors.gray_bg,
-      width: '95%',
-      height: '100%',
+      width: "95%",
+      height: "100%",
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'relative',
+      justifyContent: "center",
+      alignItems: "center",
+      position: "relative",
       gap: 25,
       shadowColor: colors.gray_bgblur,
       shadowOffset: [{ width: 0, height: 0 }],
@@ -101,23 +109,23 @@ export default function SignUp() {
       color: colors.black,
       textAlign: "left",
       alignSelf: "flex-start",
-      marginLeft: '7%',
+      marginLeft: "7%",
     },
     svgLayer: {
-      position: 'absolute',
-      top: '5%',
-      left: '22%',
-      width: '100%',
-      height: '100%',
+      position: "absolute",
+      top: "5%",
+      left: "22%",
+      width: "100%",
+      height: "100%",
       zIndex: -1,
     },
     buttonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      justifyContent: "space-between",
       gap: 30,
-      alignItems: 'center',
-      bottom: '10.5%',
-      position: 'absolute',
+      alignItems: "center",
+      bottom: "10.5%",
+      position: "absolute",
     },
   };
 
@@ -126,7 +134,7 @@ export default function SignUp() {
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.svgLayer}>
-            <Babypinksvg width={Dimensions.get('window').width} height={185} />
+            <Babypinksvg width={Dimensions.get("window").width} height={185} />
           </View>
           <Text style={[fonts.EngBold22, styles.signInText]}>Sign up</Text>
           <View style={styles.frame}>
@@ -168,11 +176,10 @@ export default function SignUp() {
 
             <FormField
               title="Confirm Password"
-              value={form.password}
-              handleChangeText={(e) => setForm({ ...form, password: e })}
+              value={form.confirmPassword}
+              handleChangeText={(e) => setForm({ ...form, confirmPassword: e })}
               otherStyles="mt-3"
             />
-
           </View>
           <View style={styles.buttonContainer}>
             <Button
