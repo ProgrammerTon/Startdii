@@ -77,6 +77,7 @@ export default function SourceDetail() {
       question: "What does the cat says?",
       choicecount: 4,
       choice: ["Meaw", "AOUUU", "Miau", "Nyan"],
+      isMultipleAnswer: false,
       answer : ["AOUUU"]
     },
     {
@@ -84,23 +85,30 @@ export default function SourceDetail() {
       question: "How many legs does cat have",
       choicecount: 2,
       choice: ["2", "4"],
+      isMultipleAnswer: false,
       answer : ["4"]
     },
     {
       questionId: 3,
-      question: "Urmm, What the sigma?",
+      question: "ท่านประธานชอบรับประทานเมนูใดบ้าง",
       choicecount: 3,
-      choice: ["Skibidi", "Edge", "Rizz"],
-      answer : ["Skibidi"]
+      choice: ["กะเพราหมูกรอบ", "ผัดซีอิ๊ว", "หมูกรอบทอดเกลือ", "หมูกรอบคั่วพริกเกลือ"],
+      isMultipleAnswer: true,
+      answer : ["กะเพราหมูกรอบ", "หมูกรอบทอดเกลือ", "หมูกรอบคั่วพริกเกลือ"]
     },
     {
       questionId: 4,
-      question: "Admin Best oshi who?",
+      question: "3+2",
       choicecount: 0,
       choice: [],
-      answer : ["Bell Warisara"]
+      isMultipleAnswer: false,
+      answer : ["5"]
     }
   ]
+  const quizStart = async () => {
+    
+    router.push("/ArchiveSystem/D2_QuizMaker");
+  };
   return (
     <ScrollView className="w-full">
       <Text className="text-3xl">{title}</Text>
@@ -113,7 +121,7 @@ export default function SourceDetail() {
         </View>
       </View>
       <View className="flex flex-col gap-4 justify-evenly items-center">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={quizStart}>
           <View className="flex flex-row gap-2 justify-center items-center bg-white p-2 rounded-xl drop-shadow-2xl w-[187px]">
             <Image
               className="w-[36px] h-[36px]"
