@@ -94,6 +94,12 @@ export default function App() {
         >
           <Text className="text-lg">UserFinder</Text>
         </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/quizzes/quiz4choice")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Quiz page</Text>
+        </TouchableHighlight>
       </SafeAreaView>
     );
   }
