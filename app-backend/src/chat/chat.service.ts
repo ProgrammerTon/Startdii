@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
-import { Chat, ChatDocument } from './entities/chat.entity';
+import { Chat, ChatDocument, Type } from './entities/chat.entity';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 import { ObjectId } from 'mongodb';
@@ -19,8 +19,15 @@ export class ChatService {
   async create(msg: messageData): Promise<Chat> {
     const chat = new Chat()
     chat.chatId = new Types.ObjectId(msg.rooms as string);
-    chat.message = msg.message.text;
-    chat.msgType = msg.message.type;
+    if(msg.message.type == Type.text) {
+      chat.message = msg.message.text;
+    }
+    if(msg.message.type == Type.source) {
+      chat.sourceId = msg.message.sourceId;
+    }
+    if(msg.message.type == Type.quiz) {
+      chat.quizId = msg.message.quizId;
+    }
     const user: any = await this.userService.findByUsername(msg.sender)
     chat.userId =  user._id;
     const createdChat = new this.chatModel(chat);
@@ -46,8 +53,10 @@ export class ChatService {
 type messageData = {
   rooms: string;
   message: {
-      text: string;
-      type?: string;
+      text?: string;
+      type: string;
+      sourceId?: ObjectId;
+      quizId?: ObjectId;
   }
   sender: string;
 };

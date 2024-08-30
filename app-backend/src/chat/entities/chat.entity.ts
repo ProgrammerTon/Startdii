@@ -1,6 +1,11 @@
 import { ObjectId} from 'mongodb';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+export enum Type {
+  text = 'Text',
+  source = 'Source',
+  quiz = 'Quiz',
+}
 
 export type ChatDocument = Chat & Document;
 
@@ -12,11 +17,11 @@ export class Chat {
   @Prop({ type: ObjectId})
   chatId: ObjectId;
 
-  @Prop({ name: 'message' })
-  message: string;
-
   @Prop()
-  msgType: string;
+  msgType: Type[];
+
+  @Prop({ name: 'message' })
+  message?: string;
 
   @Prop({ type: ObjectId, name: 'sourceId'})
   sourceId?: ObjectId;
