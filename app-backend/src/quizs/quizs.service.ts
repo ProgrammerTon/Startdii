@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { plainToInstance } from 'class-transformer';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
 import { ObjectId } from 'mongodb';
+import { User, UserDocument } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class QuizsService {
@@ -15,6 +16,8 @@ export class QuizsService {
     private quizModel: Model<QuizDocument>,
     @InjectModel(Tag.name)
     private tagModel: Model<TagDocument>,
+    @InjectModel(User.name)
+    private userModel: Model<UserDocument>,
   ) {}
 
   async create(createQuizDto: CreateQuizDto): Promise<Quiz> {
@@ -30,31 +33,36 @@ export class QuizsService {
     return this.quizModel.find().exec();
   }
 
-  async arrayMatching(a1: any[], a2: any[]): Promise<number> {
+  async arrayMatching(a1: any[], a2: any[]): Promise<boolean> {
     if (a1.length == a2.length) {
-      let ans = 1;
+      let ans = true;
       for (let i = 0; i < a1.length; i++) {
         if (a1[i] !== a2[i]){
-          ans = 0; break;
+          ans = false; break;
         }
       }
       return ans;
     }
-    return 0;
+    return false;
   }
 
-  async countScore(id: ObjectId, ans: (number | number[])[]) {
-    let result = "result: "
-    let score = 0;
+  async submitQuiz(id: ObjectId, userId: ObjectId, ans: (number | number[])[]) {
+    console.log("calculating results")
+    let results = await this.checkResults(id,ans);
+    console.log("got results");
+    return this.addHistory(id,userId,results);
+  }
+
+  async checkResults(id: ObjectId, ans: (number | number[])[]) {
+    let results: boolean[] = [];
     const quiz = await this.quizModel.findById(id).exec();
     for (let i = 0; i < quiz.questions.length; i++) {
       if (typeof ans[i] == "object" && typeof quiz.questions[i].answers == "object"){
-        score += await this.arrayMatching(ans[i] as number[],quiz.questions[i].answers as number[]);
+        results.push(await this.arrayMatching(ans[i] as number[],quiz.questions[i].answers as number[]));
       } else
-        score += Number(quiz.questions[i].answers == ans[i]);
+        results.push(quiz.questions[i].answers == ans[i]);
     }
-    result += score + "/" + ans.length;
-    return result;
+    return results;
   }
 
   async addQuizFromTags(id: ObjectId){
@@ -86,12 +94,38 @@ export class QuizsService {
     }
   }
 
-  async addHistory(){
-    return;
+  async addHistory(id: ObjectId, userId: ObjectId, res: boolean[]){
+    const quiz = await this.quizModel.findById(id).exec();
+    const user = await this.userModel.findById(userId).exec();
+    if (!quiz.players.includes(userId)){
+      quiz.players.push(userId);
+      if (quiz.total_score)
+        quiz.total_score += res.filter(value => value).length;
+      else
+        quiz.total_score = res.filter(value => value).length;
+      for (let i = 0; i < quiz.questions.length; i++){
+        if (quiz.questions[i].correct)
+          quiz.questions[i].correct += Number(res[i]);
+        else
+          quiz.questions[i].correct = Number(res[i]);
+      }
+      console.log(user)
+      user.quiz_history.push({id: id, results: res});
+    }
+    await this.quizModel
+      .findByIdAndUpdate(
+        id,
+        { $set: quiz },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+    await quiz.save();
+    await user.save();
+    return quiz;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} quiz`;
+  async findOne(id: ObjectId){
+    return this.quizModel.findById(id).exec();
   }
 
   update(id: number, updateQuizDto: UpdateQuizDto) {

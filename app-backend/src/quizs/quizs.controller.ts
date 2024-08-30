@@ -20,13 +20,13 @@ export class QuizsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.quizsService.findOne(+id);
+  findOne(@Param('id') id: ObjectId) {
+    return this.quizsService.findOne(id);
   }
 
-  @Get(':id/grade')
-  countScore(@Param('id') id: ObjectId, @Body('ans') ans: (number | number[])[]) {
-    return this.quizsService.countScore(id,ans);
+  @Patch(':id/:userId/submit')
+  submitQuiz(@Param('id') id: ObjectId, @Param('userId') userId: ObjectId, @Body('ans') ans: (number | number[])[]) {
+    return this.quizsService.submitQuiz(id,userId,ans);
   }
 
   @Patch(':id')

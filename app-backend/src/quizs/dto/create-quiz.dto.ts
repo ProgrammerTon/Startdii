@@ -23,6 +23,7 @@ class QuestionDto {
   @ApiProperty()
   @IsNotEmpty()
   answers: number[] | number;
+
 }
 
 export class CreateQuizDto {
@@ -54,4 +55,5 @@ export class CreateQuizDto {
   @ApiProperty()
   @IsOptional()
   tags?: string[] = [];
+
 }

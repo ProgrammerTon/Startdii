@@ -38,7 +38,7 @@ export class User {
   favorite_sources: ObjectId[];
 
   @Prop({ name: 'quizHistory' })
-  quizHistory: ObjectId[];
+  quiz_history: {id: ObjectId, results: boolean[]}[] = [];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

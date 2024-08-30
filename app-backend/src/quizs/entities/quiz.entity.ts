@@ -19,6 +19,7 @@ export class Question {
   qType: QType;
   choices: string[];
   answers: number[] | number;
+  correct: number = 0;
 }
 
 
@@ -27,7 +28,7 @@ export class Quiz {
   @Prop({ type: ObjectId, auto: true })
   id: ObjectId;
 
-  @Prop({ type: ObjectId, required: true, name: "ownerId"})
+  @Prop({ type: ObjectId, required: true, name: "ownerId", ref: 'User'})
   ownerId: ObjectId;
 
   @Prop({ type: String, required: true, name: "title" })
@@ -44,6 +45,12 @@ export class Quiz {
 
   @Prop({ name: "tags" })
   tags: string[];
+
+  @Prop({ name: "players", ref: 'User'})
+  players: ObjectId[];
+
+  @Prop({ name: "total_score"})
+  total_score: number = 0;
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz);
