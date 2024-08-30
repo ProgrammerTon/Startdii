@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
+
 import { Chat, ChatDocument, messageType } from './entities/chat.entity';
 import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user.entity';
 import { ObjectId } from 'mongodb';
 
 @Injectable()
@@ -15,20 +17,19 @@ export class ChatService {
   ) {}
 
   async create(msg: messageData): Promise<Chat> {
-    const chat = new Chat();
+    const chat = new Chat()
     chat.chatId = new Types.ObjectId(msg.rooms as string);
-    if (msg.type == messageType.text) {
-      chat.message = msg.text;
+    if(msg.message.type == messageType.text) {
+      chat.message = msg.message.text;
     }
-    if (msg.type == messageType.source) {
-      chat.sourceId = msg.sourceId;
+    if(msg.message.type == messageType.source) {
+      chat.sourceId = msg.message.sourceId;
     }
-    if (msg.type == messageType.quiz) {
-      chat.quizId = msg.quizId;
+    if(msg.message.type == messageType.quiz) {
+      chat.quizId = msg.message.quizId;
     }
-    const user: any = await this.userService.findByUsername(msg.sender);
-    chat.msgType = msg.type;
-    chat.userId = user._id;
+    const user: any = await this.userService.findByUsername(msg.sender)
+    chat.userId =  user._id;
     const createdChat = new this.chatModel(chat);
     return createdChat.save();
   }
@@ -37,36 +38,28 @@ export class ChatService {
     return this.chatModel.find().exec();
   }
 
-  async findChatRoomByOffset(
-    offset: number,
-    chatId: ObjectId,
-  ): Promise<Chat[] | null> {
+  async findChatRoomByOffset(chatId: ObjectId): Promise<Chat[] | null> {
     const size = 10;
-    const messages = await this.chatModel
+    const sources = await this.chatModel
       .find({ chatId: chatId })
-      .sort({ createdAt: 1 })
-      .populate('userId', 'username')
+      .sort({ createdAt: -1 })
       .exec();
-    offset--;
-    offset *= size;
-    const transformMessages = (messages) => {
-      return messages.map((msg) => ({
-        text: msg.message,
-        sender: msg.userId.username,
-        type: 'Text', // Assuming all messages are of type "Text"
-        time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
-      }));
-    };
-    const formattedMessages = transformMessages(messages);
-    return formattedMessages.slice(offset, offset + size);
+    const msg_count = sources.length;
+    var end = msg_count;
+    var start = msg_count - size;
+    return sources.slice(start, end);
   }
 }
 
 type messageData = {
   rooms: string;
-  type: messageType;
-  text?: string;
-  sourceId?: ObjectId;
-  quizId?: ObjectId;
+  message: {
+      text?: string;
+      type: string;
+      sourceId?: ObjectId;
+      quizId?: ObjectId;
+  }
   sender: string;
 };
+
+

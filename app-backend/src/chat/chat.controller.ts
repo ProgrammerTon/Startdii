@@ -15,10 +15,16 @@ export class ChatController {
     }
     
     @Get(':chatId')
+    findRecentChatOffset(@Param('chatId', ParseObjectIdPipe) chatId: ObjectId) {
+      return this.chatService.findChatRoomByOffset(chatId);
+    }
+    
+}
+
+/*
     findRecentChatOffset(@Query() query: { offset: number }, @Param('chatId', ParseObjectIdPipe) chatId: ObjectId) {
       if (!query.offset) return this.chatService.findAll();
       const offset = query.offset;
       return this.chatService.findChatRoomByOffset(offset, chatId);
     }
-    
-}
+*/
