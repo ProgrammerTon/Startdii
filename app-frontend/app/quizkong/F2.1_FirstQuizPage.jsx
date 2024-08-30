@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import DescriptionBox from './F2.1_descriptionBox';
 import Tag from './F2.1_Tag';
+import StartButton from './F2.1_StartButton';
 
 const FirstQuizPage = () => {
   return (
@@ -13,6 +14,7 @@ const FirstQuizPage = () => {
           <Tag label="#datasci" />
           <Tag label="#datamining" />
         </View>
+          <StartButton/>
       </ScrollView>
     </View>
   );
@@ -22,7 +24,7 @@ export default FirstQuizPage;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
+    flex: 1, // Change flex value to 1 for proper layout
     backgroundColor: '#FFFFFF',
     padding: 20,
   },
@@ -36,10 +38,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '100%',
     boxSizing: 'border-box',
-  },
-  tagsContainer: {
-    flexDirection: 'row', // Arrange tags in a row
-    flexWrap: 'wrap', // Allow tags to wrap to the next line
-    marginTop: 10, // Add some margin at the top
   },
 });
