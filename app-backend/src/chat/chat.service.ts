@@ -44,7 +44,7 @@ export class ChatService {
     const size = 10;
     const messages = await this.chatModel
       .find({ chatId: chatId })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: 1 })
       .populate('userId', 'username')
       .exec();
     offset--;
