@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { QuizsService } from './quizs.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
+import { ObjectId } from 'mongodb';
 
 @Controller('quizs')
 export class QuizsController {
@@ -21,6 +22,11 @@ export class QuizsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.quizsService.findOne(+id);
+  }
+
+  @Get(':id/grade')
+  countScore(@Param('id') id: ObjectId, @Body('ans') ans: (number | number[])[]) {
+    return this.quizsService.countScore(id,ans);
   }
 
   @Patch(':id')

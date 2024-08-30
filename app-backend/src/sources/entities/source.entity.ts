@@ -15,7 +15,7 @@ export class Source {
   @Prop({ type: ObjectId, auto: true })
   id: ObjectId;
 
-  @Prop({ type: ObjectId })
+  @Prop({ type: ObjectId, name: 'owner', ref: 'User'})
   ownerId: ObjectId;
 
   @Prop({ name: 'title' })

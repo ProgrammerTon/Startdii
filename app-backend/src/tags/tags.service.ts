@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
 import { Source, SourceDocument } from 'src/sources/entities/source.entity';
+import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 
 @Injectable()
 export class TagsService {
@@ -15,6 +16,8 @@ export class TagsService {
     private tagModel: Model<TagDocument>,
     @InjectModel(Source.name)
     private sourceModel: Model<SourceDocument>,
+    @InjectModel(Quiz.name)
+    private quizModel: Model<QuizDocument>,
   ) {}
 
   async create(createTagDto: CreateTagDto): Promise<Tag> {
@@ -43,16 +46,23 @@ export class TagsService {
     return await this.tagModel.findOne({ name: name }).select('sources').populate('sources').exec();
   }
 
-  // Remove all invalid sourceId(s)
-  async patchSources(name: string) {
+  async getQuizs(name: string) {
+    return await this.tagModel.findOne({ name: name }).select('quizs').populate('quizs').exec();
+  }
+
+  // Remove all invalid sourceId(s) and quizId(s)
+  async patchSourcesAndQuizs(name: string) {
     let tag = await this.tagModel.findOne({ name: name });
     let sources = tag.sources.slice();
-    
+    let quizs = tag.quizs.slice();
     for (var i = 0; i < sources.length; i++) {
       const source = await this.sourceModel.findById(sources[i]).exec();
-      console.log(source);
+      const quiz = await this.quizModel.findById(quizs[i]).exec();
       if (!source) {
         tag.sources = await tag.sources.filter(element => String(element) !== String(sources[i]))
+      }
+      if (!quiz) {
+        tag.sources = await tag.quizs.filter(element => String(element) !== String(quizs[i]))
       }
     }
     return tag.save()

@@ -7,6 +7,7 @@ import { plainToInstance } from 'class-transformer';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
+import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 
 @Injectable()
 export class SourcesService {
@@ -60,6 +61,7 @@ export class SourcesService {
     }
   }
 
+
   async update(
     id: ObjectId,
     updateSourceDto: UpdateSourceDto,
@@ -80,7 +82,7 @@ export class SourcesService {
   }
 
   async findById(id: ObjectId): Promise<Source | null> {
-    return this.sourceModel.findById(id).exec();
+    return this.sourceModel.findById(id).populate('ownerId','username').exec();
   }
 
   async findAll() {
@@ -101,6 +103,7 @@ export class SourcesService {
   async searchByTitle(keyword: string): Promise<Source[]> {
     return this.sourceModel.find({ $text: { $search: keyword } }).exec();
   }
+
 
   /*async findByTag(tagname: string): Promise<Source[]> {
     const sources = new Array<Source>();
