@@ -1,18 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const DescriptionBox = () => {
+const DescriptionBlock = () => {
   return (
     <View style={styles.descriptionBox}>
         <Text style={styles.descriptionText}>
-                        สวัสดีครับ เราเคยรู้จักกันรึเป่า
+                        BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL 
 
         </Text>
     </View>
   );
 };
 
-export default DescriptionBox;
+export default DescriptionBlock;
 
 const styles = StyleSheet.create({
   descriptionBox: {

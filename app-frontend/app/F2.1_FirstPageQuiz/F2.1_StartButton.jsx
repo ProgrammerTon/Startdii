@@ -5,8 +5,8 @@ const { width } = Dimensions.get('window'); // Get screen width for responsive s
 
 const StartButton = () => {
   return (
-    <TouchableOpacity style={styles.button} onPress={() => alert('KUAY')}>
-      <Text style={styles.buttonText}>Start</Text>
+    <TouchableOpacity style={styles.button} onPress={() => alert('Rak naka <3')}>
+      <Text style={styles.buttonText}> START</Text>
     </TouchableOpacity>
   );
 };

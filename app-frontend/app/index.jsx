@@ -91,10 +91,17 @@ export default function App() {
         </TouchableHighlight>
         {isLogged ? <LogoutButton /> : null}
         <TouchableHighlight
-          onPress={() => router.push("/quizkong/F2.1_FirstQuizPage")}
+          onPress={() => router.push("/F2.1_FirstPageQuiz/F2.1_FirstQuizPage")}
           className="bg-green-600 p-2 rounded-xl"
         >
-          <Text className="text-lg">Click kong</Text>
+          <Text className="text-lg">quiz page beta</Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight
+          onPress={() => router.push("/F2.2_SumPageQuiz/F2.2_SumQuizPage")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">sum page beta</Text>
         </TouchableHighlight>
 
       </SafeAreaView>
