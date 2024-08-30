@@ -9,52 +9,51 @@ import {
 } from "react-native";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { router, useLocalSearchParams } from "expo-router";
+import { fetchChat } from "../../services/ChatService";
 
 const ArchiveMainPage = () => {
-  // const [messages, setMessages] = useState([
-  //   { text: "สวัสดีครับท่านสมาชิกชมรม", time: "12:48", sender: "user" },
-  //   { text: "สวัสดีครับท่านประธาน", time: "12:48", sender: "receiver" },
-  //   { text: "รู้เขารู้เรา", time: "12:49", sender: "user" },
-  //   { text: "รบร้อยครั้ง", time: "12:50", sender: "user" },
-  //   { text: "แพ้ร้อยครั้ง", time: "12:51", sender: "receiver" },
-  // ]);
   const { room } = useLocalSearchParams();
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
+  const [offset, setOffset] = useState(1);
   const {
     joinRoom,
     leaveRoom,
     messages,
     sendMessage,
-    clearMessage,
+    fetchMessage,
     user,
     isLogged,
+    clearMessage,
   } = useGlobalContext();
 
   useEffect(() => {
     if (!isLogged || !user) {
       router.replace("/sign-in");
     } else {
-      console.log("My bad", user);
-      setName(user.firstname);
+      setName(user.username);
     }
     console.log("Join Room", room);
     joinRoom(room);
-    clearMessage();
+    fetchChat();
     return () => {
       leaveRoom(room);
       clearMessage();
     };
   }, []);
 
+  const fetchChat = () => {
+    fetchMessage(room, offset);
+    setOffset(offset + 1);
+  };
+
   const handleSendMessage = () => {
     if (message && room) {
-      const newMessage = {
-        text: message,
-        time: new Date().toLocaleTimeString().slice(0, 5),
-        sender: name,
-      };
-      sendMessage(room, JSON.stringify(newMessage));
+      const time = new Date().toLocaleTimeString().slice(0, 5);
+      const type = "Text";
+      const sender = name;
+      const text = message;
+      sendMessage({ room, text, sender, type, time });
       setMessage("");
     }
   };
