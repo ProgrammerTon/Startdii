@@ -22,6 +22,9 @@ export class User {
   @Prop({ name: 'password' })
   password: string;
 
+  @Prop({ name: 'username', unique: true })
+  username: string;
+
   @Prop({ name: 'firstname' })
   firstname: string;
 
