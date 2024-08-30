@@ -21,7 +21,7 @@ export class QuizsController {
 
   @Get(':id')
   findOne(@Param('id') id: ObjectId) {
-    return this.quizsService.findOne(id);
+    return this.quizsService.findById(id);
   }
 
   @Patch(':id/:userId/submit')

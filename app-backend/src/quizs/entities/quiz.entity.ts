@@ -46,7 +46,7 @@ export class Quiz {
   @Prop({ name: "tags" })
   tags: string[];
 
-  @Prop({ name: "players", ref: 'User'})
+  @Prop({ name: "players" })
   players: ObjectId[];
 
   @Prop({ name: "total_score"})

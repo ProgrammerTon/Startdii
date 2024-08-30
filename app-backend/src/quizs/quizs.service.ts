@@ -124,8 +124,8 @@ export class QuizsService {
     return quiz;
   }
 
-  async findOne(id: ObjectId){
-    return this.quizModel.findById(id).exec();
+  async findById(id: ObjectId): Promise<Quiz | null> {
+    return this.quizModel.findById(id).populate('ownerId','username').exec();
   }
 
   update(id: number, updateQuizDto: UpdateQuizDto) {
