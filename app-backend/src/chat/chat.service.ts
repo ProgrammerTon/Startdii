@@ -38,7 +38,6 @@ export class ChatService {
   }
 
   async findChatRoomByOffset(
-    offset: number,
     chatId: ObjectId,
   ): Promise<Chat[] | null> {
     const size = 10;
@@ -47,8 +46,9 @@ export class ChatService {
       .sort({ createdAt: 1 })
       .populate('userId', 'username')
       .exec();
-    offset--;
-    offset *= size;
+    const msg_count = messages.length;
+    var end = msg_count;
+    var start = msg_count - size;
     const transformMessages = (messages) => {
       return messages.map((msg) => ({
         text: msg.message,
@@ -58,7 +58,7 @@ export class ChatService {
       }));
     };
     const formattedMessages = transformMessages(messages);
-    return formattedMessages.slice(offset, offset + size);
+    return formattedMessages.slice(start, end);
   }
 }
 
