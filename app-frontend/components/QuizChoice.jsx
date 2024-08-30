@@ -1,30 +1,34 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import fonts from "../constants/font";
 import colors from "../constants/color";
 
-const Button = ({ content }) => {
+const QuizChoice = ({ content }) => {
   return (
-    <TouchableOpacity style={styles.button}>
-      <Text style={[fonts.EngMedium18, styles.buttonText]}>{content}</Text>
+    <TouchableOpacity>
+      <View style={styles.choiceContainer}>
+        <Text style={styles.textStyle}> {content} </Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "lightblue",
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderStyle: "solid",
+  choiceContainer:{
+    backgroundColor:"lightblue",
+    paddingVertical: 20,
+    marginTop:10,
+    borderWidth:2,
     borderColor:"black",
+    borderStyle:"solid",
+    borderRadius:5,
     flexDirection:"row",
-    borderRadius: 10,
+    justifyContent:"center",
   },
-  buttonText: {
-    color: 'black',
+  textStyle:{
+    fontSize: 20,
+    //fontWeight: "bold"
   },
 });
 
-export default Button;
+export default QuizChoice;

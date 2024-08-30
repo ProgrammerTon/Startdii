@@ -3,7 +3,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  FlatList,
+  Dimensions,
   StyleSheet
 } from "react-native";
 import { React , useState } from "react";
@@ -14,13 +14,16 @@ import Button from "../../components/Button";
 import CommentList from "../../components/CommentCard";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+const { width, height } = Dimensions.get('window');
+
 export default function Quiz4choice() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const quizData = [
     {
+      totalQuestion: 5,
       questionId: 1,
-      question: "What does the cat says?",
+      question: "What does the cat says? askldksAGFJDSKLJFKJSDFJKerdfstgyhujgihfhudgytfrsdewfyguhijotfrdeswfg",
       choicecount: 4,
       choice: ["Meaw", "AOUUU", "Miau", "Nyan"],
       isMultipleAnswer: false,
@@ -31,22 +34,22 @@ export default function Quiz4choice() {
     <View style={styles.container}>
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
-          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30, marginRight:25}}>
+          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}}>
             <AntDesign name="closecircle" size={30} color="red" />
           </TouchableOpacity>
         </View>
+        <View style={styles.quizNumber}>
+            <Text style={styles.textNumber}>{quizData[currentQuestion].questionId} / {quizData[currentQuestion].totalQuestion}</Text>
+        </View>
         <View style={styles.question}>
-          <Text style={styles.textStyle}> {quizData[currentQuestion].question} </Text>
+            <Text style={styles.textStyle}> {quizData[currentQuestion].question} </Text>
         </View>
       </View>
+      
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
         {quizData[currentQuestion]?.choice.map((item)=>{
-          return <TouchableOpacity>
-              <View style={styles.choiceContainer}>
-                <Text style={styles.textStyle}> {item} </Text>
-              </View>
-            </TouchableOpacity>
+          return <QuizChoice content={item} />
           })}
         </View>
         <View style={styles.nextQuestion}>
@@ -68,33 +71,49 @@ const styles = StyleSheet.create({
     marginHorizontal: '1%',
   },
   topPart:{
-    flex: 1,
-    width: "105%",
+    height: height * 0.3,
+    width: width,
     backgroundColor: "#04B36E",
   },
   bottomPart:{
-    flex: 2,
-    width: "105%",
+    height: height * 0.7,
+    width: width,
     justifyContent: "center",
   },
   closeQuiz: {
     flex: 1,
     flexDirection: "column",
-    display: "flex", 
     alignSelf: "flex-end",
-    justifyContent: "center",
+    marginRight: width * 0.07,
+    marginTop: height * 0.07
+  },
+  quizNumber:{
+    alignSelf: "center",
+    backgroundColor: "#ddd",
+    padding:7,
+    paddingHorizontal:15,
+    marginTop: -height * 0.2,
+    marginBottom: height * 0.08,
+    zIndex: 1,
   },
   question: {
-    flex: 2,
+    //flex: 1,
+    height: height * 0.25,
     backgroundColor: "#fff",
     alignSelf: "center",
     justifyContent: "center",
-    paddingHorizontal: 100,
-    marginVertical: 20,
+    paddingHorizontal: width * 0.1,
+    paddingVertical: height * 0.02,
+    marginVertical: -height * 0.1,
+    marginHorizontal: width * 0.1,
     borderRadius:10,
     borderWidth:2,
     borderColor:"black",
     borderStyle:"solid",
+  },
+  textNumber:{
+    fontSize: 20,
+    fontWeight: "bold"
   },
   textStyle:{
     fontSize: 20,
@@ -102,30 +121,22 @@ const styles = StyleSheet.create({
   },
   choice: {
     flex: 4,
-    width: "80%",
-    padding:20,
-    marginVertical:30,
+    width: width * 0.8,
+    padding: 10,
+    marginTop: height * 0.15,
+    marginBottom: height * 0.2,
     justifyContent: "space-between",
     alignSelf: "center",
   },
-  choiceContainer:{
-    backgroundColor:"lightblue",
-    paddingVertical: 20,
-    marginTop:10,
-    borderWidth:2,
-    borderColor:"black",
-    borderStyle:"solid",
-    borderRadius:5,
-    flexDirection:"row",
-    justifyContent:"center",
-  },
   nextQuestion:{
     flex: 1,
+
   },
   nextButton:{
-    paddingHorizontal:20,
+    paddingHorizontal: width * 0.05,
     paddingVertical:10,
     marginRight:20,
+    marginVertical: -height * 0.05,
     backgroundColor: "#0270ED", 
     borderRadius:20,
     alignSelf: "flex-end",
