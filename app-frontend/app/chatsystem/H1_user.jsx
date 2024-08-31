@@ -21,20 +21,6 @@ const ChatH1 = () => {
   const [userData, setUserData] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
   const { user, isLogged } = useGlobalContext();
-  const [chatComponents, setChatComponents] = useState([
-    {
-      username: "Mr.BOB",
-      url: "/chatroom/1",
-    },
-    {
-      username: "Room 1",
-      url: "/chatroom/2",
-    },
-    {
-      username: "Room 2",
-      url: "/chatroom/3",
-    },
-  ]);
 
   useEffect(() => {
     if (!isLogged) {
@@ -53,16 +39,6 @@ const ChatH1 = () => {
     }));
     setRefreshing(false);
     setUserData(filteredData);
-    // fetch("https://randomuser.me/api/?results=8")
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
-    //     setRefreshing(false);
-    //     var newdata = userData.concat(responseJson.results);
-    //     setUserData(newdata);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
   };
 
   const addChatComponent = () => {
@@ -105,10 +81,6 @@ const ChatH1 = () => {
           </TouchableOpacity>
         </View>
       ))} */}
-
-      {/* <TouchableOpacity style={styles.addButton} onPress={addChatComponent}>
-        <Text style={styles.addButtonText}>Add Chat</Text>
-      </TouchableOpacity> */}
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => {

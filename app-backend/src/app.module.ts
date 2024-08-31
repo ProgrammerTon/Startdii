@@ -10,11 +10,9 @@ import { TagsModule } from './tags/tags.module';
 import { SourcesModule } from './sources/sources.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { CommentsModule } from './comments/comments.module';
-<<<<<<< HEAD
 import { FilesController } from './files/files.controller';
-=======
 import { GuildsModule } from './guilds/guilds.module';
->>>>>>> d165c004650a1fdcef03a163635d357a45f98721
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -36,7 +34,8 @@ import { GuildsModule } from './guilds/guilds.module';
     TagsModule,
     SourcesModule,
     CommentsModule,
-    GuildsModule
+    GuildsModule,
+    ChatModule,
   ],
   controllers: [AppController, FilesController],
   providers: [AppService, ChatGateway],
