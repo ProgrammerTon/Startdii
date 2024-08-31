@@ -22,6 +22,9 @@ export class User {
   @Prop({ name: 'password' })
   password: string;
 
+  @Prop({ name: 'username', unique: true })
+  username: string;
+
   @Prop({ name: 'firstname' })
   firstname: string;
 
@@ -30,6 +33,9 @@ export class User {
 
   @Prop({ name: 'roles' })
   roles: Role[];
+
+  @Prop({ name: 'favorite_sources' })
+  favorite_sources: ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

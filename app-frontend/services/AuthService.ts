@@ -9,14 +9,13 @@ async function loginUser(email: string, password: string): Promise<any | null> {
       password: password,
     }),
   });
-  const result = await res.json();
-  if (result.accessToken) {
-    localStorage.setItem("accessToken", result.accessToken);
-    localStorage.setItem("username", result.username);
-    return result;
-  } else {
-    return null;
+  if (res.ok) {
+    const { access_token } = await res.json();
+    console.log(access_token);
+    return access_token;
   }
+  throw new Error("Network Failed");
+  return null;
 }
 
 export default {

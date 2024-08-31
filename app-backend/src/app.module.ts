@@ -3,11 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoursesModule } from './courses/courses.module';
 import { UsersModule } from './users/users.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TagsModule } from './tags/tags.module';
+import { SourcesModule } from './sources/sources.module';
 import { ChatGateway } from './chat/chat.gateway';
+import { CommentsModule } from './comments/comments.module';
+import { GuildsModule } from './guilds/guilds.module';
 
 @Module({
   imports: [
@@ -15,11 +18,21 @@ import { ChatGateway } from './chat/chat.gateway';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot('mongodburl'),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+        dbName: configService.get<string>('MONGODB_DATABASE'),
+      }),
+      inject: [ConfigService],
+    }),
     CoursesModule,
     AuthModule,
     UsersModule,
     TagsModule,
+    SourcesModule,
+    CommentsModule,
+    GuildsModule
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],

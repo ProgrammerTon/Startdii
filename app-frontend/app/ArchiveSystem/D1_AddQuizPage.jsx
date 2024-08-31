@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity,ScrollView } from 'react-native';
 import { Redirect, router } from "expo-router";
+import ErrorEmptyFieldWindow from '../../components/ErrorEmptyFieldWindow';
 
 const AddQuizPage = () => {
   const [name, setName] = useState('');
@@ -13,8 +14,32 @@ const AddQuizPage = () => {
     setTag('');
   };
 
+  const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
+
+  const ShowErrorEmptyFieldWindow = () => {
+    setAddErrorEmptyFieldWindow(true);
+  };
+
+  const CloseErrorEmptyFieldWindow = () => {
+    setAddErrorEmptyFieldWindow(false);
+  };
+
+  const Next = async () => {
+    if (
+      name === "" ||
+      description === "" ||
+      tag === ""
+    ) {
+      ShowErrorEmptyFieldWindow();
+    } else {
+      router.push("/ArchiveSystem/D2_QuizMaker");
+    }
+  };
+
+
   return (
     <View style={styles.container}>
+      <ScrollView>
       <Text style={styles.title}>Quiz</Text>
       
       <Text style={styles.label}>Name</Text>
@@ -47,10 +72,12 @@ const AddQuizPage = () => {
           <Text style={styles.resetButtonText}>Reset</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.publishButton} onPress={() => router.push("/ArchiveSystem/D2_QuizMaker")}>
+        <TouchableOpacity style={styles.publishButton} onPress={Next}>
           <Text style={styles.publishButtonText}>Next</Text>
         </TouchableOpacity>
+        <ErrorEmptyFieldWindow visible={AddErrorEmptyFieldWindow} onClose={CloseErrorEmptyFieldWindow}/>
       </View>
+      </ScrollView>
     </View>
   );
 };
@@ -83,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   textarea: {
-    height: 80,
+    height: 120,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 15,
