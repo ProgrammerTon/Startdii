@@ -42,13 +42,15 @@ export class ChatService {
     chatId: ObjectId,
   ): Promise<Chat[] | null> {
     const size = 10;
-    const messages = await this.chatModel
-      .find({ chatId: chatId })
-      .sort({ createdAt: 1 })
-      .populate('userId', 'username')
-      .exec();
     offset--;
     offset *= size;
+    const messages = await this.chatModel
+      .find({ chatId: chatId })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(size)
+      .populate('userId', 'username')
+      .exec();
     const transformMessages = (messages) => {
       return messages.map((msg) => ({
         text: msg.message,
@@ -58,7 +60,7 @@ export class ChatService {
       }));
     };
     const formattedMessages = transformMessages(messages);
-    return formattedMessages.slice(offset, offset + size);
+    return formattedMessages;
   }
 }
 
