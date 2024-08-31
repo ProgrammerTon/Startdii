@@ -1,22 +1,40 @@
 import {
   UseInterceptors,
-  UploadedFile,
   UploadedFiles,
   Controller,
   Post,
   Get,
+  Param,
+  Res,
+  NotFoundException,
+  Response,
   StreamableFile,
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import * as fs from 'fs';
 import * as path from 'path';
+import { extname } from 'path';
 import { createReadStream } from 'fs';
+import { diskStorage } from 'multer';
 import { join } from 'path';
 
 @Controller('files')
 export class FilesController {
   @Post('upload')
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(
+    FilesInterceptor('files', 10, {
+      storage: diskStorage({
+        destination: './uploads', // Save files to the 'uploads' folder
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          const filename = `${file.originalname}-${uniqueSuffix}${ext}`;
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
   uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
     console.log(files);
     // const uploadPath = path.join(__dirname, '..', 'uploads'); // Specify the directory where you want to save the file
@@ -34,9 +52,11 @@ export class FilesController {
     // return { message: 'File uploaded successfully!', filePath };
   }
 
-  @Get('pdf')
-  getPdf(): StreamableFile {
-    const file = createReadStream(join(process.cwd(), 'sample.pdf'));
+  @Get('pdf/:filename')
+  async getPdf(@Param('filename') filename: string): Promise<StreamableFile> {
+    const file = createReadStream(
+      join(process.cwd(), `./uploads/${filename}.pdf`),
+    );
     return new StreamableFile(file, {
       type: 'application/pdf',
       disposition: 'inline; filename="sample.pdf"',
@@ -47,7 +67,9 @@ export class FilesController {
 
   @Get('image')
   getImage(): StreamableFile {
-    const file = createReadStream(join(process.cwd(), 'sample-image.png'));
+    const file = createReadStream(
+      join(process.cwd(), './uploads/sample-image.png'),
+    );
     return new StreamableFile(file, {
       type: 'image/png',
       disposition: 'inline; filename="sample-image.png"',
