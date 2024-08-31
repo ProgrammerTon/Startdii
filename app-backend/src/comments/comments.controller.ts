@@ -1,5 +1,5 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Headers} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Headers, Query} from '@nestjs/common';
 
 import { Types } from 'mongoose';
 import { ObjectId } from 'mongodb';
@@ -18,18 +18,26 @@ export class CommentsController {
     return this.commentsService.findAll();
   }
 
-  @Get(':sourceId')
-  findAllBySourceId(@Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId) {
-    return this.commentsService.findAllBySourceId(sourceId);
+  @Get(':referenceId')
+  findAllByReferenceId(@Param('referenceId', ParseObjectIdPipe) refernceId: ObjectId,
+                       @Query('option') option: string) {
+    return this.commentsService.findAllByReferenceId(refernceId, option);
   }
 
-  @Post(':sourceId')
-  create(@Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
+  @Post(':referenceId')
+  create(@Param('referenceId', ParseObjectIdPipe) referenceId: ObjectId,
          @Body() createCommentDto: CreateCommentDto,
-         @Headers('x-user-id') ownerId: string) {
+         @Headers('x-user-id') ownerId: string,
+         @Query('option') option: string) {
+          
     createCommentDto.ownerId = new Types.ObjectId(ownerId);
-    createCommentDto.sourceId = sourceId;
 
+    if (option === 'source') {
+      createCommentDto.sourceId = referenceId;
+    } else if (option === 'quiz') {
+      createCommentDto.quizId = referenceId;
+    }
+    
     return this.commentsService.create(createCommentDto);
   }
 

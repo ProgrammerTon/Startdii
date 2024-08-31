@@ -31,6 +31,9 @@ export class Comment {
   @Prop({ type: ObjectId, name: 'sourceId' })
   sourceId: ObjectId;
 
+  @Prop({ type: ObjectId, name: 'quizId' })
+  quizId: ObjectId;
+  
   @Prop({ name: 'content' })
   content: string;
 

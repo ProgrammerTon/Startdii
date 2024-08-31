@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateReplyCommentDto {
   @ApiProperty()
   ownerId?: ObjectId;
-  
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -19,6 +19,9 @@ export class CreateCommentDto {
   @ApiProperty()
   sourceId?: ObjectId;
 
+  @ApiProperty()
+  quizId?: ObjectId;
+  
   @ApiProperty()
   @IsString()
   @IsNotEmpty()

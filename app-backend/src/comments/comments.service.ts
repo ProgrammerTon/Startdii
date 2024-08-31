@@ -19,8 +19,15 @@ export class CommentsService {
     return this.commentModel.find().exec();
   }
   
-  async findAllBySourceId(sourceId: ObjectId): Promise<any> {
-    const comments = await this.commentModel.find({ sourceId: sourceId })
+  async findAllByReferenceId(referenceId: ObjectId, option: string): Promise<any> {
+    let query = {}
+    if (option === 'source') {
+      query["sourceId"] = referenceId;
+    } else {
+      query["quizId"] = referenceId;
+    }
+
+    const comments = await this.commentModel.find(query)
     .populate({
       path: 'ownerId',
       select: 'username'
