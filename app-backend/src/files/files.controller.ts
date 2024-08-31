@@ -1,12 +1,13 @@
 import {
   UseInterceptors,
   UploadedFile,
+  UploadedFiles,
   Controller,
   Post,
   Get,
   StreamableFile,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import * as fs from 'fs';
 import * as path from 'path';
 import { createReadStream } from 'fs';
@@ -15,22 +16,22 @@ import { join } from 'path';
 @Controller('files')
 export class FilesController {
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    const uploadPath = path.join(__dirname, '..', 'uploads'); // Specify the directory where you want to save the file
+  @UseInterceptors(FilesInterceptor('files'))
+  uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
+    console.log(files);
+    // const uploadPath = path.join(__dirname, '..', 'uploads'); // Specify the directory where you want to save the file
 
-    // Ensure the upload directory exists
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
+    // // Ensure the upload directory exists
+    // if (!fs.existsSync(uploadPath)) {
+    //   fs.mkdirSync(uploadPath, { recursive: true });
+    // }
 
-    const filePath = path.join(uploadPath, file.originalname);
+    // const filePath = path.join(uploadPath, file.originalname);
 
-    // Write the file buffer to storage
-    fs.writeFileSync(filePath, file.buffer);
-
-    return { message: 'File uploaded successfully!', filePath };
+    // // Write the file buffer to storage
+    // fs.writeFileSync(filePath, file.buffer);
+    return { message: 'File uploaded successfully!' };
+    // return { message: 'File uploaded successfully!', filePath };
   }
 
   @Get('pdf')
