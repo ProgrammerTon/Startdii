@@ -19,17 +19,25 @@ const { width, height } = Dimensions.get('window');
 export default function Quiz4choice() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedChoice, setSelectedChoice] = useState(null);
   const quizData = [
     {
       totalQuestion: 5,
       questionId: 1,
       question: "What does the cat says? askldksAGFJDSKLJFKJSDFJKerdfstgyhujgihfhudgytfrsdewfyguhijotfrdeswfg",
       choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "Nyan"],
+      choice: ["Meaw", "AOUUU", "Miau", "20"],
       isMultipleAnswer: false,
       answer : ["AOUUU"]
     }
-  ]
+  ];
+  const handleChoiceSelect = (choice) => {
+    if (selectedChoice === choice) {
+      setSelectedChoice(null); // Unselect if the same choice is pressed
+    } else {
+      setSelectedChoice(choice); // Select the new choice
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
@@ -48,8 +56,12 @@ export default function Quiz4choice() {
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
-        {quizData[currentQuestion]?.choice.map((item)=>{
-          return <QuizChoice content={item} />
+        {quizData[currentQuestion]?.choice.map((item, index)=>{
+          return <QuizChoice 
+                  key={index}
+                  content={item}
+                  isSelected={selectedChoice === item} 
+                  onPress={() => handleChoiceSelect(item)}/>
           })}
         </View>
         <View style={styles.nextQuestion}>
@@ -98,6 +110,7 @@ const styles = StyleSheet.create({
   },
   question: {
     //flex: 1,
+    width: width * 0.9,
     height: height * 0.25,
     backgroundColor: "#fff",
     alignSelf: "center",
@@ -105,7 +118,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.1,
     paddingVertical: height * 0.02,
     marginVertical: -height * 0.1,
-    marginHorizontal: width * 0.1,
     borderRadius:10,
     borderWidth:2,
     borderColor:"black",
@@ -121,11 +133,11 @@ const styles = StyleSheet.create({
   },
   choice: {
     flex: 4,
-    width: width * 0.8,
+    width: width * 0.9,
     padding: 10,
-    marginTop: height * 0.15,
+    marginTop: height * 0.1,
     marginBottom: height * 0.2,
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignSelf: "center",
   },
   nextQuestion:{
@@ -136,7 +148,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     paddingVertical:10,
     marginRight:20,
-    marginVertical: -height * 0.05,
+    marginVertical: -height * 0.03,
     backgroundColor: "#0270ED", 
     borderRadius:20,
     alignSelf: "flex-end",

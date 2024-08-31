@@ -3,10 +3,10 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import fonts from "../constants/font";
 import colors from "../constants/color";
 
-const QuizChoice = ({ content }) => {
+const QuizChoice = ({ content, isSelected, onPress }) => {
   return (
-    <TouchableOpacity>
-      <View style={styles.choiceContainer}>
+    <TouchableOpacity onPress={onPress}>
+      <View style={[styles.choiceContainer, isSelected && styles.selectedContainer]}>
         <Text style={styles.textStyle}> {content} </Text>
       </View>
     </TouchableOpacity>
@@ -15,19 +15,22 @@ const QuizChoice = ({ content }) => {
 
 const styles = StyleSheet.create({
   choiceContainer:{
-    backgroundColor:"lightblue",
+    backgroundColor:"#fff",
     paddingVertical: 20,
     marginTop:10,
-    borderWidth:2,
-    borderColor:"black",
+    borderWidth:3,
+    borderColor:"#04B36E",
     borderStyle:"solid",
-    borderRadius:5,
+    borderRadius:10,
     flexDirection:"row",
     justifyContent:"center",
   },
+  selectedContainer: {
+    backgroundColor: "#04B36E", // Change to desired color for selected state
+  },
   textStyle:{
     fontSize: 20,
-    //fontWeight: "bold"
+    fontWeight: "bold"
   },
 });
 
