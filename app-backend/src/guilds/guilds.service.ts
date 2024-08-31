@@ -16,9 +16,13 @@ export class GuildsService {
   async findAll(): Promise<Guild[]> {
     return this.guildModel.find().exec();
   }
-  
+
   async getAllMembersInGuild(id: ObjectId): Promise<any> {
-    return this.guildModel.findById({ _id: id }).select('memberIdList').populate('memberIdList').exec();
+    return this.guildModel
+      .findById({ _id: id })
+      .select('memberIdList')
+      .populate('memberIdList')
+      .exec();
   }
 
   async findGuildByMemberId(memberId: ObjectId): Promise<Guild[]> {
@@ -29,7 +33,9 @@ export class GuildsService {
     const guild = await this.guildModel.findById({ _id: id });
     const memberIdString = memberId.toString();
 
-    const viceLeaderId = guild.viceLeaderIdList.filter(elementId => (elementId.toString() === memberIdString));
+    const viceLeaderId = guild.viceLeaderIdList.filter(
+      (elementId) => elementId.toString() === memberIdString,
+    );
 
     if (memberIdString === guild.leaderId.toString()) {
       return 'leader';
@@ -46,7 +52,9 @@ export class GuildsService {
   }
 
   async update(id: ObjectId, updateGuildDto: UpdateGuildDto): Promise<Guild> {
-    return this.guildModel.findByIdAndUpdate(id, updateGuildDto, { new: true }).exec(); 
+    return this.guildModel
+      .findByIdAndUpdate(id, updateGuildDto, { new: true })
+      .exec();
   }
 
   async updateLeader(id: ObjectId, leaderId: ObjectId): Promise<Guild> {
@@ -54,13 +62,15 @@ export class GuildsService {
     const oldLeaderId = guild.leaderId;
 
     // update member status of ex-leader
-    const memberIdList = (await this.removeMember(id, oldLeaderId)).memberIdList;
+    const memberIdList = (await this.removeMember(id, oldLeaderId))
+      .memberIdList;
     guild.memberIdList = memberIdList;
-    
+
     // update vice leader status of new leader, if vice leader is promoted
-    const viceLeaderIdList = (await this.removeViceLeader(id, leaderId)).viceLeaderIdList;
+    const viceLeaderIdList = (await this.removeViceLeader(id, leaderId))
+      .viceLeaderIdList;
     guild.viceLeaderIdList = viceLeaderIdList;
-    
+
     guild.leaderId = leaderId;
 
     return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();
@@ -70,12 +80,14 @@ export class GuildsService {
     const guild = await this.guildModel.findById({ _id: id });
     guild.viceLeaderIdList.push(viceLeaderId);
 
-    return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();    
+    return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();
   }
 
   async removeViceLeader(id: ObjectId, viceLeaderId: ObjectId): Promise<Guild> {
     const guild = await this.guildModel.findById({ _id: id });
-    guild.viceLeaderIdList = guild.viceLeaderIdList.filter(elementId => (elementId.toString() !== viceLeaderId.toString()));
+    guild.viceLeaderIdList = guild.viceLeaderIdList.filter(
+      (elementId) => elementId.toString() !== viceLeaderId.toString(),
+    );
 
     return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();
   }
@@ -89,8 +101,12 @@ export class GuildsService {
 
   async removeMember(id: ObjectId, memberId: ObjectId): Promise<Guild> {
     const guild = await this.guildModel.findById({ _id: id });
-    guild.memberIdList = guild.memberIdList.filter(elementId => (elementId.toString() !== memberId.toString()));
-    guild.viceLeaderIdList = guild.viceLeaderIdList.filter(elementId => (elementId.toString() !== memberId.toString()))
+    guild.memberIdList = guild.memberIdList.filter(
+      (elementId) => elementId.toString() !== memberId.toString(),
+    );
+    guild.viceLeaderIdList = guild.viceLeaderIdList.filter(
+      (elementId) => elementId.toString() !== memberId.toString(),
+    );
 
     return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();
   }
