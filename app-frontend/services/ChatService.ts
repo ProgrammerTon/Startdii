@@ -11,6 +11,7 @@ export async function fetchChat(
       headers: { "Content-Type": "application/json" },
     });
     const result = await res.json();
+    console.log(result);
     if (res.ok) {
       return result;
     } else {

@@ -29,7 +29,7 @@ const GlobalProvider = ({ children }) => {
     if (!chat) {
       return;
     }
-    setMessages((prevMessages) => [...chat, ...prevMessages]);
+    setMessages((prevMessages) => [...prevMessages, ...chat]);
   };
 
   const sendMessage = ({ room, text, sender, type, time }) => {
@@ -61,7 +61,7 @@ const GlobalProvider = ({ children }) => {
       try {
         console.log(message);
         const newMessage = JSON.parse(message); // Synchronously parse the JSON string
-        setMessages((prevMessages) => [...prevMessages, newMessage]); // Add the new message to state
+        setMessages((prevMessages) => [newMessage, ...prevMessages]); // Add the new message to state
       } catch (error) {
         console.error("Failed to parse message:", error);
       }

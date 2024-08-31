@@ -6,16 +6,33 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { router, useLocalSearchParams } from "expo-router";
 import { fetchChat } from "../../services/ChatService";
+
+const ChatView = ({ message, index, name }) => {
+  return (
+    <View
+      key={index}
+      style={[
+        styles.messageContainer,
+        message.sender === name ? styles.receiverMessage : styles.userMessage,
+      ]}
+    >
+      <Text style={styles.messageText}>{message.text}</Text>
+      <Text style={styles.messageTime}>{message.time}</Text>
+    </View>
+  );
+};
 
 const ArchiveMainPage = () => {
   const { room } = useLocalSearchParams();
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [offset, setOffset] = useState(1);
+  const [loading, setLoading] = useState(false);
   const {
     joinRoom,
     leaveRoom,
@@ -43,8 +60,10 @@ const ArchiveMainPage = () => {
   }, []);
 
   const fetchChat = () => {
+    setLoading(true);
     fetchMessage(room, offset);
     setOffset(offset + 1);
+    setLoading(false);
   };
 
   const handleSendMessage = () => {
@@ -60,22 +79,17 @@ const ArchiveMainPage = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.chatContainer}>
-        {messages.map((message, index) => (
-          <View
-            key={index}
-            style={[
-              styles.messageContainer,
-              message.sender === name
-                ? styles.receiverMessage
-                : styles.userMessage,
-            ]}
-          >
-            <Text style={styles.messageText}>{message.text}</Text>
-            <Text style={styles.messageTime}>{message.time}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      <FlatList
+        data={messages}
+        renderItem={({ item, index }) => (
+          <ChatView index={index} message={item} name={name} />
+        )}
+        keyExtractor={(item, index) => `${item.sender}-${index}`}
+        inverted // This makes the list scroll from bottom to top
+        onEndReached={fetchChat}
+        onEndReachedThreshold={0.1} // Adjust as needed
+        ListFooterComponent={loading && <ActivityIndicator />}
+      />
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}
@@ -150,3 +164,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+{
+  /* <ScrollView style={styles.chatContainer}>
+        {messages.map((message, index) => (
+          <View
+            key={index}
+            style={[
+              styles.messageContainer,
+              message.sender === name
+                ? styles.receiverMessage
+                : styles.userMessage,
+            ]}
+          >
+            <Text style={styles.messageText}>{message.text}</Text>
+            <Text style={styles.messageTime}>{message.time}</Text>
+          </View>
+        ))}
+      </ScrollView> */
+}
