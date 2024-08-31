@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Source, SourceSchema } from 'src/sources/entities/source.entity';
 import { ChatList, ChatListSchema } from './entities/chatlist.entity';
 import { ChatListService } from './chatlist.service';
-import { GuildsService } from 'src/guilds/guilds.service';
+import { GuildsModule } from 'src/guilds/guilds.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -14,8 +14,9 @@ import { GuildsService } from 'src/guilds/guilds.service';
       { name: Source.name, schema: SourceSchema },
       { name: ChatList.name, schema: ChatListSchema },
     ]),
+    GuildsModule,
   ],
-  providers: [UsersService, ChatListService, GuildsService],
+  providers: [UsersService, ChatListService],
   exports: [UsersService],
   controllers: [UsersController],
 })
