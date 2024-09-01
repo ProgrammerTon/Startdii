@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get('window');
 export default function Quiz4choice() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedChoice, setSelectedChoice] = useState(null);
+  const [selectedChoice, setSelectedChoice] = useState([]);
   const quizData = [
     {
       totalQuestion: 5,
@@ -24,15 +24,25 @@ export default function Quiz4choice() {
       question: "What does the cat says?",
       choicecount: 5,
       choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
-      isMultipleAnswer: false,
+      isMultipleAnswer: true,
       answer : ["AOUUU"]
     }
   ];
   const handleChoiceSelect = (choice) => {
-    if (selectedChoice === choice) {
-      setSelectedChoice(null); // Unselect if the same choice is pressed
-    } else {
-      setSelectedChoice(choice); // Select the new choice
+    if(quizData[currentQuestion].isMultipleAnswer){
+      if (selectedChoice.includes(choice)) {
+        const newSelectedChoice = selectedChoice.filter((item) => item !== choice)
+        setSelectedChoice(newSelectedChoice); // Unselect if the same choice is pressed
+      } else {
+        setSelectedChoice([...selectedChoice, choice]); // Select the new choice to the selectedchoice
+      }
+    }
+    else{
+      if (selectedChoice.includes(choice)) {
+        setSelectedChoice([]); // Unselect if the same choice is pressed
+      } else {
+        setSelectedChoice([choice]); // Select the new choice and remove old ones
+      }
     }
   };
   return (
@@ -58,7 +68,7 @@ export default function Quiz4choice() {
             renderItem={({ item }) => (
               <QuizChoice
                 content={item}
-                isSelected={selectedChoice === item}
+                isSelected={selectedChoice.includes(item)}
                 onPress={() => handleChoiceSelect(item)}
                 makeColumn={(quizData[currentQuestion].choicecount > 4)? true : false}
               />
