@@ -41,11 +41,11 @@ export class CommentsService {
     const allUsernames = comments.map(comment => ({
       parentComment: {
         _id: comment['_id'],
-        ownerId: comment.ownerId['username'],
+        username: comment.ownerId['username'],
         content: comment.content
       },
       replyComments: comment.replyComments.map(reply => ({
-        ownerId: reply.ownerId['username'],
+        username: reply.ownerId['username'],
         content: reply.content
       }))
     }));

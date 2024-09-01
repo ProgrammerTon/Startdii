@@ -1,5 +1,10 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Post, Patch, Delete, Body, Param, Headers, Query} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Request, Query, UseGuards} from '@nestjs/common';
+
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/auth/roles/role.guard';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { Role } from 'src/users/entities/user.entity';
 
 import { Types } from 'mongoose';
 import { ObjectId } from 'mongodb';
@@ -24,14 +29,16 @@ export class CommentsController {
     return this.commentsService.findAllByReferenceId(refernceId, option);
   }
 
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post(':referenceId')
   create(@Param('referenceId', ParseObjectIdPipe) referenceId: ObjectId,
          @Body() createCommentDto: CreateCommentDto,
-         @Headers('x-user-id') ownerId: string,
+         @Request() req,
          @Query('option') option: string) {
-          
-    createCommentDto.ownerId = new Types.ObjectId(ownerId);
-
+        
+    createCommentDto.ownerId = new Types.ObjectId(req.user.id);
+    
     if (option === 'source') {
       createCommentDto.sourceId = referenceId;
     } else if (option === 'quiz') {
@@ -41,11 +48,13 @@ export class CommentsController {
     return this.commentsService.create(createCommentDto);
   }
 
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Patch(':id')
   createReplyComment(@Param('id', ParseObjectIdPipe) id: ObjectId,
                      @Body() createReplyCommentDto: CreateReplyCommentDto,
-                     @Headers('x-user-id') ownerId: string) {
-    createReplyCommentDto.ownerId = new Types.ObjectId(ownerId);
+                     @Request() req) {
+    createReplyCommentDto.ownerId = new Types.ObjectId(req.user.id);
 
     return this.commentsService.createReplyComment(id, createReplyCommentDto);
   }
