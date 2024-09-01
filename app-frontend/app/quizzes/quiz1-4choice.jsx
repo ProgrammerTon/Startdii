@@ -7,11 +7,7 @@ import {
   StyleSheet
 } from "react-native";
 import { React , useState } from "react";
-import { useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import QuizChoice from "../../components/QuizChoice";
-import Button from "../../components/Button";
-import CommentList from "../../components/CommentCard";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 const { width, height } = Dimensions.get('window');
@@ -24,9 +20,9 @@ export default function Quiz4choice() {
     {
       totalQuestion: 5,
       questionId: 1,
-      question: "What does the cat says? askldksAGFJDSKLJFKJSDFJKerdfstgyhujgihfhudgytfrsdewfyguhijotfrdeswfg",
+      question: "What does the cat says?",
       choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "20"],
+      choice: ["Meaw", "AOUUU", "Miau", "21"],
       isMultipleAnswer: false,
       answer : ["AOUUU"]
     }
@@ -64,7 +60,7 @@ export default function Quiz4choice() {
                   onPress={() => handleChoiceSelect(item)}/>
           })}
         </View>
-        <View style={styles.nextQuestion}>
+        <View>
           <TouchableOpacity style={styles.nextButton}>
             <Text> Next </Text>
           </TouchableOpacity>
@@ -115,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignSelf: "center",
     justifyContent: "center",
-    paddingHorizontal: width * 0.1,
+    alignItems: "center",
     paddingVertical: height * 0.02,
     marginVertical: -height * 0.1,
     borderRadius:10,
@@ -140,15 +136,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignSelf: "center",
   },
-  nextQuestion:{
-    flex: 1,
-
-  },
   nextButton:{
     paddingHorizontal: width * 0.05,
     paddingVertical:10,
     marginRight:20,
-    marginVertical: -height * 0.03,
+    marginVertical: -height * 0.15,
     backgroundColor: "#0270ED", 
     borderRadius:20,
     alignSelf: "flex-end",
