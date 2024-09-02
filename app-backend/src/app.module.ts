@@ -10,6 +10,9 @@ import { TagsModule } from './tags/tags.module';
 import { SourcesModule } from './sources/sources.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { CommentsModule } from './comments/comments.module';
+import { QuizsModule } from './quizs/quizs.module';
+import { GuildsModule } from './guilds/guilds.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { CommentsModule } from './comments/comments.module';
     TagsModule,
     SourcesModule,
     CommentsModule,
+    QuizsModule,
+    GuildsModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],

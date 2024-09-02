@@ -13,13 +13,13 @@ const AddNoteQuizWindow = ({ visible, onClose }) => {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Pressable style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/C1_AddNotePage")}>
-            <Text style={styles.InteractButtonText}>Notes</Text>
+            <Text style={styles.InteractButtonText}>N</Text>
           </Pressable>
           <Pressable style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/D1_AddQuizPage")}>
-            <Text style={styles.InteractButtonText}>Quiz</Text>
+            <Text style={styles.InteractButtonText}>Q</Text>
           </Pressable>
           <Pressable style={styles.InteractButton} onPress={onClose}>
-            <Text style={styles.InteractButtonText}>Close</Text>
+            <Text style={styles.InteractButtonText}>C</Text>
           </Pressable>
         </View>
       </View>
@@ -28,28 +28,37 @@ const AddNoteQuizWindow = ({ visible, onClose }) => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',  
+    alignItems: 'flex-end',    
   },
   modalContent: {
-    width: 300,
+    width: '30%',               
+    maxWidth: 400,              
     padding: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgba(255, 255, 255, 0)',
     borderRadius: 10,
     alignItems: 'center',
+    margin: 10,  
+    bottom: 20,                  
+    right: -30,          
   },
   modalText: {
     fontSize: 18,
-    marginBottom: 15,
+    marginBottom: 20,
   },
   InteractButton: {
-    backgroundColor: '#3367d6',
+    backgroundColor: '#fc8601',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 20,
+    margin: 5,      
   },
   InteractButtonText: {
     color: '#ffffff',

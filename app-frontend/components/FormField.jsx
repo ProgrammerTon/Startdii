@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Equivalent to flex flex-row
     alignItems: 'center', // Equivalent to items-center
     width: '91.666667%', // Equivalent to w-11/12
-    height: '45%',
+    height: '44px',
     padding: '3%',
     marginTop: '2%',
   },

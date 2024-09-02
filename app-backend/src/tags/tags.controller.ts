@@ -32,9 +32,19 @@ export class TagsController {
     return this.tagsService.findOne(name);
   }
 
+  @Get('sources/:name')
+  getSources(@Param('name') name: string) {
+    return this.tagsService.getSources(name);
+  }
+
+  @Get('quizs/:name')
+  getQuizs(@Param('name') name: string) {
+    return this.tagsService.getQuizs(name);
+  }
+
   @Patch(':name')
-  update(@Param('name') name: string, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagsService.update(+name, updateTagDto);
+  update(@Param('name') name: string) {
+    return this.tagsService.patchSourcesAndQuizs(name);
   }
 
   @Delete(':name')

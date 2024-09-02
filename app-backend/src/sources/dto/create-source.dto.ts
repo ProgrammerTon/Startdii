@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ObjectId } from 'mongodb';
-import { Tag } from '../../tags/entities/tag.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Status } from '../entities/source.entity';
 
 export class CreateSourceDto {
   @ApiProperty()
@@ -18,11 +18,15 @@ export class CreateSourceDto {
 
   @ApiProperty()
   @IsOptional()
-  content: string = '';
+  published: Status = Status.private;
 
   @ApiProperty()
   @IsOptional()
-  published: boolean = false;
+  guildId: ObjectId;
+  
+  @ApiProperty()
+  @IsOptional()
+  content: string = '';
 
   @ApiProperty()
   @IsOptional()
