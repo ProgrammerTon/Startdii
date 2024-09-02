@@ -110,6 +110,13 @@ export default function App() {
         <Text className="text-lg">chat2</Text>
       </TouchableHighlight>
 
+      <TouchableHighlight
+        onPress={() => router.push("/Guild_j/I1")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Guild1</Text>
+      </TouchableHighlight>
+
       </SafeAreaView>
     );
   }
