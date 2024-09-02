@@ -12,6 +12,7 @@ import { ChatGateway } from './chat/chat.gateway';
 import { CommentsModule } from './comments/comments.module';
 import { GuildsModule } from './guilds/guilds.module';
 import { ChatModule } from './chat/chat.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ChatModule } from './chat/chat.module';
     CommentsModule,
     GuildsModule,
     ChatModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],

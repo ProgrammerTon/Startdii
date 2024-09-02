@@ -22,9 +22,9 @@ export class CommentsService {
   async findAllByReferenceId(referenceId: ObjectId, option: string): Promise<any> {
     let query = {}
     if (option === 'source') {
-      query["sourceId"] = referenceId;
+      query['sourceId'] = referenceId;
     } else {
-      query["quizId"] = referenceId;
+      query['quizId'] = referenceId;
     }
 
     const comments = await this.commentModel.find(query)
