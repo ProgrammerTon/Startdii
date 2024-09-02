@@ -7,11 +7,13 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { ChatService } from './chat.service';
 
 @WebSocketGateway(3002, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
+  constructor(private chatService: ChatService) {}
   private logger: Logger = new Logger('MessageGateway');
 
   handleConnection(client: Socket) {
@@ -37,8 +39,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('newMessage')
-  handleMessage(client: Socket, payload: any) {
+  async handleMessage(client: Socket, payload: any) {
     const data = JSON.parse(payload);
-    this.server.to(data.rooms).emit('message', data.message);
+    this.server.to(data.rooms).emit('message', payload);
+    await this.chatService.create(data);
   }
 }
