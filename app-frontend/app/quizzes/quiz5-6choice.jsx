@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  StyleSheet
+  StyleSheet,
+  Modal
 } from "react-native";
 import { React , useState } from "react";
 import QuizChoice from "../../components/QuizChoice";
@@ -17,10 +18,11 @@ export default function Quiz4choice() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState([]);
+  const [closeQuiz, setCloseQuiz] = useState(false);
   const quizData = [
     {
       totalQuestion: 5,
-      questionId: 1,
+      questionId: 2,
       question: "What does the cat says?",
       choicecount: 5,
       choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
@@ -49,7 +51,7 @@ export default function Quiz4choice() {
     <View style={styles.container}>
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
-          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}}>
+          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}} onPress={()=>setCloseQuiz(true)}>
             <AntDesign name="closecircle" size={30} color="red" />
           </TouchableOpacity>
         </View>
@@ -81,11 +83,28 @@ export default function Quiz4choice() {
           />
         </View>
         <View>
-          <TouchableOpacity style={styles.nextButton}>
-            <Text> Next </Text>
+        <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
+            <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
           </TouchableOpacity>
         </View>
       </View>
+      <Modal transparent={true} visible={closeQuiz}>
+        <View style={{flex: 1, backgroundColor: "#555555aa"}}>
+          <View style={{backgroundColor: "#fff", marginTop: height*0.4, margin:50, padding: 20, alignItems: "center", borderRadius: 10, height: height * 0.15}}>
+            <View>
+              <Text style={{fontSize: 20, fontWeight: "bold"}}> Do you want to Leave Quiz? </Text>
+            </View>
+            <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
+              <TouchableOpacity style={styles.closeQuizButton} onPress={()=>setCloseQuiz(false)}>
+                <Text style={{fontSize: 16, fontWeight: "bold"}}> Cancel </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.leaveQuizButton}>
+                <Text style={{fontSize: 16, fontWeight: "bold", color: "#fff"}}> Leave </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }
@@ -179,6 +198,24 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 30,
     fontWeight: "bold",
+  },
+  closeQuizButton:{
+    paddingHorizontal: width * 0.05,
+    paddingVertical:10,
+    marginVertical: 5,
+    marginHorizontal: 20,
+    backgroundColor: "#bbb",
+    paddingHorizontal: width * 0.05,
+    borderRadius:20,
+  },
+  leaveQuizButton:{
+    paddingHorizontal: width * 0.05,
+    paddingVertical:10,
+    marginVertical: 5,
+    marginHorizontal: 20,
+    backgroundColor: "#F44D19",
+    paddingHorizontal: width * 0.05,
+    borderRadius:20,
   },
 })
 {
