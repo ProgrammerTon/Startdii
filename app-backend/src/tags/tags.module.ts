@@ -16,5 +16,6 @@ import { Quiz, QuizSchema } from 'src/quizs/entities/quiz.entity';
   ],
   controllers: [TagsController],
   providers: [TagsService],
+  exports: [TagsService],
 })
 export class TagsModule {}

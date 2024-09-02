@@ -28,14 +28,14 @@ export class SourcesService {
   }
 
   async delete(id: ObjectId): Promise<void> {
-    await this.removeSourceFromTags(id)
+    await this.removeSourceFromTags(id);
     await this.sourceModel.findByIdAndDelete(id).exec();
   }
 
-  async addSourceFromTags(id: ObjectId){
+  async addSourceFromTags(id: ObjectId) {
     const source = await this.sourceModel.findById(id).exec();
     let tag;
-    for (var i = 0; i < source.tags.length; i++) {
+    for (let i = 0; i < source.tags.length; i++) {
       tag = await this.tagModel.findOne({ name: source.tags[i] }).exec();
       if (!tag) {
         tag = await this.tagModel.create({ name: source.tags[i] });
@@ -45,11 +45,11 @@ export class SourcesService {
     }
   }
 
-  async removeSourceFromTags(id: ObjectId){
+  async removeSourceFromTags(id: ObjectId) {
     // Find the document by ID and apply the updates
     const source = await this.sourceModel.findById(id).exec();
     let tag;
-    for (var i = 0; i < source.tags.length; i++) {
+    for (let i = 0; i < source.tags.length; i++) {
       tag = await this.tagModel.findOne({ name: source.tags[i] }).exec();
       if (!tag) {
         tag = await this.tagModel.create({ name: source.tags[i] });
@@ -61,12 +61,11 @@ export class SourcesService {
     }
   }
 
-
   async update(
     id: ObjectId,
     updateSourceDto: UpdateSourceDto,
   ): Promise<Source> {
-    this.removeSourceFromTags(id)
+    this.removeSourceFromTags(id);
 
     const updatedSource = await this.sourceModel
       .findByIdAndUpdate(
@@ -76,13 +75,13 @@ export class SourcesService {
       )
       .exec();
 
-    this.addSourceFromTags(updatedSource.id)
+    this.addSourceFromTags(updatedSource.id);
     // Return the updated document, or null if not found
     return updatedSource;
   }
 
   async findById(id: ObjectId): Promise<Source | null> {
-    return this.sourceModel.findById(id).populate('ownerId','username').exec();
+    return this.sourceModel.findById(id).populate('ownerId', 'username').exec();
   }
 
   async findAll() {
@@ -104,6 +103,22 @@ export class SourcesService {
     return this.sourceModel.find({ $text: { $search: keyword } }).exec();
   }
 
+  async findSourcesByTags(tags: string[]) {
+    return this.sourceModel
+      .find({
+        tags: { $all: tags },
+      })
+      .exec();
+  }
+
+  async findSourcesByTagsAndTitle(tags: string[], title: string) {
+    return this.sourceModel
+      .find({
+        tags: { $all: tags },
+        $text: { $search: title }, // 'i' for case-insensitive search
+      })
+      .exec();
+  }
 
   /*async findByTag(tagname: string): Promise<Source[]> {
     const sources = new Array<Source>();
