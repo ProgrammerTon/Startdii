@@ -67,7 +67,8 @@ export default function Quiz4choice() {
                   key={index}
                   content={item}
                   isSelected={selectedChoice.includes(item)} 
-                  onPress={() => handleChoiceSelect(item)}/>
+                  onPress={() => handleChoiceSelect(item)}
+                  isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}/>
           })}
         </View>
         <View>

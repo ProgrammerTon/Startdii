@@ -71,6 +71,7 @@ export default function Quiz4choice() {
                 isSelected={selectedChoice.includes(item)}
                 onPress={() => handleChoiceSelect(item)}
                 makeColumn={(quizData[currentQuestion].choicecount > 4)? true : false}
+                isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}
               />
             )}
             keyExtractor={(item, index) => index.toString()}
