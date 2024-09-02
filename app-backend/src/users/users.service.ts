@@ -44,8 +44,10 @@ export class UsersService {
   }
 
   async findByUsername(username: string) {
-    const user = await this.userModel
-      .findOne({ username })
+    const users = await this.userModel
+      .find({
+        username: { $regex: username, $options: 'i' },
+      })
       .populate({
         path: 'quiz_history.id',
       })
@@ -57,15 +59,41 @@ export class UsersService {
         },
       })
       .exec();
-    const x = user.quiz_history.map((entry) => ({
-      quiz: entry.id, // Renamed field
-      results: entry.results,
-    }));
-    const transformedUser = {
-      ...user.toObject(),
-      quiz_history: x, // Use the transformed data
-    };
-    return transformedUser;
+    const transformedUsers = users.map((user) => {
+      const x = user.quiz_history.map((entry) => ({
+        quiz: entry.id, // Renamed field
+        results: entry.results,
+      }));
+
+      return {
+        ...user.toObject(),
+        quiz_history: x, // Use the transformed data
+      };
+    });
+
+    return transformedUsers;
+    // const user = await this.userModel
+    //   .findOne({ username })
+    //   .populate({
+    //     path: 'quiz_history.id',
+    //   })
+    //   .populate({
+    //     path: 'favorite_sources',
+    //     populate: {
+    //       path: 'ownerId',
+    //       select: 'username',
+    //     },
+    //   })
+    //   .exec();
+    // const x = user.quiz_history.map((entry) => ({
+    //   quiz: entry.id, // Renamed field
+    //   results: entry.results,
+    // }));
+    // const transformedUser = {
+    //   ...user.toObject(),
+    //   quiz_history: x, // Use the transformed data
+    // };
+    // return transformedUser;
   }
 
   async findSourcesByUserId(ownerId: ObjectId) {
