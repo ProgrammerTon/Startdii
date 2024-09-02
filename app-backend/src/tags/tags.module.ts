@@ -7,10 +7,13 @@ import { Source, SourceSchema } from 'src/sources/entities/source.entity';
 import { Quiz, QuizSchema } from 'src/quizs/entities/quiz.entity';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Tag.name, schema: TagSchema },
-    { name: Source.name, schema: SourceSchema },
-    { name: Quiz.name, schema: QuizSchema },
-  ])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Tag.name, schema: TagSchema },
+      { name: Source.name, schema: SourceSchema },
+      { name: Quiz.name, schema: QuizSchema },
+    ]),
+  ],
   controllers: [TagsController],
   providers: [TagsService],
 })

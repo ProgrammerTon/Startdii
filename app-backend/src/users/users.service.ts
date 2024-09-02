@@ -35,7 +35,6 @@ export class UsersService {
     }
   }
 
-
   async findAll() {
     return this.userModel.find().exec();
   }
@@ -45,17 +44,22 @@ export class UsersService {
   }
 
   async findByUsername(username: string) {
-    let user = await this.userModel.findOne({ username }).populate({
-      path: 'quiz_history.id'}).populate({
+    const user = await this.userModel
+      .findOne({ username })
+      .populate({
+        path: 'quiz_history.id',
+      })
+      .populate({
         path: 'favorite_sources',
         populate: {
-            path: 'ownerId',
-            select: 'username'
-        }
-    }).exec();
-    let x = user.quiz_history.map(entry => ({
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .exec();
+    const x = user.quiz_history.map((entry) => ({
       quiz: entry.id, // Renamed field
-      results: entry.results
+      results: entry.results,
     }));
     const transformedUser = {
       ...user.toObject(),

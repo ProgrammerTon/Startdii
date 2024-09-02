@@ -43,28 +43,40 @@ export class TagsService {
   }
 
   async getSources(name: string) {
-    return await this.tagModel.findOne({ name: name }).select('sources').populate('sources').exec();
+    return await this.tagModel
+      .findOne({ name: name })
+      .select('sources')
+      .populate('sources')
+      .exec();
   }
 
   async getQuizs(name: string) {
-    return await this.tagModel.findOne({ name: name }).select('quizs').populate('quizs').exec();
+    return await this.tagModel
+      .findOne({ name: name })
+      .select('quizs')
+      .populate('quizs')
+      .exec();
   }
 
   // Remove all invalid sourceId(s) and quizId(s)
   async patchSourcesAndQuizs(name: string) {
-    let tag = await this.tagModel.findOne({ name: name });
-    let sources = tag.sources.slice();
-    let quizs = tag.quizs.slice();
+    const tag = await this.tagModel.findOne({ name: name });
+    const sources = tag.sources.slice();
+    const quizs = tag.quizs.slice();
     for (var i = 0; i < sources.length; i++) {
       const source = await this.sourceModel.findById(sources[i]).exec();
       const quiz = await this.quizModel.findById(quizs[i]).exec();
       if (!source) {
-        tag.sources = await tag.sources.filter(element => String(element) !== String(sources[i]))
+        tag.sources = await tag.sources.filter(
+          (element) => String(element) !== String(sources[i]),
+        );
       }
       if (!quiz) {
-        tag.sources = await tag.quizs.filter(element => String(element) !== String(quizs[i]))
+        tag.sources = await tag.quizs.filter(
+          (element) => String(element) !== String(quizs[i]),
+        );
       }
     }
-    return tag.save()
+    return tag.save();
   }
 }

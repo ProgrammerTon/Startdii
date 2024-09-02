@@ -3,8 +3,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ObjectId } from 'mongodb';
 
-import { Comment, CommentDocument, ReplyComment, ReplyCommentDocument } from './entities/comment.entity';
-import { CreateCommentDto, CreateReplyCommentDto } from './dto/create-comment.dto';
+import {
+  Comment,
+  CommentDocument,
+  ReplyComment,
+  ReplyCommentDocument,
+} from './entities/comment.entity';
+import {
+  CreateCommentDto,
+  CreateReplyCommentDto,
+} from './dto/create-comment.dto';
 
 @Injectable()
 export class CommentsService {
@@ -12,42 +20,46 @@ export class CommentsService {
     @InjectModel(Comment.name)
     private commentModel: Model<CommentDocument>,
     @InjectModel(ReplyComment.name)
-    private replyCommentModel: Model<ReplyCommentDocument>
+    private replyCommentModel: Model<ReplyCommentDocument>,
   ) {}
 
   async findAll(): Promise<Comment[]> {
     return this.commentModel.find().exec();
   }
-  
-  async findAllByReferenceId(referenceId: ObjectId, option: string): Promise<any> {
-    let query = {}
+
+  async findAllByReferenceId(
+    referenceId: ObjectId,
+    option: string,
+  ): Promise<any> {
+    const query = {};
     if (option === 'source') {
-      query["sourceId"] = referenceId;
+      query['sourceId'] = referenceId;
     } else {
-      query["quizId"] = referenceId;
+      query['quizId'] = referenceId;
     }
 
-    const comments = await this.commentModel.find(query)
-    .populate({
-      path: 'ownerId',
-      select: 'username'
-    })
-    .populate({
-      path: 'replyComments.ownerId',
-      select: 'username'
-    })
-    .exec();
+    const comments = await this.commentModel
+      .find(query)
+      .populate({
+        path: 'ownerId',
+        select: 'username',
+      })
+      .populate({
+        path: 'replyComments.ownerId',
+        select: 'username',
+      })
+      .exec();
 
-    const allUsernames = comments.map(comment => ({
+    const allUsernames = comments.map((comment) => ({
       parentComment: {
         _id: comment['_id'],
         username: comment.ownerId['username'],
-        content: comment.content
+        content: comment.content,
       },
-      replyComments: comment.replyComments.map(reply => ({
+      replyComments: comment.replyComments.map((reply) => ({
         username: reply.ownerId['username'],
-        content: reply.content
-      }))
+        content: reply.content,
+      })),
     }));
 
     return allUsernames;
@@ -58,21 +70,33 @@ export class CommentsService {
     return createdComment.save();
   }
 
-  async createReplyComment(id: ObjectId, createReplyCommentDto: CreateReplyCommentDto): Promise<Comment> {
+  async createReplyComment(
+    id: ObjectId,
+    createReplyCommentDto: CreateReplyCommentDto,
+  ): Promise<Comment> {
     const comment = await this.commentModel.findById({ _id: id });
     const replyComment = new this.replyCommentModel(createReplyCommentDto);
 
     comment.replyComments.push(replyComment);
     replyComment.save();
 
-    return this.commentModel.findByIdAndUpdate(id, comment, { new: true }).exec();
+    return this.commentModel
+      .findByIdAndUpdate(id, comment, { new: true })
+      .exec();
   }
 
-  async removeReplyComment(id: ObjectId, replyCommentId: string): Promise<Comment> {
+  async removeReplyComment(
+    id: ObjectId,
+    replyCommentId: string,
+  ): Promise<Comment> {
     const comment = await this.commentModel.findById({ _id: id });
-    comment.replyComments = comment.replyComments.filter(reply => reply['_id'].toString() !== replyCommentId);
+    comment.replyComments = comment.replyComments.filter(
+      (reply) => reply['_id'].toString() !== replyCommentId,
+    );
 
-    return this.commentModel.findByIdAndUpdate(id, comment, { new: true }).exec();
+    return this.commentModel
+      .findByIdAndUpdate(id, comment, { new: true })
+      .exec();
   }
 
   async remove(id: ObjectId) {
