@@ -92,6 +92,12 @@ export default function App() {
           <Text className="text-lg">Chat 2</Text>
         </TouchableHighlight>
         <TouchableHighlight
+          onPress={() => router.push("/Guild/I1_first")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Guild</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
           onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
           className="bg-green-600 p-2 rounded-xl"
         >

@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
-const ArchiveMainPage = () => {
+const firstpageguild = () => {
   const guilds = [
     { id: 1, color: '#FF6347', badgeColor: '#2ecc71', title: 'เรารู้เขารู้เรา', members: 12 },
-    { id: 2, color: '#4682B4', badgeColor: '#FF69B4', title: 'เรารู้เขารู้เรา', members: 12 },
-    { id: 3, color: '#FFB6C1', badgeColor: '#FF4500', title: 'เรารู้เขารู้เรา', members: 12 },
+    { id: 2, color: '#4682B4', badgeColor: '#FF69B4', title: 'แต่เขาแกล้งรู้เรา', members: 12 },
+    { id: 3, color: '#FFB6C1', badgeColor: '#FF4500', title: 'อะไรอ่ะ', members: 12 },
   ];
 
   return (
@@ -38,7 +38,7 @@ const ArchiveMainPage = () => {
   );
 };
 
-export default ArchiveMainPage;
+export default firstpageguild;
 
 const styles = StyleSheet.create({
   container: {
