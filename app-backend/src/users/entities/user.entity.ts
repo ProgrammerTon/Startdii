@@ -34,8 +34,11 @@ export class User {
   @Prop({ name: 'roles' })
   roles: Role[];
 
-  @Prop({ name: 'favorite_sources' })
+  @Prop({ name: 'favorite_sources', ref: 'Source' })
   favorite_sources: ObjectId[];
+
+  @Prop({ name: 'quizHistory', ref: 'Quiz' })
+  quiz_history: {id: ObjectId, results: boolean[]}[] = [];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

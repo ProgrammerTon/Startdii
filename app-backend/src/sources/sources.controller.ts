@@ -46,8 +46,8 @@ export class SourcesController {
     return this.sourcesService.delete(id);
   }
 
-  @Get('search/:tagName')
-  findByTag(@Param('tagName') tagName: string) {
-    return this.sourcesService.findByTag(tagName);
+  @Get('searchname/:keyword')
+  findByTitle(@Param('keyword') keyword: string) {
+    return this.sourcesService.searchByTitle(keyword);
   }
 }
