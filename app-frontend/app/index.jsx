@@ -1,4 +1,4 @@
-import { View, Text, TouchableHighlight } from "react-native";
+import { View, Text, TouchableHighlight,ScrollView } from "react-native";
 import { Redirect, router } from "expo-router";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -37,6 +37,7 @@ export default function App() {
   if (fontsLoaded) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center">
+        <ScrollView>
         <StatusBar style="auto" />
         <Text className="text-3xl">Hello Welcome to</Text>
         <Text className="text-3xl">Startdii</Text>
@@ -93,19 +94,19 @@ export default function App() {
           <Text className="text-lg">Chat 2</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={() => router.push("/Guild/GuildPage")}
+          onPress={() => router.push("/Guild/I1_GuildPage")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">Guild</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={() => router.push("/Guild/ChatScreen")}
+          onPress={() => router.push("/Guild/I2_ChatScreen")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">GuildChat</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={() => router.push("/Guild/Member")}
+          onPress={() => router.push("/Guild/I4_Member")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">Member</Text>
@@ -123,6 +124,7 @@ export default function App() {
           <Text className="text-lg">NoteDetailed</Text>
         </TouchableHighlight>
         {isLogged ? <LogoutButton /> : null}
+        </ScrollView>
       </SafeAreaView>
     );
   }

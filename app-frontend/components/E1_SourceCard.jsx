@@ -54,7 +54,9 @@ const SourceCard = () => {
             style={styles.heartIcon}
           />
         </TouchableOpacity >
-          <FontAwesome name="share" size={24} color="gray" style={styles.shareIcon} />
+        <TouchableOpacity>
+          <FontAwesome name="share" size={30} color="gray" style={styles.shareIcon} />
+        </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>

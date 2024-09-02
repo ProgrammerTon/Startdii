@@ -4,11 +4,11 @@ import MemberItem from './MemberItem';  // Import the new component
 
 const MemberScreen = () => {
   const members = [
-    { id: 1, name: 'Juaz Juazzz', isAdmin: true },
-    { id: 2, name: 'PunInwZa007', isAdmin: false },
-    { id: 3, name: 'Mr.BOB', isAdmin: false },
-    { id: 4, name: 'rainny', isAdmin: false },
-    { id: 5, name: 'fortune', isAdmin: false },
+    { id: 1, name: 'Juaz Juazzz', isAdmin: true ,isViceAdmin:false},
+    { id: 2, name: 'PunInwZa007', isAdmin: false ,isViceAdmin: true},
+    { id: 3, name: 'Mr.BOB', isAdmin: false ,isViceAdmin: true},
+    { id: 4, name: 'rainny', isAdmin: false ,isViceAdmin: false},
+    { id: 5, name: 'fortune', isAdmin: false ,isViceAdmin: false},
   ];
 
   return (
@@ -26,6 +26,7 @@ const MemberScreen = () => {
             key={member.id} 
             name={member.name} 
             isAdmin={member.isAdmin} 
+            isViceAdmin={member.isViceAdmin}
           />
         ))}
       </ScrollView>

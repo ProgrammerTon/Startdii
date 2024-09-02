@@ -53,7 +53,9 @@ const QuizCard = () => {
             style={styles.heartIcon}
           />
         </TouchableOpacity >
-          <FontAwesome name="share" size={24} color="gray" style={styles.icon} />
+        <TouchableOpacity>
+          <FontAwesome name="share" size={30} color="gray" style={styles.icon} />
+        </TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>

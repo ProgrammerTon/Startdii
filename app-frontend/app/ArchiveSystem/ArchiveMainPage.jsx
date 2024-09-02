@@ -70,7 +70,7 @@ const ArchiveMainPage = () => {
         </TouchableOpacity>
       </View>
         <TouchableOpacity style={styles.circle} onPress={openAddWindow}>
-          <Text style={styles.PlusText}>+</Text>
+          <Text style={styles.floatingButtonText}>+</Text>
         </TouchableOpacity>
         <AddNoteQuizWindow visible={AddWindowVisible} onClose={closeAddWindow} />
       <View>
@@ -140,10 +140,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  PlusText: {
-    color: '#ffffff',
-    fontSize: 30,
-    textAlign: 'center',  
+  floatingButtonText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });
 

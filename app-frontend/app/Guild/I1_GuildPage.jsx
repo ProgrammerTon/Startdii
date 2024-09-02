@@ -19,7 +19,7 @@ const GuildPage = () => {
         <GuildButton
           key={guild.id}
           guild={guild}
-          onPress={() => router.push("/Guild/ChatScreen")}
+          onPress={() => router.push("/Guild/I2_ChatScreen")}
         />
       ))}
       <TouchableOpacity style={styles.floatingButton}>
