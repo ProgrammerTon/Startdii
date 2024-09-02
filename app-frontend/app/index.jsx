@@ -8,6 +8,7 @@ import * as Font from "expo-font";
 import { useGlobalContext } from "../context/GlobalProvider";
 import LogoutButton from "../components/LogoutButton";
 
+
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const { user, isLogged } = useGlobalContext();
@@ -92,10 +93,22 @@ export default function App() {
           <Text className="text-lg">Chat 2</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={() => router.push("/Guild/I1_first")}
+          onPress={() => router.push("/Guild/GuildPage")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">Guild</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/Guild/ChatScreen")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">GuildChat</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/Guild/Member")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Member</Text>
         </TouchableHighlight>
         <TouchableHighlight
           onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
