@@ -97,6 +97,12 @@ export default function App() {
         >
           <Text className="text-lg">UserFinder</Text>
         </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/ArchiveSystem/E2_NoteDetailed")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">NoteDetailed</Text>
+        </TouchableHighlight>
         {isLogged ? <LogoutButton /> : null}
       </SafeAreaView>
     );
