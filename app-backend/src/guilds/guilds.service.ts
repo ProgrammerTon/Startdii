@@ -17,12 +17,44 @@ export class GuildsService {
     return this.guildModel.find().exec();
   }
 
-  async getAllMembersInGuild(id: ObjectId): Promise<any> {
-    return this.guildModel
+  async findGuildById(id: ObjectId): Promise<any> {
+    const data = await this.guildModel
       .findById({ _id: id })
-      .select('memberIdList')
       .populate('memberIdList')
       .exec();
+    const transformedData = {
+      _id: data._id,
+      inviteCode: data.inviteCode,
+      memberIdList: data.memberIdList.map((member: any) => {
+        const memberIdString = member._id.toString();
+
+        const viceLeaderId = data.viceLeaderIdList.filter(
+          (elementId) => elementId.toString() === memberIdString,
+        );
+        let role;
+        if (memberIdString === data.leaderId.toString()) {
+          role = 'leader';
+        } else if (viceLeaderId.length > 0) {
+          role = 'vice-leader';
+        } else {
+          role = 'member';
+        }
+        return {
+          _id: member._id,
+          email: member.email,
+          username: member.username,
+          firstname: member.firstname,
+          lastname: member.lastname,
+          role: role,
+        };
+      }),
+      leaderId: data.leaderId,
+      viceLeaderIdList: data.viceLeaderIdList,
+      name: data.name,
+      description: data.description,
+      cover: data.cover,
+    };
+    return transformedData;
   }
 
   async findGuildByMemberId(memberId: ObjectId): Promise<Guild[]> {
