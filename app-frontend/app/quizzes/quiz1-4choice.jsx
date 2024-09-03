@@ -35,7 +35,8 @@ export default function Quiz4choice() {
         const newSelectedChoice = selectedChoice.filter((item) => item !== choice)
         setSelectedChoice(newSelectedChoice); // Unselect if the same choice is pressed
       } else {
-        setSelectedChoice([...selectedChoice, choice]); // Select the new choice to the selectedchoice
+        const newSelectedChoice = [...selectedChoice, choice].sort(); // Sort the array after adding the new choice
+        setSelectedChoice(newSelectedChoice); // Select the new choice to the selectedchoice
       }
     }
     else{
