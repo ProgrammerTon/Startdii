@@ -18,6 +18,7 @@ import { Roles } from 'src/auth/roles/roles.decorator';
 import { CreateGuildDto } from './dto/create-guild.dto';
 import { UpdateGuildDto } from './dto/update-guild.dto';
 import { GuildsService } from './guilds.service';
+import { Types } from 'mongoose';
 
 import { ParseObjectIdPipe } from 'src/common/pipes';
 import genInviteCode from './utils/guilds.genInviteCode';
@@ -35,8 +36,8 @@ export class GuildsController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post('joinGuild/:inviteCode')
   addMemberByCode(@Param('inviteCode') inviteCode: string, @Request() req) {
-    const userId = req.user.id;
-    this.guildsService.addMemberByCode(inviteCode, userId);
+    const userId = new Types.ObjectId(req.user.id);
+    return this.guildsService.addMemberByCode(inviteCode, userId);
   }
 
   @Get(':id')
