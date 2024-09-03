@@ -4,10 +4,9 @@ import { CreateSourceDto } from './dto/create-source.dto';
 import { UpdateSourceDto } from './dto/update-source.dto';
 import { Source, SourceDocument } from './entities/source.entity';
 import { plainToInstance } from 'class-transformer';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
-import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 
 @Injectable()
 export class SourcesService {
