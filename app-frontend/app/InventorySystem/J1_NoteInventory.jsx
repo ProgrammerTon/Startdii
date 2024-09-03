@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import TagList from '../../components/TagList';
 
-const SourceDetailPage = () => {
+const NoteInventoryDetailed = () => {
   const { id } = useLocalSearchParams();
   const title = "Title";
   const description = "This is descriptionThis is descriptionThis is descriptionThis is descriptionThis is descriptionThis is description";
@@ -77,7 +77,7 @@ const SourceDetailPage = () => {
   );
 };
 
-export default SourceDetailPage;
+export default NoteInventoryDetailed;
 
 const styles = StyleSheet.create({
   container: {
