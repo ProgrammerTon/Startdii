@@ -83,17 +83,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F8F8',
-    padding: 10,
+    padding: 10
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'center',  
     alignItems: 'center',     
     backgroundColor: '#FEDD3A',
     paddingVertical: 15,
     paddingHorizontal: 10,
-    borderRadius: 10,
     position: 'relative', 
+    justifyContent: 'center',  
   },
   headerTitle: {
     fontSize: 20,

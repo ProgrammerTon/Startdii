@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 const GuildButton = ({ guild, onPress }) => {
+  const noti = 1;
   return (
     <TouchableOpacity style={[styles.card, { backgroundColor: guild.color }]} onPress={onPress}>
       <View style={styles.badge}>
@@ -16,7 +17,7 @@ const GuildButton = ({ guild, onPress }) => {
         <Text style={styles.members}>{guild.members} Members</Text>
       </View>
       <View style={styles.notification}>
-        <Text style={styles.notificationText}>3</Text>
+        <Text style={styles.notificationText}>{noti}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -73,14 +74,15 @@ const styles = StyleSheet.create({
   },
   members: {
     fontSize: 12,
-    color: '#888',
+    color: '#000000',
   },
   notification: {
-    backgroundColor: '#FF6347',
+    backgroundColor: '#f4f4f4',
     borderRadius: 15,
     padding: 5,
     width: 30,
     height: 30,
     justifyContent: 'center',
+    alignItems: 'center'
   }
 });

@@ -5,6 +5,7 @@ import ArchiveSearchBar from '../../components/ArchiveSearchBar.jsx';
 import ToggleNoteQuiz from '../../components/ToggleNoteQuiz.jsx';
 import SourceCard from '../../components/E1_SourceCard.jsx';
 import QuizCard from '../../components/F1_QuizCard.jsx';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ArchiveMainPage = () => {
   const [ActiveFilter,setActiveFilter] = useState('Relevance');
@@ -69,7 +70,7 @@ const ArchiveMainPage = () => {
         <Text style={styles.filterText}>{filterText}</Text>
         </TouchableOpacity>
       </View>
-        <TouchableOpacity style={styles.circle} onPress={openAddWindow}>
+        <TouchableOpacity style={styles.floatingButton} onPress={openAddWindow}>
           <Text style={styles.floatingButtonText}>+</Text>
         </TouchableOpacity>
         <AddNoteQuizWindow visible={AddWindowVisible} onClose={closeAddWindow} />
@@ -118,16 +119,21 @@ const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
   },
-  circle: {
-    width: 40,       
-    height: 40,      
-    borderRadius: 20,  
-    backgroundColor: '#ef6d11',
-    position: 'absolute',  
-    bottom: 10,           
-    right: 20,          
+  floatingButton: {
+    backgroundColor: '#FF6347',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   toggleButton: {
     width: 40,

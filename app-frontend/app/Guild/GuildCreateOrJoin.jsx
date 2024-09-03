@@ -1,11 +1,35 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, Modal, Pressable, TouchableOpacity } from 'react-native';
 import { Redirect, router } from "expo-router";
 import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import GuildCreateWindow from './GuildCreate';
+import GuildJoinWindow from './GuildJoin';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Feather from '@expo/vector-icons/Feather';
 
-const AddNoteQuizWindow = ({ visible, onClose }) => {
+const CreateJoinGuild = ({ visible, onClose }) => {
+    
+  const [createGuild,setCreateGuild] = useState(false);
+  const [joinGuild,setJoinGuild] = useState(false);
+
+  const openCreateGuildWindow = () => { 
+    setCreateGuild(true);
+  };
+
+  const closeCreateGuildWindow = () => {
+    setCreateGuild(false);
+  };
+
+  const openJoinGuildJoinWindow = () => { 
+    setJoinGuild(true);
+  };
+
+  const closeJoinGuildWindow = () => {
+    setJoinGuild(false);
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -15,12 +39,16 @@ const AddNoteQuizWindow = ({ visible, onClose }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <TouchableOpacity style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/C1_AddNotePage")}>
-            <AntDesign name="addfile" size={20} color="#ffffff" />
+          <TouchableOpacity style={styles.InteractButton} onPress={(openJoinGuildJoinWindow)}>
+            <FontAwesome6 name="door-open" size={20} color="#ffffff" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/D1_AddQuizPage")}>
-          <MaterialCommunityIcons name="file-question-outline" size={20} color="#ffffff" />
+          <GuildJoinWindow visible={joinGuild} onClose={closeJoinGuildWindow} />
+
+          <TouchableOpacity style={styles.InteractButton} onPress={(openCreateGuildWindow)}>
+          <Feather name="plus-circle" size={20} color="#ffffff" />
           </TouchableOpacity>
+          <GuildCreateWindow visible={createGuild} onClose={closeCreateGuildWindow} />
+          
           <TouchableOpacity style={styles.InteractButton} onPress={onClose}>
             <FontAwesome name="close" size={24} color="#ffffff" />
           </TouchableOpacity>
@@ -59,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddNoteQuizWindow;
+export default CreateJoinGuild;

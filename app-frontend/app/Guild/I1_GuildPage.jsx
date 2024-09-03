@@ -1,14 +1,28 @@
 // GuildPage.js
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import GuildButton from './GuildButton';
 import { Redirect, router } from "expo-router";
+import CreateJoinGuild from './GuildCreateOrJoin';
+
 const GuildPage = () => {
   const guilds = [
     { id: 1, color: '#FF6347', badgeColor: '#2ecc71', title: 'เรารู้เขารู้เรา', description: 'เรารู้เขา เรารู้ว่าคนชื่นชอบ...', members: 12 },
     { id: 2, color: '#4682B4', badgeColor: '#FF69B4', title: 'แต่เขาแกล้งรู้เรา', description: 'เรารู้เขา เรารู้ว่าคนชื่นชอบ...', members: 12 },
     { id: 3, color: '#FFB6C1', badgeColor: '#FF4500', title: 'อะไรอ่ะ', description: 'เรารู้เขา เรารู้ว่าคนชื่นชอบ...', members: 12 },
   ];
+
+  const [guildCreateJoinWindow,setguildCreateJoinWindow] = useState(false);
+
+  const openguildCreateJoinWindow = () => { 
+    setguildCreateJoinWindow(true);
+  };
+
+  const closeguildCreateJoinWindow = () => {
+    setguildCreateJoinWindow(false);
+  };
+
+
 
   return (
     <View style={styles.container}>
@@ -22,9 +36,10 @@ const GuildPage = () => {
           onPress={() => router.push("/Guild/I2_ChatScreen")}
         />
       ))}
-      <TouchableOpacity style={styles.floatingButton}>
+      <TouchableOpacity style={styles.floatingButton} onPress={openguildCreateJoinWindow}>
         <Text style={styles.floatingButtonText}>+</Text>
       </TouchableOpacity>
+      <CreateJoinGuild visible={guildCreateJoinWindow} onClose={closeguildCreateJoinWindow} />
     </View>
   );
 };
@@ -35,11 +50,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 50,
+    paddingTop: 0,
   },
   header: {
     backgroundColor: '#FFB6C1',
-    padding: 15,
+    padding: 20,
     alignItems: 'center',
   },
   headerText: {

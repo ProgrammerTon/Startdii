@@ -1,12 +1,26 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import PromoteOrKickWindow from './PromoteOrKickWindow';
 
 const MemberItem = ({ name, isAdmin, isViceAdmin }) => {
+  const [promoteOrKickWindowVisible, setPromoteOrKickWindowVisible] = useState(false);
+
+  const openPromoteOrKickWindow = () => {
+    setPromoteOrKickWindowVisible(true);
+  };
+
+  const closePromoteOrKickWindow = () => {
+    setPromoteOrKickWindowVisible(false);
+  };
+
   return (
     <View style={styles.memberItem}>
-      <Text style={styles.memberName}>{name}</Text>
-      {isAdmin && <Text style={styles.adminBadge}>👑</Text>}
-      {isViceAdmin && <Text style={styles.adminBadge}>⚔️</Text>}
+      <TouchableOpacity onPress={openPromoteOrKickWindow} style={styles.touchable}>
+        <Text style={styles.memberName}>{name}</Text>
+        {isAdmin && <Text style={styles.adminBadge}>👑</Text>}
+        {isViceAdmin && !isAdmin && <Text style={styles.adminBadge}>⚔️</Text>}
+      </TouchableOpacity>
+      <PromoteOrKickWindow visible={promoteOrKickWindowVisible} onClose={closePromoteOrKickWindow} />
     </View>
   );
 };
@@ -17,7 +31,6 @@ const styles = StyleSheet.create({
   memberItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 20,
@@ -28,12 +41,19 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
   },
+  touchable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
   memberName: {
     fontSize: 16,
     color: '#000',
+    flex: 1, 
   },
   adminBadge: {
     fontSize: 16,
     color: '#000',
+    marginLeft: 5,
   },
 });

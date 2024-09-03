@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Redirect, router } from "expo-router";
 
 const ChatScreen = () => {
+  const guildName = 'Test_guild'
   const [messages, setMessages] = useState([
     { id: 1, text: 'สวัสดีครับท่านสมาชิกชมรม', time: '12:48', sender: 'Juaz Juazzz', isCurrentUser: false },
     { id: 2, text: 'สวัสดีครับท่านประธาน', time: '12:48', sender: 'Me', isCurrentUser: true },
@@ -17,7 +19,7 @@ const ChatScreen = () => {
         id: messages.length + 1,
         text: inputText,
         time: new Date().toLocaleTimeString().slice(0, 5),
-        sender: 'Me',  // Assuming 'Me' is the current user
+        sender: 'Me',  
         isCurrentUser: true,
       };
       setMessages([...messages, newMessage]);
@@ -31,8 +33,8 @@ const ChatScreen = () => {
         <TouchableOpacity>
           <Text style={styles.backButton}>{'<'}</Text>
         </TouchableOpacity>
-        <Text style={styles.headerText}>เรารู้เขารู้เรา</Text>
-        <TouchableOpacity>
+        <Text style={styles.headerText}>{guildName}</Text>
+        <TouchableOpacity onPress={() => router.push("/Guild/I3_GuildSetting")}>
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
       </View>
@@ -78,6 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',
+    justifyContent: 'flex-start',
   },
   header: {
     backgroundColor: '#fca6cc',
@@ -114,10 +117,11 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   messageBubble: {
-    borderRadius: 20,
+    borderRadius: 40,
     paddingHorizontal: 15,
     paddingVertical: 10,
     maxWidth: '80%',
+    backgroundColor: 'white'
   },
   messageText: {
     fontSize: 16,
