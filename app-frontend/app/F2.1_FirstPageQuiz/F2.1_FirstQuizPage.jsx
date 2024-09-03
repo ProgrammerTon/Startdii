@@ -1,19 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import Descriptionblock from './F2.1_descriptionBlock';
-import Tag from './F2.1_Tag';
-import StartButton from './F2.1_StartButton';
-import { TimeDateBlock } from './F2.1_Time_Username';
-import { UsernameBlock } from './F2.1_Time_Username';
-import CommentBox from './F2.1_CommentBlock';
-import RatingBlock from './F2.1_Rating';
+import DescriptionBlock from '../Quiz_Component/descriptionBlock';
+import Tag from '../Quiz_Component/Tag';
+import StartButton from '../Quiz_Component/StartButton';
+import { TimeDateBlock } from '../Quiz_Component/Time_Username';
+import { UsernameBlock } from '../Quiz_Component/Time_Username';
+import CommentBox from '../Quiz_Component/CommentBlock';
+import RatingBlock from '../Quiz_Component/Rating';
 
 const FirstQuizPage = () => {
+  const TotalQuestion = 7 ;
   return (
     <View style={styles.container}>
       <ScrollView>
         <Text style={styles.headerStyle}>Data Mining</Text>
-        <Descriptionblock />
+        <DescriptionBlock />
         <View style={styles.tagsContainer}>
           <Tag label="#datasci" />
           <Tag label="#datamining" />
@@ -22,7 +23,7 @@ const FirstQuizPage = () => {
           <TimeDateBlock timeDate="22/07/24 18:00" />
           <UsernameBlock />
         </View>
-        <Text style={styles.headerQs}>10 Questions</Text>
+        <Text style={styles.headerQs}>{TotalQuestion} Questions</Text>
         <StartButton/> 
         <RatingBlock ScoreRating={4.5} numComment={2}/>
         <CommentBox 

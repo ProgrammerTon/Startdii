@@ -1,22 +1,26 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import DescriptionBlock from './F2.2_descriptionBlock';
-import Tag from './F2.2_Tag';
-import StartButton from './F2.2_StartButton';
-import { TimeDateBlock } from './F2.2_Time_Username';
-import { UsernameBlock } from './F2.2_Time_Username';
-import CommentBox from './F2.2_CommentBlock';
-import RatingBlock from './F2.2_Rating';
-import SumButton from './F2.2_SummaryButton';
-import CommentBar from './F2.2_CommenBar';
-import RatingBar from './F2.2_RatingBar';
+import DescriptionBlock from '../Quiz_Component/descriptionBlock';
+import Tag from '../Quiz_Component/Tag';
+import StartButton from '../Quiz_Component/StartButton';
+import { TimeDateBlock } from '../Quiz_Component/Time_Username';
+import { UsernameBlock } from '../Quiz_Component/Time_Username';
+import CommentBox from '../Quiz_Component/CommentBlock';
+import RatingBlock from '../Quiz_Component/Rating';
+import SumButton from '../Quiz_Component/SummaryButton';
+import CommentBar from '../Quiz_Component/CommenBar';
+import RatingBar from '../Quiz_Component/RatingBar';
 
-const FirstQuizPage = () => {
+
+const SumQuizPage = () => {
+
+  const TotalQuestion =  11;
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <Text style={styles.headerStyle}>Data Mining</Text>
-        <DescriptionBlock />
+        <DescriptionBlock/>
         <View style={styles.tagsContainer}>
           <Tag label="#datasci" />
           <Tag label="#datamining" />
@@ -25,7 +29,7 @@ const FirstQuizPage = () => {
           <TimeDateBlock timeDate="22/07/24 18:00" />
           <UsernameBlock />
         </View>
-        <Text style={styles.headerQs}>10 Questions</Text>
+        <Text style={styles.headerQs}>{TotalQuestion} Questions</Text>
         <StartButton/> 
         <SumButton/>
         <RatingBlock ScoreRating={4.5} numComment={2}/>
@@ -47,7 +51,7 @@ const FirstQuizPage = () => {
   );
 };
 
-export default FirstQuizPage;
+export default SumQuizPage;
 
 const styles = StyleSheet.create({
   container: {
