@@ -48,7 +48,7 @@ export class GuildsController {
 
   @Get(':id')
   getAllMembersInGuild(@Param('id', ParseObjectIdPipe) id: ObjectId) {
-    return this.guildsService.getAllMembersInGuild(id);
+    return this.guildsService.findGuildById(id);
   }
 
   @Get(':id/:memberId')
