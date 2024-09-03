@@ -7,17 +7,20 @@ import {
   TouchableOpacity,
   FlatList,
   RefreshControl,
+  SafeAreaView,
 } from "react-native";
 import GuildButton from "./GuildButton";
 import { Redirect, router } from "expo-router";
 import CreateJoinGuild from "./GuildCreateOrJoin";
 import { guildList } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { useGuildContext } from "../../context/GuildProvider";
 
 const GuildPage = () => {
   const [guilds, setGuilds] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
   const { isLogged } = useGlobalContext();
+  const { setGuildId } = useGuildContext();
 
   useEffect(() => {
     if (!isLogged) {
@@ -89,7 +92,10 @@ const GuildPage = () => {
           <GuildButton
             key={item.id}
             guild={item}
-            onPress={() => router.push("/Guild/I2_ChatScreen")}
+            onPress={() => {
+              setGuildId(item.id);
+              router.push("/guild/I2_ChatScreen");
+            }}
           />
         )}
         keyExtractor={(item) => `${item.id}`}
