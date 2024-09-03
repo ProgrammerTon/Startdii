@@ -8,6 +8,8 @@ import {
   Delete,
   Request,
   Query,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 import { RolesGuard } from 'src/auth/roles/role.guard';
@@ -37,7 +39,11 @@ export class GuildsController {
   @Post('joinGuild/:inviteCode')
   addMemberByCode(@Param('inviteCode') inviteCode: string, @Request() req) {
     const userId = new Types.ObjectId(req.user.id);
-    return this.guildsService.addMemberByCode(inviteCode, userId);
+    const guild = this.guildsService.addMemberByCode(inviteCode, userId);
+    if (!guild) {
+      throw new HttpException('Not Found Guild', HttpStatus.NOT_FOUND);
+    }
+    return guild;
   }
 
   @Get(':id')
