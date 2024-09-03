@@ -16,15 +16,15 @@ export default DescriptionBlock;
 
 const styles = StyleSheet.create({
   descriptionBox: {
-    marginTop: 5, // Space between header and description
+    marginTop: 5, 
     padding: 15,
-    backgroundColor: '#F0F0F0', // Light gray background for description
-    borderRadius: 5, // Rounded corners
+    backgroundColor: '#F0F0F0', 
+    borderRadius: 5, 
   },
   descriptionText: {
-    fontSize: 16, // Font size for the description text
-    color: '#000000', // Black text color
-    textAlign: 'justify', // Center text horizontally
-    // or you can use textAlign: 'left' if you want left-aligned text
+    fontSize: 16, 
+    color: '#000000', 
+    textAlign: 'justify', 
+
   },
 });

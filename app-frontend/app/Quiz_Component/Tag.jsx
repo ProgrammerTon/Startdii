@@ -14,14 +14,14 @@ export default Tag;
 const styles = StyleSheet.create({
   tagContainer: {
     backgroundColor: '#E0E0E0', // Light grey background
-    borderRadius: 20, // Rounded corners
-    paddingVertical: 5, // Vertical padding
-    paddingHorizontal: 15, // Horizontal padding
-    marginRight: 10, // Space between tags
-    marginVertical: 5, // Space between rows of tags
+    borderRadius: 20, 
+    paddingVertical: 5, 
+    paddingHorizontal: 15, 
+    marginRight: 10, 
+    marginVertical: 5, 
   },
   tagText: {
-    color: '#000000', // Black text color
-    fontSize: 13, // Font size for the tag
+    color: '#000000', 
+    fontSize: 13, 
   },
 });

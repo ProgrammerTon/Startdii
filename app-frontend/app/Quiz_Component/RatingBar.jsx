@@ -34,16 +34,16 @@ const styles = StyleSheet.create({
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    // paddingHorizontal: width * 0.05, // Responsive padding
+  
   },
   ratingText: {
-    fontSize: width * 0.04, // Responsive font size
+    fontSize: width * 0.04, 
     fontWeight : "bold" ,
-    marginRight: width * 0.02, // Responsive margin
+    marginRight: width * 0.02, 
   },
   star: {
-    fontSize: width * 0.08, // Responsive font size for stars
-    marginHorizontal: width * 0.01, // Responsive spacing between stars
+    fontSize: width * 0.08, 
+    marginHorizontal: width * 0.01, 
   },
 });
 

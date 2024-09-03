@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     starStyle: {
         marginTop : -2 ,
         color: '#f5e740',
-        fontSize: 24, // Adjust size as needed
+        fontSize: 24, 
     },
 });
 

@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
   commentInput: {
     flex: 1,
     fontSize: 16,
-    maxHeight: 150, // Increase the max height for more text
-    minHeight: 40, // Minimum height to start with
+    maxHeight: 150, 
+    minHeight: 40, 
   },
   clearButton: {
     fontSize: 16,
