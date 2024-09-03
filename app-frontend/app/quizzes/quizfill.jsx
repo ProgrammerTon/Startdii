@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  Modal
+  Modal,
+  TextInput
 } from "react-native";
 import { React , useState } from "react";
 import QuizChoice from "../../components/QuizChoice";
@@ -18,15 +19,16 @@ export default function Quiz4choice() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState([]);
   const [closeQuiz, setCloseQuiz] = useState(false);
+  const [userInput, setUserInput] = useState('');
   const quizData = [
     {
       totalQuestion: 5,
-      questionId: 1,
-      question: "What does the cat says?",
-      choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "21"],
+      questionId: 3,
+      question: "2+2-1?",
+      choicecount: 0,
+      choice: [],
       isMultipleAnswer: false,
-      answer : ["AOUUU"]
+      answer : ["3"]
     }
   ];
   const handleChoiceSelect = (choice) => {
@@ -64,17 +66,16 @@ export default function Quiz4choice() {
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
-        {quizData[currentQuestion]?.choice.map((item, index)=>{
-          return <QuizChoice 
-                  key={index}
-                  content={item}
-                  isSelected={selectedChoice.includes(item)} 
-                  onPress={() => handleChoiceSelect(item)}
-                  isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}/>
-          })}
+        <TextInput
+        style={styles.textarea}
+        value={userInput}
+        onChangeText={setUserInput}
+        placeholder="Answer"
+        multiline
+        />
         </View>
         <View>
-          <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
+          <TouchableOpacity style={styles.nextButton} onPress={() => console.log(answer)}>
             <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
           </TouchableOpacity>
         </View>
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     flex: 4,
     width: width * 0.9,
     padding: 10,
-    marginTop: height * 0.1,
+    marginTop: height * 0.12,
     marginBottom: height * 0.2,
     justifyContent: "flex-start",
     alignSelf: "center",
@@ -174,6 +175,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#0270ED", 
     borderRadius:20,
     alignSelf: "flex-end",
+  },
+  textarea: {
+    height: 100,
+    marginTop: 10,
+    borderWidth: 3,
+    borderColor:"#04B36E", // Green
+    borderStyle:"solid",
+    borderRadius:10,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+    justifyContent: "center",
+    //niggaalignSelf: "center",
   },
   headerText: {
     flex: 1,
