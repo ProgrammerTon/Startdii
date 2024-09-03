@@ -23,7 +23,7 @@ export class CreateSourceDto {
   @ApiProperty()
   @IsOptional()
   guildId: ObjectId;
-  
+
   @ApiProperty()
   @IsOptional()
   content: string = '';

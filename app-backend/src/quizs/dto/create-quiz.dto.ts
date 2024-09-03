@@ -1,9 +1,16 @@
-import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested, IsMongoId } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+  IsMongoId,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ObjectId } from 'mongodb';
 import { Status, QType, Question } from '../entities/quiz.entity';
 import { ApiProperty } from '@nestjs/swagger';
-
 
 class QuestionDto {
   @ApiProperty()
@@ -23,7 +30,6 @@ class QuestionDto {
   @ApiProperty()
   @IsNotEmpty()
   answers: number[] | number;
-
 }
 
 export class CreateQuizDto {
@@ -36,7 +42,6 @@ export class CreateQuizDto {
   @IsNotEmpty()
   @IsString()
   title: string;
-
 
   @ApiProperty()
   @ValidateNested({ each: true })
@@ -55,5 +60,4 @@ export class CreateQuizDto {
   @ApiProperty()
   @IsOptional()
   tags?: string[] = [];
-
 }
