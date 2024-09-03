@@ -43,11 +43,14 @@ export class TagsService {
   }
 
   async getSources(name: string) {
-    return await this.tagModel
-      .findOne({ name: name })
-      .select('sources')
-      .populate('sources')
+    const result = await this.tagModel
+      .findOne({ name: { $regex: new RegExp(`^${name}$`, 'i') } })
+      .select('sources') // Select only the 'sources' field
+      .populate('sources') // Populate the sources if they reference another model
+      .lean() // Return a plain JavaScript object
       .exec();
+
+    return result?.sources || [];
   }
 
   async getQuizs(name: string) {

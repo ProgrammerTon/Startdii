@@ -106,7 +106,9 @@ export class SourcesService {
   async findSourcesByTags(tags: string[]) {
     return this.sourceModel
       .find({
-        tags: { $all: tags },
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
       })
       .exec();
   }
@@ -114,8 +116,10 @@ export class SourcesService {
   async findSourcesByTagsAndTitle(tags: string[], title: string) {
     return this.sourceModel
       .find({
-        tags: { $all: tags },
-        $text: { $search: title }, // 'i' for case-insensitive search
+        $text: { $search: title },
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
       })
       .exec();
   }
