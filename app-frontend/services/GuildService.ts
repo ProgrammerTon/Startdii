@@ -1,9 +1,42 @@
 import { baseUrl } from "@/constants/const";
+import { getCurrentToken } from "@/utils/asyncstroage";
 
-type GuildRespond = {};
+export async function guildList() {
+  const token = await getCurrentToken();
+  const res = await fetch(`${baseUrl}/users/guild`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data: any = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return data;
+}
 
-type GuildRequest = {};
-
+export async function joinGuildByCode(inviteCode: string) {
+  const token = await getCurrentToken();
+  const res = await fetch(`${baseUrl}/guilds/joinGuild/${inviteCode}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) {
+    return null;
+  }
+  try {
+    const data: any = await res.json();
+    console.log("Join Guild", data);
+    return data;
+  } catch (error) {
+    return null;
+  }
+}
 // export async function createGuild(data: GuildRequest): Promise<any | null> {
 //   const res = await fetch(`${baseUrl}/sources`, {
 //     method: "POST",
