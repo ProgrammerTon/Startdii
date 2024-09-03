@@ -11,8 +11,8 @@ export enum Status {
 }
 
 export enum QType {
-    choice = 'choice',
-    fill = 'fill'
+  choice = 'choice',
+  fill = 'fill',
 }
 export class Question {
   question: string;
@@ -22,34 +22,33 @@ export class Question {
   correct: number = 0;
 }
 
-
 @Schema({ timestamps: true })
 export class Quiz {
   @Prop({ type: ObjectId, auto: true })
   id: ObjectId;
 
-  @Prop({ type: ObjectId, required: true, name: "ownerId", ref: 'User'})
+  @Prop({ type: ObjectId, required: true, name: 'ownerId', ref: 'User' })
   ownerId: ObjectId;
 
-  @Prop({ type: String, required: true, name: "title" })
+  @Prop({ type: String, required: true, name: 'title' })
   title: string;
 
-  @Prop({ name: "questions" })
+  @Prop({ name: 'questions' })
   questions: Question[];
 
-  @Prop({ name: "published" })
+  @Prop({ name: 'published' })
   published: Status;
 
   @Prop({ type: ObjectId, required: false })
   guildId: ObjectId;
 
-  @Prop({ name: "tags" })
+  @Prop({ name: 'tags' })
   tags: string[];
 
-  @Prop({ name: "players" })
+  @Prop({ name: 'players' })
   players: ObjectId[];
 
-  @Prop({ name: "total_score"})
+  @Prop({ name: 'total_score' })
   total_score: number = 0;
 }
 

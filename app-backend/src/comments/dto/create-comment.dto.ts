@@ -21,7 +21,7 @@ export class CreateCommentDto {
 
   @ApiProperty()
   quizId?: ObjectId;
-  
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()

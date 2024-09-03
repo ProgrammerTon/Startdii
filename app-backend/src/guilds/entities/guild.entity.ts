@@ -1,4 +1,4 @@
-import { ObjectId} from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
@@ -14,7 +14,7 @@ export class Guild {
 
   @Prop({ name: 'inviteCode' })
   inviteCode: string;
-  
+
   @Prop({ type: [ObjectId], name: 'memberIdList', ref: 'User' })
   memberIdList: ObjectId[];
 
@@ -35,4 +35,3 @@ export class Guild {
 }
 
 export const GuildSchema = SchemaFactory.createForClass(Guild);
-
