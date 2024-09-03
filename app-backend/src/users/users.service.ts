@@ -43,6 +43,11 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async findByExactUsername(username: string) {
+    const user = await this.userModel.findOne({ username }).exec();
+    return user;
+  }
+
   async findByUsername(username: string) {
     const users = await this.userModel
       .find({
