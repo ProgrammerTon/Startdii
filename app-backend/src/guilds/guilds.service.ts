@@ -94,8 +94,10 @@ export class GuildsService {
 
   async addMember(id: ObjectId, memberId: ObjectId): Promise<Guild> {
     const guild = await this.guildModel.findById({ _id: id });
+    if (!guild) {
+      return null;
+    }
     guild.memberIdList.push(memberId);
-
     return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();
   }
 
@@ -113,6 +115,17 @@ export class GuildsService {
 
   async remove(id: ObjectId): Promise<Guild> {
     return this.guildModel.findByIdAndDelete(id).exec();
+  }
+
+  async addMemberByCode(inviteCode: string, userId: ObjectId): Promise<Guild> {
+    const guild = await this.guildModel.findOne({ inviteCode });
+    if (!guild) {
+      return null;
+    }
+    guild.memberIdList.push(userId);
+    return await this.guildModel
+      .findByIdAndUpdate(guild._id, guild, { new: true })
+      .exec();
   }
 
   // debugging service
