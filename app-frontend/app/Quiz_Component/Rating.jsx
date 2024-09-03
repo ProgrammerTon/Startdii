@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import StarRating from './F2.1_Star';
+import StarRating from './Star';
 
 const RatingBlock = ({ ScoreRating, numComment}) => {
   return (
