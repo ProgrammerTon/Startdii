@@ -30,7 +30,7 @@ const SourceCard = ({ id, title, author, tags }) => {
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>{title}</Text>
           <Text style={styles.authorText}>By {author}</Text>
-          {/* <TagList tags={tags} title={title} /> */}
+          <TagList tags={tags} title={title} id={id} />
           <View style={styles.ratingContainer}>
             {[...Array(5)].map((_, index) => (
               <FontAwesome
