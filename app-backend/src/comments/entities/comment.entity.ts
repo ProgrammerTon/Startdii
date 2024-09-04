@@ -36,10 +36,7 @@ export class Comment {
 
   @Prop({ name: 'content' })
   content: string;
-
-  @Prop({ name: 'score' })
-  score: number;
-
+  
   @Prop({ type: [ReplyCommentSchema], name: 'replyComments', default: [] })
   replyComments: ReplyComment[];
 }
