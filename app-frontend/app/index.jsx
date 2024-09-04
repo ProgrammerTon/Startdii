@@ -103,7 +103,7 @@ export default function App() {
           onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
           className="bg-green-600 p-2 rounded-xl"
         >
-          <Text className="text-lg">UserFinder</Text>
+          <Text className="text-lg">User Finder</Text>
         </TouchableHighlight>
         <TouchableHighlight
           onPress={() => router.push("/ArchiveSystem/E2_NoteDetailed")}
@@ -118,7 +118,6 @@ export default function App() {
           <Text className="text-lg">NoteInventory</Text>
         </TouchableHighlight>
         {isLogged ? <LogoutButton /> : null}
-        </ScrollView>
       </SafeAreaView>
     );
   }
