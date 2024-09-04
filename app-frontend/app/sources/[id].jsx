@@ -16,6 +16,7 @@ import RatingBlock from "../Quiz_Component/Rating";
 import CommentBar from "../Quiz_Component/CommentBar";
 import RatingBar from "../Quiz_Component/RatingBar";
 import { findSource } from "../../services/SourceService";
+import { getCommentsSource } from "../../services/CommentService";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -50,6 +51,7 @@ const SourceDetailPage = () => {
 
   useEffect(() => {
     fecthSource(id);
+    fetchComments(id);
   }, []);
 
   // State to hold the list of comments
@@ -73,6 +75,11 @@ const SourceDetailPage = () => {
 
     // Clear the comment input
     setCommentInput("");
+  };
+
+  const fetchComments = async () => {
+    const data = await getCommentsSource(id);
+    console.log("Comments", data);
   };
 
   const onRefresh = () => {

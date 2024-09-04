@@ -16,6 +16,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { getSource } from "../../services/SourceService";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
+import { router } from "expo-router";
 
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Relevance");
