@@ -104,6 +104,27 @@ export class SourcesService {
     return this.sourceModel.find({ $text: { $search: keyword } }).exec();
   }
 
+  async findSourcesByTags(tags: string[]) {
+    return this.sourceModel
+      .find({
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
+      })
+      .exec();
+  }
+
+  async findSourcesByTagsAndTitle(tags: string[], title: string) {
+    return this.sourceModel
+      .find({
+        $text: { $search: title },
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
+      })
+      .exec();
+  }
+
   /*async findByTag(tagname: string): Promise<Source[]> {
     const sources = new Array<Source>();
     const tag = await this.tagModel.findOne({ name: tagname }).exec();
