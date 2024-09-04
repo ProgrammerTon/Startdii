@@ -13,7 +13,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
 
 const ChatScreen = () => {
-  const [guildName, setGuildName] = useState("Test_guild");
+  const [guildName, setGuildName] = useState("");
   const { guild } = useGuildContext();
   const [room, setRoom] = useState("");
   const [message, setMessage] = useState("");
@@ -32,8 +32,7 @@ const ChatScreen = () => {
   } = useGlobalContext();
 
   useEffect(() => {
-    if (room !== "") {
-      console.log("Join Room", room);
+    if (room) {
       joinRoom(room);
       fetchChat();
       return () => {
@@ -46,15 +45,12 @@ const ChatScreen = () => {
   useEffect(() => {
     if (!isLogged) {
       router.replace("/sign-in");
+    } else if (user && guild) {
+      setName(user.username || "");
+      setGuildName(guild.name || "Test_guild");
+      setRoom(guild._id || "");
     }
-    if (user) {
-      setName(user.username);
-    }
-    if (guild) {
-      setGuildName(guild.name);
-      setRoom(guild._id);
-    }
-  }, []);
+  }, [user, guild, isLogged]);
 
   const fetchChat = () => {
     setLoading(true);
