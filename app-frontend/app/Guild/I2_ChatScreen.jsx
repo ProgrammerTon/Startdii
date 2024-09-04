@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,63 +6,111 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { Redirect, router } from "expo-router";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { useGuildContext } from "../../context/GuildProvider";
 
 const ChatScreen = () => {
-  const guildName = "Test_guild";
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: "สวัสดีครับท่านสมาชิกชมรม",
-      time: "12:48",
-      sender: "Juaz Juazzz",
-      isCurrentUser: false,
-    },
-    {
-      id: 2,
-      text: "สวัสดีครับท่านประธาน",
-      time: "12:48",
-      sender: "Me",
-      isCurrentUser: true,
-    },
-    {
-      id: 3,
-      text: "รู้เขารู้เรา",
-      time: "12:49",
-      sender: "Mr.BOB",
-      isCurrentUser: false,
-    },
-    {
-      id: 4,
-      text: "รบร้อยครั้ง",
-      time: "12:50",
-      sender: "PunInwZa007",
-      isCurrentUser: false,
-    },
-    {
-      id: 5,
-      text: "แพ้ร้อยครั้ง",
-      time: "12:51",
-      sender: "Me",
-      isCurrentUser: true,
-    },
-  ]);
-  const [inputText, setInputText] = useState("");
+  const [guildName, setGuildName] = useState("Test_guild");
+  const { guild } = useGuildContext();
+  const [room, setRoom] = useState("");
+  const [message, setMessage] = useState("");
+  const [name, setName] = useState("");
+  const [offset, setOffset] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const {
+    joinRoom,
+    leaveRoom,
+    messages,
+    sendMessage,
+    fetchMessage,
+    user,
+    isLogged,
+    clearMessage,
+  } = useGlobalContext();
 
-  const handleSend = () => {
-    if (inputText.trim()) {
-      const newMessage = {
-        id: messages.length + 1,
-        text: inputText,
-        time: new Date().toLocaleTimeString().slice(0, 5),
-        sender: "Me",
-        isCurrentUser: true,
+  useEffect(() => {
+    if (room !== "") {
+      console.log("Join Room", room);
+      joinRoom(room);
+      fetchChat();
+      return () => {
+        leaveRoom(room);
+        clearMessage();
       };
-      setMessages([...messages, newMessage]);
-      setInputText("");
+    }
+  }, [room]);
+
+  useEffect(() => {
+    if (!isLogged) {
+      router.replace("/sign-in");
+    }
+    if (user) {
+      setName(user.username);
+    }
+    if (guild) {
+      setGuildName(guild.name);
+      setRoom(guild._id);
+    }
+  }, []);
+
+  const fetchChat = () => {
+    setLoading(true);
+    fetchMessage(room, offset);
+    setOffset(offset + 1);
+    setLoading(false);
+  };
+
+  const handleSendMessage = () => {
+    if (message.trim() && room) {
+      const text = message;
+      const time = new Date().toLocaleTimeString().slice(0, 5);
+      const type = "Text";
+      const sender = name;
+      const userName = user.username;
+      sendMessage({ room, text, sender, type, time });
+      setMessage("");
     }
   };
+  // const [messages, setMessages] = useState([
+  //   {
+  //     id: 1,
+  //     text: "สวัสดีครับท่านสมาชิกชมรม",
+  //     time: "12:48",
+  //     sender: "Juaz Juazzz",
+  //     isCurrentUser: false,
+  //   },
+  //   {
+  //     id: 2,
+  //     text: "สวัสดีครับท่านประธาน",
+  //     time: "12:48",
+  //     sender: "Me",
+  //     isCurrentUser: true,
+  //   },
+  //   {
+  //     id: 3,
+  //     text: "รู้เขารู้เรา",
+  //     time: "12:49",
+  //     sender: "Mr.BOB",
+  //     isCurrentUser: false,
+  //   },
+  //   {
+  //     id: 4,
+  //     text: "รบร้อยครั้ง",
+  //     time: "12:50",
+  //     sender: "PunInwZa007",
+  //     isCurrentUser: false,
+  //   },
+  //   {
+  //     id: 5,
+  //     text: "แพ้ร้อยครั้ง",
+  //     time: "12:51",
+  //     sender: "Me",
+  //     isCurrentUser: true,
+  //   },
+  // ]);
 
   return (
     <View style={styles.container}>
@@ -75,35 +123,45 @@ const ChatScreen = () => {
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
       </View>
-
-      <ScrollView style={styles.chatContainer}>
-        {messages.map((message) => (
-          <View
-            key={message.id}
-            style={[
-              styles.messageWrapper,
-              message.isCurrentUser ? styles.currentUser : styles.otherUser,
-            ]}
-          >
-            {!message.isCurrentUser && (
-              <Text style={styles.messageSender}>{message.sender}</Text>
-            )}
-            <View style={styles.messageBubble}>
-              <Text style={styles.messageText}>{message.text}</Text>
-            </View>
-            <Text style={styles.messageTime}>{message.time}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      {user ? (
+        <FlatList
+          data={messages}
+          renderItem={({ item, index }) => {
+            item.isCurrentUser = item.sender == user.username;
+            return (
+              <View
+                key={item.id}
+                style={[
+                  styles.messageWrapper,
+                  item.isCurrentUser ? styles.currentUser : styles.otherUser,
+                ]}
+              >
+                {!item.isCurrentUser && (
+                  <Text style={styles.messageSender}>{item.sender}</Text>
+                )}
+                <View style={styles.messageBubble}>
+                  <Text style={styles.messageText}>{item.text}</Text>
+                </View>
+                <Text style={styles.messageTime}>{item.time}</Text>
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => `${item.sender}-${index}`}
+          inverted // This makes the list scroll from bottom to top
+          onEndReached={fetchChat}
+          onEndReachedThreshold={0.1} // Adjust as needed
+          ListFooterComponent={loading && <ActivityIndicator />}
+        />
+      ) : null}
 
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          value={inputText}
-          onChangeText={setInputText}
+          value={message}
+          onChangeText={setMessage}
           placeholder="message"
         />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
           <Text style={styles.sendButtonText}>➤</Text>
         </TouchableOpacity>
       </View>
