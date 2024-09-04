@@ -5,12 +5,17 @@ import { Redirect, router } from "expo-router";
 import ChatSearchBar from "../../components/ChatSearchBar";
 import InviteCodeWindow from "./InviteCodeWindow";
 import LeaveGuildWindow from "./LeaveGuildWindow";
+import { useGuildContext } from "../../context/GuildProvider";
+import { leavePerson } from "../../services/GuildService";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const GuildSettingPage = () => {
   const guildName = "Test_guild";
   const [InviteWindowVisible, setInviteWindowVisible] = useState(false);
   const [LeaveGuildWindowVisible, setLeaveGuildWindowVisible] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const { guild } = useGuildContext();
+  const { user } = useGlobalContext();
 
   const handlePress = () => {
     setIsMuted(!isMuted);
@@ -30,6 +35,21 @@ const GuildSettingPage = () => {
 
   const closeLeaveWindow = () => {
     setLeaveGuildWindowVisible(false);
+  };
+
+  const handleLeave = () => {
+    const transformdata = guild.memberIdList.map((item, index) => ({
+      _id: item._id,
+      id: index + 1, // Assign a sequential ID starting from 1
+      username: `${item.username}`, // Combine firstname and lastname
+      isAdmin: item.role === "leader", // Check if the role is 'admin'
+      isViceAdmin: item.role === "vice-leader", // Check if the role is 'vice-admin'
+    }));
+
+    const data = leavePerson(user._id, transformdata, guild._id);
+    if (data) {
+      router.push("/");
+    }
   };
 
   return (
@@ -65,6 +85,7 @@ const GuildSettingPage = () => {
         <InviteCodeWindow
           visible={InviteWindowVisible}
           onClose={closeInviteWindow}
+          code={guild.inviteCode}
         />
 
         <TouchableOpacity style={styles.button} onPress={openLeaveWindow}>
@@ -74,6 +95,7 @@ const GuildSettingPage = () => {
         <LeaveGuildWindow
           visible={LeaveGuildWindowVisible}
           onClose={closeLeaveWindow}
+          handleLeave={handleLeave}
         />
       </View>
       <View style={styles.SearchContainer}>

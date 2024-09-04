@@ -1,9 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View, Modal, Pressable,TouchableOpacity } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 
-
-const InviteCodeWindow = ({ visible, onClose}) => {
-  const code = 818181
+const InviteCodeWindow = ({ visible, onClose, code }) => {
   return (
     <Modal
       animationType="slide"
@@ -33,53 +38,53 @@ const InviteCodeWindow = ({ visible, onClose}) => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: '#ffffff',
+    width: "80%",
+    backgroundColor: "#ffffff",
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
     marginBottom: 10,
   },
   codeText: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
     marginRight: 10,
   },
   cancelButtonText: {
-    color: '#000000',
+    color: "#000000",
     fontSize: 16,
   },
   copyButton: {
     flex: 1,
-    backgroundColor: '#4285F4',
+    backgroundColor: "#4285F4",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
   },
   copyButtonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
 });

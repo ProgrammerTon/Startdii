@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import MemberItem from "./MemberItem"; // Import the new component
 import { useGuildContext } from "../../context/GuildProvider";
-import { kickViceLeader, promoteViceLeader } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { kickPerson, promoteViceLeader } from "../../services/GuildService";
 
 const MemberScreen = () => {
   // const members = [
@@ -62,40 +62,11 @@ const MemberScreen = () => {
     await loadGuild();
   };
 
-  const kickMember = async (userId) => {
-    if (userId === user._id) {
-      Alert.alert("You Cant Kick Yourself");
-      return;
+  const handleKickMember = async (userId) => {
+    const data = kickPerson(user._id, userId, members, guild._id);
+    if (data) {
+      await loadGuild();
     }
-    const owner = members.find((user) => user._id === user._id);
-    const userkick = members.find((user) => user._id === userId);
-    if (!owner.isAdmin && !owner.isViceAdmin) {
-      Alert.alert("You Not have Permission");
-      return;
-    }
-    if (owner.isViceAdmin && userkick.isViceAdmin) {
-      Alert.alert("You Not have Permission");
-      return;
-    }
-    if (userkick.isAdmin) {
-      Alert.alert("You Cant Kick Admin");
-      return;
-    }
-    let data;
-    if (userkick.isViceAdmin) {
-      data = await kickViceLeader(guild._id, userId);
-    }
-    if (!userkick.isAdmin && !userkick.isViceAdmin) {
-      data = await kickMember(guild._id, userId);
-    }
-    console.log(data);
-    if (!data) {
-      Alert.alert("Kick Failed");
-      return;
-    } else {
-      Alert.alert("Kick!!");
-    }
-    await loadGuild();
   };
 
   return (
@@ -116,7 +87,7 @@ const MemberScreen = () => {
               name={item.username}
               isAdmin={item.isAdmin}
               isViceAdmin={item.isViceAdmin}
-              mainKick={kickMember}
+              mainKick={handleKickMember}
               mainPromote={promoteMember}
             />
           )}
