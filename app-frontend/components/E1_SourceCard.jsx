@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import TagList from './TagList';
 import { FontAwesome } from '@expo/vector-icons'; // Importing icons for heart and stars
+import images from '../constants/images';
 
 const SourceCard = () => {
   const title = 'Data Mining';
@@ -24,7 +25,7 @@ const SourceCard = () => {
         <View style={styles.imageContainer}>
           <Image
             style={styles.bookImage}
-            //source={require('../constants/images/book.png')} 
+            source={images.book} 
             contentFit="contain"
           />
           <Text style={styles.timestamp}>1 day ago</Text>
