@@ -103,7 +103,7 @@ export default function App() {
           onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
           className="bg-green-600 p-2 rounded-xl"
         >
-          <Text className="text-lg">User Finder</Text>
+          <Text className="text-lg">UserFinder</Text>
         </TouchableHighlight>
         <TouchableHighlight
           onPress={() => router.push("/ArchiveSystem/E2_NoteDetailed")}
@@ -117,7 +117,20 @@ export default function App() {
         >
           <Text className="text-lg">NoteInventory</Text>
         </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/F2.1_FirstPageQuiz/F2.1_FirstQuizPage")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">F2.1</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/F2.2_SumPageQuiz/F2.2_SumQuizPage")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">F2.2</Text>
+        </TouchableHighlight>
         {isLogged ? <LogoutButton /> : null}
+        </ScrollView>
       </SafeAreaView>
     );
   }

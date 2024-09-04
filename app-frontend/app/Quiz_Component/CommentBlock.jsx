@@ -17,7 +17,7 @@ export default CommentBox;
 
 const styles = StyleSheet.create({
   commentContainer: {
-    backgroundColor: '#F9F9F9',
+    backgroundColor: 'white',
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
