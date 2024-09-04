@@ -9,7 +9,7 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native";
-import SearchBar from "../../components/SearchBar";
+import UserSearchBar from "../../components/UserSearchBar";
 import UserNameComponent from "./UserNameComponent";
 import { getUserByUsername } from "../../services/UserService";
 import { addChatList } from "../../services/ChatListService";
@@ -50,7 +50,7 @@ const UserFinderPage = () => {
 
   return (
     <View style={styles.container}>
-      <SearchBar
+      <UserSearchBar
         value={searchUsername}
         handleChangeText={(e) => setSearchUsername(e)}
         onSubmit={onSubmit}

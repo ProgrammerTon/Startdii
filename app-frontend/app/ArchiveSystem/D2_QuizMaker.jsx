@@ -43,9 +43,6 @@ const QuizMakerPage = () => {
       </ScrollView>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.resetButton}>
-          <Text style={styles.buttonText}>Reset</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>

@@ -1,18 +1,34 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import AddNoteQuizWindow from './AddNoteQuizWindow.jsx';
-import SearchBar from '../../components/SearchBar';
+import ArchiveSearchBar from '../../components/ArchiveSearchBar.jsx';
 import ToggleNoteQuiz from '../../components/ToggleNoteQuiz.jsx';
+import SourceCard from '../../components/E1_SourceCard.jsx';
+import QuizCard from '../../components/F1_QuizCard.jsx';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ArchiveMainPage = () => {
   const [ActiveFilter,setActiveFilter] = useState('Relevance');
   const [AddWindowVisible, setAddWindowVisible] = useState(false);
   const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] = useState(false);
+  const [filterDirection, setFilterDirection] = useState('↓');
+  
+
+// Update the ToggleFilterChange function
   const ToggleFilterChange = (filter) => {
-    setActiveFilter(filter); 
+    if (ActiveFilter === filter) {
+      // Toggle direction if the same filter is selected
+      setFilterDirection(prevDirection => prevDirection === '↓' ? '↑' : '↓');
+    } else {
+      // Change filter and reset direction
+      setActiveFilter(filter);
+      setFilterDirection(filter === 'Latest' ? '↓' : '↑');
+    }
   };
 
-  const openAddWindow = () => {
+  const filterText = ActiveFilter === 'Latest' ? `Latest ${filterDirection}` : `Oldest ${filterDirection}`;
+
+  const openAddWindow = () => { 
     setAddWindowVisible(true);
   };
 
@@ -39,7 +55,7 @@ const ArchiveMainPage = () => {
         
         <ToggleNoteQuiz visible={AddToggleNoteQuizVisible} onClose={closeAddToggleNoteQuizVisible} />
         */}
-      <SearchBar />
+      <ArchiveSearchBar />
       <View style={styles.filterContainer}>
         <TouchableOpacity style={ActiveFilter === 'Relevance' ? styles.filterButton : styles.inactiveFilterButton}
           onPress={() => ToggleFilterChange('Relevance')}>
@@ -49,15 +65,19 @@ const ArchiveMainPage = () => {
           onPress={() => ToggleFilterChange('Rating')}>
           <Text style={styles.filterText}>Rating</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={ActiveFilter === 'Latest' ? styles.filterButton : styles.inactiveFilterButton}
-          onPress={() => ToggleFilterChange('Latest')}>
-          <Text style={styles.filterText}>Latest ↓ ↑</Text>
+        <TouchableOpacity style={ActiveFilter === 'Latest' || ActiveFilter === 'Oldest' ? styles.filterButton : styles.inactiveFilterButton}
+          onPress={() => ToggleFilterChange(ActiveFilter === 'Latest' ? 'Oldest' : 'Latest')}>
+        <Text style={styles.filterText}>{filterText}</Text>
         </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.circle} onPress={openAddWindow}>
-          <Text style={styles.PlusText}>+</Text>
+      </View>
+        <TouchableOpacity style={styles.floatingButton} onPress={openAddWindow}>
+          <Text style={styles.floatingButtonText}>+</Text>
         </TouchableOpacity>
         <AddNoteQuizWindow visible={AddWindowVisible} onClose={closeAddWindow} />
+      <View>
+        <SourceCard/>
+        <QuizCard />
+      </View>
       <View style={styles.emptyContainer}>
         {/* Waiting For System Traversal Tab*/}
       </View>
@@ -99,16 +119,21 @@ const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
   },
-  circle: {
-    width: 40,       
-    height: 40,      
-    borderRadius: 20,  
-    backgroundColor: '#ef6d11',
-    position: 'absolute',  
-    bottom: 10,           
-    right: 20,          
+  floatingButton: {
+    backgroundColor: '#FF6347',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   toggleButton: {
     width: 40,
@@ -116,15 +141,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#ef6d11',
     position: 'absolute',
-    top: 10,         // Distance from the top of the screen
-    left: 20,        // Distance from the left of the screen
+    top: 10,       
+    left: 20,        
     justifyContent: 'center',
     alignItems: 'center',
   },
-  PlusText: {
-    color: '#ffffff',
-    fontSize: 30,
-    textAlign: 'center',  
+  floatingButtonText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });
 
