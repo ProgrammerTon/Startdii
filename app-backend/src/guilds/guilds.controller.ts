@@ -6,13 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
   Query,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
-
+import { RolesGuard } from 'src/auth/roles/role.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { Role } from 'src/users/entities/user.entity';
+import { UseGuards } from '@nestjs/common';
+import { Roles } from 'src/auth/roles/roles.decorator';
 import { CreateGuildDto } from './dto/create-guild.dto';
 import { UpdateGuildDto } from './dto/update-guild.dto';
 import { GuildsService } from './guilds.service';
+import { Types } from 'mongoose';
 
 import { ParseObjectIdPipe } from 'src/common/pipes';
 import genInviteCode from './utils/guilds.genInviteCode';
@@ -26,9 +34,21 @@ export class GuildsController {
     return this.guildsService.findAll();
   }
 
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('joinGuild/:inviteCode')
+  addMemberByCode(@Param('inviteCode') inviteCode: string, @Request() req) {
+    const userId = new Types.ObjectId(req.user.id);
+    const guild = this.guildsService.addMemberByCode(inviteCode, userId);
+    if (!guild) {
+      throw new HttpException('Not Found Guild', HttpStatus.NOT_FOUND);
+    }
+    return guild;
+  }
+
   @Get(':id')
   getAllMembersInGuild(@Param('id', ParseObjectIdPipe) id: ObjectId) {
-    return this.guildsService.getAllMembersInGuild(id);
+    return this.guildsService.findGuildById(id);
   }
 
   @Get(':id/:memberId')

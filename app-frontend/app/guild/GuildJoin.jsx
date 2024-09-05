@@ -1,8 +1,21 @@
-import React from 'react';
-import { StyleSheet, Text, View, Modal, Pressable,TouchableOpacity, TextInput } from 'react-native';
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 
-
-const GuildJoinWindow = ({ visible, onClose, value, onSubmit}) => {
+const GuildJoinWindow = ({
+  visible,
+  onClose,
+  onPress,
+  value,
+  handleChangeText,
+}) => {
   return (
     <Modal
       animationType="slide"
@@ -16,14 +29,14 @@ const GuildJoinWindow = ({ visible, onClose, value, onSubmit}) => {
           <TextInput
             style={styles.inviteContainer}
             value={value}
-            onSubmitEditing={onSubmit}
+            onChangeText={handleChangeText}
           />
 
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.copyButton}>
+            <TouchableOpacity style={styles.copyButton} onPress={onPress}>
               <Text style={styles.copyButtonText}>Join</Text>
             </TouchableOpacity>
           </View>
@@ -36,70 +49,70 @@ const GuildJoinWindow = ({ visible, onClose, value, onSubmit}) => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: '#ffffff',
+    width: "80%",
+    backgroundColor: "#ffffff",
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
     marginBottom: 10,
   },
   codeText: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
     marginRight: 10,
   },
   cancelButtonText: {
-    color: '#000000',
+    color: "#000000",
     fontSize: 16,
   },
   copyButton: {
     flex: 1,
-    backgroundColor: '#4285F4',
+    backgroundColor: "#4285F4",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
   },
   copyButtonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
   codeText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   inviteContainer: {
     flexDirection: "row",
     backgroundColor: "#f4ede4",
     borderRadius: 15,
-    paddingHorizontal: '50%',
-    paddingVertical: '3%',
-    paddingHorizontal: 15, 
-    paddingVertical: 10,  
+    paddingHorizontal: "50%",
+    paddingVertical: "3%",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     marginBottom: 15,
-    width: '100%',         
+    width: "100%",
   },
 });
 
