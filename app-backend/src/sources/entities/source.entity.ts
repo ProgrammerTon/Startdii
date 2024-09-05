@@ -10,6 +10,12 @@ export enum Status {
   guild = "guild"
 }
 
+export class Rating {
+  score: number = 0;
+  count: number = 0;
+  rater: ObjectId[] = [];
+}
+
 @Schema({ timestamps: true })
 export class Source {
   @Prop({ type: ObjectId, auto: true })
@@ -38,6 +44,12 @@ export class Source {
 
   @Prop({ name: 'tags' })
   tags: string[];
+
+  @Prop({ name: "rating" })
+  rating: Rating;
+
+
+  
 }
 
 export const SourceSchema = SchemaFactory.createForClass(Source).index({

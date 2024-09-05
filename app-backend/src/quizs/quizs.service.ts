@@ -135,4 +135,8 @@ export class QuizsService {
   remove(id: number) {
     return `This action removes a #${id} quiz`;
   }
+
+  async addRating(id: ObjectId, score: number, rater: ObjectId){
+    return;
+  }
 }

@@ -22,6 +22,12 @@ export class Question {
   correct: number = 0;
 }
 
+export class Rating {
+  score: number = 0;
+  count: number = 0;
+  rater: ObjectId[] = [];
+}
+
 
 @Schema({ timestamps: true })
 export class Quiz {
@@ -51,6 +57,10 @@ export class Quiz {
 
   @Prop({ name: "total_score"})
   total_score: number = 0;
+
+  @Prop({ name: "rating" })
+  rating: Rating;
+
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz);
