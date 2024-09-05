@@ -7,6 +7,7 @@ import {
   ScrollView,
   RefreshControl,
   TextInput,
+  Alert,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
@@ -78,8 +79,10 @@ const SourceDetailPage = () => {
     // Add the new comment to the top of the comments list
     setComments([newComment, ...comments]);
 
-    const data = await createCommentSource(id, null, commentInput, "source");
-    console.log(data);
+    const data = await createCommentSource(id, null, commentInput);
+    if (!data) {
+      Alert.alert("Failed");
+    }
 
     // Clear the comment input
     setCommentInput("");
@@ -92,7 +95,8 @@ const SourceDetailPage = () => {
       date: new Date().toLocaleDateString(),
       comment: com.parentComment.content,
     }));
-    setComments([...newComment, ...comments]);
+    const reversedComments = newComment.reverse();
+    setComments([...reversedComments]);
   };
 
   const onRefresh = () => {

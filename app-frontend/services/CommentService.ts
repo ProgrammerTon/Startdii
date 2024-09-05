@@ -27,15 +27,15 @@ export async function getCommentsSource(sourceId: string) {
 export async function createCommentSource(
   sourceId: string | null,
   quizId: string | null,
-  content: string,
-  option: string
+  content: string
 ): Promise<any | null> {
   const data = {
     content,
   };
   const targetId = sourceId ? sourceId : quizId;
-  const token = getCurrentToken();
-  const res = await fetch(`${baseUrl}/comments/${targetId}`, {
+  const option = sourceId ? "source" : "quiz";
+  const token = await getCurrentToken();
+  const res = await fetch(`${baseUrl}/comments/${targetId}?option=${option}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -43,6 +43,7 @@ export async function createCommentSource(
     },
     body: JSON.stringify(data),
   });
+  console.log(res);
   if (!res.ok) {
     return null;
   }
