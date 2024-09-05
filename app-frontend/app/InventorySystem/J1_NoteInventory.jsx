@@ -1,14 +1,10 @@
-import React , {useState} from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import TagList from '../../components/TagList';
-import CommentBox from '../Quiz_Component/CommentBlock';
-import RatingBlock from '../Quiz_Component/Rating';
-import CommentBar from '../Quiz_Component/CommentBar';
-import RatingBar from '../Quiz_Component/RatingBar';
 
-const SourceDetailPage = () => {
+const NoteInventoryDetailed = () => {
   const { id } = useLocalSearchParams();
   const title = "Title";
   const description = "This is descriptionThis is descriptionThis is descriptionThis is descriptionThis is descriptionThis is description";
@@ -17,33 +13,13 @@ const SourceDetailPage = () => {
   const updated_at = "22/07/24 18:00";
   const score = 4.8;
   const count = 999;
-
-  // State to hold the list of comments
-  const [comments, setComments] = useState([]);
-  // State for the input value in the CommentBar
-  const [commentInput, setCommentInput] = useState('');
-
-  // Function to handle submitting a new comment
-  const handleSubmitComment = () => {
-    if (commentInput.trim() === '') return; // Prevent empty comments
-
-    // Create a new comment object
-    const newComment = {
-      username: "New User", // Replace with dynamic username if available
-      date: new Date().toLocaleDateString(),
-      comment: commentInput,
-    };
-
-    // Add the new comment to the top of the comments list
-    setComments([newComment, ...comments]);
-
-    // Clear the comment input
-    setCommentInput('');
-  };
+  const comments = [
+    { author: 'Juaz Juazzz', date: '22/07/24', content: 'สุดยอดมากครับ' },
+    { author: 'Master Student', date: '22/07/24', content: 'ดีเลิศยอดเยี่ยม' },
+  ];
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
+    <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{title}</Text>
@@ -73,32 +49,35 @@ const SourceDetailPage = () => {
         </TouchableOpacity>
       </View>
 
-        <RatingBlock ScoreRating={4.5} numComment={comments.length}/>
-        <RatingBar/>
+      {/* Rating */}
+      <View style={styles.ratingContainer}>
+        <Text style={styles.ratingText}>{score.toFixed(1)}</Text>
+        <FontAwesome name="star" size={24} color="#FEDD3A" />
+        <Text style={styles.reviewsText}>({count})</Text>
+      </View>
 
-        {/* CommentBar with input */}
-        <CommentBar
-          value={commentInput}
-          handleChangeText={setCommentInput}
-          onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
-        />
-
-        {/* Render all comments */}
+      {/* Comments Section */}
+      <View style={styles.commentsContainer}>
         {comments.map((comment, index) => (
-          <CommentBox
-            key={index}
-            username={comment.username}
-            date={comment.date}
-            comment={comment.comment}
-          />
+          <View key={index} style={styles.commentBox}>
+            <Text style={styles.commentAuthor}>{comment.author}</Text>
+            <Text style={styles.commentDate}>{comment.date}</Text>
+            <Text style={styles.commentContent}>{comment.content}</Text>
+          </View>
         ))}
-        
-      </ScrollView>
-    </View>
+      </View>
+
+      {/* Add Comment */}
+      <TextInput
+        style={styles.commentInput}
+        placeholder="Write a comment..."
+        multiline={true}
+      />
+    </ScrollView>
   );
 };
 
-export default SourceDetailPage;
+export default NoteInventoryDetailed;
 
 const styles = StyleSheet.create({
   container: {
@@ -163,5 +142,50 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#0E68D9',
     marginTop: 5,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginVertical: 10,
+  },
+  ratingText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginRight: 5,
+  },
+  reviewsText: {
+    fontSize: 12,
+    color: 'gray',
+    marginLeft: 5,
+  },
+  commentsContainer: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  commentBox: {
+    marginBottom: 15,
+  },
+  commentAuthor: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  commentDate: {
+    fontSize: 12,
+    color: 'gray',
+    marginBottom: 5,
+  },
+  commentContent: {
+    fontSize: 14,
+    color: 'black',
+  },
+  commentInput: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 10,
+    textAlignVertical: 'top',
   },
 });

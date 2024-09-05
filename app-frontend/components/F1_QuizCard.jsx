@@ -1,6 +1,7 @@
 import React , {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import { Image } from 'expo-image';
+import images from "../constants/images";
+import { Image } from "expo-image";
 import { router } from 'expo-router';
 import TagList from './TagList';
 import { FontAwesome } from '@expo/vector-icons'; 
@@ -25,7 +26,7 @@ const QuizCard = () => {
           <Image
             style={styles.quizImage}
             contentFit="contain"
-            //source={require('../constants/images/quizpaper.png')}
+            source={images.quizpaper}
           />
           <Text style={styles.timestamp}>1 day ago</Text>
         </View>
