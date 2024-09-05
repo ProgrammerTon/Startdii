@@ -60,6 +60,7 @@ export default function Quiz1_4sol() {
                   onPress={() => (null)}
                   isCorrect={quizData[currentQuestion].answer.includes(item)}
                   isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}
+                  isSolution={quizData[currentQuestion].selectedChoice.length !== 0}
                   />
           })}
         </View>

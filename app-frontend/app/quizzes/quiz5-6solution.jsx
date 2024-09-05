@@ -27,6 +27,7 @@ export default function Quiz5_6sol() {
       choicecount: 5,
       choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
       isMultipleAnswer: true,
+      selectedChoice: ["Meaw","21", "Purr"],
       answer : ["AOUUU", "21", "Purr"]
     }
   ];
@@ -53,7 +54,7 @@ export default function Quiz5_6sol() {
         <View style={styles.choice}>
           <FlatList
             data={quizData[currentQuestion].choice}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <QuizChoice
                 content={item}
                 isSelected={checkingSelected(item)}
@@ -61,6 +62,7 @@ export default function Quiz5_6sol() {
                 isCorrect={quizData[currentQuestion].answer.includes(item)}
                 makeColumn={(quizData[currentQuestion].choicecount > 4)? true : false}
                 isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}
+                isSolution={quizData[currentQuestion].selectedChoice.length !== 0}
               />
             )}
             keyExtractor={(item, index) => index.toString()}

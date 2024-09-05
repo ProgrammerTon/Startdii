@@ -6,11 +6,12 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get('window');
 
-const QuizChoice = ({ content, isSelected, onPress, isCorrect, makeColumn, isMultipleAnswer}) => {
+const QuizChoice = ({ content, isSelected = false, onPress, isCorrect = false, makeColumn = false, isMultipleAnswer = false, isSolution = false}) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={[styles.choiceContainer, isSelected && styles.selectedContainer, makeColumn && styles.makeColumn, isMultipleAnswer && styles.multipleAnswer, !isCorrect && styles.incorrect, isCorrect && !isSelected && styles.correctandnotselected]}>
-        {(isMultipleAnswer)? <MaterialCommunityIcons name="checkbox-marked" size={24} color={(!isCorrect)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={{alignSelf:"center", marginRight: 5}}/> : null}
+      <View style={[styles.choiceContainer, isSelected && styles.selectedContainer, makeColumn && styles.makeColumn, isMultipleAnswer && styles.multipleAnswer, !isCorrect && isSolution && styles.incorrect, isCorrect && !isSelected && styles.correctandnotselected]}>
+        {(isMultipleAnswer)? (!isCorrect && isSelected && isSolution)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={{alignSelf:"center", marginRight: 5}}/>
+         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(!isCorrect && isSolution)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={{alignSelf:"center", marginRight: 5}}/> : null}
         <Text style={styles.textStyle}> {content} </Text>
       </View>
     </TouchableOpacity>
