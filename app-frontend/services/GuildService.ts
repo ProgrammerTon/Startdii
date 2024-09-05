@@ -57,9 +57,9 @@ export async function promoteViceLeader(
   }
   try {
     const data: any = await res.json();
-    console.log("Member Left:", data);
     return data;
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
@@ -107,7 +107,6 @@ export async function kickViceLeader(guildId: string, userId: string) {
   }
   try {
     const data: any = await res.json();
-    console.log("Member Left:", data);
     return data;
   } catch (error) {
     return null;
@@ -166,51 +165,6 @@ export async function leavePerson(
     data = await kickMember(guildId, userId);
   }
   if (!userleave.isAdmin && !userleave.isViceAdmin) {
-    data = await kickMember(guildId, userId);
-  }
-  console.log(data);
-  if (!data) {
-    Alert.alert("Kick Failed");
-    return;
-  } else {
-    Alert.alert("Kick!!");
-  }
-}
-
-export async function kickPerson(
-  ownerId: string,
-  userId: string,
-  members: any[],
-  guildId: string
-) {
-  if (userId === ownerId) {
-    Alert.alert("You Cant Kick Yourself");
-    return;
-  }
-  const owner = members.find((user) => user._id === ownerId);
-  const userkick = members.find((user) => user._id === userId);
-  if (!owner.isAdmin && !owner.isViceAdmin) {
-    Alert.alert("You Not have Permission");
-    return;
-  }
-  if (owner.isViceAdmin && userkick.isViceAdmin) {
-    Alert.alert("You Not have Permission");
-    return;
-  }
-  if (userkick.isAdmin) {
-    Alert.alert("You Cant Kick Admin");
-    return;
-  }
-  let data;
-  if (userkick.isViceAdmin) {
-    data = await kickViceLeader(guildId, userId);
-    if (!data) {
-      Alert.alert("Kick Failed");
-      return;
-    }
-    data = await kickMember(guildId, userId);
-  }
-  if (!userkick.isAdmin && !userkick.isViceAdmin) {
     data = await kickMember(guildId, userId);
   }
   console.log(data);

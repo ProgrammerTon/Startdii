@@ -11,7 +11,12 @@ import {
 import MemberItem from "./MemberItem"; // Import the new component
 import { useGuildContext } from "../../context/GuildProvider";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { kickPerson, promoteViceLeader } from "../../services/GuildService";
+import {
+  kickMember,
+  kickPerson,
+  kickViceLeader,
+  promoteViceLeader,
+} from "../../services/GuildService";
 
 const MemberScreen = () => {
   // const members = [
@@ -41,8 +46,8 @@ const MemberScreen = () => {
       Alert.alert("You Cant Promote Yourself");
       return;
     }
-    const owner = members.find((user) => user._id === user._id);
-    const userpro = members.find((user) => user._id === userId);
+    const owner = members.find((userw) => userw._id === user._id);
+    const userpro = members.find((userw) => userw._id === userId);
     if (!owner.isAdmin) {
       Alert.alert("You Not have Permission");
       return;
@@ -52,7 +57,6 @@ const MemberScreen = () => {
       return;
     }
     const data = await promoteViceLeader(guild._id, userId, "add");
-    console.log(data);
     if (!data) {
       Alert.alert("Promote Failed");
       return;
@@ -63,9 +67,38 @@ const MemberScreen = () => {
   };
 
   const handleKickMember = async (userId) => {
-    const data = kickPerson(user._id, userId, members, guild._id);
+    if (userId === user._id) {
+      Alert.alert("You Cant Kick Yourself");
+      return;
+    }
+    const owner = members.find((userw) => userw._id === user._id);
+    const userkick = members.find((userw) => userw._id === userId);
+    if (userkick.isAdmin) {
+      Alert.alert("You Cant Kick Admin");
+      return;
+    }
+    if (userkick.isViceAdmin && owner.isViceAdmin) {
+      Alert.alert("You Cant Kick Same Role");
+      return;
+    }
+    if (!owner.isAdmin && !owner.isViceAdmin) {
+      Alert.alert("You Dont have Permission");
+      return;
+    }
+    let data;
+    if (owner.isAdmin && userkick.isViceAdmin) {
+      data = kickViceLeader(guild._id, userId);
+    }
+    if (owner.isViceAdmin) {
+      data = kickMember(guild._id, userId);
+    }
     if (data) {
+      Alert.alert("Kicked!!");
       await loadGuild();
+      return;
+    } else {
+      Alert.alert("Kicked Failed");
+      return;
     }
   };
 
