@@ -53,7 +53,7 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('guild')
   findGuildByMemberId(@Request() req) {
-    const memberId = req.user.id;
+    const memberId = new Types.ObjectId(req.user.id);
     return this.guildsService.findGuildByMemberId(memberId);
   }
 

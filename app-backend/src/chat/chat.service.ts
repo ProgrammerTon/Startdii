@@ -26,7 +26,7 @@ export class ChatService {
     if (msg.type == messageType.quiz) {
       chat.quizId = msg.quizId;
     }
-    const user: any = await this.userService.findByUsername(msg.sender);
+    const user: any = await this.userService.findByExactUsername(msg.sender);
     chat.msgType = msg.type;
     chat.userId = user._id;
     const createdChat = new this.chatModel(chat);

@@ -27,14 +27,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('joinRoom')
   handleJoinRoom(client: Socket, room: string) {
     client.join(room);
-    client.emit('message', `Joined room ${room}`);
+    // client.emit('message', `Joined room ${room}`);
     return this.logger.log(`Client ${client.id} joined room ${room}`);
   }
 
   @SubscribeMessage('leaveRoom')
   handleLeaveRoom(client: Socket, room: string) {
     client.leave(room);
-    client.emit('message', `Left room ${room}`);
+    // client.emit('message', `Left room ${room}`);
     return this.logger.log(`Client ${client.id} left room ${room}`);
   }
 

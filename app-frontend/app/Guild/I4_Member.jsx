@@ -1,35 +1,99 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import MemberItem from './MemberItem';  // Import the new component
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  Alert,
+} from "react-native";
+import MemberItem from "./MemberItem"; // Import the new component
+import { useGuildContext } from "../../context/GuildProvider";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { kickPerson, promoteViceLeader } from "../../services/GuildService";
 
 const MemberScreen = () => {
-  const members = [
-    { id: 1, name: 'Juaz Juazzz', isAdmin: true ,isViceAdmin:false},
-    { id: 2, name: 'PunInwZa007', isAdmin: false ,isViceAdmin: true},
-    { id: 3, name: 'Mr.BOB', isAdmin: false ,isViceAdmin: true},
-    { id: 4, name: 'rainny', isAdmin: false ,isViceAdmin: false},
-    { id: 5, name: 'fortune', isAdmin: false ,isViceAdmin: false},
-  ];
+  // const members = [
+  //   { id: 1, name: "Juaz Juazzz", isAdmin: true, isViceAdmin: false },
+  //   { id: 2, name: "PunInwZa007", isAdmin: false, isViceAdmin: true },
+  //   { id: 3, name: "Mr.BOB", isAdmin: false, isViceAdmin: true },
+  //   { id: 4, name: "rainny", isAdmin: false, isViceAdmin: false },
+  //   { id: 5, name: "fortune", isAdmin: false, isViceAdmin: false },
+  // ];
+  const [members, setMembers] = useState([]);
+  const { guild, loadGuild } = useGuildContext();
+  const { user } = useGlobalContext();
+  useEffect(() => {
+    const transformdata = guild.memberIdList.map((item, index) => ({
+      _id: item._id,
+      id: index + 1, // Assign a sequential ID starting from 1
+      username: `${item.username}`, // Combine firstname and lastname
+      isAdmin: item.role === "leader", // Check if the role is 'admin'
+      isViceAdmin: item.role === "vice-leader", // Check if the role is 'vice-admin'
+    }));
+
+    setMembers(transformdata);
+  }, []);
+
+  const promoteMember = async (userId) => {
+    if (userId === user._id) {
+      Alert.alert("You Cant Promote Yourself");
+      return;
+    }
+    const owner = members.find((user) => user._id === user._id);
+    const userpro = members.find((user) => user._id === userId);
+    if (!owner.isAdmin) {
+      Alert.alert("You Not have Permission");
+      return;
+    }
+    if (userpro.isAdmin) {
+      Alert.alert("You Cant Promote Admin");
+      return;
+    }
+    const data = await promoteViceLeader(guild._id, userId, "add");
+    console.log(data);
+    if (!data) {
+      Alert.alert("Promote Failed");
+      return;
+    } else {
+      Alert.alert("Promote!");
+    }
+    await loadGuild();
+  };
+
+  const handleKickMember = async (userId) => {
+    const data = kickPerson(user._id, userId, members, guild._id);
+    if (data) {
+      await loadGuild();
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity>
-          <Text style={styles.backButton}>{'<'}</Text>
+          <Text style={styles.backButton}>{"<"}</Text>
         </TouchableOpacity>
         <Text style={styles.headerText}>MEMBER</Text>
       </View>
-
-      <ScrollView style={styles.memberContainer}>
-        {members.map(member => (
-          <MemberItem 
-            key={member.id} 
-            name={member.name} 
-            isAdmin={member.isAdmin} 
-            isViceAdmin={member.isViceAdmin}
-          />
-        ))}
-      </ScrollView>
+      <View style={styles.memberContainer}>
+        <FlatList
+          data={members}
+          renderItem={({ item, index }) => (
+            <MemberItem
+              userId={item._id}
+              key={item.id}
+              name={item.username}
+              isAdmin={item.isAdmin}
+              isViceAdmin={item.isViceAdmin}
+              mainKick={handleKickMember}
+              mainPromote={promoteMember}
+            />
+          )}
+          keyExtractor={(item) => `${item.id}`}
+        />
+      </View>
     </View>
   );
 };
@@ -39,23 +103,23 @@ export default MemberScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: "#f8f8f8",
   },
   header: {
-    backgroundColor: '#fca6cc',
+    backgroundColor: "#fca6cc",
     paddingVertical: 10,
     paddingHorizontal: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   backButton: {
     fontSize: 24,
-    color: '#000',
+    color: "#000",
   },
   headerText: {
     fontSize: 18,
-    color: '#000',
-    fontWeight: 'bold',
+    color: "#000",
+    fontWeight: "bold",
     marginLeft: 20,
   },
   memberContainer: {

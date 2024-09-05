@@ -1,7 +1,13 @@
-import React from 'react';
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
 
-const PromoteOrKickWindow = ({ visible, onClose }) => {
+const PromoteOrKickWindow = ({
+  visible,
+  onClose,
+  handlePromote,
+  handleKick,
+  userId,
+}) => {
   return (
     <Modal
       animationType="slide"
@@ -15,10 +21,20 @@ const PromoteOrKickWindow = ({ visible, onClose }) => {
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.promoteButton}>
+            <TouchableOpacity
+              style={styles.promoteButton}
+              onPress={() => {
+                handlePromote(userId);
+              }}
+            >
               <Text style={styles.promoteButtonText}>Promote</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.kickButton}>
+            <TouchableOpacity
+              style={styles.kickButton}
+              onPress={() => {
+                handleKick(userId);
+              }}
+            >
               <Text style={styles.kickButtonText}>Kick</Text>
             </TouchableOpacity>
           </View>
@@ -31,55 +47,55 @@ const PromoteOrKickWindow = ({ visible, onClose }) => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: '#ffffff',
+    width: "80%",
+    backgroundColor: "#ffffff",
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
     marginRight: 10,
   },
   cancelButtonText: {
-    color: '#000000',
+    color: "#000000",
     fontSize: 16,
   },
   promoteButton: {
     flex: 1,
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
     marginRight: 10,
   },
   promoteButtonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
   kickButton: {
     flex: 1,
-    backgroundColor: '#e6401f',
+    backgroundColor: "#e6401f",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
   },
   kickButtonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
 });

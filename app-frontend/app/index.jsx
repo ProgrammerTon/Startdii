@@ -1,4 +1,4 @@
-import { View, Text, TouchableHighlight,ScrollView } from "react-native";
+import { View, Text, TouchableHighlight, ScrollView } from "react-native";
 import { Redirect, router } from "expo-router";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import { useGlobalContext } from "../context/GlobalProvider";
 import LogoutButton from "../components/LogoutButton";
-
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -38,35 +37,36 @@ export default function App() {
     return (
       <SafeAreaView className="flex-1 items-center justify-center">
         <ScrollView>
-        <StatusBar style="auto" />
-        <Text className="text-3xl">Hello Welcome to</Text>
-        <Text className="text-3xl">Startdii</Text>
-        <TouchableHighlight
-          onPress={() => router.push("/home")}
-          className="bg-green-600 p-2 rounded-xl"
-        >
-          <Text className="text-lg">Home</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => router.push("/sign-up")}
-          className="bg-green-600 p-2 rounded-xl"
-        >
-          <Text className="text-lg">Sign Up</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => router.push("/sign-in")}
-          className="bg-green-600 p-2 rounded-xl"
-        >
-          <Text className="text-lg">Sign In</Text>
-        </TouchableHighlight>
+          <StatusBar style="auto" />
+          <Text className="text-3xl">Hello Welcome to</Text>
+          <Text className="text-3xl">Startdii</Text>
+          <TouchableHighlight
+            onPress={() => router.push("/home")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">Home</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/sign-up")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">Sign Up</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/sign-in")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">Sign In</Text>
+          </TouchableHighlight>
 
-        <TouchableHighlight
-          onPress={() => router.push("/trynaja")}
-          className="bg-green-600 p-2 rounded-xl"
-        >
-          <Text className="text-lg">TNJ</Text>
-        </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/trynaja")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">TNJ</Text>
+          </TouchableHighlight>
 
+<<<<<<< HEAD
         <TouchableHighlight
           onPress={() => router.push("/sources/create")}
           className="bg-green-600 p-2 rounded-xl"
@@ -130,6 +130,53 @@ export default function App() {
           <Text className="text-lg">F2.2</Text>
         </TouchableHighlight>
         {isLogged ? <LogoutButton /> : null}
+=======
+          <TouchableHighlight
+            onPress={() => router.push("/sources/create")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">Create Note</Text>
+          </TouchableHighlight>
+          {isLogged ? <Text>Already Login</Text> : <Text>Not Login</Text>}
+          {isLogged ? <Text>{user?.email}</Text> : null}
+          <TouchableHighlight
+            onPress={() => router.push("/ArchiveSystem/ArchiveMainPage")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">Archive</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/ArchiveSystem/D2_QuizMaker")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">D2_QuizMaker</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/chatsystem/H1_user")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">Chat 2</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/guild/I1_GuildPage")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">Guild</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">UserFinder</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/ArchiveSystem/E2_NoteDetailed")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">NoteDetailed</Text>
+          </TouchableHighlight>
+          {isLogged ? <LogoutButton /> : null}
+>>>>>>> 6d198e543908ae3b23a7495cbb2e0f845bf2cf93
         </ScrollView>
       </SafeAreaView>
     );
