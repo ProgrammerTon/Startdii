@@ -90,7 +90,6 @@ const SourceDetailPage = () => {
 
   const fetchComments = async () => {
     const data = await getCommentsSource(id);
-    console.log("Message", data);
     const newComment = data.map((com) => ({
       username: com.parentComment.username, // Replace with dynamic username if available
       date: new Date(com.parentComment.updatedAt).toLocaleDateString(),

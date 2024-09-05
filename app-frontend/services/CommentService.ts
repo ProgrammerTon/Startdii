@@ -1,17 +1,6 @@
 import { baseUrl } from "@/constants/const";
 import { getCurrentToken } from "@/utils/asyncstroage";
 
-type SourceRespond = {};
-
-type SourceRequest = {
-  ownerId: string;
-  title: string;
-  description?: string;
-  content?: string;
-  published?: boolean;
-  tags?: string[];
-};
-
 export async function getCommentsSource(sourceId: string) {
   const res = await fetch(`${baseUrl}/comments/${sourceId}?option=source`, {
     method: "GET",
@@ -49,34 +38,4 @@ export async function createCommentSource(
   }
   const result = await res.json();
   return result;
-}
-
-export async function getSource(
-  offset: number
-): Promise<SourceRespond[] | null> {
-  const res = await fetch(`${baseUrl}/sources?offset=${offset}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data: SourceRespond[] = await res.json();
-  if (!res.ok) {
-    return null;
-  }
-  return data;
-}
-
-export async function findSource(id: string): Promise<SourceRespond | null> {
-  const res = await fetch(`${baseUrl}/sources/${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data: SourceRespond = await res.json();
-  if (!res.ok) {
-    return null;
-  }
-  return data;
 }
