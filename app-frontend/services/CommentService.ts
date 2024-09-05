@@ -1,4 +1,5 @@
 import { baseUrl } from "@/constants/const";
+import { getCurrentToken } from "@/utils/asyncstroage";
 
 type SourceRespond = {};
 
@@ -23,16 +24,29 @@ export async function getCommentsSource(sourceId: string) {
   return result;
 }
 
-export async function createComment(data: SourceRequest): Promise<any | null> {
-  const res = await fetch(`${baseUrl}/sources`, {
+export async function createCommentSource(
+  sourceId: string | null,
+  quizId: string | null,
+  content: string,
+  option: string
+): Promise<any | null> {
+  const data = {
+    content,
+  };
+  const targetId = sourceId ? sourceId : quizId;
+  const token = getCurrentToken();
+  const res = await fetch(`${baseUrl}/comments/${targetId}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(data),
   });
-  const result = await res.json();
   if (!res.ok) {
     return null;
   }
+  const result = await res.json();
   return result;
 }
 

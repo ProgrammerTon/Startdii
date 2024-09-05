@@ -16,7 +16,10 @@ import RatingBlock from "../Quiz_Component/Rating";
 import CommentBar from "../Quiz_Component/CommentBar";
 import RatingBar from "../Quiz_Component/RatingBar";
 import { findSource } from "../../services/SourceService";
-import { getCommentsSource } from "../../services/CommentService";
+import {
+  getCommentsSource,
+  createCommentSource,
+} from "../../services/CommentService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SourceDetailPage = () => {
@@ -62,7 +65,7 @@ const SourceDetailPage = () => {
   const [commentInput, setCommentInput] = useState("");
 
   // Function to handle submitting a new comment
-  const handleSubmitComment = () => {
+  const handleSubmitComment = async () => {
     if (commentInput.trim() === "") return; // Prevent empty comments
 
     // Create a new comment object
@@ -74,6 +77,9 @@ const SourceDetailPage = () => {
 
     // Add the new comment to the top of the comments list
     setComments([newComment, ...comments]);
+
+    const data = await createCommentSource(id, null, commentInput, "source");
+    console.log(data);
 
     // Clear the comment input
     setCommentInput("");
