@@ -32,8 +32,8 @@ const UserFinderPage = () => {
     if (!user) {
       Alert.alert("Not Found User");
     } else {
-      console.log(user);
-      setUserFound([user]);
+      // console.log("Found Users", user);
+      setUserFound([...user]);
     }
   };
 
