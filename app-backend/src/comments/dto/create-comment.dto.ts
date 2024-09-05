@@ -26,12 +26,7 @@ export class CreateCommentDto {
   @IsString()
   @IsNotEmpty()
   content: string;
-
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  score: number;
-
+  
   @ApiProperty()
   replyComments: CreateReplyCommentDto[];
 }
