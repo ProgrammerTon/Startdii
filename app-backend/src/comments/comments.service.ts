@@ -55,7 +55,7 @@ export class CommentsService {
         _id: comment['_id'],
         username: comment.ownerId['username'],
         content: comment.content,
-        updateAt: comment.updateAt,
+        updatedAt: comment.updatedAt,
       },
       replyComments: comment.replyComments.map((reply) => ({
         username: reply.ownerId['username'],
