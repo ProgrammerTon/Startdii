@@ -4,6 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  FlatList,
   StyleSheet,
   Modal
 } from "react-native";
@@ -13,7 +14,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 const { width, height } = Dimensions.get('window');
 
-export default function Quiz1_4choice() {
+export default function Quiz5_6sol() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState([]);
@@ -21,32 +22,17 @@ export default function Quiz1_4choice() {
   const quizData = [
     {
       totalQuestion: 5,
-      questionId: 1,
+      questionId: 2,
       question: "What does the cat says?",
-      choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "21"],
-      isMultipleAnswer: false,
-      answer : ["AOUUU"]
+      choicecount: 5,
+      choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
+      isMultipleAnswer: true,
+      answer : ["AOUUU", "21", "Purr"]
     }
   ];
-  const handleChoiceSelect = (choice) => {
-    if(quizData[currentQuestion].isMultipleAnswer){
-      if (selectedChoice.includes(choice)) {
-        const newSelectedChoice = selectedChoice.filter((item) => item !== choice)
-        setSelectedChoice(newSelectedChoice); // Unselect if the same choice is pressed
-      } else {
-        const newSelectedChoice = [...selectedChoice, choice].sort(); // Sort the array after adding the new choice
-        setSelectedChoice(newSelectedChoice); // Select the new choice to the selectedchoice
-      }
-    }
-    else{
-      if (selectedChoice.includes(choice)) {
-        setSelectedChoice([]); // Unselect if the same choice is pressed
-      } else {
-        setSelectedChoice([choice]); // Select the new choice and remove old ones
-      }
-    }
-  };
+  const checkingSelected = (item) => {
+    return quizData[currentQuestion].selectedChoice.includes(item)
+  }
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
@@ -65,17 +51,26 @@ export default function Quiz1_4choice() {
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
-        {quizData[currentQuestion]?.choice.map((item, index)=>{
-          return <QuizChoice 
-                  key={index}
-                  content={item}
-                  isSelected={selectedChoice.includes(item)} 
-                  onPress={() => handleChoiceSelect(item)}
-                  isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}/>
-          })}
+          <FlatList
+            data={quizData[currentQuestion].choice}
+            renderItem={({ item }) => (
+              <QuizChoice
+                content={item}
+                isSelected={checkingSelected(item)}
+                onPress={() => (null)}
+                isCorrect={quizData[currentQuestion].answer.includes(item)}
+                makeColumn={(quizData[currentQuestion].choicecount > 4)? true : false}
+                isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={2} // Display in two columns
+            columnWrapperStyle={styles.columnWrapper} // Add spacing between columns
+            contentContainerStyle={styles.choiceContainer} // Style for FlatList container
+          />
         </View>
         <View>
-          <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
+        <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
             <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
           </TouchableOpacity>
         </View>
@@ -166,6 +161,15 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.2,
     justifyContent: "flex-start",
     alignSelf: "center",
+  },
+  choiceContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  columnWrapper: {
+    width: width * 0.9,
+    justifyContent: 'space-evenly',
+    paddingHorizontal: 10,
   },
   nextButton:{
     paddingHorizontal: width * 0.05,

@@ -13,7 +13,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 const { width, height } = Dimensions.get('window');
 
-export default function Quiz4choice() {
+export default function Quiz1_4sol() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState([]);
@@ -26,11 +26,11 @@ export default function Quiz4choice() {
       choicecount: 4,
       choice: ["Meaw", "AOUUU", "Miau", "21"],
       isMultipleAnswer: true,
-      selectedChoice: ["Meaw"],
-      answer : ["21"]
+      selectedChoice: ["Meaw","21"],
+      answer : ["AOUUU","21"]
     }
   ];
-  const checkingSelected = () => {
+  const checkingSelected = (item) => {
     return quizData[currentQuestion].selectedChoice.includes(item)
   }
   return (
@@ -53,12 +53,12 @@ export default function Quiz4choice() {
         <View style={styles.choice}>
         
         {quizData[currentQuestion]?.choice.map((item, index)=>{
-          return <QuizChoice 
+          return <QuizChoice
                   key={index}
                   content={item}
-                  isSelected={(item) => checkingSelected(item) || selectedChoice.includes(item)}
+                  isSelected={checkingSelected(item)}
                   onPress={() => (null)}
-                  isIncorrect={quizData[currentQuestion].selectedChoice.includes(item) && !quizData[currentQuestion].answer.includes(item)}
+                  isCorrect={quizData[currentQuestion].answer.includes(item)}
                   isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}
                   />
           })}
