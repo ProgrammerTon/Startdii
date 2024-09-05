@@ -90,9 +90,10 @@ const SourceDetailPage = () => {
 
   const fetchComments = async () => {
     const data = await getCommentsSource(id);
+    console.log("Message", data);
     const newComment = data.map((com) => ({
       username: com.parentComment.username, // Replace with dynamic username if available
-      date: new Date().toLocaleDateString(),
+      date: new Date(com.parentComment.updatedAt).toLocaleDateString(),
       comment: com.parentComment.content,
     }));
     const reversedComments = newComment.reverse();
