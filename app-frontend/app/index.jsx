@@ -62,6 +62,12 @@ export default function App() {
         >
           <Text className="text-lg">Create Note</Text>
         </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/bottomtab/tab")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">test</Text>
+        </TouchableHighlight>
         {isLogged ? <Text>Already Login</Text> : <Text>Not Login</Text>}
         {isLogged ? <Text>{user?.email}</Text> : null}
       </SafeAreaView>
