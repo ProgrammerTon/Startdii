@@ -17,6 +17,7 @@ import CommentBar from "../Quiz_Component/CommentBar";
 import RatingBar from "../Quiz_Component/RatingBar";
 import { findSource } from "../../services/SourceService";
 import { getCommentsSource } from "../../services/CommentService";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -24,6 +25,7 @@ const SourceDetailPage = () => {
   const [refreshing, setRefreshing] = useState(false);
   const score = 4.8;
   const count = 999;
+  const { user } = useGlobalContext();
 
   const fecthSource = async (id) => {
     const data = await findSource(id);
@@ -65,7 +67,7 @@ const SourceDetailPage = () => {
 
     // Create a new comment object
     const newComment = {
-      username: "New User", // Replace with dynamic username if available
+      username: user.username, // Replace with dynamic username if available
       date: new Date().toLocaleDateString(),
       comment: commentInput,
     };
@@ -79,7 +81,12 @@ const SourceDetailPage = () => {
 
   const fetchComments = async () => {
     const data = await getCommentsSource(id);
-    console.log("Comments", data);
+    const newComment = data.map((com) => ({
+      username: com.parentComment.username, // Replace with dynamic username if available
+      date: new Date().toLocaleDateString(),
+      comment: com.parentComment.content,
+    }));
+    setComments([...newComment, ...comments]);
   };
 
   const onRefresh = () => {
