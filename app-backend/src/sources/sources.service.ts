@@ -88,11 +88,15 @@ export class SourcesService {
     return this.sourceModel.find().exec();
   }
 
-  async findByOffset(offset: number): Promise<Source[] | null> {
+  async findByOffset(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+  ): Promise<Source[] | null> {
     const size = 10;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
     const sources = await this.sourceModel
       .find()
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: sortValue })
       .populate('ownerId', 'username')
       .exec();
     offset--;

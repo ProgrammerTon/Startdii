@@ -30,10 +30,11 @@ export class SourcesController {
   }
 
   @Get()
-  findByOffset(@Query() query: { offset: number }) {
+  findByOffset(@Query() query: { offset: number; sortOrder: 'asc' | 'desc' }) {
     if (!query.offset) return this.sourcesService.findAll();
     const offset = query.offset;
-    return this.sourcesService.findByOffset(offset);
+    const sortOrder = query.sortOrder;
+    return this.sourcesService.findByOffset(offset, sortOrder);
   }
 
   @Get('search')
