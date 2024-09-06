@@ -6,7 +6,7 @@ const ArchiveMainPage = () => {
   
   return (
     <View style={styles.container}>
-
+      
     </View>
   );
 };
