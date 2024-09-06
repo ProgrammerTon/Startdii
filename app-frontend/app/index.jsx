@@ -95,34 +95,22 @@ export default function App() {
           <Text className="text-lg">UserFinder</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={() => router.push("/quizzes/quiz1-4choice")}
+          onPress={() => router.push("/quizzes/F3_quizchoice")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">Quiz page 1-4</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={() => router.push("/quizzes/quiz5-6choice")}
-          className="bg-green-600 p-2 rounded-xl"
-        >
-          <Text className="text-lg">Quiz page 5-6</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => router.push("/quizzes/quizfill")}
+          onPress={() => router.push("/quizzes/F3_quizfill")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">Quiz fill</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          onPress={() => router.push("/quizzes/quiz1-4solution")}
+          onPress={() => router.push("/quizzes/F6_quizchoicesolution")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">Quiz solution</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => router.push("/quizzes/quiz5-6solution")}
-          className="bg-green-600 p-2 rounded-xl"
-        >
-          <Text className="text-lg">Quiz solution 5-6</Text>
         </TouchableHighlight>
       </SafeAreaView>
     );
