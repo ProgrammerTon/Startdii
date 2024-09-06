@@ -15,12 +15,15 @@ import HiFolder from "../../components/HiFolderIcon";
 import HiChatAlt2 from "../../components/HiChatAlt2Icon";
 import HiUser from "../../components/HiUserIcon";
 import ArchiveMainPage from "../ArchiveSystem/ArchiveMainPage";
+import H1_user from "../chatsystem/H1_user";
+import G1_user from "../UserFinderSystem/G1_UserFinder";
+import Guild_Page from "../guild/I1_GuildPage";
 
 const TabArr = [
-    { route: 'Guild', label: 'Guild', icon: HiUserGroup, component: Guild },
-    { route: 'Search', label: 'Search', icon: HiSearch, component: Search },
+    { route: 'Guild', label: 'Guild', icon: HiUserGroup, component: Guild_Page },
+    { route: 'Search', label: 'Search', icon: HiSearch, component: G1_user },
     { route: 'Archive', label: 'Archive', icon: HiFolder, component: ArchiveMainPage },
-    { route: 'Chat', label: 'Chat', icon: HiChatAlt2, component: Chat },
+    { route: 'Chat', label: 'Chat', icon: HiChatAlt2, component: H1_user },
     { route: 'Profile', label: 'Profile', icon: HiUser, component: Profile },
 ];
 
