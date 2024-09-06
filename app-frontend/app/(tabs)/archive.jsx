@@ -3,12 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   FlatList,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
-import AddNoteQuizWindow from "./AddNoteQuizWindow.jsx";
+import AddNoteQuizWindow from "../ArchiveSystem/AddNoteQuizWindow.jsx";
 import ArchiveSearchBar from "../../components/ArchiveSearchBar.jsx";
 import ToggleNoteQuiz from "../../components/ToggleNoteQuiz.jsx";
 import SourceCard from "../../components/E1_SourceCard.jsx";
@@ -18,6 +17,7 @@ import { getSource } from "../../services/SourceService";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
 import { router } from "expo-router";
+import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid.jsx";
 
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Relevance");
@@ -37,14 +37,14 @@ const ArchiveMainPage = () => {
       setData([...data, ...sources]);
       setOffset(offset + 1);
     }
-    setRefreshing(false)
+    setRefreshing(false);
   };
 
   const handleRefresh = () => {
     setOffset(1);
-    setData([])
-    fetchData()
-  }
+    setData([]);
+    fetchData();
+  };
 
   useEffect(() => {
     if (!isLogged) {
@@ -87,7 +87,7 @@ const ArchiveMainPage = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaViewAndroid style={styles.container}>
       <View style={styles.headerContainer}>
         <TouchableOpacity
           onPress={openAddToggleNoteQuizVisible}
@@ -164,7 +164,7 @@ const ArchiveMainPage = () => {
       <View style={styles.emptyContainer}>
         {/* Waiting For System Traversal Tab*/}
       </View>
-    </View>
+    </SafeAreaViewAndroid>
   );
 };
 

@@ -9,10 +9,11 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native";
-import Componentchatuser from "./Componentchatuser";
+import Componentchatuser from "../chatsystem/Componentchatuser";
 import { router } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { getChatList } from "../../services/ChatListService";
+import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
 
 // Get screen width for responsive design
 const { width } = Dimensions.get("window");
@@ -32,6 +33,7 @@ const ChatH1 = () => {
   }, []);
 
   const loadUserData = async () => {
+    setRefreshing(true);
     const chatList = await getChatList();
     const filteredData = chatList.map((chat) => ({
       username: chat.userId.username,
@@ -53,7 +55,7 @@ const ChatH1 = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaViewAndroid style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Chat</Text>
       </View>
@@ -81,7 +83,7 @@ const ChatH1 = () => {
           </TouchableOpacity>
         </View>
       ))} */}
-    </View>
+    </SafeAreaViewAndroid>
   );
 };
 

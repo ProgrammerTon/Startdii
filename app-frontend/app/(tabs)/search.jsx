@@ -11,11 +11,12 @@ import {
   ScrollView,
 } from "react-native";
 import UserSearchBar from "../../components/UserSearchBar";
-import UserNameComponent from "./UserNameComponent";
+import UserNameComponent from "../UserFinderSystem/UserNameComponent";
 import { getUserByUsername } from "../../services/UserService";
 import { addChatList } from "../../services/ChatListService";
 import { router } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
 
 const UserFinderPage = () => {
   const [searchUsername, setSearchUsername] = useState("");
@@ -50,26 +51,26 @@ const UserFinderPage = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaViewAndroid style={styles.container}>
       <UserSearchBar
         value={searchUsername}
         handleChangeText={(e) => setSearchUsername(e)}
         onSubmit={onSubmit}
       />
-      
+
       <ScrollView className="mb-20">
-      {userFound.map((user, ind) => {
-        return (
-          <UserNameComponent
-            key={user._id}
-            id={user._id}
-            username={user.username}
-            onPress={onAdd}
-          />
-        );
-      })}
+        {userFound.map((user, ind) => {
+          return (
+            <UserNameComponent
+              key={user._id}
+              id={user._id}
+              username={user.username}
+              onPress={onAdd}
+            />
+          );
+        })}
       </ScrollView>
-    </View>
+    </SafeAreaViewAndroid>
   );
 };
 export default UserFinderPage;
