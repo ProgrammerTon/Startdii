@@ -112,6 +112,7 @@ const GuildPage = () => {
       <CreateJoinGuild
         visible={guildCreateJoinWindow}
         onClose={closeguildCreateJoinWindow}
+        loadData={loadGuildsData}
       />
     </View>
   );

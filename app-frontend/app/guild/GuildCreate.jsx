@@ -4,7 +4,7 @@ import { createGuild } from '../../services/GuildService';
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { Alert } from "react-native";
 
-const GuildCreateWindow = ({ visible, onClose, value, onSubmit}) => {
+const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
   const { user } = useGlobalContext();
   const [guildFormat, setGuildFormat] = useState({
     name: "",
@@ -23,6 +23,7 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit}) => {
           Alert.alert("Guild creation failed");
         } else {
           Alert.alert("Guild successfully created");
+          loadData();
         }
       } catch (error) {
         Alert.alert("Error", error.message);
