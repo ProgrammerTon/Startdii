@@ -104,6 +104,47 @@ export class SourcesService {
     return this.sourceModel.find({ $text: { $search: keyword } }).exec();
   }
 
+  
+  async userRating(id: ObjectId, score: number, raterId: ObjectId){
+    const obj = await this.sourceModel.findById(id).exec();
+    const rating = obj.rating.find(r => r.raterId.toString() === raterId.toString());
+    if (!rating){
+      obj.rating.push({raterId: raterId, score: score});
+    } else {
+      rating.score = score
+    }
+    await this.sourceModel
+      .findByIdAndUpdate(
+        id,
+        { $set: obj },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+    await obj.save();
+    return obj;
+  }
+
+  async getRating(id: ObjectId){
+    const obj = await this.sourceModel.findById(id).exec();
+    const rating = obj.rating;
+    const totalScore = rating.reduce((sum, r) => sum + r.score, 0);
+    const averageScore = rating.length ? totalScore / rating.length : 0;
+    return {Rating: averageScore, Count: rating.length};
+  }
+  
+  async dataReset(id: ObjectId){
+    const obj = await this.sourceModel.findById(id).exec();
+    obj.rating = [];
+    await this.sourceModel
+      .findByIdAndUpdate(
+        id,
+        { $set: obj },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+    await obj.save();
+    return obj;
+  }
 
   /*async findByTag(tagname: string): Promise<Source[]> {
     const sources = new Array<Source>();

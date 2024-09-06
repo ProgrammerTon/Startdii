@@ -50,4 +50,20 @@ export class SourcesController {
   findByTitle(@Param('keyword') keyword: string) {
     return this.sourcesService.searchByTitle(keyword);
   }
+
+  @Get('rating/:id')
+  getRating(@Param('id') id: ObjectId) {
+    return this.sourcesService.getRating(id);
+  }
+
+  @Patch('rating/:id')
+  userRating(@Param('id') id: ObjectId, @Body('score') score: number, @Body('raterId') raterId: ObjectId) {
+    return this.sourcesService.userRating(id,score,raterId as ObjectId);
+  }
+
+  @Patch('reset/:id')
+  dataReset(@Param('id') id: ObjectId) {
+    return this.sourcesService.dataReset(id);
+  }
+
 }

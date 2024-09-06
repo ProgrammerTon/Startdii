@@ -10,12 +10,6 @@ export enum Status {
   guild = "guild"
 }
 
-export class Rating {
-  score: number = 0;
-  count: number = 0;
-  rater: ObjectId[] = [];
-}
-
 @Schema({ timestamps: true })
 export class Source {
   @Prop({ type: ObjectId, auto: true })
@@ -46,7 +40,8 @@ export class Source {
   tags: string[];
 
   @Prop({ name: "rating" })
-  rating: Rating;
+  rating: {raterId: ObjectId, score: number}[] = [];
+
 
 
   

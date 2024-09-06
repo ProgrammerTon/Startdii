@@ -38,4 +38,20 @@ export class QuizsController {
   remove(@Param('id') id: string) {
     return this.quizsService.remove(+id);
   }
+
+  @Get('rating/:id')
+  getRating(@Param('id') id: ObjectId) {
+    return this.quizsService.getRating(id);
+  }
+
+  @Patch('rating/:id')
+  userRating(@Param('id') id: ObjectId, @Body('score') score: number, @Body('raterId') raterId: ObjectId) {
+    return this.quizsService.userRating(id,score,raterId as ObjectId);
+  }
+
+  @Patch('reset/:id')
+  dataReset(@Param('id') id: ObjectId) {
+    return this.quizsService.dataReset(id);
+  }
+
 }

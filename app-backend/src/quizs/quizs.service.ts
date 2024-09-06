@@ -136,7 +136,47 @@ export class QuizsService {
     return `This action removes a #${id} quiz`;
   }
 
-  async addRating(id: ObjectId, score: number, rater: ObjectId){
-    return;
+  async userRating(id: ObjectId, score: number, raterId: ObjectId){
+    const obj = await this.quizModel.findById(id).exec();
+    const rating = await obj.rating.find(r => r.raterId.toString() === raterId.toString());
+    if (!rating){
+      obj.rating.push({raterId: raterId, score: score});
+    } else {
+      rating.score = score
+    }
+    await this.quizModel
+      .findByIdAndUpdate(
+        id,
+        { $set: obj },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+    await obj.save();
+    return obj;
   }
+
+  async getRating(id: ObjectId){
+    const obj = await this.quizModel.findById(id).exec();
+    const rating = obj.rating;
+    const totalScore = rating.reduce((sum, r) => sum + r.score, 0);
+    const averageScore = rating.length ? totalScore / rating.length : 0;
+    return {Rating: averageScore, Count: rating.length};
+  }
+
+  async dataReset(id: ObjectId){
+    const obj = await this.quizModel.findById(id).exec();
+    obj.players = [];
+    obj.total_score = 0;
+    obj.rating = [];
+    await this.quizModel
+      .findByIdAndUpdate(
+        id,
+        { $set: obj },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+    await obj.save();
+    return obj;
+  }
+
 }
