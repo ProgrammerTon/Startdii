@@ -22,7 +22,7 @@ const CreateJoinGuild = ({ visible, onClose }) => {
   const [createGuild, setCreateGuild] = useState(false);
   const [joinGuild, setJoinGuild] = useState(false);
   const [guildCode, setGuildCode] = useState("");
-
+  
   const handleChangeText = (e) => setGuildCode(e);
 
   const onJoinGuild = async () => {
