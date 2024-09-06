@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, Pressable, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Modal, Pressable, TouchableOpacity,Dimensions } from 'react-native';
 import { Redirect, router } from "expo-router";
 import { FontAwesome } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
+const { width, height } = Dimensions.get('window');
 const AddNoteQuizWindow = ({ visible, onClose }) => {
   return (
     <Modal
@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    left: 215,
-    bottom: 115
+    bottom: height * 0.15, 
+    right: width * -0.615, 
   },
   modalContent: {
     width: '30%',

@@ -7,6 +7,7 @@ import {
   Pressable,
   TouchableOpacity,
   Alert,
+  Dimensions
 } from "react-native";
 import { Redirect, router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
@@ -17,6 +18,7 @@ import GuildJoinWindow from "./GuildJoin";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Feather from "@expo/vector-icons/Feather";
 import { joinGuildByCode } from "../../services/GuildService";
+const { width, height } = Dimensions.get('window');
 
 const CreateJoinGuild = ({ visible, onClose, loadData }) => {
   const [createGuild, setCreateGuild] = useState(false);
@@ -103,8 +105,8 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    left: 215,
-    bottom: 130,
+    bottom: height * 0.17, 
+    right: width * -0.615, 
   },
   modalContent: {
     width: "30%",
