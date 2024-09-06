@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useState } from "react";
 import { StyleSheet, Text, View, Modal, Pressable,TouchableOpacity, TextInput } from 'react-native';
-
+import { createGuild } from '../../services/GuildService';
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { Alert } from "react-native";
 
 const GuildCreateWindow = ({ visible, onClose, value, onSubmit}) => {
+  const { user } = useGlobalContext();
+  const [guildFormat, setGuildFormat] = useState({
+    name: "",
+    description: "",
+    cover: 1,
+  });
+
+  const create = async () => {
+    if (guildFormat.name === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+    else {
+      try {
+        const data = await createGuild(user._id, guildFormat);
+        if (!data) {
+          Alert.alert("Guild creation failed");
+        } else {
+          Alert.alert("Guild successfully created");
+        }
+      } catch (error) {
+        Alert.alert("Error", error.message);
+      }
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -15,14 +42,16 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit}) => {
           <Text style={styles.codeText}>Name </Text>
           <TextInput
             style={styles.createContainer}
-            value={value}
+            value={guildFormat.name}
             onSubmitEditing={onSubmit}
+            onChangeText={(e) => setGuildFormat({ ...guildFormat, name: e })}
           />
           <Text style={styles.codeText}>Description </Text>
           <TextInput
             style={styles.createContainer}
-            value={value}
+            value={guildFormat.description}
             onSubmitEditing={onSubmit}
+            onChangeText={(e) => setGuildFormat({ ...guildFormat, description: e })}
           />
           <Text style={styles.codeText}>Guild Cover </Text>
           <View style={styles.coverContainer}>
@@ -32,7 +61,10 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit}) => {
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.copyButton}>
+            <TouchableOpacity 
+              style={styles.copyButton}
+              onPress={create}
+            >
               <Text style={styles.copyButtonText}>Create</Text>
             </TouchableOpacity>
           </View>

@@ -2,6 +2,25 @@ import { baseUrl } from "@/constants/const";
 import { getCurrentToken } from "@/utils/asyncstroage";
 import { Alert } from "react-native";
 
+type GuildRequest = {
+  name: string, 
+  description: string, 
+  cover: number,
+};
+
+export async function createGuild(userId: string, data: GuildRequest): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/guilds/${userId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
 export async function guildList() {
   const token = await getCurrentToken();
   const res = await fetch(`${baseUrl}/users/guild`, {
@@ -175,6 +194,7 @@ export async function leavePerson(
     Alert.alert("Kick!!");
   }
 }
+
 // export async function createGuild(data: GuildRequest): Promise<any | null> {
 //   const res = await fetch(`${baseUrl}/sources`, {
 //     method: "POST",
