@@ -84,7 +84,7 @@ export default function Quiz1_4choice() {
       </View>
       <Modal transparent={true} visible={closeQuiz}>
         <View style={{flex: 1, backgroundColor: "#555555aa"}}>
-          <View style={{backgroundColor: "#fff", marginTop: height*0.4, margin:50, padding: 20, alignItems: "center", borderRadius: 10, height: height * 0.15}}>
+          <View style={styles.leaveQuizPopUp}>
             <View>
               <Text style={{fontSize: 20, fontWeight: "bold"}}> Do you want to Leave Quiz? </Text>
             </View>
@@ -202,6 +202,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     borderRadius:20,
   },
+  leaveQuizPopUp:{
+    backgroundColor: "#fff", 
+    marginTop: height*0.4, 
+    margin:50, 
+    padding: 20, 
+    alignItems: "center", 
+    borderRadius: 10, 
+    height: height * 0.15
+  }
 })
 {
   /* <FlatList

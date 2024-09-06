@@ -112,6 +112,12 @@ export default function App() {
         >
           <Text className="text-lg">Quiz solution</Text>
         </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/quizzes/F6_quizfillsolution")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Quiz fill solution</Text>
+        </TouchableHighlight>
       </SafeAreaView>
     );
   }

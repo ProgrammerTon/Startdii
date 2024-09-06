@@ -6,12 +6,12 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get('window');
 
-const QuizChoice = ({ content, isSelected = false, onPress, isCorrect = false, isMultipleAnswer = false, isSolutionType = false}) => {
+const QuizChoice = ({ content, isSelected = false, onPress, isCorrect = false, isMultipleAnswer = false, isSolutionType = false, isFillType=false}) => {
   const correctandnotselected = isCorrect && !isSelected && isSolutionType
   const incorrectedandselected = !isCorrect && isSelected && isSolutionType
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={[styles.choiceContainer, (isSelected)? (incorrectedandselected)? styles.incorrect : styles.selectedContainer : (correctandnotselected)? styles.correctandnotselected : null, isMultipleAnswer && styles.multipleAnswer]}>
+      <View style={[styles.choiceContainer, (isSelected)? (incorrectedandselected)? styles.incorrect : styles.selectedContainer : (correctandnotselected)? styles.correctandnotselected : null, isMultipleAnswer && styles.multipleAnswer, isFillType && styles.fillType]}>
         {(isMultipleAnswer)? (incorrectedandselected)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={{alignSelf:"center", marginRight: 5}}/>
          : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(correctandnotselected)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={{alignSelf:"center", marginRight: 5}}/> : null}
         <Text style={styles.textStyle}> {content} </Text>
@@ -45,6 +45,9 @@ const styles = StyleSheet.create({
   },
   correctandnotselected:{
     borderColor:"#F44D19",
+    backgroundColor:"#fff",
+  },
+  fillType:{
     backgroundColor:"#fff",
   },
   textStyle:{
