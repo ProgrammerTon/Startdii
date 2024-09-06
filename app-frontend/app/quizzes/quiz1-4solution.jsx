@@ -10,6 +10,7 @@ import {
 import { React , useState } from "react";
 import QuizChoice from "../../components/QuizChoice";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Entypo from '@expo/vector-icons/Entypo';
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,10 +25,10 @@ export default function Quiz1_4sol() {
       questionId: 1,
       question: "What does the cat says?",
       choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "21"],
+      choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
       isMultipleAnswer: true,
-      selectedChoice: ["Meaw","21"],
-      answer : ["AOUUU","21"]
+      selectedChoice: ["Meaw","21", "Purr"],
+      answer : ["AOUUU", "21", "Purr"]
     }
   ];
   const checkingSelected = (item) => {
@@ -37,8 +38,8 @@ export default function Quiz1_4sol() {
     <View style={styles.container}>
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
-          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}} onPress={()=>setCloseQuiz(true)}>
-            <AntDesign name="closecircle" size={30} color="red" />
+          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:20, padding:5}} onPress={()=>setCloseQuiz(true)}>
+            <Entypo name="chevron-left" size={30} color="blue" />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
@@ -51,7 +52,7 @@ export default function Quiz1_4sol() {
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
-        
+        <ScrollView>
         {quizData[currentQuestion]?.choice.map((item, index)=>{
           return <QuizChoice
                   key={index}
@@ -60,9 +61,10 @@ export default function Quiz1_4sol() {
                   onPress={() => (null)}
                   isCorrect={quizData[currentQuestion].answer.includes(item)}
                   isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}
-                  isSolution={quizData[currentQuestion].selectedChoice.length !== 0}
+                  isSolutionType={quizData[currentQuestion].selectedChoice.length !== 0}
                   />
           })}
+        </ScrollView>
         </View>
         <View>
           <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
@@ -112,8 +114,8 @@ const styles = StyleSheet.create({
   closeQuiz: {
     flex: 1,
     flexDirection: "column",
-    alignSelf: "flex-end",
-    marginRight: width * 0.07,
+    alignSelf: "flex-start",
+    marginLeft: width * 0.05,
     marginTop: height * 0.07
   },
   quizNumber:{
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     padding: 10,
     marginTop: height * 0.1,
-    marginBottom: height * 0.2,
+    marginBottom: height * 0.15,
     justifyContent: "flex-start",
     alignSelf: "center",
   },
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     paddingVertical:10,
     marginRight:20,
-    marginVertical: -height * 0.15,
+    marginVertical: -height * 0.13,
     backgroundColor: "#0270ED", 
     borderRadius:20,
     alignSelf: "flex-end",

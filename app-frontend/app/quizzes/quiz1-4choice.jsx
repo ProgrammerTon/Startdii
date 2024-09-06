@@ -24,7 +24,7 @@ export default function Quiz1_4choice() {
       questionId: 1,
       question: "What does the cat says?",
       choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "21"],
+      choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
       isMultipleAnswer: false,
       answer : ["AOUUU"]
     }
@@ -65,6 +65,7 @@ export default function Quiz1_4choice() {
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
+        <ScrollView>
         {quizData[currentQuestion]?.choice.map((item, index)=>{
           return <QuizChoice 
                   key={index}
@@ -73,6 +74,7 @@ export default function Quiz1_4choice() {
                   onPress={() => handleChoiceSelect(item)}
                   isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}/>
           })}
+        </ScrollView>
         </View>
         <View>
           <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignSelf: "flex-end",
-    marginRight: width * 0.07,
+    marginRight: width * 0.05,
     marginTop: height * 0.07
   },
   quizNumber:{
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     padding: 10,
     marginTop: height * 0.1,
-    marginBottom: height * 0.2,
+    marginBottom: height * 0.15,
     justifyContent: "flex-start",
     alignSelf: "center",
   },
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     paddingVertical:10,
     marginRight:20,
-    marginVertical: -height * 0.15,
+    marginVertical: -height * 0.13,
     backgroundColor: "#0270ED", 
     borderRadius:20,
     alignSelf: "flex-end",

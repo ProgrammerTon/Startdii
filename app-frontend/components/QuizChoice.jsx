@@ -6,12 +6,14 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get('window');
 
-const QuizChoice = ({ content, isSelected = false, onPress, isCorrect = false, makeColumn = false, isMultipleAnswer = false, isSolution = false}) => {
+const QuizChoice = ({ content, isSelected = false, onPress, isCorrect = false, isMultipleAnswer = false, isSolutionType = false}) => {
+  const correctandnotselected = isCorrect && !isSelected && isSolutionType
+  const incorrectedandselected = !isCorrect && isSelected && isSolutionType
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={[styles.choiceContainer, isSelected && styles.selectedContainer, makeColumn && styles.makeColumn, isMultipleAnswer && styles.multipleAnswer, !isCorrect && isSolution && styles.incorrect, isCorrect && !isSelected && styles.correctandnotselected]}>
-        {(isMultipleAnswer)? (!isCorrect && isSelected && isSolution)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={{alignSelf:"center", marginRight: 5}}/>
-         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(!isCorrect && isSolution)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={{alignSelf:"center", marginRight: 5}}/> : null}
+      <View style={[styles.choiceContainer, (isSelected)? (incorrectedandselected)? styles.incorrect : styles.selectedContainer : (correctandnotselected)? styles.correctandnotselected : null, isMultipleAnswer && styles.multipleAnswer]}>
+        {(isMultipleAnswer)? (incorrectedandselected)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={{alignSelf:"center", marginRight: 5}}/>
+         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(correctandnotselected)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={{alignSelf:"center", marginRight: 5}}/> : null}
         <Text style={styles.textStyle}> {content} </Text>
       </View>
     </TouchableOpacity>
@@ -34,16 +36,15 @@ const styles = StyleSheet.create({
   selectedContainer: {
     backgroundColor: "#04B36E", // Green
   },
-  makeColumn: {
-    width: width * 0.4,
-  },
   multipleAnswer:{
     justifyContent:"space between",
   },
   incorrect:{
     borderColor:"#F44D19",
+    backgroundColor:"#04B36E",
   },
   correctandnotselected:{
+    borderColor:"#F44D19",
     backgroundColor:"#fff",
   },
   textStyle:{
