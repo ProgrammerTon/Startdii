@@ -92,7 +92,7 @@ const AddNotePage = () => {
           multiline
         />
 
-        <Text style={styles.label}>Tag</Text>
+        <Text style={styles.label}>Tag (Use comma to seperate Tag. Example : KU,Mining)</Text>
         <TextInput
           style={styles.input}
           value={tag}
