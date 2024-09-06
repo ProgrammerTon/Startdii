@@ -112,6 +112,7 @@ const GuildPage = () => {
       <CreateJoinGuild
         visible={guildCreateJoinWindow}
         onClose={closeguildCreateJoinWindow}
+        loadData={loadGuildsData}
       />
     </View>
   );
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    bottom: 20,
+    bottom: 120,
     right: 20,
     elevation: 5,
     shadowColor: "#000",
