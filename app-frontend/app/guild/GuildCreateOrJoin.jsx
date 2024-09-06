@@ -18,11 +18,11 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Feather from "@expo/vector-icons/Feather";
 import { joinGuildByCode } from "../../services/GuildService";
 
-const CreateJoinGuild = ({ visible, onClose }) => {
+const CreateJoinGuild = ({ visible, onClose, loadData }) => {
   const [createGuild, setCreateGuild] = useState(false);
   const [joinGuild, setJoinGuild] = useState(false);
   const [guildCode, setGuildCode] = useState("");
-
+  
   const handleChangeText = (e) => setGuildCode(e);
 
   const onJoinGuild = async () => {
@@ -32,6 +32,7 @@ const CreateJoinGuild = ({ visible, onClose }) => {
         Alert.alert("Join Failed");
       } else {
         Alert.alert("Join Success");
+        loadData();
       }
     } catch (error) {
       Alert.alert("Error", error.message);
@@ -86,6 +87,7 @@ const CreateJoinGuild = ({ visible, onClose }) => {
           <GuildCreateWindow
             visible={createGuild}
             onClose={closeCreateGuildWindow}
+            loadData={loadData}
           />
 
           <TouchableOpacity style={styles.InteractButton} onPress={onClose}>

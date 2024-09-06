@@ -48,13 +48,14 @@ export class CommentsService {
         path: 'replyComments.ownerId',
         select: 'username',
       })
-      .exec();
+      .exec() as any;
 
     const allUsernames = comments.map((comment) => ({
       parentComment: {
         _id: comment['_id'],
         username: comment.ownerId['username'],
         content: comment.content,
+        updatedAt: comment.updatedAt,
       },
       replyComments: comment.replyComments.map((reply) => ({
         username: reply.ownerId['username'],
