@@ -5,10 +5,11 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  TouchableHighlight,
 } from "react-native";
 import FormField from "../../components/FormField";
 import Button from "../../components/Button";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { ScrollView } from "react-native";
 import AuthService from "../../services/AuthService";
@@ -20,7 +21,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { getCurrentUser } from "../../utils/asyncstroage";
 
 export default function SignIn() {
-  const { setUser, setIsLogged } = useGlobalContext();
+  const { setUser, setIsLogged, isLogged } = useGlobalContext();
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -47,6 +48,18 @@ export default function SignIn() {
       setSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (isLogged) {
+      router.replace("/profile");
+    }
+  }, [isLogged]);
+
+  useEffect(() => {
+    if (isLogged) {
+      router.replace("/profile");
+    }
+  }, []);
 
   const styles = {
     bg: {
@@ -173,6 +186,12 @@ export default function SignIn() {
             </TouchableOpacity>
           </View>
         </View>
+        <TouchableHighlight
+          onPress={() => router.push("/dev")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Dev</Text>
+        </TouchableHighlight>
       </ScrollView>
     </SafeAreaView>
   );
