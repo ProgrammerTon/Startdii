@@ -179,7 +179,7 @@ export default function SignIn() {
             <Text style={[fonts.EngMedium14, styles.text2]}>
               Don’t have an account?
             </Text>
-            <TouchableOpacity onPress={submit}>
+            <TouchableOpacity onPress={() => router.push("/sign-up")}>
               <Text style={[fonts.EngMedium14, styles.text]}>
                 Create an account
               </Text>
