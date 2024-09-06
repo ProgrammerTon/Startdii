@@ -30,28 +30,39 @@ const ArchiveMainPage = () => {
   const [refreshing, setRefreshing] = useState(true);
   const { isLogged } = useGlobalContext();
 
-  const fetchData = async () => {
+  const fetchData = async (of = offset, reset = false) => {
+    const sortOrder = filterDirection === "↓" ? "desc" : "asc";
     setRefreshing(true);
-    const sources = await getSource(offset);
+
+    const sources = await getSource(of, sortOrder);
+
     if (sources.length !== 0) {
-      setData([...data, ...sources]);
-      setOffset(offset + 1);
+      setData((prevData) => (reset ? sources : [...prevData, ...sources]));
+      setOffset(of + 1); // Increment the offset for pagination
     }
+
     setRefreshing(false);
   };
 
-  const handleRefresh = () => {
-    setOffset(1);
-    setData([]);
-    fetchData();
+  // Handle refresh to reset offset and refetch data
+  const handleRefresh = async () => {
+    setOffset(1); // Reset offset
+    setData([]); // Clear current data
+    fetchData(1, true); // Fetch first page of data
   };
 
+  // Trigger data fetch when filterDirection changes
+  useEffect(() => {
+    handleRefresh(); // Refresh data when filter changes
+  }, [filterDirection]);
+
+  // Initial fetch when component loads and handle login redirection
   useEffect(() => {
     if (!isLogged) {
       router.replace("/sign-in");
+    } else {
+      fetchData(); // Initial data fetch
     }
-    fetchData();
-    setRefreshing(false);
   }, []);
 
   const ToggleFilterChange = (filter) => {
@@ -141,23 +152,20 @@ const ArchiveMainPage = () => {
       <AddNoteQuizWindow visible={AddWindowVisible} onClose={closeAddWindow} />
       <FlatList
         data={data}
-        renderItem={({ item }) => {
-          return (
-            <SourceCard
-              id={item._id}
-              title={item.title}
-              author={item.ownerId.username}
-              tags={item.tags}
-            />
-          );
-        }}
+        renderItem={({ item }) => (
+          <SourceCard
+            id={item._id}
+            title={item.title}
+            author={item.ownerId.username}
+            tags={item.tags}
+          />
+        )}
+        keyExtractor={(item, ind) => `${item._id}-${ind}`}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
-        keyExtractor={(item) => `${item._id}`}
-        onEndReached={fetchData}
+        onEndReached={() => fetchData()} // Load more data when the list reaches the end
         onEndReachedThreshold={0.1} // Adjust as needed
-        ListFooterComponent={refreshing && <ActivityIndicator />}
       />
       <View className="my-5"></View>
       {/* <QuizCard /> */}
