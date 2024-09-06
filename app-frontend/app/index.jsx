@@ -68,6 +68,12 @@ export default function App() {
         >
           <Text className="text-lg">test</Text>
         </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/profile/profile_test")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">Profile</Text>
+        </TouchableHighlight>
         {isLogged ? <Text>Already Login</Text> : <Text>Not Login</Text>}
         {isLogged ? <Text>{user?.email}</Text> : null}
       </SafeAreaView>
