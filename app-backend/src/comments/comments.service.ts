@@ -15,6 +15,15 @@ export class CommentsService {
     private replyCommentModel: Model<ReplyCommentDocument>
   ) {}
 
+  // --------------------------- Create ---------------------------
+
+  async create(createCommentDto: CreateCommentDto) {
+    const createdComment = new this.commentModel(createCommentDto);
+    return createdComment.save();
+  }
+
+  // --------------------------- Get ---------------------------
+
   async findAll(): Promise<Comment[]> {
     return this.commentModel.find().exec();
   }
@@ -53,10 +62,7 @@ export class CommentsService {
     return allUsernames;
   }
 
-  async create(createCommentDto: CreateCommentDto) {
-    const createdComment = new this.commentModel(createCommentDto);
-    return createdComment.save();
-  }
+  // --------------------------- Update ---------------------------
 
   async createReplyComment(id: ObjectId, createReplyCommentDto: CreateReplyCommentDto): Promise<Comment> {
     const comment = await this.commentModel.findById({ _id: id });
@@ -74,6 +80,8 @@ export class CommentsService {
 
     return this.commentModel.findByIdAndUpdate(id, comment, { new: true }).exec();
   }
+
+  // --------------------------- Delete ---------------------------
 
   async remove(id: ObjectId) {
     return this.commentModel.findByIdAndDelete(id);

@@ -13,9 +13,23 @@ export class GuildsService {
     private guildModel: Model<GuildDocument>,
   ) {}
 
+  // --------------------------- Create ---------------------------
+
+  async create(createGuildDto: CreateGuildDto) {
+    const createdGuild = new this.guildModel(createGuildDto);
+    return createdGuild.save();
+  }
+
+  // --------------------------- Get ---------------------------
+
   async findAll(): Promise<Guild[]> {
     return this.guildModel.find().exec();
   }
+
+  // debugging service
+  // async findOne(id: ObjectId): Promise<Guild> {
+  //   return this.guildModel.findById({ _id: id }).exec();
+  // }
   
   async getAllMembersInGuild(id: ObjectId): Promise<any> {
     return this.guildModel.findById({ _id: id }).select('memberIdList').populate('memberIdList').exec();
@@ -40,11 +54,8 @@ export class GuildsService {
     }
   }
 
-  async create(createGuildDto: CreateGuildDto) {
-    const createdGuild = new this.guildModel(createGuildDto);
-    return createdGuild.save();
-  }
-
+  // --------------------------- Update ---------------------------
+  
   async update(id: ObjectId, updateGuildDto: UpdateGuildDto): Promise<Guild> {
     return this.guildModel.findByIdAndUpdate(id, updateGuildDto, { new: true }).exec(); 
   }
@@ -95,12 +106,11 @@ export class GuildsService {
     return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();
   }
 
+  // --------------------------- Delete ---------------------------
+
   async remove(id: ObjectId): Promise<Guild> {
     return this.guildModel.findByIdAndDelete(id).exec();
   }
 
-  // debugging service
-  // async findOne(id: ObjectId): Promise<Guild> {
-  //   return this.guildModel.findById({ _id: id }).exec();
-  // }
+
 }

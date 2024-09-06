@@ -16,15 +16,35 @@ import { GuildsService } from './guilds.service';
 
 import { ParseObjectIdPipe } from 'src/common/pipes';
 import genInviteCode from './utils/guilds.genInviteCode';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Guild')
 @Controller('guilds')
 export class GuildsController {
   constructor(private readonly guildsService: GuildsService) {}
+
+  @Post(':leaderId')
+  create(
+    @Param('leaderId', ParseObjectIdPipe) leaderId: ObjectId,
+    @Body() createGuildDto: CreateGuildDto,
+  ) {
+    createGuildDto.inviteCode = genInviteCode();
+    createGuildDto.leaderId = leaderId;
+    createGuildDto.viceLeaderIdList = [];
+    createGuildDto.memberIdList = [leaderId];
+
+    return this.guildsService.create(createGuildDto);
+  }
 
   @Get()
   findAll() {
     return this.guildsService.findAll();
   }
+
+  // @Get('test/:id')
+  // findOne(@Param('id', ParseObjectIdPipe) id: ObjectId) {
+  //   return this.guildsService.findOne(id);
+  // }
 
   @Get(':id')
   getAllMembersInGuild(@Param('id', ParseObjectIdPipe) id: ObjectId) {
@@ -39,18 +59,7 @@ export class GuildsController {
     return this.guildsService.getRoleByMemberId(id, memberId);
   }
 
-  @Post(':leaderId')
-  create(
-    @Param('leaderId', ParseObjectIdPipe) leaderId: ObjectId,
-    @Body() createGuildDto: CreateGuildDto,
-  ) {
-    createGuildDto.inviteCode = genInviteCode();
-    createGuildDto.leaderId = leaderId;
-    createGuildDto.viceLeaderIdList = [];
-    createGuildDto.memberIdList = [leaderId];
 
-    return this.guildsService.create(createGuildDto);
-  }
 
   @Patch(':id')
   update(
@@ -101,8 +110,5 @@ export class GuildsController {
     return this.guildsService.remove(id);
   }
 
-  // @Get('test/:id')
-  // findOne(@Param('id', ParseObjectIdPipe) id: ObjectId) {
-  //   return this.guildsService.findOne(id);
-  // }
+
 }

@@ -26,20 +26,12 @@ export class TagsService {
     return createdTag.save();
   }
 
-  findAll() {
+  async findAll() {
     return this.tagModel.find().exec();
   }
 
   async findOne(name: string): Promise<Tag> {
     return await this.tagModel.findOne({ name: name });
-  }
-
-  update(id: number, updateTagDto: UpdateTagDto) {
-    return `This action updates a #${id} tag`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} tag`;
   }
 
   async getSources(name: string) {

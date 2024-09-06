@@ -36,16 +36,6 @@ export class SourcesController {
     return this.sourcesService.findById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: ObjectId, @Body() updateSourceDto: UpdateSourceDto) {
-    return this.sourcesService.update(id, updateSourceDto);
-  }
-
-  @Delete(':id')
-  delete(@Param('id') id: ObjectId) {
-    return this.sourcesService.delete(id);
-  }
-
   @Get('searchname/:keyword')
   findByTitle(@Param('keyword') keyword: string) {
     return this.sourcesService.searchByTitle(keyword);
@@ -54,6 +44,11 @@ export class SourcesController {
   @Get('rating/:id')
   getRating(@Param('id') id: ObjectId) {
     return this.sourcesService.getRating(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: ObjectId, @Body() updateSourceDto: UpdateSourceDto) {
+    return this.sourcesService.update(id, updateSourceDto);
   }
 
   @Patch('rating/:id')
@@ -66,4 +61,8 @@ export class SourcesController {
     return this.sourcesService.dataReset(id);
   }
 
+  @Delete(':id')
+  delete(@Param('id') id: ObjectId) {
+    return this.sourcesService.delete(id);
+  }
 }

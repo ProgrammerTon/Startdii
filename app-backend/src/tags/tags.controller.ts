@@ -49,6 +49,6 @@ export class TagsController {
 
   @Delete(':name')
   remove(@Param('name') name: string) {
-    return this.tagsService.remove(+name);
+    return "N/A";
   }
 }

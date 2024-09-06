@@ -36,17 +36,22 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @Post('chatlist')
+  addChatList(@Body() createChatListDto: CreateChatDto) {
+    return this.chatListService.create(createChatListDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('profile')
   getProfile(@Request() req) {
     const user = this.usersService.findByEmail(req.user.email);
     return user;
-  }
-
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
   }
 
   @Roles(Role.Customer)
@@ -65,11 +70,15 @@ export class UsersController {
     return this.chatListService.findAllChatList(ownerId);
   }
 
-  @Post('chatlist')
-  addChatList(@Body() createChatListDto: CreateChatDto) {
-    return this.chatListService.create(createChatListDto);
+  @Get(':username')
+  async findUserByUsername(@Param('username') username: string) {
+    const data = await this.usersService.findByUsername(username);
+    if (data == null) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+    return data;
   }
-
+  
   @Get(':ownerId/sources')
   getSources(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
     return this.usersService.getSources(id);
@@ -78,15 +87,6 @@ export class UsersController {
   @Get(':ownerId/quizs')
   getQuizzes(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
     return this.usersService.getQuizzes(id);
-  }
-
-  @Get(':username')
-  async findUserByUsername(@Param('username') username: string) {
-    const data = await this.usersService.findByUsername(username);
-    if (data == null) {
-      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-    }
-    return data;
   }
 
   @Patch('favorite_sources/add/:userId/:sourceId')

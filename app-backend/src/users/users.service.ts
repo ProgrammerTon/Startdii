@@ -17,6 +17,8 @@ export class UsersService {
     private sourceModel: Model<SourceDocument>,
   ) {}
 
+  // --------------------------- Create ---------------------------
+  
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = plainToInstance(User, createUserDto);
     user.roles = [Role.Customer];
@@ -25,16 +27,7 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async hashPassword(password: string): Promise<string> {
-    try {
-      const saltRounds = 10;
-      password = await bcrypt.hash(password, saltRounds);
-      return password;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
+  // --------------------------- Get ---------------------------
 
   async findAll() {
     return this.userModel.find().exec();
@@ -72,6 +65,7 @@ export class UsersService {
     return await this.userModel.findById(ownerId).select('quizzes').populate('quizzes').exec();
   }
 
+  // --------------------------- Update ---------------------------
   async addFavoriteSource(id: ObjectId, sourceId: ObjectId) {
     const user = await this.userModel.findById(id).exec();
     if (!user.favorite_sources.includes(sourceId)) {
@@ -91,5 +85,17 @@ export class UsersService {
     return await this.userModel
       .findByIdAndUpdate(id, user, { new: true })
       .exec();
+  }
+
+  // --------------------------- Misc. ---------------------------
+
+  async hashPassword(password: string): Promise<string> {
+    try {
+      const saltRounds = 10;
+      password = await bcrypt.hash(password, saltRounds);
+      return password;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

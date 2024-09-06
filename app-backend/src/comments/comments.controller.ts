@@ -18,17 +18,6 @@ import { CreateCommentDto, CreateReplyCommentDto } from './dto/create-comment.dt
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Get()
-  findAll() {
-    return this.commentsService.findAll();
-  }
-
-  @Get(':referenceId')
-  findAllByReferenceId(@Param('referenceId', ParseObjectIdPipe) refernceId: ObjectId,
-                       @Query('option') option: string) {
-    return this.commentsService.findAllByReferenceId(refernceId, option);
-  }
-
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post(':referenceId')
@@ -46,6 +35,17 @@ export class CommentsController {
     }
     
     return this.commentsService.create(createCommentDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.commentsService.findAll();
+  }
+
+  @Get(':referenceId')
+  findAllByReferenceId(@Param('referenceId', ParseObjectIdPipe) refernceId: ObjectId,
+                       @Query('option') option: string) {
+    return this.commentsService.findAllByReferenceId(refernceId, option);
   }
 
   @Roles(Role.Customer)
