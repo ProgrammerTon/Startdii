@@ -1,14 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useEffect, useRef } from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from "react-native";
-import { Slot } from "expo-router";
+import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
 import * as Animatable from "react-native-animatable";
