@@ -1,5 +1,4 @@
 import { IsOptional } from 'class-validator';
-import { Tag } from '../../tags/entities/tag.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateSourceDto {
@@ -21,5 +20,5 @@ export class UpdateSourceDto {
 
   @ApiProperty()
   @IsOptional()
-  tags?: Tag[];
+  tags?: string[];
 }
