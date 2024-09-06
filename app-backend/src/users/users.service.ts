@@ -64,8 +64,12 @@ export class UsersService {
     return transformedUser;
   }
 
-  async findSourcesByUserId(ownerId: ObjectId) {
-    return await this.sourceModel.find({ ownerId }).exec();
+  async getSources(ownerId: ObjectId) {
+    return await this.userModel.findById(ownerId).select('sources').populate('sources').exec();
+  }
+
+  async getQuizzes(ownerId: ObjectId) {
+    return await this.userModel.findById(ownerId).select('quizzes').populate('quizzes').exec();
   }
 
   async addFavoriteSource(id: ObjectId, sourceId: ObjectId) {

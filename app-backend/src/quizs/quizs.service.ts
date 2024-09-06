@@ -22,10 +22,13 @@ export class QuizsService {
 
   async create(createQuizDto: CreateQuizDto): Promise<Quiz> {
     const quiz = plainToInstance(Quiz, createQuizDto);
+    let owner = await this.userModel.findById(quiz.ownerId).exec();
     quiz.published = Status.private;
     const createdQuiz = new this.quizModel(quiz);
     await createdQuiz.save();
     this.addQuizFromTags(createdQuiz._id as ObjectId);
+    owner.quizzes.push(createdQuiz._id as ObjectId);
+    await owner.save()
     return createdQuiz;
   }
 

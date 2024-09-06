@@ -70,9 +70,14 @@ export class UsersController {
     return this.chatListService.create(createChatListDto);
   }
 
-  @Get('sources/:ownerId')
-  findSourcesByUserId(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
-    return this.usersService.findSourcesByUserId(id);
+  @Get(':ownerId/sources')
+  getSources(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
+    return this.usersService.getSources(id);
+  }
+
+  @Get(':ownerId/quizs')
+  getQuizzes(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
+    return this.usersService.getQuizzes(id);
   }
 
   @Get(':username')

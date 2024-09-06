@@ -8,6 +8,7 @@ import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
 import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
+import { User, UserDocument } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class SourcesService {
@@ -16,14 +17,19 @@ export class SourcesService {
     private sourceModel: Model<SourceDocument>,
     @InjectModel(Tag.name)
     private tagModel: Model<TagDocument>,
+    @InjectModel(User.name)
+    private userModel: Model<UserDocument>,
   ) {}
 
   async create(createSourceDto: CreateSourceDto): Promise<Source> {
     const source = plainToInstance(Source, createSourceDto);
+    let owner = await this.userModel.findById(source.ownerId).exec();
     source.ownerId = new ObjectId(source.ownerId);
     const createdSource = new this.sourceModel(source);
     await createdSource.save();
     this.addSourceFromTags(createdSource._id as ObjectId);
+    owner.sources.push(createdSource._id as ObjectId);
+    await owner.save()
     return createdSource;
   }
 
