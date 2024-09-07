@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 import React from "react";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import LogoutButton from "../../components/LogoutButton";
+import { router } from "expo-router";
 
 const DevPage = () => {
   const { isLogged, user } = useGlobalContext();
