@@ -12,7 +12,7 @@ import { ObjectId } from 'mongodb';
 import { Status, QType, Question } from '../entities/quiz.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-class QuestionDto {
+export class QuestionDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()

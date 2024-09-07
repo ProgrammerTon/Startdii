@@ -23,6 +23,15 @@ export class CommentsService {
     private replyCommentModel: Model<ReplyCommentDocument>,
   ) {}
 
+  // --------------------------- Create ---------------------------
+
+  async create(createCommentDto: CreateCommentDto) {
+    const createdComment = new this.commentModel(createCommentDto);
+    return createdComment.save();
+  }
+
+  // --------------------------- Get ---------------------------
+
   async findAll(): Promise<Comment[]> {
     return this.commentModel.find().exec();
   }
@@ -38,7 +47,7 @@ export class CommentsService {
       query['quizId'] = referenceId;
     }
 
-    const comments = await this.commentModel
+    const comments = (await this.commentModel
       .find(query)
       .populate({
         path: 'ownerId',
@@ -48,7 +57,7 @@ export class CommentsService {
         path: 'replyComments.ownerId',
         select: 'username',
       })
-      .exec() as any;
+      .exec()) as any;
 
     const allUsernames = comments.map((comment) => ({
       parentComment: {
@@ -66,10 +75,7 @@ export class CommentsService {
     return allUsernames;
   }
 
-  async create(createCommentDto: CreateCommentDto) {
-    const createdComment = new this.commentModel(createCommentDto);
-    return createdComment.save();
-  }
+  // --------------------------- Update ---------------------------
 
   async createReplyComment(
     id: ObjectId,
@@ -99,6 +105,8 @@ export class CommentsService {
       .findByIdAndUpdate(id, comment, { new: true })
       .exec();
   }
+
+  // --------------------------- Delete ---------------------------
 
   async remove(id: ObjectId) {
     return this.commentModel.findByIdAndDelete(id);

@@ -59,9 +59,28 @@ export class SourcesController {
     return this.sourcesService.findById(id);
   }
 
+  @Get(':id/rating')
+  getRating(@Param('id') id: ObjectId) {
+    return this.sourcesService.getRating(id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: ObjectId, @Body() updateSourceDto: UpdateSourceDto) {
     return this.sourcesService.update(id, updateSourceDto);
+  }
+
+  @Patch(':id/rating')
+  userRating(
+    @Param('id') id: ObjectId,
+    @Body('score') score: number,
+    @Body('raterId') raterId: ObjectId,
+  ) {
+    return this.sourcesService.userRating(id, score, raterId as ObjectId);
+  }
+
+  @Patch(':id/reset')
+  dataReset(@Param('id') id: ObjectId) {
+    return this.sourcesService.dataReset(id);
   }
 
   @Delete(':id')
