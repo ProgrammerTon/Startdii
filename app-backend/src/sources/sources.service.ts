@@ -173,7 +173,7 @@ export class SourcesService {
         delete sourceObj.rating;
         return {
           ...sourceObj, // Convert Mongoose document to plain object
-          totalScore, // Add totalScore
+          count: rating.length,
           averageScore, // Add averageScore
         };
       });
