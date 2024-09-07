@@ -5,9 +5,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export type SourceDocument = Source & Document;
 
 export enum Status {
-  private = "private",
-  public = "public",
-  guild = "guild"
+  private = 'private',
+  public = 'public',
+  guild = 'guild',
 }
 
 @Schema({ timestamps: true })
@@ -15,7 +15,7 @@ export class Source {
   @Prop({ type: ObjectId, auto: true })
   id: ObjectId;
 
-  @Prop({ type: ObjectId, name: 'owner', ref: 'User'})
+  @Prop({ type: ObjectId, name: 'owner', ref: 'User' })
   ownerId: ObjectId;
 
   @Prop({ name: 'title' })

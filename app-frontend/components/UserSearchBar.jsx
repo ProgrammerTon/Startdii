@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 
-const SearchBar = ({ value, handleChangeText, onSubmit }) => {
+const UserSearchBar = ({ value, handleChangeText, onSubmit }) => {
   return (
     <View style={styles.searchContainer}>
       <TextInput
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchBar;
+export default UserSearchBar;

@@ -45,7 +45,7 @@ export class User {
   quizzes: ObjectId[];
 
   @Prop({ name: 'quizHistory', ref: 'Quiz' })
-  quiz_history: {id: ObjectId, results: boolean[]}[] = [];
+  quiz_history: { id: ObjectId; results: boolean[] }[] = [];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

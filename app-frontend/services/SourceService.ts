@@ -25,14 +25,18 @@ export async function createSource(data: SourceRequest): Promise<any | null> {
 }
 
 export async function getSource(
-  offset: number
+  offset: number,
+  sortOrder: "asc" | "desc"
 ): Promise<SourceRespond[] | null> {
-  const res = await fetch(`${baseUrl}/sources?offset=${offset}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const res = await fetch(
+    `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   const data: SourceRespond[] = await res.json();
   if (!res.ok) {
     return null;

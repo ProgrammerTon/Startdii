@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -21,17 +21,12 @@ export class CreateCommentDto {
 
   @ApiProperty()
   quizId?: ObjectId;
-  
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   content: string;
-
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  score: number;
-
+  
   @ApiProperty()
   replyComments: CreateReplyCommentDto[];
 }

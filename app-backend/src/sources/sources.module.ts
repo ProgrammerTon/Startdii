@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Source, SourceSchema } from './entities/source.entity';
 import { Tag, TagSchema } from 'src/tags/entities/tag.entity';
 import { User, UserSchema } from 'src/users/entities/user.entity';
+import { TagsModule } from 'src/tags/tags.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { User, UserSchema } from 'src/users/entities/user.entity';
       { name: Tag.name, schema: TagSchema },
       { name: User.name, schema: UserSchema },
     ]),
+    TagsModule,
   ],
   controllers: [SourcesController],
   providers: [SourcesService],

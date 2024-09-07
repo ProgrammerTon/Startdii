@@ -18,7 +18,7 @@ export class UsersService {
   ) {}
 
   // --------------------------- Create ---------------------------
-  
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = plainToInstance(User, createUserDto);
     user.roles = [Role.Customer];
@@ -37,32 +37,78 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 
+  async findByExactUsername(username: string) {
+    const user = await this.userModel.findOne({ username }).exec();
+    return user;
+  }
+
   async findByUsername(username: string) {
-    let user = await this.userModel.findOne({ username }).populate({
-      path: 'quiz_history.id'}).populate({
+    const users = await this.userModel
+      .find({
+        username: { $regex: username, $options: 'i' },
+      })
+      .populate({
+        path: 'quiz_history.id',
+      })
+      .populate({
         path: 'favorite_sources',
         populate: {
-            path: 'ownerId',
-            select: 'username'
-        }
-    }).exec();
-    let x = user.quiz_history.map(entry => ({
-      quiz: entry.id, // Renamed field
-      results: entry.results
-    }));
-    const transformedUser = {
-      ...user.toObject(),
-      quiz_history: x, // Use the transformed data
-    };
-    return transformedUser;
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .exec();
+    const transformedUsers = users.map((user) => {
+      const x = user.quiz_history.map((entry) => ({
+        quiz: entry.id, // Renamed field
+        results: entry.results,
+      }));
+
+      return {
+        ...user.toObject(),
+        quiz_history: x, // Use the transformed data
+      };
+    });
+
+    return transformedUsers;
+    // const user = await this.userModel
+    //   .findOne({ username })
+    //   .populate({
+    //     path: 'quiz_history.id',
+    //   })
+    //   .populate({
+    //     path: 'favorite_sources',
+    //     populate: {
+    //       path: 'ownerId',
+    //       select: 'username',
+    //     },
+    //   })
+    //   .exec();
+    // const x = user.quiz_history.map((entry) => ({
+    //   quiz: entry.id, // Renamed field
+    //   results: entry.results,
+    // }));
+    // const transformedUser = {
+    //   ...user.toObject(),
+    //   quiz_history: x, // Use the transformed data
+    // };
+    // return transformedUser;
   }
 
   async getSources(ownerId: ObjectId) {
-    return await this.userModel.findById(ownerId).select('sources').populate('sources').exec();
+    return await this.userModel
+      .findById(ownerId)
+      .select('sources')
+      .populate('sources')
+      .exec();
   }
 
   async getQuizzes(ownerId: ObjectId) {
-    return await this.userModel.findById(ownerId).select('quizzes').populate('quizzes').exec();
+    return await this.userModel
+      .findById(ownerId)
+      .select('quizzes')
+      .populate('quizzes')
+      .exec();
   }
 
   // --------------------------- Update ---------------------------

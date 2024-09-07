@@ -12,7 +12,7 @@ export class ReplyComment {
   @Prop({ type: ObjectId, name: 'ownerId', ref: 'User' })
   ownerId: ObjectId;
 
-  @Prop( { name: 'content' })
+  @Prop({ name: 'content' })
   content: string;
 }
 
@@ -33,13 +33,10 @@ export class Comment {
 
   @Prop({ type: ObjectId, name: 'quizId' })
   quizId: ObjectId;
-  
+
   @Prop({ name: 'content' })
   content: string;
-
-  @Prop({ name: 'score' })
-  score: number;
-
+  
   @Prop({ type: [ReplyCommentSchema], name: 'replyComments', default: [] })
   replyComments: ReplyComment[];
 }

@@ -31,14 +31,14 @@ export class SourcesService {
     await createdSource.save();
     this.addSourceFromTags(createdSource._id as ObjectId);
     owner.sources.push(createdSource._id as ObjectId);
-    await owner.save()
+    await owner.save();
     return createdSource;
   }
 
   // --------------------------- Get ---------------------------
 
   async findById(id: ObjectId): Promise<Source | null> {
-    return this.sourceModel.findById(id).populate('ownerId','username').exec();
+    return this.sourceModel.findById(id).populate('ownerId', 'username').exec();
   }
 
   async findAll() {
@@ -58,14 +58,14 @@ export class SourcesService {
 
   async searchByTitle(keyword: string): Promise<Source[]> {
     return this.sourceModel.find({ $text: { $search: keyword } }).exec();
-  }  
-  
-  async getRating(id: ObjectId){
+  }
+
+  async getRating(id: ObjectId) {
     const obj = await this.sourceModel.findById(id).exec();
     const rating = obj.rating;
     const totalScore = rating.reduce((sum, r) => sum + r.score, 0);
     const averageScore = rating.length ? totalScore / rating.length : 0;
-    return {Rating: averageScore, Count: rating.length};
+    return { Rating: averageScore, Count: rating.length };
   }
 
   /*async findByTag(tagname: string): Promise<Source[]> {
@@ -85,7 +85,7 @@ export class SourcesService {
     id: ObjectId,
     updateSourceDto: UpdateSourceDto,
   ): Promise<Source> {
-    this.removeSourceFromTags(id)
+    this.removeSourceFromTags(id);
 
     const updatedSource = await this.sourceModel
       .findByIdAndUpdate(
@@ -95,18 +95,20 @@ export class SourcesService {
       )
       .exec();
 
-    this.addSourceFromTags(updatedSource.id)
+    this.addSourceFromTags(updatedSource.id);
     // Return the updated document, or null if not found
     return updatedSource;
   }
 
-  async userRating(id: ObjectId, score: number, raterId: ObjectId){
+  async userRating(id: ObjectId, score: number, raterId: ObjectId) {
     const obj = await this.sourceModel.findById(id).exec();
-    const rating = obj.rating.find(r => r.raterId.toString() === raterId.toString());
-    if (!rating){
-      obj.rating.push({raterId: raterId, score: score});
+    const rating = obj.rating.find(
+      (r) => r.raterId.toString() === raterId.toString(),
+    );
+    if (!rating) {
+      obj.rating.push({ raterId: raterId, score: score });
     } else {
-      rating.score = score
+      rating.score = score;
     }
     await this.sourceModel
       .findByIdAndUpdate(
@@ -118,8 +120,8 @@ export class SourcesService {
     await obj.save();
     return obj;
   }
-  
-  async dataReset(id: ObjectId){
+
+  async dataReset(id: ObjectId) {
     const obj = await this.sourceModel.findById(id).exec();
     obj.rating = [];
     await this.sourceModel
@@ -136,13 +138,11 @@ export class SourcesService {
   // --------------------------- Delete ---------------------------
 
   async delete(id: ObjectId): Promise<void> {
-    await this.removeSourceFromTags(id)
+    await this.removeSourceFromTags(id);
     await this.sourceModel.findByIdAndDelete(id).exec();
   }
 
-  // --------------------------- Misc. ---------------------------
-
-  async addSourceFromTags(id: ObjectId){
+  async addSourceFromTags(id: ObjectId) {
     const source = await this.sourceModel.findById(id).exec();
     let tag;
     for (var i = 0; i < source.tags.length; i++) {
@@ -155,7 +155,7 @@ export class SourcesService {
     }
   }
 
-  async removeSourceFromTags(id: ObjectId){
+  async removeSourceFromTags(id: ObjectId) {
     // Find the document by ID and apply the updates
     const source = await this.sourceModel.findById(id).exec();
     let tag;
@@ -170,4 +170,83 @@ export class SourcesService {
       tag.save();
     }
   }
+
+  async update(
+    id: ObjectId,
+    updateSourceDto: UpdateSourceDto,
+  ): Promise<Source> {
+    this.removeSourceFromTags(id);
+
+    const updatedSource = await this.sourceModel
+      .findByIdAndUpdate(
+        id,
+        { $set: updateSourceDto },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+
+    this.addSourceFromTags(updatedSource.id);
+    // Return the updated document, or null if not found
+    return updatedSource;
+  }
+
+  async findById(id: ObjectId): Promise<Source | null> {
+    return this.sourceModel.findById(id).populate('ownerId', 'username').exec();
+  }
+
+  async findAll() {
+    return this.sourceModel.find().exec();
+  }
+
+  async findByOffset(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+  ): Promise<Source[] | null> {
+    const size = 10;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
+    const sources = await this.sourceModel
+      .find()
+      .sort({ createdAt: sortValue })
+      .populate('ownerId', 'username')
+      .exec();
+    offset--;
+    offset *= size;
+    return sources.slice(offset, offset + size);
+  }
+
+  async searchByTitle(keyword: string): Promise<Source[]> {
+    return this.sourceModel.find({ $text: { $search: keyword } }).exec();
+  }
+
+  async findSourcesByTags(tags: string[]) {
+    return this.sourceModel
+      .find({
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
+      })
+      .exec();
+  }
+
+  async findSourcesByTagsAndTitle(tags: string[], title: string) {
+    return this.sourceModel
+      .find({
+        $text: { $search: title },
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
+      })
+      .exec();
+  }
+
+  /*async findByTag(tagname: string): Promise<Source[]> {
+    const sources = new Array<Source>();
+    const tag = await this.tagModel.findOne({ name: tagname }).exec();
+    if (tag) {
+      for (let i = 0; i < tag.sources.length; i++) {
+        sources.push(await this.sourceModel.findById(tag.sources[i]).exec());
+      }
+    }
+    return sources;
+  }*/
 }

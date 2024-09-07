@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { QuizsService } from './quizs.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
@@ -12,7 +20,7 @@ export class QuizsController {
 
   @Post()
   create(@Body() createQuizDto: CreateQuizDto) {
-    console.log(createQuizDto)
+    console.log(createQuizDto);
     return this.quizsService.create(createQuizDto);
   }
 
@@ -37,8 +45,12 @@ export class QuizsController {
   }
 
   @Patch(':id/:userId/submit')
-  submitQuiz(@Param('id') id: ObjectId, @Param('userId') userId: ObjectId, @Body('ans') ans: (number | number[])[]) {
-    return this.quizsService.submitQuiz(id,userId,ans);
+  submitQuiz(
+    @Param('id') id: ObjectId,
+    @Param('userId') userId: ObjectId,
+    @Body('ans') ans: (number | number[])[],
+  ) {
+    return this.quizsService.submitQuiz(id, userId, ans);
   }
 
   @Patch(':id/rating')

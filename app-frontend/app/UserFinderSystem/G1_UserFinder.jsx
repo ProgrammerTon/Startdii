@@ -8,8 +8,9 @@ import {
   Alert,
   FlatList,
   RefreshControl,
+  ScrollView,
 } from "react-native";
-import SearchBar from "../../components/SearchBar";
+import UserSearchBar from "../../components/UserSearchBar";
 import UserNameComponent from "./UserNameComponent";
 import { getUserByUsername } from "../../services/UserService";
 import { addChatList } from "../../services/ChatListService";
@@ -32,8 +33,8 @@ const UserFinderPage = () => {
     if (!user) {
       Alert.alert("Not Found User");
     } else {
-      console.log(user);
-      setUserFound([user]);
+      // console.log("Found Users", user);
+      setUserFound([...user]);
     }
   };
 
@@ -50,11 +51,13 @@ const UserFinderPage = () => {
 
   return (
     <View style={styles.container}>
-      <SearchBar
+      <UserSearchBar
         value={searchUsername}
         handleChangeText={(e) => setSearchUsername(e)}
         onSubmit={onSubmit}
       />
+      
+      <ScrollView className="mb-20">
       {userFound.map((user, ind) => {
         return (
           <UserNameComponent
@@ -65,6 +68,7 @@ const UserFinderPage = () => {
           />
         );
       })}
+      </ScrollView>
     </View>
   );
 };
