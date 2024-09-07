@@ -158,6 +158,7 @@ const ArchiveMainPage = () => {
             title={item.title}
             author={item.ownerId.username}
             tags={item.tags}
+            rating={item.averageScore}
           />
         )}
         keyExtractor={(item, ind) => `${item._id}-${ind}`}
