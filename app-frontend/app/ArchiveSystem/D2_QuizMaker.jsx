@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, ScrollView, StyleSheet, SafeAreaView, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, TouchableOpacity, ScrollView, StyleSheet, SafeAreaView, FlatList, Dimensions } from 'react-native';
 import UploadCompleteWindow from '../../components/UploadCompleteWindow';
 import ErrorEmptyFieldWindow from '../../components/ErrorEmptyFieldWindow';
 import QuestionComponent from './QuestionComponent';
@@ -9,38 +9,52 @@ const { width } = Dimensions.get('window');
 const QuizMakerPage = () => {
   const [questions, setQuestions] = useState([{ id: Date.now() }]);
 
+  console.log('All questions:', JSON.stringify(questions, null, 2));
+
+  useEffect(() => {
+    console.log('Questions updated:', questions);
+  }, [questions]);
+
   const addNewQuestion = () => {
     setQuestions([...questions, { id: Date.now() }]);
+    console.log('All questions:', JSON.stringify(questions, null, 2));
   };
 
   const deleteQuestion = (idToRemove) => {
     const updatedQuestions = questions.filter(question => question.id !== idToRemove);
     setQuestions(updatedQuestions);
+    console.log('All questions after deletion:', JSON.stringify(updatedQuestions, null, 2));
   };
 
   const Publish = () => {
     // Publish logic
   };
 
+  const renderItem = ({ item, index }) => (
+    <View key={item.id} style={styles.questionContainer}>
+      <Text style={styles.questionNumber}>Question {index + 1}</Text>
+      <QuestionComponent questionNumber={index + 1} />
+      <TouchableOpacity style={styles.deleteButton} onPress={() => deleteQuestion(item.id)}>
+        <Text style={styles.deleteText}>Delete</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <Text style={styles.counterText}>Total Questions: {questions.length}</Text>
-
-        {questions.map((question, index) => (
-          <View key={question.id} style={styles.questionContainer}>
-            <Text style={styles.questionNumber}>Question {index + 1}</Text>
-            <QuestionComponent questionNumber={index + 1} />
-            <TouchableOpacity style={styles.deleteButton} onPress={() => deleteQuestion(question.id)}>
-              <Text style={styles.deleteText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-
-        <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
-          <Text style={styles.plusText}>+</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      <FlatList
+        data={questions}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={
+          <Text style={styles.counterText}>Total Questions: {questions.length}</Text>
+        }
+        ListFooterComponent={
+          <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
+            <Text style={styles.plusText}>+</Text>
+          </TouchableOpacity>
+        }
+      />
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.saveButton}>

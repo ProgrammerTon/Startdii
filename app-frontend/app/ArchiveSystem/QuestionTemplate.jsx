@@ -8,23 +8,29 @@ const QuestionTemplate = () => {
 
   const handleChoiceChange = (type) => {
     if (type === 'increase' && choices <= 5) {
-        setChoices(choices + 1);
+      setChoices(choices + 1);
+      console.log('Choices:', choices + 1);
     }
     if (type === 'decrease' && choices > 2) {
-        setChoices(choices - 1);
+      setChoices(choices - 1);
+      console.log('Choices:', choices - 1);
     }
   };
-
+  
   const [value, setValue] = useState('');
 
   const handleChange = (text) => {
     const numericValue = text.replace(/[^0-9.]/g, '');
     setValue(numericValue);
+    console.log('Answer Number Input:', numericValue);
   };
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.optionContainer} onPress={() => setSelectedOption('fill')}>
+      <Pressable style={styles.optionContainer} onPress={() => {
+        setSelectedOption('fill')
+        console.log('Selected Option:', 'fill');}
+        }>
         <View style={[styles.radioButton, selectedOption === 'fill' && styles.selectedRadio]} />
         <Text style={styles.optionText}>Fill the answer</Text>
         {selectedOption === 'fill' && (
@@ -36,7 +42,10 @@ const QuestionTemplate = () => {
         )}
       </Pressable>
 
-      <Pressable style={styles.optionContainer} onPress={() => setSelectedOption('choice')}>
+      <Pressable style={styles.optionContainer} onPress={() => {
+        setSelectedOption('choice')
+        console.log('Selected Option:', 'choice');
+        }}>
         <View style={[styles.radioButton, selectedOption === 'choice' && styles.selectedRadio]} />
         <Text style={styles.optionText}>Choice</Text>
 

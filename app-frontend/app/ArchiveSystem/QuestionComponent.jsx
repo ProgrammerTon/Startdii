@@ -7,12 +7,17 @@ const { width } = Dimensions.get('window');
 const QuestionComponent = ({ questionNumber }) => {
   const [question, setQuestion] = useState('');
 
+  const handleQuestionChange = (text) => {
+    setQuestion(text);
+    console.log(`Question ${questionNumber}:`, text);
+  };
+
   return (
     <View>
       <TextInput
         style={styles.input}
         value={question}
-        onChangeText={setQuestion}
+        onChangeText={handleQuestionChange}
         placeholder="Question"
       />
       <QuestionTemplate />
@@ -23,7 +28,7 @@ const QuestionComponent = ({ questionNumber }) => {
 const styles = StyleSheet.create({
   input: {
     height: 120,
-    width: '100%', 
+    width: '100%',
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 30,

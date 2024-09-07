@@ -2,19 +2,29 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 const ChoiceBoxes = ({ count }) => {
-  const [activeButtons, setActiveButtons] = useState([0]); 
+  const [activeButtons, setActiveButtons] = useState([0]);
+  const [textInputs, setTextInputs] = useState({});
 
   const toggleButtonColor = (index) => {
+    console.log('Toggled Button Index:', index);
     setActiveButtons((prevActiveButtons) => {
-      if (prevActiveButtons.includes(index)) {
-        if (prevActiveButtons.length === 1) {
-          return prevActiveButtons; 
-        }
-        return prevActiveButtons.filter((item) => item !== index);
-      } else {
-        return [...prevActiveButtons, index];
-      }
+      const updatedButtons = prevActiveButtons.includes(index)
+        ? prevActiveButtons.length === 1
+          ? prevActiveButtons
+          : prevActiveButtons.filter((item) => item !== index)
+        : [...prevActiveButtons, index];
+  
+      console.log('Active Buttons:', updatedButtons);
+      return updatedButtons;
     });
+  };
+
+  const handleTextChange = (index, text) => {
+    setTextInputs((prevTextInputs) => ({
+      ...prevTextInputs,
+      [index]: text,
+    }));
+    console.log(`Answer Inputs ${index+1}:`, textInputs);
   };
 
   const renderChoiceBoxes = () => {
@@ -25,6 +35,8 @@ const ChoiceBoxes = ({ count }) => {
           <TextInput 
             style={styles.choiceBox} 
             placeholder={`Answer ${i + 1}`} 
+            value={textInputs[i] || ''} 
+            onChangeText={(text) => handleTextChange(i, text)} 
           />
           <TouchableOpacity
             style={activeButtons.includes(i) ? styles.activeFilterButton : styles.inactiveFilterButton}
