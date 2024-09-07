@@ -78,8 +78,8 @@ export class SourcesService {
   }
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
-    const obj = await this.sourceModel.findById(id).exec();
-    const rating = obj.rating.find(
+    let obj = await this.sourceModel.findById(id).exec();
+    let rating = await obj.rating.find(
       (r) => r.raterId.toString() === raterId.toString(),
     );
     if (!rating) {
@@ -87,13 +87,6 @@ export class SourcesService {
     } else {
       rating.score = score;
     }
-    await this.sourceModel
-      .findByIdAndUpdate(
-        id,
-        { $set: obj },
-        { new: true, useFindAndModify: false }, // Return the updated document
-      )
-      .exec();
     await obj.save();
     return obj;
   }

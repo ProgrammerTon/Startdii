@@ -59,7 +59,7 @@ export class SourcesController {
     return this.sourcesService.findById(id);
   }
 
-  @Get('rating/:id')
+  @Get(':id/rating')
   getRating(@Param('id') id: ObjectId) {
     return this.sourcesService.getRating(id);
   }
@@ -69,7 +69,7 @@ export class SourcesController {
     return this.sourcesService.update(id, updateSourceDto);
   }
 
-  @Patch('rating/:id')
+  @Patch(':id/rating')
   userRating(
     @Param('id') id: ObjectId,
     @Body('score') score: number,
@@ -78,7 +78,7 @@ export class SourcesController {
     return this.sourcesService.userRating(id, score, raterId as ObjectId);
   }
 
-  @Patch('reset/:id')
+  @Patch(':id/reset')
   dataReset(@Param('id') id: ObjectId) {
     return this.sourcesService.dataReset(id);
   }

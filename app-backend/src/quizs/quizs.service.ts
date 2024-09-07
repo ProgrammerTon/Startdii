@@ -96,8 +96,8 @@ export class QuizsService {
   }
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
-    const obj = await this.quizModel.findById(id).exec();
-    const rating = await obj.rating.find(
+    let obj = await this.quizModel.findById(id).exec();
+    let rating = await obj.rating.find(
       (r) => r.raterId.toString() === raterId.toString(),
     );
     if (!rating) {
@@ -105,13 +105,6 @@ export class QuizsService {
     } else {
       rating.score = score;
     }
-    await this.quizModel
-      .findByIdAndUpdate(
-        id,
-        { $set: obj },
-        { new: true, useFindAndModify: false }, // Return the updated document
-      )
-      .exec();
     await obj.save();
     return obj;
   }
