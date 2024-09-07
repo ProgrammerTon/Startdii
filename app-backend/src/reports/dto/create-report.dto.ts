@@ -14,7 +14,7 @@ export class CreateReportDto {
 
   @ApiProperty()
   quizId?: ObjectId;
-  
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -25,4 +25,3 @@ export class CreateReportDto {
   @IsNotEmpty()
   description: string;
 }
-

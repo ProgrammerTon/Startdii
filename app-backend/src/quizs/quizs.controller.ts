@@ -54,8 +54,12 @@ export class QuizsController {
   }
 
   @Patch(':id/rating')
-  userRating(@Param('id') id: ObjectId, @Body('score') score: number, @Body('raterId') raterId: ObjectId) {
-    return this.quizsService.userRating(id,score,raterId as ObjectId);
+  userRating(
+    @Param('id') id: ObjectId,
+    @Body('score') score: number,
+    @Body('raterId') raterId: ObjectId,
+  ) {
+    return this.quizsService.userRating(id, score, raterId as ObjectId);
   }
 
   @Patch(':id/reset')

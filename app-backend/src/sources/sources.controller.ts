@@ -59,11 +59,6 @@ export class SourcesController {
     return this.sourcesService.findById(id);
   }
 
-  @Get('searchname/:keyword')
-  findByTitle(@Param('keyword') keyword: string) {
-    return this.sourcesService.searchByTitle(keyword);
-  }
-
   @Get('rating/:id')
   getRating(@Param('id') id: ObjectId) {
     return this.sourcesService.getRating(id);
@@ -75,8 +70,12 @@ export class SourcesController {
   }
 
   @Patch('rating/:id')
-  userRating(@Param('id') id: ObjectId, @Body('score') score: number, @Body('raterId') raterId: ObjectId) {
-    return this.sourcesService.userRating(id,score,raterId as ObjectId);
+  userRating(
+    @Param('id') id: ObjectId,
+    @Body('score') score: number,
+    @Body('raterId') raterId: ObjectId,
+  ) {
+    return this.sourcesService.userRating(id, score, raterId as ObjectId);
   }
 
   @Patch('reset/:id')

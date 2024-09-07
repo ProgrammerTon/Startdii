@@ -1,5 +1,15 @@
 import { ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Post, Delete, Param, Body, Request, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  Body,
+  Request,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/roles/role.guard';
@@ -24,21 +34,24 @@ export class ReportsController {
   }
 
   @Get(':referenceId')
-  findAllByReferenceId(@Param('referenceId', ParseObjectIdPipe) referenceId: ObjectId,
-                       @Query('option') option: string) {
+  findAllByReferenceId(
+    @Param('referenceId', ParseObjectIdPipe) referenceId: ObjectId,
+    @Query('option') option: string,
+  ) {
     return this.reportsService.findAllByReferenceId(referenceId, option);
   }
 
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post(':referenceId')
-  create(@Param('referenceId', ParseObjectIdPipe) referenceId: ObjectId,
-         @Body() createReportDto: CreateReportDto,
-         @Request() req,
-         @Query('option') option: string ) {
-    
+  create(
+    @Param('referenceId', ParseObjectIdPipe) referenceId: ObjectId,
+    @Body() createReportDto: CreateReportDto,
+    @Request() req,
+    @Query('option') option: string,
+  ) {
     createReportDto.reporterId = new Types.ObjectId(req.user.id);
-  
+
     if (option === 'user') {
       createReportDto.userId = referenceId;
     } else if (option === 'source') {

@@ -26,7 +26,7 @@ export class CreateCommentDto {
   @IsString()
   @IsNotEmpty()
   content: string;
-  
+
   @ApiProperty()
   replyComments: CreateReplyCommentDto[];
 }

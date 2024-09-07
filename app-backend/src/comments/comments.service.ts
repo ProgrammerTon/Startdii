@@ -47,7 +47,7 @@ export class CommentsService {
       query['quizId'] = referenceId;
     }
 
-    const comments = await this.commentModel
+    const comments = (await this.commentModel
       .find(query)
       .populate({
         path: 'ownerId',
@@ -57,7 +57,7 @@ export class CommentsService {
         path: 'replyComments.ownerId',
         select: 'username',
       })
-      .exec() as any;
+      .exec()) as any;
 
     const allUsernames = comments.map((comment) => ({
       parentComment: {

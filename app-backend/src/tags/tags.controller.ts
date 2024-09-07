@@ -49,6 +49,6 @@ export class TagsController {
 
   @Delete(':name')
   remove(@Param('name') name: string) {
-    return "N/A";
+    return 'N/A';
   }
 }

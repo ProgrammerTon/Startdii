@@ -30,11 +30,14 @@ export class GuildsService {
   // async findOne(id: ObjectId): Promise<Guild> {
   //   return this.guildModel.findById({ _id: id }).exec();
   // }
-  
+
   async getAllMembersInGuild(id: ObjectId): Promise<any> {
-    return this.guildModel.findById({ _id: id }).select('memberIdList').populate('memberIdList').exec();
+    return this.guildModel
+      .findById({ _id: id })
+      .select('memberIdList')
+      .populate('memberIdList')
+      .exec();
   }
-  
 
   async findGuildByMemberId(memberId: ObjectId): Promise<Guild[]> {
     return this.guildModel.find({ memberIdList: { $in: [memberId] } }).exec();
@@ -98,7 +101,7 @@ export class GuildsService {
   }
 
   // --------------------------- Update ---------------------------
-  
+
   async update(id: ObjectId, updateGuildDto: UpdateGuildDto): Promise<Guild> {
     return this.guildModel
       .findByIdAndUpdate(id, updateGuildDto, { new: true })
@@ -167,7 +170,6 @@ export class GuildsService {
     return this.guildModel.findByIdAndDelete(id).exec();
   }
 
-
   async addMemberByCode(inviteCode: string, userId: ObjectId): Promise<Guild> {
     const guild = await this.guildModel.findOne({ inviteCode });
     if (!guild) {
@@ -183,5 +185,4 @@ export class GuildsService {
   // async findOne(id: ObjectId): Promise<Guild> {
   //   return this.guildModel.findById({ _id: id }).exec();
   // }
-}
 }

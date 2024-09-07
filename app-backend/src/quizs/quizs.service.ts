@@ -24,7 +24,7 @@ export class QuizsService {
 
   async create(createQuizDto: CreateQuizDto): Promise<Quiz> {
     const quiz = plainToInstance(Quiz, createQuizDto);
-    let owner = await this.userModel.findById(quiz.ownerId).exec();
+    const owner = await this.userModel.findById(quiz.ownerId).exec();
     quiz.published = Status.private;
     const createdQuiz = new this.quizModel(quiz);
     await createdQuiz.save();
@@ -90,7 +90,7 @@ export class QuizsService {
 
   async submitQuiz(id: ObjectId, userId: ObjectId, ans: (number | number[])[]) {
     console.log('calculating results');
-    let results = await this.checkResults(id, ans);
+    const results = await this.checkResults(id, ans);
     console.log('got results');
     return this.addHistory(id, userId, results);
   }

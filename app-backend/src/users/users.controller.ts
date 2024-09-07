@@ -78,7 +78,7 @@ export class UsersController {
     }
     return data;
   }
-  
+
   @Get(':ownerId/sources')
   getSources(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
     return this.usersService.getSources(id);
