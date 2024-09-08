@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+
+import { Model } from 'mongoose';
+import { ObjectId } from 'mongodb';
+
 import { Guild, GuildDocument } from './entities/guild.entity';
 import { CreateGuildDto } from './dto/create-guild.dto';
 import { UpdateGuildDto } from './dto/update-guild.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class GuildsService {
@@ -82,6 +84,12 @@ export class GuildsService {
 
   async addMember(id: ObjectId, memberId: ObjectId): Promise<Guild> {
     const guild = await this.guildModel.findById({ _id: id });
+    const member = guild.memberIdList.filter(elementId => (elementId.toString() === memberId.toString()));
+
+    if (member.length > 0) {
+      throw new HttpException('User is already in the guild', HttpStatus.BAD_REQUEST);
+    }
+
     guild.memberIdList.push(memberId);
 
     return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();
