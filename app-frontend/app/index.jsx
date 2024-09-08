@@ -61,13 +61,6 @@ export default function App() {
           </TouchableHighlight>
 
           <TouchableHighlight
-            onPress={() => router.push("/trynaja")}
-            className="bg-green-600 p-2 rounded-xl"
-          >
-            <Text className="text-lg">TNJ</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight
             onPress={() => router.push("/sources/create")}
             className="bg-green-600 p-2 rounded-xl"
           >
@@ -94,12 +87,6 @@ export default function App() {
             <Text className="text-lg">Chat 2</Text>
           </TouchableHighlight>
           <TouchableHighlight
-            onPress={() => router.push("/guild/I1_GuildPage")}
-            className="bg-green-600 p-2 rounded-xl"
-          >
-            <Text className="text-lg">Guild</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
             onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
             className="bg-green-600 p-2 rounded-xl"
           >
@@ -116,6 +103,42 @@ export default function App() {
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">test</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/quizzes/F3_quizchoice")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">F3_quizchoice</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/quizzes/F3_quizfill")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">F3_quizfill</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/quizzes/F6_quizchoicesolution")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">F6_quizchoicesolution</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/quizzes/F6_quizfillsolution")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">F3_quizfillsolution</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/F2.1_FirstPageQuiz/F2.1_FirstQuizPage")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">F2.1_FirstQuizPage</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          onPress={() => router.push("/F2.2_SumPageQuiz/F2.2_SumQuizPage")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">F2.2_SumQuizPage</Text>
         </TouchableHighlight>
           {isLogged ? <LogoutButton /> : null}
         </ScrollView>

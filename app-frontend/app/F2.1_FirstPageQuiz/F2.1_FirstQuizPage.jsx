@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,FlatList } from 'react-native';
 import DescriptionBlock from '../Quiz_Component/descriptionBlock';
 import Tag from '../Quiz_Component/Tag';
 import StartButton from '../Quiz_Component/StartButton';
@@ -9,9 +9,16 @@ import RatingBlock from '../Quiz_Component/Rating';
 import SumButton from '../Quiz_Component/SummaryButton';
 import CommentBar from '../Quiz_Component/CommentBar';
 import RatingBar from '../Quiz_Component/RatingBar';
+import { Header } from 'react-native/Libraries/NewAppScreen';
 
 const SumQuizPage = () => {
   const TotalQuestion = 11;
+  const HeaderTopic = 'Data Mining';
+  const QuizDescription = 'BESTBELL';
+  const Username = 'Best';
+  const tags = ['datasci','datamining','Chicken'];
+  const RatingScore = 4.5;
+  const timeDate = "22/07/24 18:00";
 
   // State to hold the list of comments
   const [comments, setComments] = useState([]);
@@ -36,22 +43,31 @@ const SumQuizPage = () => {
     setCommentInput('');
   };
 
+  const renderTag = ({ item }) => <Tag label={item} />; // Render each tag
+  const renderComment = ({ item }) => (
+    <CommentBox username={item.username} date={item.date} comment={item.comment} />
+  );
+
+
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.headerStyle}>Data Mining</Text>
-        <DescriptionBlock/>
-        <View style={styles.tagsContainer}>
-          <Tag label="#datasci" />
-          <Tag label="#datamining" />
-        </View>
+        <Text style={styles.headerStyle}>{HeaderTopic}</Text>
+        <DescriptionBlock QuizDescription={QuizDescription}/>
+        <FlatList
+          data={tags} 
+          horizontal={true}
+          renderItem={renderTag}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.tagsContainer}
+        />
         <View style={styles.headerContainer}>
-          <TimeDateBlock timeDate="22/07/24 18:00" />
-          <UsernameBlock />
+          <TimeDateBlock timeDate={timeDate} />
+          <UsernameBlock username={Username} />
         </View>
         <Text style={styles.headerQs}>{TotalQuestion} Questions</Text>
         <StartButton/>
-        <RatingBlock ScoreRating={4.5} numComment={comments.length}/>
+        <RatingBlock ScoreRating={RatingScore} numComment={comments.length}/>
         <RatingBar/>
 
         {/* CommentBar with input */}

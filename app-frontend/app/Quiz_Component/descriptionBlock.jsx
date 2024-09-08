@@ -1,12 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const DescriptionBlock = () => {
+const DescriptionBlock = ( {QuizDescription} ) => {
   return (
     <View style={styles.descriptionBox}>
         <Text style={styles.descriptionText}>
-                        BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL BESTBELL 
-
+            {QuizDescription}
         </Text>
     </View>
   );
