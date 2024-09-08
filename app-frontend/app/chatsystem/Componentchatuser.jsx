@@ -11,17 +11,19 @@ import {
 // Get screen width for responsive design
 const { width } = Dimensions.get("window");
 
-const Componentchatuser = ({ username, message, time, url }) => {
+const Componentchatuser = ({ item }) => {
+  const message = "sample message";
+  const time = "12.15";
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.chatItem}
         onPress={() => {
-          router.push(url);
+          router.push(item.url);
         }}
       >
         <View style={styles.textContainer}>
-          <Text style={styles.username}>{username}</Text>
+          <Text style={styles.username}>{item.username}</Text>
           <Text style={styles.message}>{message}</Text>
         </View>
         <Text style={styles.time}>{time}</Text>

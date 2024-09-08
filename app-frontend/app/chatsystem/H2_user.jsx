@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { router } from "expo-router";
 
 const ArchiveMainPage = () => {
   // const [messages, setMessages] = useState([
@@ -20,14 +21,25 @@ const ArchiveMainPage = () => {
   const [message, setMessage] = useState("");
   const [room, setRoom] = useState("default");
   const [name, setName] = useState("");
-  const { joinRoom, leaveRoom, messages, sendMessage, clearMessage, user } =
-    useGlobalContext();
+  const {
+    joinRoom,
+    leaveRoom,
+    messages,
+    sendMessage,
+    clearMessage,
+    user,
+    isLogged,
+  } = useGlobalContext();
 
   useEffect(() => {
+    if (!isLogged || !user) {
+      router.replace("/sign-in");
+    } else {
+      setName(user.firstname);
+    }
     console.log(room);
     joinRoom(room);
     clearMessage();
-    setName(user.firstname);
     return () => {
       leaveRoom(room);
       clearMessage();

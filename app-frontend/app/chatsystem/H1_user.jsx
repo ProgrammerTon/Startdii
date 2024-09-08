@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,37 +6,40 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  FlatList,
+  RefreshControl,
 } from "react-native";
 import Componentchatuser from "./Componentchatuser";
 import { router } from "expo-router";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { getChatList } from "../../services/ChatListService";
 
 // Get screen width for responsive design
 const { width } = Dimensions.get("window");
 
 const ChatH1 = () => {
-  const [chatComponents, setChatComponents] = useState([
-    {
-      id: Date.now(),
-      username: "Mr.BOB",
-      message: "Sample message",
-      time: "12:51",
-      url: "/chatroom/1",
-    },
-    {
-      id: Date.now(),
-      username: "Room 1",
-      message: "Sample message",
-      time: "12:51",
-      url: "/chatroom/2",
-    },
-    {
-      id: Date.now(),
-      username: "Room 2",
-      message: "Sample message",
-      time: "12:51",
-      url: "/chatroom/3",
-    },
-  ]);
+  const [userData, setUserData] = useState([]);
+  const [refreshing, setRefreshing] = useState(true);
+  const { user, isLogged } = useGlobalContext();
+
+  useEffect(() => {
+    if (!isLogged) {
+      router.replace("/sign-in");
+    } else {
+      loadUserData();
+      setRefreshing(false);
+    }
+  }, []);
+
+  const loadUserData = async () => {
+    const chatList = await getChatList();
+    const filteredData = chatList.map((chat) => ({
+      username: chat.userId.username,
+      url: `/chatroom/${chat.chatroom}`,
+    }));
+    setRefreshing(false);
+    setUserData(filteredData);
+  };
 
   const addChatComponent = () => {
     setChatComponents([...chatComponents, { id: Date.now() }]);
@@ -55,34 +58,29 @@ const ChatH1 = () => {
         <Text style={styles.header}>Chat</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        {chatComponents.map((chatComponent, ind) => (
-          <View
-            key={`${chatComponent.id}-${ind}`}
-            style={styles.chatItemContainer}
+      <FlatList
+        data={userData}
+        keyExtractor={(item, index) => index.toString()}
+        enableEmptySections={true}
+        renderItem={Componentchatuser}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={loadUserData} />
+        }
+      />
+      {/* {chatComponents.map((chatComponent, ind) => (
+        <View
+          key={`${chatComponent.id}-${ind}`}
+          style={styles.chatItemContainer}
+        >
+          <Componentchatuser item={chatComponent} />
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => deleteChatComponent(chatComponent.id)}
           >
-            <Componentchatuser
-              username={chatComponent.username}
-              message={chatComponent.message}
-              time={chatComponent.time}
-              url={chatComponent.url}
-            />
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={() => deleteChatComponent(chatComponent.id)}
-            >
-              <Text style={styles.deleteButtonText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
-
-      {/* <TouchableOpacity style={styles.addButton} onPress={addChatComponent}>
-        <Text style={styles.addButtonText}>Add Chat</Text>
-      </TouchableOpacity> */}
-      <TouchableOpacity style={styles.addButton} onPress={() => {}}>
-        <Text style={styles.addButtonText}>Add Chat</Text>
-      </TouchableOpacity>
+            <Text style={styles.deleteButtonText}>Delete</Text>
+          </TouchableOpacity>
+        </View>
+      ))} */}
     </View>
   );
 };
@@ -138,6 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginVertical: 20,
+    marginBottom: 125,
     width: width - 40, // Responsive width
     alignSelf: "center",
   },

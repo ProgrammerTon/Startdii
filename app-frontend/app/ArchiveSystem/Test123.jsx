@@ -3,10 +3,10 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 
 const ArchiveMainPage = () => {
 
-
+  
   return (
     <View style={styles.container}>
-
+      
     </View>
   );
 };

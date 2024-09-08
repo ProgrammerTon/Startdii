@@ -1,83 +1,92 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity , ScrollView} from 'react-native';
-import { Redirect, router } from "expo-router";
-import UploadCompleteWindow from '../../components/UploadCompleteWindow';
-import ErrorEmptyFieldWindow from '../../components/ErrorEmptyFieldWindow';
-import QuestionComponent from './QuestionComponent';
+import React, { useState, useEffect } from "react";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  Dimensions,
+} from "react-native";
+import UploadCompleteWindow from "../../components/UploadCompleteWindow";
+import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
+import QuestionComponent from "./QuestionComponent";
+import { useQuizContext } from "../../context/QuizProvider";
+
+const { width } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [tag, setTag] = useState('');
+  const [questions, setQuestions] = useState([{ id: Date.now() }]);
+  const { title, setTitle, description, setDescription, tags, setTags } =
+    useQuizContext();
 
-  const resetFields = () => {
-    setName('');
-    setDescription('');
-    setTag('');
-  };
+  console.log("All questions:", JSON.stringify(questions, null, 2));
 
-  const [AddUploadWindowVisible, setAddUploadWindowVisible] = useState(false);
-  const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
+  useEffect(() => {
+    console.log("Questions updated:", questions);
+  }, [questions]);
 
-  const ShowUploadComplete = () => {
-    setAddUploadWindowVisible(true);
-  };
-
-  const CloseUploadComplete = () => {
-    setAddUploadWindowVisible(false);
-  };
-
-  const ShowErrorEmptyFieldWindow = () => {
-    setAddErrorEmptyFieldWindow(true);
-  };
-
-  const CloseErrorEmptyFieldWindow = () => {
-    setAddErrorEmptyFieldWindow(false);
-  };
-
-  const [questions, setQuestions] = useState([1]);
   const addNewQuestion = () => {
-    setQuestions([...questions, questions.length + 1]);
+    setQuestions([...questions, { id: Date.now() }]);
+    console.log("All questions:", JSON.stringify(questions, null, 2));
   };
 
-  const Publish = async () => {
-    if (
-      name === "" ||
-      description === "" ||
-      tag === "" ||
-      content === ""
-    ) {
-      ShowErrorEmptyFieldWindow();
-    } else {
-      ShowUploadComplete();
-    };
+  const deleteQuestion = (idToRemove) => {
+    const updatedQuestions = questions.filter(
+      (question) => question.id !== idToRemove
+    );
+    setQuestions(updatedQuestions);
+    console.log(
+      "All questions after deletion:",
+      JSON.stringify(updatedQuestions, null, 2)
+    );
   };
+
+  const Publish = () => {
+    // Publish logic
+  };
+
+  const renderItem = ({ item, index }) => (
+    <View key={item.id} style={styles.questionContainer}>
+      <Text style={styles.questionNumber}>Question {index + 1}</Text>
+      <QuestionComponent questionNumber={index + 1} />
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => deleteQuestion(item.id)}
+      >
+        <Text style={styles.deleteText}>Delete</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        {questions.map((_, index) => (
-          <QuestionComponent key={index} questionNumber={index + 1} />
-        ))}
-
-        <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
-          <Text style={styles.plusText}>+</Text>
-        </TouchableOpacity>
-      </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={questions}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={
+          <Text style={styles.counterText}>
+            Total Questions: {questions.length}
+          </Text>
+        }
+        ListFooterComponent={
+          <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
+            <Text style={styles.plusText}>+</Text>
+          </TouchableOpacity>
+        }
+      />
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.resetButton}>
-          <Text style={styles.buttonText}>Reset</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.publishButton} onPress={Publish}>
           <Text style={styles.buttonText}>Publish</Text>
         </TouchableOpacity>
-        <UploadCompleteWindow visible={AddUploadWindowVisible} onClose={CloseUploadComplete} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -85,43 +94,72 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: "#f4f4f4",
+  },
+  counterText: {
+    fontSize: width * 0.05, // Adjust font size based on screen width
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  questionContainer: {
+    marginBottom: 20,
+    padding: width * 0.05, // Adjust padding based on screen width
+    backgroundColor: "#fff",
+    borderRadius: 5,
+  },
+  questionNumber: {
+    fontSize: width * 0.045, // Adjust font size
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  deleteButton: {
+    backgroundColor: "#e74c3c",
+    padding: width * 0.03, // Adjust padding for button
+    borderRadius: 5,
+    marginTop: 10,
+    alignSelf: "center",
+  },
+  deleteText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 20,
   },
   resetButton: {
-    backgroundColor: '#ccc',
-    padding: 10,
+    backgroundColor: "#ccc",
+    padding: width * 0.03,
     borderRadius: 5,
   },
   saveButton: {
-    backgroundColor: '#f39c12',
-    padding: 10,
+    backgroundColor: "#f39c12",
+    padding: width * 0.03,
     borderRadius: 5,
   },
   publishButton: {
-    backgroundColor: '#3498db',
-    padding: 10,
+    backgroundColor: "#3498db",
+    padding: width * 0.03,
     borderRadius: 5,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   addButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#4CAF50",
+    padding: width * 0.05,
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 50,
     marginVertical: 20,
   },
   plusText: {
-    color: '#fff',
-    fontSize: 24,
+    color: "#fff",
+    fontSize: width * 0.08,
   },
 });
 

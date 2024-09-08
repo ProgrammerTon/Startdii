@@ -17,32 +17,30 @@ type QuizRequest = {};
 //   return result;
 // }
 
-// export async function getSource(
-//   offset: number
-// ): Promise<SourceRespond[] | null> {
-//   const res = await fetch(`${baseUrl}/sources?offset=${offset}`, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   const data: SourceRespond[] = await res.json();
-//   if (!res.ok) {
-//     return null;
-//   }
-//   return data;
-// }
+export async function getQuiz(offset: number): Promise<any> {
+  const res = await fetch(`${baseUrl}/sources?offset=${offset}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data: any = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return data;
+}
 
-// export async function findSource(id: string): Promise<SourceRespond | null> {
-//   const res = await fetch(`${baseUrl}/sources/${id}`, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   const data: SourceRespond = await res.json();
-//   if (!res.ok) {
-//     return null;
-//   }
-//   return data;
-// }
+export async function findQuiz(id: string): Promise<any> {
+  const res = await fetch(`${baseUrl}/quizs/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!res.ok) {
+    return null;
+  }
+  const data: any = await res.json();
+  return data;
+}

@@ -22,7 +22,7 @@ export class User {
   @Prop({ name: 'password' })
   password: string;
 
-  @Prop({ name: 'username' })
+  @Prop({ name: 'username', unique: true })
   username: string;
 
   @Prop({ name: 'firstname' })
@@ -34,8 +34,18 @@ export class User {
   @Prop({ name: 'roles' })
   roles: Role[];
 
-  @Prop({ name: 'favorite_sources' })
+  // Inventory section
+  @Prop({ name: 'sources', ref: 'Source' })
+  sources: ObjectId[];
+
+  @Prop({ name: 'favorite_sources', ref: 'Source' })
   favorite_sources: ObjectId[];
+
+  @Prop({ name: 'quizzes', ref: 'Quiz' })
+  quizzes: ObjectId[];
+
+  @Prop({ name: 'quizHistory', ref: 'Quiz' })
+  quiz_history: { id: ObjectId; results: boolean[] }[] = [];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

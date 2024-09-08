@@ -14,6 +14,7 @@ async function loginUser(email: string, password: string): Promise<any | null> {
     console.log(access_token);
     return access_token;
   }
+  throw new Error("Network Failed");
   return null;
 }
 
