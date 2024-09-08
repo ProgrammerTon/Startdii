@@ -1,30 +1,19 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import React from 'react';
+import { View, TextInput, TouchableOpacity, Text , StyleSheet} from 'react-native';
 
-const ChoiceBoxes = ({ count }) => {
-  const [activeButtons, setActiveButtons] = useState([0]);
-  const [textInputs, setTextInputs] = useState({});
+const ChoiceBoxes = ({ count, textInputs, setTextInputs, activeButtons, setActiveButtons }) => {
 
   const toggleButtonColor = (index) => {
-    console.log('Toggled Button Index:', index);
-    setActiveButtons((prevActiveButtons) => {
-      const updatedButtons = prevActiveButtons.includes(index)
-        ? prevActiveButtons.length === 1
-          ? prevActiveButtons
-          : prevActiveButtons.filter((item) => item !== index)
-        : [...prevActiveButtons, index];
-  
-      console.log('Active Buttons:', updatedButtons);
-      return updatedButtons;
-    });
+    const updatedButtons = activeButtons.includes(index)
+      ? activeButtons.filter(item => item !== index)
+      : [...activeButtons, index];
+
+    setActiveButtons(updatedButtons);
   };
 
   const handleTextChange = (index, text) => {
-    setTextInputs((prevTextInputs) => ({
-      ...prevTextInputs,
-      [index]: text,
-    }));
-    console.log(`Answer Inputs ${index+1}:`, textInputs);
+    const updatedTextInputs = { ...textInputs, [index]: text };
+    setTextInputs(updatedTextInputs);
   };
 
   const renderChoiceBoxes = () => {
@@ -32,18 +21,18 @@ const ChoiceBoxes = ({ count }) => {
     for (let i = 0; i < count; i++) {
       boxes.push(
         <View key={i} style={styles.choiceRow}>
-          <TextInput 
-            style={styles.choiceBox} 
-            placeholder={`Answer ${i + 1}`} 
-            value={textInputs[i] || ''} 
-            onChangeText={(text) => handleTextChange(i, text)} 
+          <TextInput
+            style={styles.choiceBox}
+            placeholder={`Answer ${i + 1}`}
+            value={textInputs[i] || ''}
+            onChangeText={(text) => handleTextChange(i, text)}
           />
           <TouchableOpacity
             style={activeButtons.includes(i) ? styles.activeFilterButton : styles.inactiveFilterButton}
             onPress={() => toggleButtonColor(i)}
           >
             <Text style={styles.toggleButtonText}>
-              {activeButtons.includes(i)}
+              {activeButtons.includes(i) ? 'True' : 'False'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -52,11 +41,7 @@ const ChoiceBoxes = ({ count }) => {
     return boxes;
   };
 
-  return (
-    <View style={styles.choiceBoxContainer}>
-      {renderChoiceBoxes()}
-    </View>
-  );
+  return <View style={styles.choiceBoxContainer}>{renderChoiceBoxes()}</View>;
 };
 
 export default ChoiceBoxes;

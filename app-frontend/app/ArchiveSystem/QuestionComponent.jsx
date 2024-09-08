@@ -1,29 +1,36 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Dimensions } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 import QuestionTemplate from './QuestionTemplate';
 
-const { width } = Dimensions.get('window');
-
-const QuestionComponent = ({ questionNumber }) => {
-  const [question, setQuestion] = useState('');
+const QuestionComponent = ({ questionNumber, question, setQuestions }) => {
+  const [questionText, setQuestionText] = useState(question.templateData?.questionText || '');
 
   const handleQuestionChange = (text) => {
-    setQuestion(text);
-    console.log(`Question ${questionNumber}:`, text);
+    setQuestionText(text);
+    setQuestions(prevQuestions =>
+      prevQuestions.map(q =>
+        q.id === question.id
+          ? { ...q, templateData: { ...q.templateData, questionText: text } }
+          : q
+      )
+    );
+    //console.log(`Question ${questionNumber}:`, text);
   };
 
   return (
     <View>
       <TextInput
         style={styles.input}
-        value={question}
+        value={questionText}
         onChangeText={handleQuestionChange}
         placeholder="Question"
       />
-      <QuestionTemplate />
+      <QuestionTemplate question={question} setQuestions={setQuestions} />
     </View>
   );
 };
+
+export default QuestionComponent;
 
 const styles = StyleSheet.create({
   input: {
@@ -38,4 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuestionComponent;
+

@@ -1,51 +1,61 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Pressable } from 'react-native';
+import React, { useState , useEffect} from 'react';
+import { View, TextInput, TouchableOpacity, Pressable, Text, StyleSheet } from 'react-native';
 import ChoiceBoxes from './ChoiceBoxes';
 
-const QuestionTemplate = () => {
-  const [selectedOption, setSelectedOption] = useState('fill');
-  const [choices, setChoices] = useState(2);
+const QuestionTemplate = ({ question, setQuestions }) => {
+  const [selectedOption, setSelectedOption] = useState(question.templateData?.selectedOption || 'fill');
+  const [choices, setChoices] = useState(question.templateData?.choices || 2);
+  const [value, setValue] = useState(question.templateData?.value || '');
+  const [textInputs, setTextInputs] = useState(question.templateData?.textInputs || {});
+  const [activeButtons, setActiveButtons] = useState(question.templateData?.activeButtons || [0]);
+
+  useEffect(() => {
+    setQuestions(prevQuestions =>
+      prevQuestions.map(q =>
+        q.id === question.id
+          ? {
+              ...q,
+              templateData: {
+                ...q.templateData,
+                selectedOption,
+                choices,
+                value,
+                textInputs,
+                activeButtons,
+              },
+            }
+          : q
+      )
+    );
+  }, [selectedOption, choices, value, textInputs, activeButtons]);
 
   const handleChoiceChange = (type) => {
-    if (type === 'increase' && choices <= 5) {
-      setChoices(choices + 1);
-      console.log('Choices:', choices + 1);
-    }
-    if (type === 'decrease' && choices > 2) {
-      setChoices(choices - 1);
-      console.log('Choices:', choices - 1);
-    }
+    const newChoices = type === 'increase' ? choices + 1 : choices - 1;
+    setChoices(newChoices);
   };
-  
-  const [value, setValue] = useState('');
 
   const handleChange = (text) => {
-    const numericValue = text.replace(/[^0-9.]/g, '');
+    const numericValue = text.replace(/[^0-9]/g, '');
     setValue(numericValue);
-    console.log('Answer Number Input:', numericValue);
   };
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.optionContainer} onPress={() => {
-        setSelectedOption('fill')
-        console.log('Selected Option:', 'fill');}
-        }>
+      <Pressable style={styles.optionContainer} onPress={() => setSelectedOption('fill')}>
         <View style={[styles.radioButton, selectedOption === 'fill' && styles.selectedRadio]} />
         <Text style={styles.optionText}>Fill the answer</Text>
         {selectedOption === 'fill' && (
-          <TextInput style={styles.answerInput} placeholder="Answer" 
-          keyboardType="numeric" 
-          value={value} 
-          onChangeText={handleChange} 
+          <TextInput
+            style={styles.answerInput}
+            placeholder="Answer"
+            keyboardType="numeric"
+            value={value}
+            onChangeText={handleChange}
           />
         )}
       </Pressable>
 
-      <Pressable style={styles.optionContainer} onPress={() => {
-        setSelectedOption('choice')
-        console.log('Selected Option:', 'choice');
-        }}>
+      <Pressable style={styles.optionContainer} onPress={() => setSelectedOption('choice')}>
         <View style={[styles.radioButton, selectedOption === 'choice' && styles.selectedRadio]} />
         <Text style={styles.optionText}>Choice</Text>
 
@@ -61,8 +71,15 @@ const QuestionTemplate = () => {
           </View>
         )}
       </Pressable>
+
       {selectedOption === 'choice' && (
-        <ChoiceBoxes count={choices} />
+        <ChoiceBoxes
+          count={choices}
+          textInputs={textInputs}
+          setTextInputs={setTextInputs}
+          activeButtons={activeButtons}
+          setActiveButtons={setActiveButtons}
+        />
       )}
     </View>
   );
