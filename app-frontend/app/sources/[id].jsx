@@ -16,7 +16,7 @@ import CommentBox from "../Quiz_Component/CommentBlock";
 import RatingBlock from "../Quiz_Component/Rating";
 import CommentBar from "../Quiz_Component/CommentBar";
 import RatingBar from "../Quiz_Component/RatingBar";
-import { findSource } from "../../services/SourceService";
+import { findSource, ratingSource } from "../../services/SourceService";
 import {
   getCommentsSource,
   createCommentSource,
@@ -27,7 +27,6 @@ const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
   const [source, setSource] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const score = 4.8;
   const count = 999;
   const { user } = useGlobalContext();
 
@@ -42,7 +41,7 @@ const SourceDetailPage = () => {
       hour: "2-digit",
       minute: "2-digit",
     }); // "11:38"
-
+    console.log("We Have Source", data);
     // Combine date and time
     const formattedDateTime = `${formattedDate} ${formattedTime}`;
     setSource({
@@ -52,12 +51,16 @@ const SourceDetailPage = () => {
       content: data.content,
       tags: data.tags,
       updated_at: formattedDateTime,
+      score: data.averageScore ? data.averageScore : 0,
+      count: data.count,
     });
   };
 
   useEffect(() => {
+    setRefreshing(true);
     fecthSource(id);
     fetchComments(id);
+    setRefreshing(false);
   }, []);
 
   // State to hold the list of comments
@@ -88,6 +91,11 @@ const SourceDetailPage = () => {
     setCommentInput("");
   };
 
+  const handleRating = async (sc) => {
+    const data = await ratingSource(id, user._id, sc);
+    console.log(data);
+  };
+
   const fetchComments = async () => {
     const data = await getCommentsSource(id);
     const newComment = data.map((com) => ({
@@ -99,13 +107,11 @@ const SourceDetailPage = () => {
     setComments([...reversedComments]);
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-
-    // Simulate a network request or some refresh operation
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    await fecthSource(id);
+    await fetchComments(id);
+    setRefreshing(false);
   };
 
   return (
@@ -151,8 +157,8 @@ const SourceDetailPage = () => {
           </TouchableOpacity>
         </View>
 
-        <RatingBlock ScoreRating={score} numComment={count} />
-        <RatingBar />
+        <RatingBlock ScoreRating={source?.score} numComment={source?.count} />
+        <RatingBar onRatingChange={handleRating} />
 
         {/* CommentBar with input */}
         <CommentBar

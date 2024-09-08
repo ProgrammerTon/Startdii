@@ -5,6 +5,9 @@ export async function addChatList(
   ownerId: string,
   userId: string
 ): Promise<any | null> {
+  if (userId === ownerId) {
+    return null;
+  }
   const res = await fetch(`${baseUrl}/users/chatlist`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -44,6 +44,11 @@ export class CreateQuizDto {
   title: string;
 
   @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  description: string;
+
+  @ApiProperty()
   @ValidateNested({ each: true })
   @Type(() => QuestionDto)
   questions: QuestionDto[];

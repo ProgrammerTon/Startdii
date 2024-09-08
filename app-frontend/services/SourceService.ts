@@ -57,3 +57,16 @@ export async function findSource(id: string): Promise<SourceRespond | null> {
   }
   return data;
 }
+
+export async function ratingSource(id: string, userId: string, score: number) {
+  const res = await fetch(`${baseUrl}/sources/${id}/rating`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ score, raterId: userId }),
+  });
+  if (!res.ok) {
+    return null;
+  }
+  const result = await res.json();
+  return result;
+}

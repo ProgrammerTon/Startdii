@@ -29,16 +29,51 @@ const ArchiveMainPage = () => {
   const [offset, setOffset] = useState(1);
   const [refreshing, setRefreshing] = useState(true);
   const { isLogged } = useGlobalContext();
+  const [searchField, setSearchField] = useState("");
+  const [isSearchNote, setIsSearchNote] = useState(true);
 
-  const fetchData = async (of = offset, reset = false) => {
+  const handleToggleSearch = (e) => {
+    if (e && !isSearchNote) {
+      setIsSearchNote(e);
+      setData([]); // Clear current data
+      fetchToggle(1, true); // Fetch first page of notes
+    }
+    if (!e && isSearchNote) {
+      setIsSearchNote(e);
+      setData([]); // Clear current data
+      fetchToggle(1, true); // Fetch first page of quizzes
+    }
+  };
+
+  const fetchToggle = async (of = offset, reset = false) => {
     const sortOrder = filterDirection === "↓" ? "desc" : "asc";
     setRefreshing(true);
+    if (!isSearchNote) {
+      const sources = await getSource(of, sortOrder);
 
-    const sources = await getSource(of, sortOrder);
+      if (sources.length !== 0) {
+        console.log(sources);
+        setData((prevData) => (reset ? sources : [...prevData, ...sources]));
+        setOffset(of + 1); // Increment the offset for pagination
+      }
+    } else {
+    }
 
-    if (sources.length !== 0) {
-      setData((prevData) => (reset ? sources : [...prevData, ...sources]));
-      setOffset(of + 1); // Increment the offset for pagination
+    setRefreshing(false);
+  };
+
+  const fetchData = async (of = offset, reset = false, toggle = false) => {
+    const sortOrder = filterDirection === "↓" ? "desc" : "asc";
+    setRefreshing(true);
+    if (isSearchNote) {
+      const sources = await getSource(of, sortOrder);
+
+      if (sources.length !== 0) {
+        setData((prevData) => (reset ? sources : [...prevData, ...sources]));
+        setOffset(of + 1); // Increment the offset for pagination
+      }
+    } else {
+      return null;
     }
 
     setRefreshing(false);
@@ -97,6 +132,10 @@ const ArchiveMainPage = () => {
     setAddToggleNoteQuizVisible(false);
   };
 
+  const handleSubmitSearch = () => {
+    console.log(searchField);
+  };
+
   return (
     <SafeAreaViewAndroid style={styles.container}>
       <View style={styles.headerContainer}>
@@ -109,8 +148,13 @@ const ArchiveMainPage = () => {
         <ToggleNoteQuiz
           visible={AddToggleNoteQuizVisible}
           onClose={closeAddToggleNoteQuizVisible}
+          setValue={(e) => handleToggleSearch(e)}
         />
-        <ArchiveSearchBar />
+        <ArchiveSearchBar
+          value={searchField}
+          handleChangeText={(e) => setSearchField(e)}
+          onSubmit={handleSubmitSearch}
+        />
       </View>
       <View style={styles.filterContainer}>
         <TouchableOpacity
@@ -158,6 +202,7 @@ const ArchiveMainPage = () => {
             title={item.title}
             author={item.ownerId.username}
             tags={item.tags}
+            rating={item.averageScore}
           />
         )}
         keyExtractor={(item, ind) => `${item._id}-${ind}`}

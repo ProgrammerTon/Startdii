@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { QuizsService } from './quizs.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
@@ -24,9 +25,17 @@ export class QuizsController {
     return this.quizsService.create(createQuizDto);
   }
 
+  // @Get()
+  // findAll() {
+  //   return this.quizsService.findAll();
+  // }
+
   @Get()
-  findAll() {
-    return this.quizsService.findAll();
+  findByOffset(@Query() query: { offset: number; sortOrder: 'asc' | 'desc' }) {
+    if (!query.offset) return this.quizsService.findAll();
+    const offset = query.offset;
+    const sortOrder = query.sortOrder;
+    return this.quizsService.findByOffset(offset, sortOrder);
   }
 
   @Get(':id')

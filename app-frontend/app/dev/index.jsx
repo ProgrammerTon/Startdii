@@ -30,6 +30,12 @@ const DevPage = () => {
         <Text className="text-lg">Archive</Text>
       </TouchableHighlight>
       <TouchableHighlight
+        onPress={() => router.push("/ArchiveSystem/D1_AddQuizPage")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">D1_AddQuizPage</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
         onPress={() => router.push("/ArchiveSystem/D2_QuizMaker")}
         className="bg-green-600 p-2 rounded-xl"
       >
@@ -64,6 +70,30 @@ const DevPage = () => {
         className="bg-green-600 p-2 rounded-xl"
       >
         <Text className="text-lg">test</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/F2.1_FirstPageQuiz/F2.1_FirstQuizPage")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Quiz</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/F2.2_SumPageQuiz/F2.2_SumQuizPage")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Quiz2</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/quiz/66da76bead73dfed0f571ecc")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">QuizID1</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/quiz/66d005e69a4ee7cfdad9beee")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">QuizID2</Text>
       </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </View>
