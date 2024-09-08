@@ -142,7 +142,21 @@ export class SourcesService {
   }
 
   async findById(id: ObjectId): Promise<Source | null> {
-    return this.sourceModel.findById(id).populate('ownerId', 'username').exec();
+    const source = await this.sourceModel
+      .findById(id)
+      .populate('ownerId', 'username')
+      .exec();
+    const rating = source.rating || []; // Ensure 'rating' exists
+    const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+    const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+    const sourceObj = source.toObject();
+    delete sourceObj.rating;
+    const transformedSources = {
+      ...sourceObj,
+      count: rating.length,
+      averageScore,
+    };
+    return transformedSources;
   }
 
   async findAll() {
@@ -173,7 +187,6 @@ export class SourcesService {
         delete sourceObj.rating;
         return {
           ...sourceObj, // Convert Mongoose document to plain object
-          totalScore, // Add totalScore
           averageScore, // Add averageScore
         };
       });

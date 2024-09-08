@@ -52,12 +52,15 @@ const SourceDetailPage = () => {
       tags: data.tags,
       updated_at: formattedDateTime,
       score: data.averageScore ? data.averageScore : 0,
+      count: data.count,
     });
   };
 
   useEffect(() => {
+    setRefreshing(true);
     fecthSource(id);
     fetchComments(id);
+    setRefreshing(false);
   }, []);
 
   // State to hold the list of comments
@@ -104,13 +107,11 @@ const SourceDetailPage = () => {
     setComments([...reversedComments]);
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-
-    // Simulate a network request or some refresh operation
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    await fecthSource(id);
+    await fetchComments(id);
+    setRefreshing(false);
   };
 
   return (
@@ -156,7 +157,7 @@ const SourceDetailPage = () => {
           </TouchableOpacity>
         </View>
 
-        <RatingBlock ScoreRating={source?.score} numComment={count} />
+        <RatingBlock ScoreRating={source?.score} numComment={source?.count} />
         <RatingBar onRatingChange={handleRating} />
 
         {/* CommentBar with input */}

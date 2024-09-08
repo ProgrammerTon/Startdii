@@ -4,7 +4,6 @@ import { SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
 import * as Animatable from "react-native-animatable";
-import Guild from "../(tabs)/guild";
 import Profile from "../(tabs)/profile";
 import Search from "../(tabs)/search";
 import HiUserGroup from "../../components/HiUserGroupIcon";
@@ -12,7 +11,7 @@ import HiSearch from "../../components/HiSearchIcon";
 import HiFolder from "../../components/HiFolderIcon";
 import HiChatAlt2 from "../../components/HiChatAlt2Icon";
 import HiUser from "../../components/HiUserIcon";
-import GuildProvider from "../../context/GuildProvider";
+import Guild from "./guild";
 import ArchiveMainPage from "./archive";
 import ChatH1 from "../(tabs)/chat";
 
@@ -97,30 +96,28 @@ const TabButton = (props) => {
 
 export default function AnimTab1() {
   return (
-    <GuildProvider>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Tab.Navigator
-          screenOptions={{
-            headerShown: false,
-            tabBarStyle: styles.tabBar,
-          }}
-        >
-          {TabArr.map((item, index) => {
-            return (
-              <Tab.Screen
-                key={index}
-                name={item.route}
-                component={item.component}
-                options={{
-                  tabBarShowLabel: false,
-                  tabBarButton: (props) => <TabButton {...props} item={item} />,
-                }}
-              />
-            );
-          })}
-        </Tab.Navigator>
-      </SafeAreaView>
-    </GuildProvider>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: styles.tabBar,
+        }}
+      >
+        {TabArr.map((item, index) => {
+          return (
+            <Tab.Screen
+              key={index}
+              name={item.route}
+              component={item.component}
+              options={{
+                tabBarShowLabel: false,
+                tabBarButton: (props) => <TabButton {...props} item={item} />,
+              }}
+            />
+          );
+        })}
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 }
 
