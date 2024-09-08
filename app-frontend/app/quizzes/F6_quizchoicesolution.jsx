@@ -5,55 +5,41 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  Modal,
-  TextInput
+  Modal
 } from "react-native";
 import { React , useState } from "react";
 import QuizChoice from "../../components/QuizChoice";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Entypo from '@expo/vector-icons/Entypo';
 
 const { width, height } = Dimensions.get('window');
 
-export default function Quiz4choice() {
+export default function Quiz1_4sol() {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState([]);
   const [closeQuiz, setCloseQuiz] = useState(false);
-  const [userInput, setUserInput] = useState('');
   const quizData = [
     {
       totalQuestion: 5,
-      questionId: 3,
-      question: "2+2-1?",
-      choicecount: 0,
-      choice: [],
-      isMultipleAnswer: false,
-      answer : ["3"]
+      questionId: 1,
+      question: "What does the cat says?",
+      choicecount: 4,
+      choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
+      isMultipleAnswer: true,
+      selectedChoice: ["Meaw","21", "Purr"],
+      answer : ["AOUUU", "21", "Purr"]
     }
   ];
-  const handleChoiceSelect = (choice) => {
-    if(quizData[currentQuestion].isMultipleAnswer){
-      if (selectedChoice.includes(choice)) {
-        const newSelectedChoice = selectedChoice.filter((item) => item !== choice)
-        setSelectedChoice(newSelectedChoice); // Unselect if the same choice is pressed
-      } else {
-        setSelectedChoice([...selectedChoice, choice]); // Select the new choice to the selectedchoice
-      }
-    }
-    else{
-      if (selectedChoice.includes(choice)) {
-        setSelectedChoice([]); // Unselect if the same choice is pressed
-      } else {
-        setSelectedChoice([choice]); // Select the new choice and remove old ones
-      }
-    }
-  };
+  const checkingSelected = (item) => {
+    return quizData[currentQuestion].selectedChoice.includes(item)
+  }
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
-          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}} onPress={()=>setCloseQuiz(true)}>
-            <AntDesign name="closecircle" size={30} color="red" />
+          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:20, padding:5}} onPress={()=>setCloseQuiz(true)}>
+            <Entypo name="chevron-left" size={30} color="blue" />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
@@ -66,23 +52,29 @@ export default function Quiz4choice() {
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
-        <TextInput
-        style={styles.textarea}
-        value={userInput}
-        onChangeText={setUserInput}
-        placeholder="Answer"
-        multiline
-        />
+        <ScrollView>
+        {quizData[currentQuestion]?.choice.map((item, index)=>{
+          return <QuizChoice
+                  key={index}
+                  content={item}
+                  isSelected={checkingSelected(item)}
+                  onPress={() => (null)}
+                  isCorrect={quizData[currentQuestion].answer.includes(item)}
+                  isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}
+                  isSolutionType={quizData[currentQuestion].selectedChoice.length !== 0}
+                  />
+          })}
+        </ScrollView>
         </View>
         <View>
-          <TouchableOpacity style={styles.nextButton} onPress={() => console.log(answer)}>
+          <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
             <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
           </TouchableOpacity>
         </View>
       </View>
       <Modal transparent={true} visible={closeQuiz}>
         <View style={{flex: 1, backgroundColor: "#555555aa"}}>
-          <View style={{backgroundColor: "#fff", marginTop: height*0.4, margin:50, padding: 20, alignItems: "center", borderRadius: 10, height: height * 0.15}}>
+          <View style={styles.leaveQuizPopUp}>
             <View>
               <Text style={{fontSize: 20, fontWeight: "bold"}}> Do you want to Leave Quiz? </Text>
             </View>
@@ -122,8 +114,8 @@ const styles = StyleSheet.create({
   closeQuiz: {
     flex: 1,
     flexDirection: "column",
-    alignSelf: "flex-end",
-    marginRight: width * 0.07,
+    alignSelf: "flex-start",
+    marginLeft: width * 0.05,
     marginTop: height * 0.07
   },
   quizNumber:{
@@ -162,8 +154,8 @@ const styles = StyleSheet.create({
     flex: 4,
     width: width * 0.9,
     padding: 10,
-    marginTop: height * 0.12,
-    marginBottom: height * 0.2,
+    marginTop: height * 0.1,
+    marginBottom: height * 0.15,
     justifyContent: "flex-start",
     alignSelf: "center",
   },
@@ -171,23 +163,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     paddingVertical:10,
     marginRight:20,
-    marginVertical: -height * 0.15,
+    marginVertical: -height * 0.13,
     backgroundColor: "#0270ED", 
     borderRadius:20,
     alignSelf: "flex-end",
-  },
-  textarea: {
-    height: 100,
-    marginTop: 10,
-    borderWidth: 3,
-    borderColor:"#04B36E", // Green
-    borderStyle:"solid",
-    borderRadius:10,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    backgroundColor: '#fff',
-    justifyContent: "center",
-    //niggaalignSelf: "center",
   },
   headerText: {
     flex: 1,
@@ -213,6 +192,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     borderRadius:20,
   },
+  leaveQuizPopUp:{
+    backgroundColor: "#fff", 
+    marginTop: height*0.4, 
+    margin:50, 
+    padding: 20, 
+    alignItems: "center", 
+    borderRadius: 10, 
+    height: height * 0.15
+  }
 })
 {
   /* <FlatList
