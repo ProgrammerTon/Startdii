@@ -3,33 +3,31 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
-  StyleSheet,
   SafeAreaView,
   FlatList,
   Dimensions,
+  StyleSheet,
 } from "react-native";
 import UploadCompleteWindow from "../../components/UploadCompleteWindow";
 import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
 import QuestionComponent from "./QuestionComponent";
-import { useQuizContext } from "../../context/QuizProvider";
 
 const { width } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
-  const [questions, setQuestions] = useState([{ id: Date.now() }]);
-  const { title, setTitle, description, setDescription, tags, setTags } =
-    useQuizContext();
+  const [questions, setQuestions] = useState([
+    { id: Date.now(), templateData: {} },
+  ]);
 
-  console.log("All questions:", JSON.stringify(questions, null, 2));
+  //console.log('All questions:', JSON.stringify(questions, null, 2));
 
   useEffect(() => {
-    console.log("Questions updated:", questions);
+    //console.log('Questions updated:', questions);
   }, [questions]);
 
   const addNewQuestion = () => {
-    setQuestions([...questions, { id: Date.now() }]);
-    console.log("All questions:", JSON.stringify(questions, null, 2));
+    setQuestions([...questions, { id: Date.now(), templateData: {} }]);
+    //console.log('All questions:', JSON.stringify(questions, null, 2));
   };
 
   const deleteQuestion = (idToRemove) => {
@@ -37,20 +35,44 @@ const QuizMakerPage = () => {
       (question) => question.id !== idToRemove
     );
     setQuestions(updatedQuestions);
-    console.log(
-      "All questions after deletion:",
-      JSON.stringify(updatedQuestions, null, 2)
-    );
+    //console.log('All questions after deletion:', JSON.stringify(updatedQuestions, null, 2));
   };
 
   const Publish = () => {
-    // Publish logic
+    console.log(`Total Questions:`, questions.length);
+    questions.forEach((question, index) => {
+      console.log(`-------------`);
+      const {
+        questionText,
+        selectedOption,
+        value,
+        choices,
+        textInputs,
+        activeButtons,
+      } = question.templateData || {};
+      console.log(`Question ${index + 1}:`, questionText);
+      console.log(`Choice Choosen: ${selectedOption}`);
+      if (selectedOption === "fill") {
+        console.log(`Number Answer: ${value}`);
+      } else if (selectedOption === "choice") {
+        console.log(`Number of Choices: ${choices}`);
+        for (let i = 0; i < choices; i++) {
+          console.log(`Choices ${i + 1}: ${textInputs[i] || ""}`);
+        }
+        console.log(`Correct Choices: ${activeButtons}`);
+      }
+    });
+    console.log(`---------------------------------------------`);
   };
 
   const renderItem = ({ item, index }) => (
     <View key={item.id} style={styles.questionContainer}>
       <Text style={styles.questionNumber}>Question {index + 1}</Text>
-      <QuestionComponent questionNumber={index + 1} />
+      <QuestionComponent
+        questionNumber={index + 1}
+        question={item}
+        setQuestions={setQuestions}
+      />
       <TouchableOpacity
         style={styles.deleteButton}
         onPress={() => deleteQuestion(item.id)}
@@ -89,6 +111,8 @@ const QuizMakerPage = () => {
     </SafeAreaView>
   );
 };
+
+export default QuizMakerPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -162,5 +186,3 @@ const styles = StyleSheet.create({
     fontSize: width * 0.08,
   },
 });
-
-export default QuizMakerPage;
