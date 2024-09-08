@@ -33,6 +33,9 @@ export class Quiz {
   @Prop({ type: String, required: true, name: 'title' })
   title: string;
 
+  @Prop({ type: String, name: 'description' })
+  description: string;
+
   @Prop({ name: 'questions' })
   questions: Question[];
 

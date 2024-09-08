@@ -40,6 +40,34 @@ export class QuizsService {
     return this.quizModel.find().exec();
   }
 
+  async findByOffset(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+  ): Promise<Quiz[] | null> {
+    const size = 10;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
+    const quizs = await this.quizModel
+      .find()
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
+      .populate('ownerId', 'username')
+      .exec();
+    offset--;
+    offset *= size;
+    const transformedQuizs = quizs.slice(offset, offset + size).map((quiz) => {
+      const rating = quiz.rating || []; // Ensure 'rating' exists
+      const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+      const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+      const quizObj = quiz.toObject();
+      delete quizObj.rating;
+      return {
+        ...quizObj, // Convert Mongoose document to plain object
+        averageScore, // Add averageScore
+      };
+    });
+    return transformedQuizs;
+  }
+
   async findById(id: ObjectId): Promise<Quiz | null> {
     return this.quizModel.findById(id).populate('ownerId', 'username').exec();
   }
