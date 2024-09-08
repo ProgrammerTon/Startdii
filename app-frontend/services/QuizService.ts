@@ -17,17 +17,23 @@ type QuizRequest = {};
 //   return result;
 // }
 
-export async function getQuiz(offset: number): Promise<any> {
-  const res = await fetch(`${baseUrl}/sources?offset=${offset}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data: any = await res.json();
+export async function getQuiz(
+  offset: number,
+  sortOrder: "asc" | "desc"
+): Promise<any[] | null> {
+  const res = await fetch(
+    `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   if (!res.ok) {
     return null;
   }
+  const data: any[] = await res.json();
   return data;
 }
 

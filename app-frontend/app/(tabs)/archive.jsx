@@ -14,6 +14,7 @@ import SourceCard from "../../components/E1_SourceCard.jsx";
 import QuizCard from "../../components/F1_QuizCard.jsx";
 import Feather from "@expo/vector-icons/Feather";
 import { getSource } from "../../services/SourceService";
+import { getQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
 import { router } from "expo-router";
@@ -52,11 +53,16 @@ const ArchiveMainPage = () => {
       const sources = await getSource(of, sortOrder);
 
       if (sources.length !== 0) {
-        console.log(sources);
         setData((prevData) => (reset ? sources : [...prevData, ...sources]));
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
+      const quizs = await getQuiz(of, sortOrder);
+
+      if (quizs.length !== 0) {
+        setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
+        setOffset(of + 1); // Increment the offset for pagination
+      }
     }
 
     setRefreshing(false);
@@ -73,7 +79,13 @@ const ArchiveMainPage = () => {
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
-      return null;
+      const quizs = await getQuiz(of, sortOrder);
+
+      if (quizs.length !== 0) {
+        console.log(quizs);
+        setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
+        setOffset(of + 1); // Increment the offset for pagination
+      }
     }
 
     setRefreshing(false);
@@ -196,15 +208,29 @@ const ArchiveMainPage = () => {
       <AddNoteQuizWindow visible={AddWindowVisible} onClose={closeAddWindow} />
       <FlatList
         data={data}
-        renderItem={({ item }) => (
-          <SourceCard
-            id={item._id}
-            title={item.title}
-            author={item.ownerId.username}
-            tags={item.tags}
-            rating={item.averageScore}
-          />
-        )}
+        renderItem={({ item }) => {
+          if (isSearchNote) {
+            return (
+              <SourceCard
+                id={item?._id}
+                title={item?.title}
+                author={item?.ownerId?.username}
+                tags={item?.tags}
+                rating={item?.averageScore}
+              />
+            );
+          } else {
+            return (
+              <QuizCard
+                id={item?._id}
+                title={item?.title}
+                author={item?.ownerId?.username}
+                tags={item?.tags}
+                rating={item?.averageScore}
+              />
+            );
+          }
+        }}
         keyExtractor={(item, ind) => `${item._id}-${ind}`}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
