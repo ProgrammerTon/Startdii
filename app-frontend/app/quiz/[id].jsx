@@ -21,7 +21,7 @@ import RatingBlock from "../Quiz_Component/Rating";
 import SumButton from "../Quiz_Component/SummaryButton";
 import CommentBar from "../Quiz_Component/CommentBar";
 import RatingBar from "../Quiz_Component/RatingBar";
-import { findQuiz } from "../../services/QuizService";
+import { findQuiz, ratingQuiz } from "../../services/QuizService";
 import {
   getCommentsQuiz,
   createCommentSource,
@@ -98,6 +98,11 @@ const SumQuizPage = () => {
     await fetchComments();
   };
 
+  const handleRating = async (sc) => {
+    const data = await ratingQuiz(id, user._id, sc);
+    console.log(data);
+  };
+
   useEffect(() => {
     setRefreshing(true);
     fetchQuiz();
@@ -130,7 +135,7 @@ const SumQuizPage = () => {
       <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
       <StartButton />
       <RatingBlock ScoreRating={4.5} numComment={comments.length} />
-      <RatingBar />
+      <RatingBar onRatingChange={handleRating} />
 
       {/* CommentBar with input */}
       <CommentBar

@@ -27,7 +27,6 @@ const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
   const [source, setSource] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const count = 999;
   const { user } = useGlobalContext();
 
   const fecthSource = async (id) => {
@@ -41,7 +40,6 @@ const SourceDetailPage = () => {
       hour: "2-digit",
       minute: "2-digit",
     }); // "11:38"
-    console.log("We Have Source", data);
     // Combine date and time
     const formattedDateTime = `${formattedDate} ${formattedTime}`;
     setSource({
