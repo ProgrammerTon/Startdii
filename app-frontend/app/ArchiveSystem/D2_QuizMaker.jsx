@@ -11,10 +11,12 @@ import {
 import UploadCompleteWindow from "../../components/UploadCompleteWindow";
 import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
 import QuestionComponent from "./QuestionComponent";
+import { useQuizContext } from "../../context/QuizProvider";
 
 const { width } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
+  const { title, description, tags } = useQuizContext();
   const [questions, setQuestions] = useState([
     { id: Date.now(), templateData: {} },
   ]);
@@ -39,6 +41,7 @@ const QuizMakerPage = () => {
   };
 
   const Publish = () => {
+    console.log(title, description, tags);
     console.log(`Total Questions:`, questions.length);
     questions.forEach((question, index) => {
       console.log(`-------------`);

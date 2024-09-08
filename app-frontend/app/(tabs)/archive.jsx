@@ -36,12 +36,10 @@ const ArchiveMainPage = () => {
   const handleToggleSearch = (e) => {
     if (e && !isSearchNote) {
       setIsSearchNote(e);
-      setData([]); // Clear current data
       fetchToggle(1, true); // Fetch first page of notes
     }
     if (!e && isSearchNote) {
       setIsSearchNote(e);
-      setData([]); // Clear current data
       fetchToggle(1, true); // Fetch first page of quizzes
     }
   };
@@ -50,10 +48,14 @@ const ArchiveMainPage = () => {
     const sortOrder = filterDirection === "↓" ? "desc" : "asc";
     setRefreshing(true);
     if (!isSearchNote) {
-      const sources = await getSource(of, sortOrder);
+      const sources = await getSource(of, sortOrder, searchField);
 
       if (sources.length !== 0) {
-        setData((prevData) => (reset ? sources : [...prevData, ...sources]));
+        if (reset) {
+          setData([...sources]);
+        } else {
+          setData((prevData) => (reset ? sources : [...prevData, ...sources]));
+        }
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
@@ -72,7 +74,7 @@ const ArchiveMainPage = () => {
     const sortOrder = filterDirection === "↓" ? "desc" : "asc";
     setRefreshing(true);
     if (isSearchNote) {
-      const sources = await getSource(of, sortOrder);
+      const sources = await getSource(of, sortOrder, searchField);
 
       if (sources.length !== 0) {
         setData((prevData) => (reset ? sources : [...prevData, ...sources]));
@@ -82,7 +84,6 @@ const ArchiveMainPage = () => {
       const quizs = await getQuiz(of, sortOrder);
 
       if (quizs.length !== 0) {
-        console.log(quizs);
         setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
         setOffset(of + 1); // Increment the offset for pagination
       }
@@ -94,7 +95,6 @@ const ArchiveMainPage = () => {
   // Handle refresh to reset offset and refetch data
   const handleRefresh = async () => {
     setOffset(1); // Reset offset
-    setData([]); // Clear current data
     fetchData(1, true); // Fetch first page of data
   };
 
@@ -145,7 +145,8 @@ const ArchiveMainPage = () => {
   };
 
   const handleSubmitSearch = () => {
-    console.log(searchField);
+    setData([]);
+    fetchData(1, true, false);
   };
 
   return (

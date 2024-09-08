@@ -50,3 +50,16 @@ export async function findQuiz(id: string): Promise<any> {
   const data: any = await res.json();
   return data;
 }
+
+export async function ratingQuiz(id: string, userId: string, score: number) {
+  const res = await fetch(`${baseUrl}/quizs/${id}/rating`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ score, raterId: userId }),
+  });
+  if (!res.ok) {
+    return null;
+  }
+  const result = await res.json();
+  return result;
+}

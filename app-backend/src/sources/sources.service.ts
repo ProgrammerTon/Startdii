@@ -193,6 +193,37 @@ export class SourcesService {
     return transformedSources;
   }
 
+  async findByOffsetWithTitle(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    title: string,
+  ): Promise<Source[] | null> {
+    const size = 10;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
+    const sources = await this.sourceModel
+      .find({ $text: { $search: title } })
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
+      .populate('ownerId', 'username')
+      .exec();
+    offset--;
+    offset *= size;
+    const transformedSources = sources
+      .slice(offset, offset + size)
+      .map((source) => {
+        const rating = source.rating || []; // Ensure 'rating' exists
+        const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+        const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+        const sourceObj = source.toObject();
+        delete sourceObj.rating;
+        return {
+          ...sourceObj, // Convert Mongoose document to plain object
+          averageScore, // Add averageScore
+        };
+      });
+    return transformedSources;
+  }
+
   async searchByTitle(keyword: string): Promise<Source[]> {
     return this.sourceModel.find({ $text: { $search: keyword } }).exec();
   }

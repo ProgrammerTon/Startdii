@@ -26,10 +26,14 @@ export async function createSource(data: SourceRequest): Promise<any | null> {
 
 export async function getSource(
   offset: number,
-  sortOrder: "asc" | "desc"
+  sortOrder: "asc" | "desc",
+  title: string | null
 ): Promise<SourceRespond[] | null> {
+  if (!title) {
+    title = "";
+  }
   const res = await fetch(
-    `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}`,
+    `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}`,
     {
       method: "GET",
       headers: {
@@ -59,6 +63,7 @@ export async function findSource(id: string): Promise<SourceRespond | null> {
 }
 
 export async function ratingSource(id: string, userId: string, score: number) {
+  console.log(`${baseUrl}/sources/${id}/rating`);
   const res = await fetch(`${baseUrl}/sources/${id}/rating`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
