@@ -125,14 +125,10 @@ export class QuizsService {
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
     let obj = await this.quizModel.findById(id).exec();
-    let rating = await obj.rating.find(
-      (r) => r.raterId.toString() === raterId.toString(),
+    obj.rating = obj.rating.filter(
+      (r) => r.raterId.toString() !== raterId.toString()
     );
-    if (!rating) {
       obj.rating.push({ raterId: raterId, score: score });
-    } else {
-      rating.score = score;
-    }
     await obj.save();
     return obj;
   }
