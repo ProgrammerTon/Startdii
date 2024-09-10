@@ -12,6 +12,12 @@ import RatingBar from "../Quiz_Component/RatingBar";
 
 const SumQuizPage = () => {
   const TotalQuestion = 11;
+  const HeaderTopic = 'Data Mining';
+  const QuizDescription = 'BESTBELL';
+  const Username = 'Best';
+  const tags = ['datasci','datamining','Chicken'];
+  const RatingScore = 4.5;
+  const timeDate = "22/07/24 18:00";
 
   // State to hold the list of comments
   const [comments, setComments] = useState([]);
@@ -51,8 +57,8 @@ const SumQuizPage = () => {
           <Tag label="#datamining" />
         </View>
         <View style={styles.headerContainer}>
-          <TimeDateBlock timeDate="22/07/24 18:00" />
-          <UsernameBlock />
+          <TimeDateBlock timeDate={timeDate} />
+          <UsernameBlock username={Username} />
         </View>
         <Text style={styles.headerQs}>{TotalQuestion} Questions</Text>
         <StartButton />

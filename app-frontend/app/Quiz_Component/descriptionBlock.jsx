@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const DescriptionBlock = ({ description }) => {
+const DescriptionBlock = ({ QuizDescription }) => {
   return (
     <View style={styles.descriptionBox}>
-      {description && <Text style={styles.descriptionText}>{description}</Text>}
+      <Text style={styles.descriptionText}>{QuizDescription}</Text>
     </View>
   );
 };
