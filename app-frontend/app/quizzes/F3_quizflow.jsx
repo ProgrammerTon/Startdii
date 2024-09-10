@@ -1,49 +1,80 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import QuizFill from './F3_quizfill';
-import QuizChoice from '../../components/QuizChoice';
+import QuizChoices from './F3_quizchoice';
+import QuizSummaryPage from './F4_quizsummary';
 
 const QuizFlow = () => {
-  // ใช้จำนวน Choice ในการแยกระหว่างคำถามแบบ fill หรือคำถามแบบ Choices โดย 1 = fill และ 2-6 = Choices
   const quizData = [
     {
-      questionId: 1,
-      question: "Charay Cool of not",
-      choicecount: 2,
+      question: "Charay Cool or not?",
+      qtype: "choice",
       choice: ["Not", "Cool"],
-      isMultipleAnswer: false,
-      answer: [0], // Correct choices based on indexes 0 
+      answer: [0], // Correct choice is 'Cool'
     },
     {
-      questionId: 2,
       question: "2+2",
-      choicecount: 0,
+      qtype: "fill",
       choice: [], // No choices, since it's a fill-in question
-      isMultipleAnswer: false,
-      answer: [4], // The correct number answer
+      answer: [4], // The correct answer is 4
     },
     {
-      questionId: 3,
       question: "2+5 and 4+5",
-      choicecount: 4,
+      qtype: "choice",
       choice: ["0", "7", "9", "1"],
-      isMultipleAnswer: true, // Since there are multiple correct choices
-      answer: [1,2], // Correct choices based on indexes 1 and 2
+      answer: [1, 2], // Correct answers are '7' and '9'
+    },
+    {
+      question: "2+5 and 3+2 and 1+8" ,
+      qtype: "choice",
+      choice: ["0", "7", "9", "1", "5"],
+      answer: [1, 2, 4], // Correct answers are '7' and '9' and '5'
     }
   ];
-  
-  // Total number of questions
-  const quizSummary = {
-    totalQuestion: quizData.length,
-    questions: quizData,
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [userAnswers, setUserAnswers] = useState([]);
+  const [score, setScore] = useState(0);
+  const [quizFinished, setQuizFinished] = useState(false);
+
+  const handleAnswerSubmit = (userAnswer) => {
+    const correctAnswer = quizData[currentQuestion].answer;
+    const isCorrect = JSON.stringify(correctAnswer) === JSON.stringify(userAnswer.map(Number));
+
+    if (isCorrect) {
+      setScore(score + 1);
+    }
+
+    setUserAnswers([...userAnswers, userAnswer]);
+
+    if (currentQuestion < quizData.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setQuizFinished(true);
+    }
   };
-  
-  console.log(quizSummary);
-  
-  
+
   return (
     <View style={styles.container}>
-      
+      {!quizFinished ? (
+        quizData[currentQuestion].qtype === "choice" ? (
+          <QuizChoices
+            questionData={quizData[currentQuestion]}
+            onSubmit={handleAnswerSubmit}
+            questionNumber={currentQuestion + 1}
+            totalQuestions={quizData.length}
+          />
+        ) : (
+          <QuizFill
+            questionData={quizData[currentQuestion]}
+            onSubmit={handleAnswerSubmit}
+            questionNumber={currentQuestion + 1}
+            totalQuestions={quizData.length}
+          />
+        )
+      ) : (
+        <QuizSummaryPage score={score} userAnswers={userAnswers} quizData={quizData} />
+      )}
     </View>
   );
 };
@@ -53,7 +84,7 @@ export default QuizFlow;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 0,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
   },
 });

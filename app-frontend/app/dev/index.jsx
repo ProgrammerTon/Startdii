@@ -95,6 +95,12 @@ const DevPage = () => {
       >
         <Text className="text-lg">QuizID2</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/quizzes/F3_quizflow")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">QuizFlow</Text>
+      </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </View>
   );

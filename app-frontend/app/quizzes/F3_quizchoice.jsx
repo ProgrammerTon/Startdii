@@ -13,71 +13,61 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 const { width, height } = Dimensions.get('window');
 
-export default function Quiz1_4choice() {
+export default function QuizChoices({ questionData, onSubmit, questionNumber, totalQuestions }) {
 
-  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState([]);
   const [closeQuiz, setCloseQuiz] = useState(false);
-  const quizData = [
-    {
-      totalQuestion: 5,
-      questionId: 1,
-      question: "What does the cat says?",
-      choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "21",],
-      isMultipleAnswer: true,
-      answer : ["AOUUU","Miau"]
-    }
-  ];
-  const handleChoiceSelect = (choice) => {
-    if(quizData[currentQuestion].isMultipleAnswer){
-      if (selectedChoice.includes(choice)) {
-        const newSelectedChoice = selectedChoice.filter((item) => item !== choice)
-        setSelectedChoice(newSelectedChoice); // Unselect if the same choice is pressed
+
+  const handleChoiceSelect = (index) => {
+    // Allow multiple selections
+    if (questionData.answer.length >= -1) {
+      if (selectedChoice.includes(index)) {
+        const newSelectedChoice = selectedChoice.filter((item) => item !== index);
+        setSelectedChoice(newSelectedChoice); // Unselect if the same index is pressed
       } else {
-        const newSelectedChoice = [...selectedChoice, choice].sort(); // Sort the array after adding the new choice
-        setSelectedChoice(newSelectedChoice); // Select the new choice to the selectedchoice
+        const newSelectedChoice = [...selectedChoice, index].sort(); // Sort the array after adding the new index
+        setSelectedChoice(newSelectedChoice); // Select the new index
       }
-    }
-    else{
-      if (selectedChoice.includes(choice)) {
-        setSelectedChoice([]); // Unselect if the same choice is pressed
+    } else {
+      if (selectedChoice.includes(index)) {
+        setSelectedChoice([]); // Unselect if the same index is pressed
       } else {
-        setSelectedChoice([choice]); // Select the new choice and remove old ones
+        setSelectedChoice([index]); // Select the new index
       }
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
-          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}} onPress={()=>setCloseQuiz(true)}>
+          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}} onPress={() => setCloseQuiz(true)}>
             <AntDesign name="closecircle" size={30} color="red" />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
-            <Text style={styles.textNumber}>{quizData[currentQuestion].questionId} / {quizData[currentQuestion].totalQuestion}</Text>
+            <Text style={styles.textNumber}>{questionNumber} / {totalQuestions}</Text>
         </View>
         <View style={styles.question}>
-            <Text style={styles.textStyle}> {quizData[currentQuestion].question} </Text>
+            <Text style={styles.textStyle}> {questionData.question} </Text>
         </View>
       </View>
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
         <ScrollView>
-        {quizData[currentQuestion]?.choice.map((item, index)=>{
+        {questionData.choice.map((item, index) => {
           return <QuizChoice 
                   key={index}
                   content={item}
-                  isSelected={selectedChoice.includes(item)} 
-                  onPress={() => handleChoiceSelect(item)}
-                  isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}/>
+                  isSelected={selectedChoice.includes(index)} 
+                  onPress={() => handleChoiceSelect(index)}
+                  />
           })}
         </ScrollView>
         </View>
         <View>
-          <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
+          <TouchableOpacity style={styles.nextButton} onPress={() => onSubmit(selectedChoice)}>
             <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
           </TouchableOpacity>
         </View>
@@ -89,7 +79,7 @@ export default function Quiz1_4choice() {
               <Text style={{fontSize: 20, fontWeight: "bold"}}> Do you want to Leave Quiz? </Text>
             </View>
             <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
-              <TouchableOpacity style={styles.closeQuizButton} onPress={()=>setCloseQuiz(false)}>
+              <TouchableOpacity style={styles.closeQuizButton} onPress={() => setCloseQuiz(false)}>
                 <Text style={{fontSize: 16, fontWeight: "bold"}}> Cancel </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.leaveQuizButton}>
