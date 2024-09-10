@@ -8,7 +8,7 @@
     "scheme": "startdii",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/wowbg2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
