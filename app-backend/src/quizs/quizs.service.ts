@@ -69,7 +69,22 @@ export class QuizsService {
   }
 
   async findById(id: ObjectId): Promise<Quiz | null> {
-    return this.quizModel.findById(id).populate('ownerId', 'username').exec();
+    const quiz = await this.quizModel
+      .findById(id)
+      .populate('ownerId', 'username')
+      .exec();
+    const rating = quiz.rating || []; // Ensure 'rating' exists
+    const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+    const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+    const quizObj = quiz.toObject();
+    delete quizObj.rating;
+    const transformedSources = {
+      ...quizObj,
+      count: rating.length,
+      averageScore,
+    };
+    return transformedSources;
+    // return this.quizModel.findById(id).populate('ownerId', 'username').exec();
   }
 
   async getRating(id: ObjectId) {
@@ -125,14 +140,10 @@ export class QuizsService {
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
     let obj = await this.quizModel.findById(id).exec();
-    let rating = await obj.rating.find(
-      (r) => r.raterId.toString() === raterId.toString(),
+    obj.rating = obj.rating.filter(
+      (r) => r.raterId.toString() !== raterId.toString(),
     );
-    if (!rating) {
-      obj.rating.push({ raterId: raterId, score: score });
-    } else {
-      rating.score = score;
-    }
+    obj.rating.push({ raterId: raterId, score: score });
     await obj.save();
     return obj;
   }

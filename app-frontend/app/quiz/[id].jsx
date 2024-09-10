@@ -90,7 +90,6 @@ const SumQuizPage = () => {
     }));
     const reversedComments = newComment.reverse();
     setComments([...reversedComments]);
-    console.log("comment", reversedComments);
   };
 
   const onRefresh = async () => {
@@ -122,7 +121,7 @@ const SumQuizPage = () => {
       }
     >
       <Text style={styles.headerStyle}>{quiz?.title}</Text>
-      <DescriptionBlock />
+      <DescriptionBlock description={quiz?.description} />
       <View style={styles.tagsContainer}>
         {quiz?.tags.map((tag, ind) => {
           return <Tag key={`${tag}-{ind}`} label={`#${tag}`} />;
@@ -134,7 +133,7 @@ const SumQuizPage = () => {
       </View>
       <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
       <StartButton />
-      <RatingBlock ScoreRating={4.5} numComment={comments.length} />
+      <RatingBlock ScoreRating={quiz?.averageScore} numComment={quiz?.count} />
       <RatingBar onRatingChange={handleRating} />
 
       {/* CommentBar with input */}
