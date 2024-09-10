@@ -30,10 +30,22 @@ export class SourcesController {
   }
 
   @Get()
-  findByOffset(@Query() query: { offset: number }) {
+  findByOffset(
+    @Query()
+    query: {
+      offset: number;
+      sortOrder: 'asc' | 'desc';
+      title: string | null;
+    },
+  ) {
     if (!query.offset) return this.sourcesService.findAll();
     const offset = query.offset;
-    return this.sourcesService.findByOffset(offset);
+    const sortOrder = query.sortOrder;
+    if (!query.title) {
+      return this.sourcesService.findByOffset(offset, sortOrder);
+    }
+    const title = query.title;
+    return this.sourcesService.findByOffsetWithTitle(offset, sortOrder, title);
   }
 
   @Get('search')
@@ -58,9 +70,28 @@ export class SourcesController {
     return this.sourcesService.findById(id);
   }
 
+  @Get(':id/rating')
+  getRating(@Param('id') id: ObjectId) {
+    return this.sourcesService.getRating(id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: ObjectId, @Body() updateSourceDto: UpdateSourceDto) {
     return this.sourcesService.update(id, updateSourceDto);
+  }
+
+  @Patch(':id/rating')
+  userRating(
+    @Param('id') id: ObjectId,
+    @Body('score') score: number,
+    @Body('raterId') raterId: ObjectId,
+  ) {
+    return this.sourcesService.userRating(id, score, raterId as ObjectId);
+  }
+
+  @Patch(':id/reset')
+  dataReset(@Param('id') id: ObjectId) {
+    return this.sourcesService.dataReset(id);
   }
 
   @Delete(':id')

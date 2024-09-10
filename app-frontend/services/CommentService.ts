@@ -13,6 +13,18 @@ export async function getCommentsSource(sourceId: string) {
   return result;
 }
 
+export async function getCommentsQuiz(quizId: string) {
+  const res = await fetch(`${baseUrl}/comments/${quizId}?option=quiz`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) {
+    return null;
+  }
+  const result = await res.json();
+  return result;
+}
+
 export async function createCommentSource(
   sourceId: string | null,
   quizId: string | null,

@@ -18,8 +18,11 @@ export class ReportsService {
     return this.reportModel.find().exec();
   }
 
-  async findAllByReferenceId(referenceId: ObjectId, option: string): Promise<any> {
-    let query = {}
+  async findAllByReferenceId(
+    referenceId: ObjectId,
+    option: string,
+  ): Promise<any> {
+    const query = {};
     if (option === 'user') {
       query['userId'] = referenceId;
     } else if (option === 'source') {
@@ -28,17 +31,19 @@ export class ReportsService {
       query['quizId'] = referenceId;
     }
 
-    const reports = await this.reportModel.find(query)
-    .populate({
-      path: 'reporterId',
-      select: 'username'
-    }).exec();
+    const reports = await this.reportModel
+      .find(query)
+      .populate({
+        path: 'reporterId',
+        select: 'username',
+      })
+      .exec();
 
-    const allReports = reports.map(report => ({
+    const allReports = reports.map((report) => ({
       _id: report['_id'],
       username: report.reporterId['username'],
       reason: report.reason,
-      description: report.description
+      description: report.description,
     }));
 
     return allReports;

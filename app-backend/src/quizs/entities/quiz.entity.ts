@@ -33,6 +33,9 @@ export class Quiz {
   @Prop({ type: String, required: true, name: 'title' })
   title: string;
 
+  @Prop({ type: String, name: 'description' })
+  description: string;
+
   @Prop({ name: 'questions' })
   questions: Question[];
 
@@ -50,6 +53,9 @@ export class Quiz {
 
   @Prop({ name: 'total_score' })
   total_score: number = 0;
+
+  @Prop({ name: 'rating' })
+  rating: { raterId: ObjectId; score: number }[] = [];
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz);

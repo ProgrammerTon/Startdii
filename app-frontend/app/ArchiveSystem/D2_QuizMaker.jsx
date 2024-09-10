@@ -1,13 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, SafeAreaView, FlatList, Dimensions, StyleSheet } from 'react-native';
-import UploadCompleteWindow from '../../components/UploadCompleteWindow';
-import ErrorEmptyFieldWindow from '../../components/ErrorEmptyFieldWindow';
-import QuestionComponent from './QuestionComponent';
+import React, { useState, useEffect } from "react";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+  FlatList,
+  Dimensions,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import UploadCompleteWindow from "../../components/UploadCompleteWindow";
+import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
+import QuestionComponent from "./QuestionComponent";
+import { useQuizContext } from "../../context/QuizProvider";
+import { createQuiz } from "../../services/QuizService";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
-  const [questions, setQuestions] = useState([{ id: Date.now(), templateData: {} }]);
+  const { title, description, tags } = useQuizContext();
+  const [questions, setQuestions] = useState([
+    { id: Date.now(), templateData: {} },
+  ]);
+  const { user } = useGlobalContext();
 
   //console.log('All questions:', JSON.stringify(questions, null, 2));
 
@@ -21,29 +37,58 @@ const QuizMakerPage = () => {
   };
 
   const deleteQuestion = (idToRemove) => {
-    const updatedQuestions = questions.filter(question => question.id !== idToRemove);
+    const updatedQuestions = questions.filter(
+      (question) => question.id !== idToRemove
+    );
     setQuestions(updatedQuestions);
     //console.log('All questions after deletion:', JSON.stringify(updatedQuestions, null, 2));
   };
 
-  const Publish = () => {
+  const Publish = async () => {
+    transformTags = tags.split(",");
+    console.log(title, description, transformTags);
     console.log(`Total Questions:`, questions.length);
-    questions.forEach((question, index) => {
-      console.log(`-------------`)
-      const { questionText,selectedOption, value, choices, textInputs, activeButtons } = question.templateData || {};
-      console.log(`Question ${index + 1}:`,questionText);
-      console.log(`Choice Choosen: ${selectedOption}`);
-      if (selectedOption === 'fill') {
-        console.log(`Number Answer: ${value}`);
-      } else if (selectedOption === 'choice') {
-        console.log(`Number of Choices: ${choices}`);
-        for (let i = 0; i < choices; i++) {
-          console.log(`Choices ${i + 1}: ${textInputs[i] || ''}`);
-        }
-        console.log(`Correct Choices: ${activeButtons}`);
-      }
+    const questionsNew = questions.map((question, index) => {
+      console.log(`-------------`);
+      const {
+        questionText,
+        selectedOption,
+        value,
+        choices,
+        textInputs,
+        activeButtons,
+      } = question.templateData || {};
+      // console.log(`Question ${index + 1}:`, questionText);
+      // console.log(`Choice Choosen: ${selectedOption}`);
+      // if (selectedOption === "fill") {
+      //   console.log(`Number Answer: ${value}`);
+      // } else if (selectedOption === "choice") {
+      //   console.log(`Number of Choices: ${choices}`);
+      //   for (let i = 0; i < choices; i++) {
+      //     console.log(`Choices ${i + 1}: ${textInputs[i] || ""}`);
+      //   }
+      //   console.log(`Correct Choices: ${activeButtons}`);
+      // }
+      return {
+        question: questionText,
+        qType: selectedOption,
+        choices: selectedOption === "choice" ? Object.values(textInputs) : [],
+        answers: selectedOption === "fill" ? value : activeButtons,
+      };
     });
-    console.log(`---------------------------------------------`)
+    console.log(questionsNew);
+    const data = await createQuiz(
+      user._id,
+      title,
+      description,
+      transformTags,
+      questionsNew
+    );
+    if (data) {
+      Alert.alert("Create Success");
+    } else {
+      Alert.alert("Failed");
+    }
   };
 
   const renderItem = ({ item, index }) => (
@@ -54,7 +99,10 @@ const QuizMakerPage = () => {
         question={item}
         setQuestions={setQuestions}
       />
-      <TouchableOpacity style={styles.deleteButton} onPress={() => deleteQuestion(item.id)}>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => deleteQuestion(item.id)}
+      >
         <Text style={styles.deleteText}>Delete</Text>
       </TouchableOpacity>
     </View>
@@ -66,7 +114,11 @@ const QuizMakerPage = () => {
         data={questions}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={<Text style={styles.counterText}>Total Questions: {questions.length}</Text>}
+        ListHeaderComponent={
+          <Text style={styles.counterText}>
+            Total Questions: {questions.length}
+          </Text>
+        }
         ListFooterComponent={
           <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
             <Text style={styles.plusText}>+</Text>
@@ -92,73 +144,71 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: "#f4f4f4",
   },
   counterText: {
     fontSize: width * 0.05, // Adjust font size based on screen width
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   questionContainer: {
     marginBottom: 20,
     padding: width * 0.05, // Adjust padding based on screen width
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 5,
   },
   questionNumber: {
     fontSize: width * 0.045, // Adjust font size
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   deleteButton: {
-    backgroundColor: '#e74c3c',
+    backgroundColor: "#e74c3c",
     padding: width * 0.03, // Adjust padding for button
     borderRadius: 5,
     marginTop: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   deleteText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 20,
   },
   resetButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: "#ccc",
     padding: width * 0.03,
     borderRadius: 5,
   },
   saveButton: {
-    backgroundColor: '#f39c12',
+    backgroundColor: "#f39c12",
     padding: width * 0.03,
     borderRadius: 5,
   },
   publishButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: "#3498db",
     padding: width * 0.03,
     borderRadius: 5,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   addButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
     padding: width * 0.05,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 50,
     marginVertical: 20,
   },
   plusText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: width * 0.08,
   },
 });
-
-

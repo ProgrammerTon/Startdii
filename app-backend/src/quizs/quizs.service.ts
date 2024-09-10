@@ -20,18 +20,143 @@ export class QuizsService {
     private userModel: Model<UserDocument>,
   ) {}
 
+  // --------------------------- Create ---------------------------
+
   async create(createQuizDto: CreateQuizDto): Promise<Quiz> {
     const quiz = plainToInstance(Quiz, createQuizDto);
+    const owner = await this.userModel.findById(quiz.ownerId).exec();
     quiz.published = Status.private;
     const createdQuiz = new this.quizModel(quiz);
     await createdQuiz.save();
     this.addQuizFromTags(createdQuiz._id as ObjectId);
+    owner.quizzes.push(createdQuiz._id as ObjectId);
+    await owner.save();
     return createdQuiz;
   }
+
+  // --------------------------- Get ---------------------------
 
   async findAll() {
     return this.quizModel.find().exec();
   }
+
+  async findByOffset(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+  ): Promise<Quiz[] | null> {
+    const size = 10;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
+    const quizs = await this.quizModel
+      .find()
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
+      .populate('ownerId', 'username')
+      .exec();
+    offset--;
+    offset *= size;
+    const transformedQuizs = quizs.slice(offset, offset + size).map((quiz) => {
+      const rating = quiz.rating || []; // Ensure 'rating' exists
+      const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+      const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+      const quizObj = quiz.toObject();
+      delete quizObj.rating;
+      return {
+        ...quizObj, // Convert Mongoose document to plain object
+        averageScore, // Add averageScore
+      };
+    });
+    return transformedQuizs;
+  }
+
+  async findById(id: ObjectId): Promise<Quiz | null> {
+    return this.quizModel.findById(id).populate('ownerId', 'username').exec();
+  }
+
+  async getRating(id: ObjectId) {
+    const obj = await this.quizModel.findById(id).exec();
+    const rating = obj.rating;
+    const totalScore = rating.reduce((sum, r) => sum + r.score, 0);
+    const averageScore = rating.length ? totalScore / rating.length : 0;
+    return { Rating: averageScore, Count: rating.length };
+  }
+
+  // --------------------------- Update ---------------------------
+
+  async update(id: ObjectId, updateQuizDto: UpdateQuizDto): Promise<Quiz> {
+    return this.quizModel
+      .findByIdAndUpdate(id, updateQuizDto, { new: true })
+      .exec();
+  }
+
+  async addHistory(id: ObjectId, userId: ObjectId, res: boolean[]) {
+    const quiz = await this.quizModel.findById(id).exec();
+    const user = await this.userModel.findById(userId).exec();
+    if (!quiz.players.includes(userId)) {
+      quiz.players.push(userId);
+      if (quiz.total_score)
+        quiz.total_score += res.filter((value) => value).length;
+      else quiz.total_score = res.filter((value) => value).length;
+      for (let i = 0; i < quiz.questions.length; i++) {
+        if (quiz.questions[i].correct)
+          quiz.questions[i].correct += Number(res[i]);
+        else quiz.questions[i].correct = Number(res[i]);
+      }
+      console.log(user);
+      user.quiz_history.push({ id: id, results: res });
+    }
+    await this.quizModel
+      .findByIdAndUpdate(
+        id,
+        { $set: quiz },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+    await quiz.save();
+    await user.save();
+    return quiz;
+  }
+
+  async submitQuiz(id: ObjectId, userId: ObjectId, ans: (number | number[])[]) {
+    console.log('calculating results');
+    const results = await this.checkResults(id, ans);
+    console.log('got results');
+    return this.addHistory(id, userId, results);
+  }
+
+  async userRating(id: ObjectId, score: number, raterId: ObjectId) {
+    let obj = await this.quizModel.findById(id).exec();
+    obj.rating = obj.rating.filter(
+      (r) => r.raterId.toString() !== raterId.toString()
+    );
+      obj.rating.push({ raterId: raterId, score: score });
+    await obj.save();
+    return obj;
+  }
+
+  async dataReset(id: ObjectId) {
+    const obj = await this.quizModel.findById(id).exec();
+    obj.players = [];
+    obj.total_score = 0;
+    obj.rating = [];
+    await this.quizModel
+      .findByIdAndUpdate(
+        id,
+        { $set: obj },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+    await obj.save();
+    return obj;
+  }
+
+  // --------------------------- Delete ---------------------------
+
+  async remove(id: ObjectId) {
+    await this.removeQuizFromTags(id);
+    await this.quizModel.findByIdAndDelete(id);
+  }
+
+  // --------------------------- Misc. ---------------------------
 
   async arrayMatching(a1: any[], a2: any[]): Promise<boolean> {
     if (a1.length == a2.length) {
@@ -45,13 +170,6 @@ export class QuizsService {
       return ans;
     }
     return false;
-  }
-
-  async submitQuiz(id: ObjectId, userId: ObjectId, ans: (number | number[])[]) {
-    console.log('calculating results');
-    const results = await this.checkResults(id, ans);
-    console.log('got results');
-    return this.addHistory(id, userId, results);
   }
 
   async checkResults(id: ObjectId, ans: (number | number[])[]) {
@@ -98,45 +216,5 @@ export class QuizsService {
       tag.quizs = tag.quizs.filter((element) => String(element) !== String(id));
       tag.save();
     }
-  }
-
-  async addHistory(id: ObjectId, userId: ObjectId, res: boolean[]) {
-    const quiz = await this.quizModel.findById(id).exec();
-    const user = await this.userModel.findById(userId).exec();
-    if (!quiz.players.includes(userId)) {
-      quiz.players.push(userId);
-      if (quiz.total_score)
-        quiz.total_score += res.filter((value) => value).length;
-      else quiz.total_score = res.filter((value) => value).length;
-      for (let i = 0; i < quiz.questions.length; i++) {
-        if (quiz.questions[i].correct)
-          quiz.questions[i].correct += Number(res[i]);
-        else quiz.questions[i].correct = Number(res[i]);
-      }
-      console.log(user);
-      user.quiz_history.push({ id: id, results: res });
-    }
-    await this.quizModel
-      .findByIdAndUpdate(
-        id,
-        { $set: quiz },
-        { new: true, useFindAndModify: false }, // Return the updated document
-      )
-      .exec();
-    await quiz.save();
-    await user.save();
-    return quiz;
-  }
-
-  async findById(id: ObjectId): Promise<Quiz | null> {
-    return this.quizModel.findById(id).populate('ownerId', 'username').exec();
-  }
-
-  update(id: number, updateQuizDto: UpdateQuizDto) {
-    return `This action updates a #${id} quiz`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} quiz`;
   }
 }

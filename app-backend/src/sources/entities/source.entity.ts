@@ -38,6 +38,9 @@ export class Source {
 
   @Prop({ name: 'tags' })
   tags: string[];
+
+  @Prop({ name: 'rating' })
+  rating: { raterId: ObjectId; score: number }[] = [];
 }
 
 export const SourceSchema = SchemaFactory.createForClass(Source).index({
