@@ -7,11 +7,14 @@ import {
   FlatList,
   Dimensions,
   StyleSheet,
+  Alert,
 } from "react-native";
 import UploadCompleteWindow from "../../components/UploadCompleteWindow";
 import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
 import QuestionComponent from "./QuestionComponent";
 import { useQuizContext } from "../../context/QuizProvider";
+import { createQuiz } from "../../services/QuizService";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const { width } = Dimensions.get("window");
 
@@ -20,6 +23,7 @@ const QuizMakerPage = () => {
   const [questions, setQuestions] = useState([
     { id: Date.now(), templateData: {} },
   ]);
+  const { user } = useGlobalContext();
 
   //console.log('All questions:', JSON.stringify(questions, null, 2));
 
@@ -40,10 +44,11 @@ const QuizMakerPage = () => {
     //console.log('All questions after deletion:', JSON.stringify(updatedQuestions, null, 2));
   };
 
-  const Publish = () => {
-    console.log(title, description, tags);
+  const Publish = async () => {
+    transformTags = tags.split(",");
+    console.log(title, description, transformTags);
     console.log(`Total Questions:`, questions.length);
-    questions.forEach((question, index) => {
+    const questionsNew = questions.map((question, index) => {
       console.log(`-------------`);
       const {
         questionText,
@@ -53,19 +58,37 @@ const QuizMakerPage = () => {
         textInputs,
         activeButtons,
       } = question.templateData || {};
-      console.log(`Question ${index + 1}:`, questionText);
-      console.log(`Choice Choosen: ${selectedOption}`);
-      if (selectedOption === "fill") {
-        console.log(`Number Answer: ${value}`);
-      } else if (selectedOption === "choice") {
-        console.log(`Number of Choices: ${choices}`);
-        for (let i = 0; i < choices; i++) {
-          console.log(`Choices ${i + 1}: ${textInputs[i] || ""}`);
-        }
-        console.log(`Correct Choices: ${activeButtons}`);
-      }
+      // console.log(`Question ${index + 1}:`, questionText);
+      // console.log(`Choice Choosen: ${selectedOption}`);
+      // if (selectedOption === "fill") {
+      //   console.log(`Number Answer: ${value}`);
+      // } else if (selectedOption === "choice") {
+      //   console.log(`Number of Choices: ${choices}`);
+      //   for (let i = 0; i < choices; i++) {
+      //     console.log(`Choices ${i + 1}: ${textInputs[i] || ""}`);
+      //   }
+      //   console.log(`Correct Choices: ${activeButtons}`);
+      // }
+      return {
+        question: questionText,
+        qType: selectedOption,
+        choices: selectedOption === "choice" ? Object.values(textInputs) : [],
+        answers: selectedOption === "fill" ? value : activeButtons,
+      };
     });
-    console.log(`---------------------------------------------`);
+    console.log(questionsNew);
+    const data = await createQuiz(
+      user._id,
+      title,
+      description,
+      transformTags,
+      questionsNew
+    );
+    if (data) {
+      Alert.alert("Create Success");
+    } else {
+      Alert.alert("Failed");
+    }
   };
 
   const renderItem = ({ item, index }) => (
