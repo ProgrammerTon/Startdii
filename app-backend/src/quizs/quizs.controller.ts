@@ -36,11 +36,22 @@ export class QuizsController {
   // }
 
   @Get()
-  findByOffset(@Query() query: { offset: number; sortOrder: 'asc' | 'desc' }) {
+  findByOffset(
+    @Query()
+    query: {
+      offset: number;
+      sortOrder: 'asc' | 'desc';
+      title: string | null;
+    },
+  ) {
     if (!query.offset) return this.quizsService.findAll();
     const offset = query.offset;
     const sortOrder = query.sortOrder;
-    return this.quizsService.findByOffset(offset, sortOrder);
+    if (!query.title) {
+      return this.quizsService.findByOffset(offset, sortOrder);
+    }
+    const title = query.title;
+    return this.quizsService.findByOffsetWithTitle(offset, sortOrder, title);
   }
 
   @Get('search')
