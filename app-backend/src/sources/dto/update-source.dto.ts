@@ -21,5 +21,5 @@ export class UpdateSourceDto {
 
   @ApiProperty()
   @IsOptional()
-  tags?: Tag[];
+  tags?: string[];
 }

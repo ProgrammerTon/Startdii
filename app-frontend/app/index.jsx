@@ -56,6 +56,15 @@ export default function App() {
         >
           <Text className="text-lg">Sign In</Text>
         </TouchableHighlight>
+
+        <TouchableHighlight
+          onPress={() => router.push("/trynaja")}
+          className="bg-green-600 p-2 rounded-xl"
+        >
+          <Text className="text-lg">TNJ</Text>
+        </TouchableHighlight>
+
+      
         <TouchableHighlight
           onPress={() => router.push("/sources/create")}
           className="bg-green-600 p-2 rounded-xl"
