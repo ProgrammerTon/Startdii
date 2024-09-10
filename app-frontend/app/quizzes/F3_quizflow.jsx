@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import QuizFill from './F3_quizfill';
 import QuizChoices from './F3_quizchoice';
 import QuizSummaryPage from './F4_quizsummary';
+import QuizAnswer from './F5_quizanswer';
 
 const QuizFlow = () => {
   const quizData = [
@@ -29,29 +30,39 @@ const QuizFlow = () => {
       qtype: "choice",
       choice: ["0", "7", "9", "1", "5"],
       answer: [1, 2, 4], // Correct answers are '7' and '9' and '5'
-    }
+    },
   ];
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
+  const [eachQuestionAnswers, setEachQuestionAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
 
   const handleAnswerSubmit = (userAnswer) => {
     const correctAnswer = quizData[currentQuestion].answer;
     const isCorrect = JSON.stringify(correctAnswer) === JSON.stringify(userAnswer.map(Number));
+    const updatedAnswers = [...eachQuestionAnswers];
+    updatedAnswers[currentQuestion] = isCorrect ? 1 : 0;
+    setEachQuestionAnswers(updatedAnswers);
 
     if (isCorrect) {
       setScore(score + 1);
+      setEachQuestionAnswers([...eachQuestionAnswers, 1]);
+    }
+    else{
+      setEachQuestionAnswers([...eachQuestionAnswers, 0]);
     }
 
     setUserAnswers([...userAnswers, userAnswer]);
 
     if (currentQuestion < quizData.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
+      
     } else {
       setQuizFinished(true);
     }
+    console.log(updatedAnswers);
   };
 
   return (
@@ -73,7 +84,8 @@ const QuizFlow = () => {
           />
         )
       ) : (
-        <QuizSummaryPage score={score} userAnswers={userAnswers} quizData={quizData} />
+        <QuizSummaryPage score={score} userAnswers={userAnswers} quizData={quizData} eachQuestionAnswers={[eachQuestionAnswers]}/>
+
       )}
     </View>
   );

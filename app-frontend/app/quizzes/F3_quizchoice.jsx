@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Modal
 } from "react-native";
-import { React , useState } from "react";
+import { React , useState, useEffect } from "react";
 import QuizChoice from "../../components/QuizChoice";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -18,6 +18,10 @@ export default function QuizChoices({ questionData, onSubmit, questionNumber, to
   const [selectedChoice, setSelectedChoice] = useState([]);
   const [closeQuiz, setCloseQuiz] = useState(false);
 
+  useEffect(() => {
+    setSelectedChoice([]);
+  }, [questionData]);
+  
   const handleChoiceSelect = (index) => {
     // Allow multiple selections
     if (questionData.answer.length >= -1) {

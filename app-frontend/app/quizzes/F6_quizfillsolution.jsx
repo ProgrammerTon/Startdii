@@ -14,24 +14,21 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 const { width, height } = Dimensions.get('window');
 
-export default function Quiz4choice() {
+//{questionData,questionNumber,totalQuestions}
+export default function QuizFillSolution() {
 
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedChoice, setSelectedChoice] = useState([]);
+  //const [currentQuestion, setCurrentQuestion] = useState(0);
+  //const [selectedChoice, setSelectedChoice] = useState([]);
   const [closeQuiz, setCloseQuiz] = useState(false);
   const [userInput, setUserInput] = useState('');
-  const quizData = [
+  const questionData = [
     {
-      totalQuestion: 5,
-      questionId: 3,
-      question: "2+2-1?",
-      choicecount: 0,
-      choice: [],
-      isMultipleAnswer: false,
-      selectedChoice: ["5"],
-      answer : ["3"],
-    }
-  ];
+      question: "2+2",
+      qtype: "fill",
+      choice: [], // No choices, since it's a fill-in question
+      answer: [4], // The correct answer is 4
+    },
+  ]
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
@@ -41,10 +38,10 @@ export default function Quiz4choice() {
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
-            <Text style={styles.textNumber}>{quizData[currentQuestion].questionId} / {quizData[currentQuestion].totalQuestion}</Text>
+            <Text style={styles.textNumber}>{questionNumber} / {totalQuestions}</Text>
         </View>
         <View style={styles.question}>
-            <Text style={styles.textStyle}> {quizData[currentQuestion].question} </Text>
+            <Text style={styles.textStyle}> {questionData.question} </Text>
         </View>
       </View>
       
@@ -52,34 +49,33 @@ export default function Quiz4choice() {
         <View style={styles.choice}>
         <Text style={styles.textNumber}>Your Answer: </Text>
         <QuizChoice
-          content={quizData[currentQuestion].selectedChoice}
+          content={questionData.selectedChoice}
           isSelected={true}
           onPress={() => (null)}
-          isCorrect={!(quizData[currentQuestion].selectedChoice[0] !== quizData[currentQuestion].answer[0])}
+          isCorrect={!(questionData.selectedChoice[0] !== questionData.answer[0])}
           isMultipleAnswer={true}
           isSolutionType={true}
           isFillType={true}
           />
-        {(quizData[currentQuestion].selectedChoice[0] !== quizData[currentQuestion].answer[0]) &&
+        {(questionData.selectedChoice[0] !== questionData.answer[0]) &&
           <View style={{marginTop:10}}>
             <Text style={styles.textNumber}>Corrected Answer:</Text>
             <QuizChoice
-              content={quizData[currentQuestion].answer}
+              content={questionData.answer}
               isSelected={true}
               onPress={() => null}
               isCorrect={true}
-              isMultipleAnswer={true}
               isSolutionType={true}
               isFillType={true}
             />
           </View>
         }
         </View>
-        <View>
+        {/*<View>
           <TouchableOpacity style={styles.nextButton} onPress={() => console.log(answer)}>
             <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
           </TouchableOpacity>
-        </View>
+        </View>*/}
       </View>
       <Modal transparent={true} visible={closeQuiz}>
         <View style={{flex: 1, backgroundColor: "#555555aa"}}>

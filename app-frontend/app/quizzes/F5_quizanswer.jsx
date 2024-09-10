@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
-const ArchiveMainPage = () => {
+const QuizAnswer = ({eachQuestionAnswers}) => {
 
   
   return (
     <View style={styles.container}>
-      
+        
     </View>
   );
 };
 
-export default ArchiveMainPage;
+export default QuizAnswer;
 
 const styles = StyleSheet.create({
   container: {
