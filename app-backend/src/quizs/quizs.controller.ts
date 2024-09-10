@@ -9,15 +9,20 @@ import {
   Query,
 } from '@nestjs/common';
 import { QuizsService } from './quizs.service';
+import { TagsService } from 'src/tags/tags.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { ObjectId } from 'mongodb';
 import { ApiTags } from '@nestjs/swagger';
+import { SearchQuizDto } from './dto/search-quiz.dto';
 
 @ApiTags('Quiz')
 @Controller('quizs')
 export class QuizsController {
-  constructor(private readonly quizsService: QuizsService) {}
+  constructor(
+    private readonly quizsService: QuizsService,
+    private readonly tagsService: TagsService,
+  ) {}
 
   @Post()
   create(@Body() createQuizDto: CreateQuizDto) {
@@ -36,6 +41,23 @@ export class QuizsController {
     const offset = query.offset;
     const sortOrder = query.sortOrder;
     return this.quizsService.findByOffset(offset, sortOrder);
+  }
+
+  @Get('search')
+  findByTitle(@Body() searchSourceDto: SearchQuizDto) {
+    if (searchSourceDto.tags.length === 0) {
+      return this.quizsService.searchByTitle(searchSourceDto.title);
+    }
+    if (!searchSourceDto.title && searchSourceDto.tags.length === 1) {
+      return this.tagsService.getQuizs(searchSourceDto.tags[0]);
+    }
+    if (!searchSourceDto.title) {
+      return this.quizsService.findSourcesByTags(searchSourceDto.tags);
+    }
+    return this.quizsService.findSourcesByTagsAndTitle(
+      searchSourceDto.tags,
+      searchSourceDto.title,
+    );
   }
 
   @Get(':id')
