@@ -133,7 +133,10 @@ const SumQuizPage = () => {
       </View>
       <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
       <StartButton />
-      <RatingBlock ScoreRating={quiz?.averageScore} numComment={quiz?.count} />
+      <RatingBlock
+        ScoreRating={Math.round(quiz?.averageScore)}
+        numComment={quiz?.count}
+      />
       <RatingBar onRatingChange={handleRating} />
 
       {/* CommentBar with input */}
