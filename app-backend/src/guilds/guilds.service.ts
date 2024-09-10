@@ -150,14 +150,19 @@ export class GuildsService {
     if (!guild) {
       return null;
     }
-    
-    const member = guild.memberIdList.filter(elementId => (elementId.toString() === memberId.toString()));
+
+    const member = guild.memberIdList.filter(
+      (elementId) => elementId.toString() === memberId.toString(),
+    );
     if (member.length > 0) {
-      throw new HttpException('User is already in the guild', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'User is already in the guild',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     guild.memberIdList.push(memberId);
-    
+
     return this.guildModel.findByIdAndUpdate(id, guild, { new: true }).exec();
   }
 

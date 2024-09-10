@@ -78,11 +78,11 @@ export class SourcesService {
   }
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
-    let obj = await this.sourceModel.findById(id).exec();
+    const obj = await this.sourceModel.findById(id).exec();
     obj.rating = obj.rating.filter(
-      (r) => r.raterId.toString() !== raterId.toString()
+      (r) => r.raterId.toString() !== raterId.toString(),
     );
-      obj.rating.push({ raterId: raterId, score: score });
+    obj.rating.push({ raterId: raterId, score: score });
     await obj.save();
     return obj;
   }

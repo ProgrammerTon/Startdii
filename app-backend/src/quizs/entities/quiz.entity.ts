@@ -58,4 +58,6 @@ export class Quiz {
   rating: { raterId: ObjectId; score: number }[] = [];
 }
 
-export const QuizSchema = SchemaFactory.createForClass(Quiz);
+export const QuizSchema = SchemaFactory.createForClass(Quiz).index({
+  title: 'text',
+});
