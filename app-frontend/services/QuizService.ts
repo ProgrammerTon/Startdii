@@ -4,6 +4,13 @@ type QuizRespond = {};
 
 type QuizRequest = {};
 
+type Question = {
+  question: string;
+  qType: "choice" | "fill";
+  choices: [] | string[];
+  answers: number[] | number;
+};
+
 // export async function createGuild(data: GuildRequest): Promise<any | null> {
 //   const res = await fetch(`${baseUrl}/sources`, {
 //     method: "POST",
@@ -56,6 +63,31 @@ export async function ratingQuiz(id: string, userId: string, score: number) {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ score, raterId: userId }),
+  });
+  if (!res.ok) {
+    return null;
+  }
+  const result = await res.json();
+  return result;
+}
+
+export async function createQuiz(
+  userId: string,
+  title: string,
+  description: string,
+  tags: string[],
+  questions: Question[]
+) {
+  const res = await fetch(`${baseUrl}/quizs`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ownerId: userId,
+      title,
+      description,
+      tags,
+      questions,
+    }),
   });
   if (!res.ok) {
     return null;
