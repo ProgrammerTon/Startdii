@@ -24,9 +24,9 @@ export default function Quiz1_4choice() {
       questionId: 1,
       question: "What does the cat says?",
       choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
-      isMultipleAnswer: false,
-      answer : ["AOUUU"]
+      choice: ["Meaw", "AOUUU", "Miau", "21",],
+      isMultipleAnswer: true,
+      answer : ["AOUUU","Miau"]
     }
   ];
   const handleChoiceSelect = (choice) => {
