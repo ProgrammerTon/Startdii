@@ -50,7 +50,7 @@ const FileUpload = () => {
     const formData = createFormData(selectedDocuments);
 
     try {
-      const response = await fetch("http://192.168.1.144:3000/files/upload", {
+      const response = await fetch("https://data.236sec.org/files/upload", {
         method: "POST",
         body: formData,
         headers: {
