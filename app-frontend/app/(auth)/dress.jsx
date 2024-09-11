@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState }from "react";
 import {
     View,
     Text,
@@ -7,6 +7,7 @@ import {
     Dimensions,
     StyleSheet,
     Image,
+    TouchableOpacity,
 } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import fonts from "../../constants/font";
@@ -23,47 +24,94 @@ import Char6 from '../../components/charactor/Charactor06';
 const Tab = createMaterialTopTabNavigator();
 
 
-function ShapeDetails() {
+
+function ShapeDetails({ onCharSelect, color }) {
     return (
         <SafeAreaView style={styles.bg}>
-            <ScrollView style={{backgroundColor:colors.white}}>
-                
-                <View style={styles.parentContainer}>
-                    <View style={styles.shapecontainer}>
-                        <Char1 style={styles.image}></Char1>
+            <ScrollView style={{ backgroundColor: colors.white }}>
+                <View style={styles.rowcontainer}>
+                    <TouchableOpacity
+                        style={styles.eachcontainer}
+                        onPress={() => onCharSelect('Char1')}
+                    >
+                        <Char1 color={color} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.eachcontainer}
+                        onPress={() => onCharSelect('Char2')}
+                    >
+                        <Char2 color={color} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.eachcontainer}
+                        onPress={() => onCharSelect('Char3')}
+                    >
+                        <Char3 color={color} />
+                    </TouchableOpacity>
                     </View>
-                    <View style={styles.shapecontainer}>
-                        <Char2 style={styles.image}></Char2>
-                    </View>
-                    <View style={styles.shapecontainer}>
-                        <Char3 style={styles.image}></Char3>
-                    </View>
+                    <View style={styles.rowcontainer}>
+                    <TouchableOpacity
+                        style={styles.eachcontainer}
+                        onPress={() => onCharSelect('Char4')}
+                    >
+                        <Char4 color={color} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.eachcontainer}
+                        onPress={() => onCharSelect('Char5')}
+                    >
+                        <Char5 color={color} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.eachcontainer}
+                        onPress={() => onCharSelect('Char6')}
+                    >
+                        <Char6 color={color} />
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.parentContainer}>
-                    <View style={styles.shapecontainer}>
-                        <Char4 style={styles.image}></Char4>
-                    </View>
-                    <View style={styles.shapecontainer}>
-                        <Char5 style={styles.image}></Char5>
-                    </View>
-                    <View style={styles.shapecontainer}>
-                        <Char6 style={styles.image}></Char6>
-                    </View>
-                </View>
-                
             </ScrollView>
         </SafeAreaView>
     );
 }
 
-function ColourDetails() {
+function ColourDetails({ onColorSelect }) {
     return (
         <SafeAreaView style={styles.bg}>
             <ScrollView style={{backgroundColor:colors.white}}>
-                <View>
-                <View style={styles.container}>
-            <CircularButton onPress={handlePress} title="Press Me" />
-        </View>
+                <View style={styles.rowcontainer}>
+                    <View style={styles.eachcontainer}>
+                        <TouchableOpacity onPress={() => onColorSelect(colors.pink)}>
+                            <View style={[styles.colorbutton, { backgroundColor: colors.pink }]} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <TouchableOpacity onPress={() => onColorSelect(colors.blue)}>
+                            <View style={[styles.colorbutton, { backgroundColor: colors.blue }]} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <TouchableOpacity onPress={() => onColorSelect(colors.red)}>
+                            <View style={[styles.colorbutton, { backgroundColor: colors.red }]} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={styles.rowcontainer}>
+                    <View style={styles.eachcontainer}>
+                        <TouchableOpacity onPress={() => onColorSelect(colors.green)}>
+                            <View style={[styles.colorbutton, { backgroundColor: colors.green }]} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <TouchableOpacity onPress={() => onColorSelect(colors.yellow)}>
+                            <View style={[styles.colorbutton, { backgroundColor: colors.yellow }]} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <TouchableOpacity onPress={() => onColorSelect(colors.purple)}>
+                            <View style={[styles.colorbutton, { backgroundColor: colors.purple }]} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -83,23 +131,42 @@ function HatDetails() {
     );
 }
 
-function CircularButton({ onPress, title }) {
-    return (
-        <TouchableOpacity style={styles.button} onPress={onPress}>
-            <Text style={styles.buttonText}>{title}</Text>
-        </TouchableOpacity>
-    );
-}
+
 
 export default function DressTest() {
+    const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.image} />);
+    const [selectedColor, setSelectedColor] = useState(colors.pink);
+
+    const getCharacterComponent = (char) => {
+        switch (char) {
+          case 'Char1':
+            return <Char1 color={selectedColor} />;
+          case 'Char2':
+            return <Char2 color={selectedColor} />;
+          case 'Char3':
+            return <Char3 color={selectedColor} />;
+          case 'Char4':
+            return <Char4 color={selectedColor} />;
+          case 'Char5':
+            return <Char5 color={selectedColor} />;
+          case 'Char6':
+            return <Char6 color={selectedColor} />;
+          default:
+            return <Char1 color={selectedColor} />;
+        }
+      };
+
     return (
         <SafeAreaView style={styles.bg}>
             <View style={styles.toptab}> 
                 <BackButton></BackButton>
             </View>
-            <View style={styles.main}>
-                <Char1 style={styles.image}></Char1>
+            <View style={{justifyContent: "center",alignItems: 'center'}}>
+                <View style={styles.main}>
+                    {getCharacterComponent(selectedChar)}
+                </View>
             </View>
+            
             <View style={styles.tabContainer}>
                 <Tab.Navigator
                     screenOptions={{
@@ -109,8 +176,12 @@ export default function DressTest() {
                         tabBarStyle: { backgroundColor: colors.white },
                     }}
                 >
-                    <Tab.Screen name="Shape" component={ShapeDetails} />
-                    <Tab.Screen name="Colour" component={ColourDetails} />
+                    <Tab.Screen name="Shape">
+                        {() => <ShapeDetails onCharSelect={setSelectedChar} color={selectedColor} />}
+                    </Tab.Screen>
+                    <Tab.Screen name="Colour">
+                        {() => <ColourDetails onColorSelect={setSelectedColor} />}
+                    </Tab.Screen>
                     <Tab.Screen name="Hat" component={HatDetails} />
                 </Tab.Navigator>
             </View>
@@ -138,50 +209,37 @@ const styles = StyleSheet.create({
         right: 0, // ให้ครอบคลุมความกว้างทั้งหมด
         height: "45.125%",
     },
-    shapecontainer: {
-        backgroundColor:colors.green,
+    eachcontainer: {
+        //backgroundColor:colors.green,
         flex: 1,
         justifyContent: "center",
         alignItems: 'center',
         height : 114,
         width : 114,
+        margin:10,
     },
     image: {
-        width: 114,  // Adjust width as needed
-        height: 114, // Adjust height as needed
+        width: "100%",  // Adjust width as needed
+        height: "100%", // Adjust height as needed
         resizeMode: 'contain', // Adjust this as needed (cover, contain, etc.)
     },
-    parentContainer: {
+    rowcontainer: {
         flex: 1, // Fill the screen
-        top:"5%",
         flexDirection: 'row', // Align children horizontally
     },
     main:{
-        top:"9%",
-        left:"20%",
-        height:200,
-        width:200,
+        top:"20%",
+        height:250,
+        width:250,
         alignItems: 'center',
         justifyContent:'center',
-        backgroundColor:colors.pink
+        //backgroundColor:colors.pink,
+        
     },
-    button: {
-        width: 100,         // Set the width of the button
-        height: 100,        // Set the height of the button (same as width to keep it circular)
-        borderRadius: 50,   // Half of the width/height to make it circular
-        backgroundColor: '#007BFF', // Button background color
-        justifyContent: 'center',
-        alignItems: 'center',
-        elevation: 5,       // Shadow for Android
-        shadowColor: '#000', // Shadow color for iOS
-        shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
-        shadowOpacity: 0.1, // Shadow opacity for iOS
-        shadowRadius: 2,    // Shadow radius for iOS
-    },
-    buttonText: {
-        color: '#fff',      // Text color
-        fontSize: 16,       // Text size
-        fontWeight: 'bold', // Text weight
-    },
+    colorbutton: {
+        borderRadius: 50,
+        height: 90,
+        width: 90,
+      }
     
 });
