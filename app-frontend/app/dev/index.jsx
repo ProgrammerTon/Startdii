@@ -107,6 +107,12 @@ const DevPage = () => {
       >
         <Text className="text-lg">QuizFlow</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/upload")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">UploadFile</Text>
+      </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </ScrollView>
   );
