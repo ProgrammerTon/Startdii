@@ -139,7 +139,7 @@ export class QuizsService {
   }
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
-    let obj = await this.quizModel.findById(id).exec();
+    const obj = await this.quizModel.findById(id).exec();
     obj.rating = obj.rating.filter(
       (r) => r.raterId.toString() !== raterId.toString(),
     );
@@ -231,5 +231,61 @@ export class QuizsService {
       tag.quizs = tag.quizs.filter((element) => String(element) !== String(id));
       tag.save();
     }
+  }
+
+  async findByOffsetWithTitle(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    title: string,
+  ): Promise<Quiz[] | null> {
+    const size = 10;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
+    const quizzes = await this.quizModel
+      .find({ $text: { $search: title } })
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
+      .populate('ownerId', 'username')
+      .exec();
+    offset--;
+    offset *= size;
+    const transformedSources = quizzes
+      .slice(offset, offset + size)
+      .map((quiz) => {
+        const rating = quiz.rating || []; // Ensure 'rating' exists
+        const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+        const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+        const quizObj = quiz.toObject();
+        delete quizObj.rating;
+        return {
+          ...quizObj, // Convert Mongoose document to plain object
+          averageScore, // Add averageScore
+        };
+      });
+    return transformedSources;
+  }
+
+  async searchByTitle(keyword: string): Promise<Quiz[]> {
+    return this.quizModel.find({ $text: { $search: keyword } }).exec();
+  }
+
+  async findSourcesByTags(tags: string[]) {
+    return this.quizModel
+      .find({
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
+      })
+      .exec();
+  }
+
+  async findSourcesByTagsAndTitle(tags: string[], title: string) {
+    return this.quizModel
+      .find({
+        $text: { $search: title },
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
+      })
+      .exec();
   }
 }
