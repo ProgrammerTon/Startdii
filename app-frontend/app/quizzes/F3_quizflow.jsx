@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import QuizFill from './F3_quizfill';
 import QuizChoices from './F3_quizchoice';
 import QuizSummaryPage from './F4_quizsummary';
-import QuizAnswer from './F5_quizanswer';
 
 const QuizFlow = () => {
   const quizData = [
@@ -30,6 +29,12 @@ const QuizFlow = () => {
       qtype: "choice",
       choice: ["0", "7", "9", "1", "5"],
       answer: [1, 2, 4], // Correct answers are '7' and '9' and '5'
+    },
+    {
+      question: "5+5",
+      qtype: "fill",
+      choice: [], // No choices, since it's a fill-in question
+      answer: [10], // The correct answer is 4
     },
   ];
 

@@ -9,19 +9,26 @@ import {
 import React from "react";
 import QuizChoice from "../../components/QuizChoice";
 import Entypo from '@expo/vector-icons/Entypo';
+import { router, useRouter , useLocalSearchParams} from "expo-router";
 
 const { width, height } = Dimensions.get('window');
 
-// Example questionData
-export default function QuizChoiceSolution({ questionData, questionAnswer, questionNumber, totalQuestions }) {
+export default function QuizChoiceSolution() {
+  const { questionData, questionAnswer, questionNumber, totalQuestions } = useLocalSearchParams();
+  console.log("Question Data : ",questionData)
+  console.log("Array of users Answer: ",questionAnswer)
+  console.log("QNum = ",questionNumber)
+  console.log("Total =",totalQuestions)
+  const parsedQuestionData = JSON.parse(questionData);
+  const parsedQuestionAnswer = JSON.parse(questionAnswer);
   // Function to check if the given choice is already selected
   const checkingSelected = (index) => {
-    return questionAnswer.includes(index); // Check if the answer is in the user's selected answers
+    return parsedQuestionAnswer.includes(index); // Check if the answer is in the user's selected answers
   };
 
   // Function to check if the given choice is part of the correct answer
   const isCorrect = (index) => {
-    return questionData.answer.includes(index); // Check if the answer is correct
+    return parsedQuestionData.answer.includes(index); // Check if the answer is correct
   };
 
   return (
@@ -30,7 +37,7 @@ export default function QuizChoiceSolution({ questionData, questionAnswer, quest
         <View style={styles.closeQuiz}>
           <TouchableOpacity
             style={{ backgroundColor: "#fff", borderRadius: 20, padding: 5 }}
-            onPress={() => { /* Handle navigation back */ }}
+            onPress={() => router.back()}
           >
             <Entypo name="chevron-left" size={30} color="blue" />
           </TouchableOpacity>
@@ -39,14 +46,14 @@ export default function QuizChoiceSolution({ questionData, questionAnswer, quest
           <Text style={styles.textNumber}>{questionNumber} / {totalQuestions}</Text>
         </View>
         <View style={styles.question}>
-          <Text style={styles.textStyle}>{questionData.question}</Text>
+          <Text style={styles.textStyle}>{parsedQuestionData.question}</Text>
         </View>
       </View>
 
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
           <ScrollView>
-            {questionData.choice.map((item, index) => (
+            {parsedQuestionData.choice.map((item, index) => (
               <QuizChoice
                 key={index}
                 content={item}

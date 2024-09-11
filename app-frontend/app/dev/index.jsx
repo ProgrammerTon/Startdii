@@ -84,22 +84,10 @@ const DevPage = () => {
         <Text className="text-lg">QuizID1</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/quiz/66d005e69a4ee7cfdad9beee")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">QuizID2</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
         onPress={() => router.push("/quizzes/F3_quizflow")}
         className="bg-green-600 p-2 rounded-xl"
       >
         <Text className="text-lg">QuizFlow</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/quizzes/F6_quizchoicesolution")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">QuizChoiceSolution</Text>
       </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </View>

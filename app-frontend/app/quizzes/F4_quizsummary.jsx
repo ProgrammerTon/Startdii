@@ -1,6 +1,5 @@
-import React, {useState,useEffect} from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import QuizAnswer from './F5_quizanswer';
+import React, {useState, useEffect} from 'react';
+import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import CommentBox from '../Quiz_Component/CommentBlock';
 import RatingBlock from '../Quiz_Component/Rating';
 import SumButton from '../Quiz_Component/SummaryButton';
@@ -8,11 +7,13 @@ import CommentBar from '../Quiz_Component/CommentBar';
 import RatingBar from '../Quiz_Component/RatingBar';
 import { TimeDateBlock, UsernameBlock } from '../Quiz_Component/Time_Username';
 import AnswerButton from './AnswersButton';
+import ScoreProgress from './ScoreProgressBar';
 
-const QuizSummaryPage = ({ score, userAnswers, quizData,eachQuestionAnswers }) => {
+const { width, height } = Dimensions.get('window');
+
+const QuizSummaryPage = ({ score, userAnswers, quizData, eachQuestionAnswers }) => {
 
   const [comments, setComments] = useState([]);
-
   const [commentInput, setCommentInput] = useState("");
 
   const handleSubmitComment = () => {
@@ -28,23 +29,19 @@ const QuizSummaryPage = ({ score, userAnswers, quizData,eachQuestionAnswers }) =
     setCommentInput("");
   };
 
-
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Quiz Summary</Text>
-      <Text style={styles.scoreText}>Your Score: {score} / {quizData.length}</Text>
-      <ScrollView>
-        {quizData.map((question, index) => (
-          <View key={index} style={styles.questionContainer}>
-            <Text style={styles.questionText}>{question.question}</Text>
-            <Text style={styles.answerText}>Your Answer: {userAnswers[index].join(', ')}</Text>
-            <Text style={styles.correctText}>
-              Correct Answer: {question.answer.join(', ')}
-            </Text>
-          </View>
-        ))}
-        <Text style={styles.answerText}>Your Answer: {eachQuestionAnswers}</Text>
-        <Text style={styles.answerText}>Your Answer: {userAnswers}</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Finished</Text>
+      </View>
+      
+      <ScrollView style={styles.containerBottom}>
+        {/* Score and progress bar container */}
+        <View style={styles.scoreProgressContainer}>
+          <Text style={styles.scoreText}>{score} / {quizData.length}</Text>
+          <ScoreProgress percent={(score / quizData.length) * 100} />
+        </View>
+
         <SumButton/>
         <AnswerButton eachQuestionAnswers={eachQuestionAnswers} userAnswers={userAnswers} quizData={quizData}/>
         <RatingBlock ScoreRating={4.5} numComment={comments.length}/>
@@ -67,7 +64,6 @@ const QuizSummaryPage = ({ score, userAnswers, quizData,eachQuestionAnswers }) =
           />
         ))}
       </ScrollView>
-      
     </View>
   );
 };
@@ -77,17 +73,31 @@ export default QuizSummaryPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#fff',
+  },
+  containerBottom: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 20,
+  },
+  header: {
+    backgroundColor: "#04B36E",
+    padding: height * 0.02,
+    alignItems: "center",
   },
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 0,
+  },
+  scoreProgressContainer: {
+    alignItems: 'center', // Center contents horizontally
     marginBottom: 20,
   },
   scoreText: {
-    fontSize: 20,
+    fontSize: 40,
     marginBottom: 20,
+    textAlign: 'center', // Center the text
   },
   questionContainer: {
     marginBottom: 20,

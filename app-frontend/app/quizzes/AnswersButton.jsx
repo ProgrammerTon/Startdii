@@ -1,24 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, Dimensions, Modal, View } from 'react-native';
-import QuizChoiceSolution from './F6_quizchoicesolution';
-import QuizFillSolution from './F6_quizfillsolution';
+import { useRouter, useNavigation } from "expo-router";
 
 const { width } = Dimensions.get('window'); // Get screen width for responsive sizing
 
 const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null); // Keep track of the selected answer
+  const router = useRouter();
+  const navigation = useNavigation(); // To use the navigation event listener
 
   // Extract the inner array
   const answers = (Array.isArray(eachQuestionAnswers) && eachQuestionAnswers[0]) || [];
 
+  useEffect(() => {
+    // Listener for navigation focus event
+    const unsubscribe = navigation.addListener('focus', () => {
+      // When navigating back to this screen, show the modal
+      if (selectedAnswer !== null) {
+        setModalVisible(true);
+      }
+    });
+
+    // Clean up the listener on unmount
+    return unsubscribe;
+  }, [navigation, selectedAnswer]);
+
   const handlePress = (index) => {
     setSelectedAnswer(index);
-    console.log("Selected Answer Index:", index);
-    console.log("Selected Answer Value:", eachQuestionAnswers[0][index]);
-    console.log("Quiz Data for Selected Answer:", quizData[index]);
-    console.log("Answer Index (1-based):", index + 1);
-    console.log("Total Number of Questions:", quizData.length);
+    console.log('-----------------------');
+    console.log("QuestionData:", quizData[index]);
+    console.log("Question Type:", quizData[index].qtype);
+    console.log("Question Number:", index + 1);
+    console.log("Total Questions:", quizData.length);
+    console.log("Array of Selected Answer:", userAnswers[index]);
+
+    const path = quizData[index].qtype === "choice"
+      ? '/quizzes/F6_quizchoicesolution'
+      : '/quizzes/F6_quizfillsolution';
+
+    // Navigate to the new page
+    router.push({
+      pathname: path,
+      params: {
+        questionData: JSON.stringify(quizData[index]),
+        questionNumber: index + 1,
+        totalQuestions: quizData.length,
+        questionAnswer: JSON.stringify(userAnswers[index]),
+      },
+    });
+
+    // Close the modal after a short delay to ensure navigation happens
+    setTimeout(() => {
+      setModalVisible(false);
+    }, 100); // Adjust delay as needed
+  };
+
+  const openModal = () => {
     setModalVisible(true);
   };
 
@@ -26,11 +64,8 @@ const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
     return answers.map((answer, index) => (
       <TouchableOpacity
         key={index}
-        style={[
-          styles.answerButton,
-          { backgroundColor: answer === 1 ? 'green' : 'red' }
-        ]}
-        onPress={() => handlePress(index)} // Pass index to handlePress
+        style={[styles.answerButton, { backgroundColor: answer === 1 ? 'green' : 'red' }]}
+        onPress={() => handlePress(index)}
       >
         <Text style={styles.answerText}>
           {index + 1}
@@ -41,7 +76,7 @@ const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => handlePress(selectedAnswer)}>
+      <TouchableOpacity style={styles.button} onPress={() => openModal()}>
         <Text style={styles.buttonText}>ANSWER</Text>
       </TouchableOpacity>
 
@@ -49,7 +84,7 @@ const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
       <Modal
         visible={modalVisible}
         transparent={true}
-        animationType="slide"
+        animationType="none"
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalBackground}>
@@ -65,25 +100,6 @@ const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
           </View>
-
-          {/* Conditionally render the solution component */}
-          {selectedAnswer !== null && (
-            quizData[selectedAnswer].qtype === "choice" ? (
-              <QuizChoiceSolution
-                questionData={quizData[selectedAnswer]}
-                questionNumber={selectedAnswer + 1}
-                totalQuestions={quizData.length}
-                questionAnswer={userAnswers[selectedAnswer]}
-              />
-            ) : (
-              <QuizFillSolution
-                questionData={quizData[selectedAnswer]}
-                questionNumber={selectedAnswer + 1}
-                totalQuestions={quizData.length}
-                equestionAnswer={userAnswers[selectedAnswer]}
-              />
-            )
-          )}
         </View>
       </Modal>
     </View>
