@@ -9,7 +9,7 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import TagList from "../../components/TagList";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import DescriptionBlock from "../Quiz_Component/descriptionBlock";
@@ -26,12 +26,14 @@ import {
   getCommentsQuiz,
   createCommentSource,
 } from "../../services/CommentService";
+import { useQuestionContext } from "../../context/QuestionProvider";
 
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();
   const TotalQuestion = 11;
   const [quiz, setQuiz] = useState(null);
   const { user } = useGlobalContext();
+  const { setQuestions } = useQuestionContext();
 
   // State to hold the list of comments
   const [comments, setComments] = useState([]);
@@ -79,6 +81,21 @@ const SumQuizPage = () => {
     }).format(date);
     data.date = formattedDate;
     setQuiz(data);
+    const transformQuestions = data.questions.map((question) => {
+      let answer;
+      if (typeof question.answers === "string") {
+        answer = [Number(question.answers)];
+      } else {
+        answer = question.answers;
+      }
+      return {
+        question: question.question,
+        qtype: question.qType,
+        choice: question.choices,
+        answer: answer,
+      };
+    });
+    setQuestions([...transformQuestions]);
   };
 
   const fetchComments = async () => {
@@ -90,7 +107,6 @@ const SumQuizPage = () => {
     }));
     const reversedComments = newComment.reverse();
     setComments([...reversedComments]);
-    console.log("comment", reversedComments);
   };
 
   const onRefresh = async () => {
@@ -122,7 +138,7 @@ const SumQuizPage = () => {
       }
     >
       <Text style={styles.headerStyle}>{quiz?.title}</Text>
-      <DescriptionBlock />
+      <DescriptionBlock QuizDescription={quiz?.description} />
       <View style={styles.tagsContainer}>
         {quiz?.tags.map((tag, ind) => {
           return <Tag key={`${tag}-{ind}`} label={`#${tag}`} />;
@@ -133,8 +149,11 @@ const SumQuizPage = () => {
         <UsernameBlock username={quiz?.ownerId?.username} />
       </View>
       <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
-      <StartButton />
-      <RatingBlock ScoreRating={4.5} numComment={comments.length} />
+      <StartButton handleOnPress={() => router.push("/quiz/F3_quizflow")} />
+      <RatingBlock
+        ScoreRating={Math.round(quiz?.averageScore)}
+        numComment={quiz?.count}
+      />
       <RatingBar onRatingChange={handleRating} />
 
       {/* CommentBar with input */}

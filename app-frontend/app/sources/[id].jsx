@@ -155,7 +155,10 @@ const SourceDetailPage = () => {
           </TouchableOpacity>
         </View>
 
-        <RatingBlock ScoreRating={source?.score} numComment={source?.count} />
+        <RatingBlock
+          ScoreRating={Math.round(source?.score)}
+          numComment={source?.count}
+        />
         <RatingBar onRatingChange={handleRating} />
 
         {/* CommentBar with input */}

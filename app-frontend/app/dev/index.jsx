@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import LogoutButton from "../../components/LogoutButton";
@@ -7,7 +13,7 @@ import { router } from "expo-router";
 const DevPage = () => {
   const { isLogged, user } = useGlobalContext();
   return (
-    <View>
+    <ScrollView>
       <TouchableHighlight
         onPress={() => router.push("/trynaja")}
         className="bg-green-600 p-2 rounded-xl"
@@ -95,8 +101,20 @@ const DevPage = () => {
       >
         <Text className="text-lg">QuizID2</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/quizzes/F3_quizflow")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">QuizFlow</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/upload")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">UploadFile</Text>
+      </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
-    </View>
+    </ScrollView>
   );
 };
 
