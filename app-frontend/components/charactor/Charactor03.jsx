@@ -5,8 +5,6 @@ const Char3 = ({color = "#d9d9d9",...props}) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1000 1000"
-    width={props.width || 100}  // Default width if not provided
-    height={props.height || 100} // Default height if not provided
     {...props}  // Allows additional props to be passed
   >
     <Path
