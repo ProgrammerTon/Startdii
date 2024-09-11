@@ -26,10 +26,14 @@ type Question = {
 
 export async function getQuiz(
   offset: number,
-  sortOrder: "asc" | "desc"
+  sortOrder: "asc" | "desc",
+  title: string | null
 ): Promise<any[] | null> {
+  if (!title) {
+    title = "";
+  }
   const res = await fetch(
-    `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}`,
+    `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}&title=${title}`,
     {
       method: "GET",
       headers: {
