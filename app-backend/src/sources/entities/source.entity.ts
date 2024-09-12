@@ -41,6 +41,12 @@ export class Source {
 
   @Prop({ name: 'rating' })
   rating: { raterId: ObjectId; score: number }[] = [];
+
+  @Prop({ name: 'avg_rating_score'})
+  avg_rating_score: number = 0;
+
+  @Prop({ name: 'rating_count'})
+  rating_count: number = 0;
 }
 
 export const SourceSchema = SchemaFactory.createForClass(Source).index({
