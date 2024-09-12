@@ -131,56 +131,56 @@ function ColourDetails({ onColorSelect }) {
     );
 }
 
-function HatDetails() {
+function HatDetails({ onHatSelect }) {
     return (
         <SafeAreaView style={styles.bg}>
             <ScrollView style={{backgroundColor:colors.white}}>
                 <View style={styles.rowcontainer}>
-                    <View style={styles.eachcontainer}>
-                        <HNone/>
-                    </View>
-                    <View style={styles.eachcontainer}>
-                        <HBanana/>
-                    </View>
-                    <View style={styles.eachcontainer}>
-                        <HCap/>
-                    </View>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HNone')}>
+                        <HNone />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HBanana')}>
+                        <HBanana />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HCap')}>
+                        <HCap />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.rowcontainer}>
-                    <View style={styles.eachcontainer}>
-                        <HCowboy/>
-                    </View>
-                    <View style={styles.eachcontainer}>
-                        <HCrown/>
-                    </View>
-                    <View style={styles.eachcontainer}>
-                        <HDeer/>
-                    </View>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HCowboy')}>
+                        <HCowboy />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HCrown')}>
+                        <HCrown />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HDeer')}>
+                        <HDeer />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.rowcontainer}>
-                    <View style={styles.eachcontainer}>
-                        <HFlower/>
-                    </View>
-                    <View style={styles.eachcontainer}>
-                        <HMagic/>
-                    </View>
-                    <View style={styles.eachcontainer}>
-                        <HPlant/>
-                    </View>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HFlower')}>
+                        <HFlower />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HMagic')}>
+                        <HMagic />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HPlant')}>
+                        <HPlant />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.rowcontainer}>
-                    <View style={styles.eachcontainer}>
-                        <HPlaster/>
-                    </View>
-                    <View style={styles.eachcontainer}>
-                        <HShark/>
-                    </View>
-                    <View style={styles.eachcontainer}>
-                        <HXmas/>
-                    </View>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HPlaster')}>
+                        <HPlaster />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HShark')}>
+                        <HShark />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.eachcontainer} onPress={() => onHatSelect('HXmas')}>
+                        <HXmas />
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -189,9 +189,11 @@ function HatDetails() {
 
 
 
+
 export default function DressTest() {
-    const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.image} />);
+    const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.char} />);
     const [selectedColor, setSelectedColor] = useState(colors.pink);
+    const [selectedHat, setSelectedHat] = useState('HNone');
 
     const getCharacterComponent = (char) => {
         switch (char) {
@@ -210,16 +212,50 @@ export default function DressTest() {
           default:
             return <Char1 color={selectedColor} />;
         }
-      };
+    };
+
+    const getHatComponent = (hat) => {
+        switch (hat) {
+            case 'HBanana':
+                return <HBanana />;
+            case 'HCap':
+                return <HCap />;
+            case 'HCowboy':
+                return <HCowboy />;
+            case 'HCrown':
+                return <HCrown />;
+            case 'HDeer':
+                return <HDeer />;
+            case 'HFlower':
+                return <HFlower />;
+            case 'HMagic':
+                return <HMagic />;
+            case 'HPlant':
+                return <HPlant />;
+            case 'HPlaster':
+                return <HPlaster />;
+            case 'HShark':
+                return <HShark />;
+            case 'HXmas':
+                return <HXmas />;
+        }
+    };
 
     return (
         <SafeAreaView style={styles.bg}>
             <View style={styles.toptab}> 
                 <BackButton></BackButton>
             </View>
-            <View style={{justifyContent: "center",alignItems: 'center'}}>
-                <View style={styles.main}>
+
+            <View style={styles.mainContainer}>
+                <View style={styles.characterContainer}>
+                    {/* Render Hat and Character Together */}
                     {getCharacterComponent(selectedChar)}
+                    {getHatComponent(selectedHat) && (
+                        <View style={styles.hatContainer}>
+                            {getHatComponent(selectedHat)}
+                        </View>
+                    )}
                 </View>
             </View>
             
@@ -238,7 +274,9 @@ export default function DressTest() {
                     <Tab.Screen name="Colour">
                         {() => <ColourDetails onColorSelect={setSelectedColor} />}
                     </Tab.Screen>
-                    <Tab.Screen name="Hat" component={HatDetails} />
+                    <Tab.Screen name="Hat">
+                        {() => <HatDetails onHatSelect={setSelectedHat} />}
+                    </Tab.Screen>
                 </Tab.Navigator>
             </View>
         
@@ -274,7 +312,7 @@ const styles = StyleSheet.create({
         width : 114,
         margin:10,
     },
-    image: {
+    char: {
         width: "100%",  // Adjust width as needed
         height: "100%", // Adjust height as needed
         resizeMode: 'contain', // Adjust this as needed (cover, contain, etc.)
@@ -283,19 +321,30 @@ const styles = StyleSheet.create({
         flex: 1, // Fill the screen
         flexDirection: 'row', // Align children horizontally
     },
-    main:{
-        top:"20%",
-        height:250,
-        width:250,
-        alignItems: 'center',
-        justifyContent:'center',
-        //backgroundColor:colors.pink,
-        
-    },
     colorbutton: {
         borderRadius: 50,
         height: 90,
         width: 90,
-      }
+    },
+    mainContainer: {
+        top:"7%",
+        alignItems: 'center',
+        flex: 1,
+    },
+    characterContainer: {
+        height: 250,
+        width: 250,
+        position: 'relative', // Ensures the child elements (hat) can be positioned absolutely inside this container
+    },
+    hatContainer: {
+        //backgroundColor:colors.green,
+        height:"56%",
+        width:"56%",
+        top:"-104%",
+        left:"22.5%"
+    },
+        
+    
+    
     
 });
