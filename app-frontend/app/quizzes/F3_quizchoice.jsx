@@ -22,6 +22,10 @@ export default function QuizChoices({
   const [selectedChoice, setSelectedChoice] = useState([]);
   const [closeQuiz, setCloseQuiz] = useState(false);
 
+  useEffect(() => {
+    setSelectedChoice([]);
+  }, [questionData]);
+  
   const handleChoiceSelect = (index) => {
     // Allow multiple selections
     if (questionData.answer.length >= -1) {

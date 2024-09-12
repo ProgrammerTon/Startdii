@@ -81,10 +81,17 @@ export class QuizsController {
     return this.quizsService.getRating(id);
   }
 
+  @Patch('rating')
+  updateRatingScores() {
+    return this.quizsService.updateRatingScores();
+  }
+
   @Patch(':id')
   update(@Param('id') id: ObjectId, @Body() updateQuizDto: UpdateQuizDto) {
     return this.quizsService.update(id as ObjectId, updateQuizDto);
   }
+
+  
 
   @Patch(':id/:userId/submit')
   submitQuiz(

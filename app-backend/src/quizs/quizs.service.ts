@@ -103,6 +103,19 @@ export class QuizsService {
       .exec();
   }
 
+  async updateRatingScores(){
+    let objs = await this.quizModel.find().exec();
+    let rating;
+    for (let i = 0; i < objs.length; i++){
+      rating = await this.getRating(objs[i]._id as ObjectId);
+      objs[i].avg_rating_score = rating.Rating;
+      objs[i].rating_count = rating.Count;
+      objs[i].save();
+    }
+    return objs
+  }
+
+
   async addHistory(id: ObjectId, userId: ObjectId, res: boolean[]) {
     const quiz = await this.quizModel.findById(id).exec();
     const user = await this.userModel.findById(userId).exec();
@@ -145,7 +158,10 @@ export class QuizsService {
     );
     obj.rating.push({ raterId: raterId, score: score });
     await obj.save();
-    return obj;
+    let rating_score = await this.getRating(id);
+    obj.avg_rating_score = rating_score.Rating;
+    obj.rating_count = rating_score.Count;
+    return await obj.save();
   }
 
   async dataReset(id: ObjectId) {
