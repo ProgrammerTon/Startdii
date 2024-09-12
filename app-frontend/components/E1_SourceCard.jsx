@@ -44,7 +44,7 @@ const SourceCard = ({ id, title, author, tags, rating }) => {
           <TouchableOpacity onPress={toggleHeart}>
             <FontAwesome
               name={isLiked ? "heart" : "heart-o"}
-              size={30}
+              size={20}
               color={isLiked ? "red" : "gray"}
               style={styles.heartIcon}
             />
@@ -52,7 +52,7 @@ const SourceCard = ({ id, title, author, tags, rating }) => {
           <TouchableOpacity>
             <FontAwesome
               name="share"
-              size={30}
+              size={20}
               color="gray"
               style={styles.shareIcon}
             />
