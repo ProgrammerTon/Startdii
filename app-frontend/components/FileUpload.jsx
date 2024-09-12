@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Button, Image } from "react-native";
+import { View, Button, Image, Alert } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 
 const FileUpload = () => {
@@ -8,7 +8,7 @@ const FileUpload = () => {
   const pickDocuments = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        multiple: true, // Allows the user to select any file
+        multiple: false, // Allows the user to select any file
       });
 
       if (!result.canceled) {
@@ -47,6 +47,8 @@ const FileUpload = () => {
   };
 
   const uploadDocuments = async () => {
+    Alert.alert("You Cant Upload Yet.");
+    return;
     const formData = createFormData(selectedDocuments);
 
     try {
