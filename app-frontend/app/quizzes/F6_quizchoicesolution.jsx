@@ -4,93 +4,70 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  StyleSheet,
-  Modal
+  StyleSheet
 } from "react-native";
-import { React , useState } from "react";
+import React from "react";
 import QuizChoice from "../../components/QuizChoice";
-import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
+import { router, useRouter , useLocalSearchParams} from "expo-router";
 
 const { width, height } = Dimensions.get('window');
 
-export default function Quiz1_4sol() {
+export default function QuizChoiceSolution() {
+  const { questionData, questionAnswer, questionNumber, totalQuestions } = useLocalSearchParams();
+  console.log("Question Data : ",questionData)
+  console.log("Array of users Answer: ",questionAnswer)
+  console.log("QNum = ",questionNumber)
+  console.log("Total =",totalQuestions)
+  const parsedQuestionData = JSON.parse(questionData);
+  const parsedQuestionAnswer = JSON.parse(questionAnswer);
+  // Function to check if the given choice is already selected
+  const checkingSelected = (index) => {
+    return parsedQuestionAnswer.includes(index); // Check if the answer is in the user's selected answers
+  };
 
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedChoice, setSelectedChoice] = useState([]);
-  const [closeQuiz, setCloseQuiz] = useState(false);
-  const quizData = [
-    {
-      totalQuestion: 5,
-      questionId: 1,
-      question: "What does the cat says?",
-      choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
-      isMultipleAnswer: true,
-      selectedChoice: ["Meaw","21", "Purr"],
-      answer : ["AOUUU", "21", "Purr"]
-    }
-  ];
-  const checkingSelected = (item) => {
-    return quizData[currentQuestion].selectedChoice.includes(item)
-  }
+  // Function to check if the given choice is part of the correct answer
+  const isCorrect = (index) => {
+    return parsedQuestionData.answer.includes(index); // Check if the answer is correct
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
-          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:20, padding:5}} onPress={()=>setCloseQuiz(true)}>
+          <TouchableOpacity
+            style={{ backgroundColor: "#fff", borderRadius: 20, padding: 5 }}
+            onPress={() => router.back()}
+          >
             <Entypo name="chevron-left" size={30} color="blue" />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
-            <Text style={styles.textNumber}>{quizData[currentQuestion].questionId} / {quizData[currentQuestion].totalQuestion}</Text>
+          <Text style={styles.textNumber}>{questionNumber} / {totalQuestions}</Text>
         </View>
         <View style={styles.question}>
-            <Text style={styles.textStyle}> {quizData[currentQuestion].question} </Text>
+          <Text style={styles.textStyle}>{parsedQuestionData.question}</Text>
         </View>
       </View>
-      
+
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
-        <ScrollView>
-        {quizData[currentQuestion]?.choice.map((item, index)=>{
-          return <QuizChoice
-                  key={index}
-                  content={item}
-                  isSelected={checkingSelected(item)}
-                  onPress={() => (null)}
-                  isCorrect={quizData[currentQuestion].answer.includes(item)}
-                  isMultipleAnswer={quizData[currentQuestion].isMultipleAnswer}
-                  isSolutionType={quizData[currentQuestion].selectedChoice.length !== 0}
-                  />
-          })}
-        </ScrollView>
-        </View>
-        <View>
-          <TouchableOpacity style={styles.nextButton} onPress={() => console.log(selectedChoice)}>
-            <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
-          </TouchableOpacity>
+          <ScrollView>
+            {parsedQuestionData.choice.map((item, index) => (
+              <QuizChoice
+                key={index}
+                content={item}
+                isSelected={checkingSelected(index)} // Check if it's selected from `questionAnswer`
+                onPress={() => null} // No need for onPress since answers are pre-selected
+                isCorrect={isCorrect(index)} // Check if the choice is correct
+                isSolutionType={true} // Display as a solution
+              />
+            ))}
+          </ScrollView>
         </View>
       </View>
-      <Modal transparent={true} visible={closeQuiz}>
-        <View style={{flex: 1, backgroundColor: "#555555aa"}}>
-          <View style={styles.leaveQuizPopUp}>
-            <View>
-              <Text style={{fontSize: 20, fontWeight: "bold"}}> Do you want to Leave Quiz? </Text>
-            </View>
-            <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
-              <TouchableOpacity style={styles.closeQuizButton} onPress={()=>setCloseQuiz(false)}>
-                <Text style={{fontSize: 16, fontWeight: "bold"}}> Cancel </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.leaveQuizButton}>
-                <Text style={{fontSize: 16, fontWeight: "bold", color: "#fff"}}> Leave </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -101,12 +78,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: '1%',
   },
-  topPart:{
+  topPart: {
     height: height * 0.3,
     width: width,
     backgroundColor: "#04B36E",
   },
-  bottomPart:{
+  bottomPart: {
     height: height * 0.7,
     width: width,
     justifyContent: "center",
@@ -116,19 +93,18 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignSelf: "flex-start",
     marginLeft: width * 0.05,
-    marginTop: height * 0.07
+    marginTop: height * 0.07,
   },
-  quizNumber:{
+  quizNumber: {
     alignSelf: "center",
     backgroundColor: "#ddd",
-    padding:7,
-    paddingHorizontal:15,
+    padding: 7,
+    paddingHorizontal: 15,
     marginTop: -height * 0.2,
     marginBottom: height * 0.08,
     zIndex: 1,
   },
   question: {
-    //flex: 1,
     width: width * 0.9,
     height: height * 0.25,
     backgroundColor: "#fff",
@@ -137,18 +113,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: height * 0.02,
     marginVertical: -height * 0.1,
-    borderRadius:10,
-    borderWidth:2,
-    borderColor:"black",
-    borderStyle:"solid",
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "black",
+    borderStyle: "solid",
   },
-  textNumber:{
+  textNumber: {
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
-  textStyle:{
+  textStyle: {
     fontSize: 20,
-    //fontWeight: "bold"
   },
   choice: {
     flex: 4,
@@ -159,55 +134,24 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignSelf: "center",
   },
-  nextButton:{
-    paddingHorizontal: width * 0.05,
-    paddingVertical:10,
-    marginRight:20,
-    marginVertical: -height * 0.13,
-    backgroundColor: "#0270ED", 
-    borderRadius:20,
-    alignSelf: "flex-end",
+  choiceContainer: {
+    backgroundColor: "#fff",
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginTop: 10,
+    borderWidth: 3,
+    borderColor: "#04B36E", // Green border for default
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
-  headerText: {
-    flex: 1,
-    alignSelf: "center",
-    fontSize: 30,
-    fontWeight: "bold",
+  selectedContainer: {
+    backgroundColor: "#04B36E", // Green background when selected
   },
-  closeQuizButton:{
-    paddingHorizontal: width * 0.05,
-    paddingVertical:10,
-    marginVertical: 5,
-    marginHorizontal: 20,
-    backgroundColor: "#bbb",
-    paddingHorizontal: width * 0.05,
-    borderRadius:20,
+  correctContainer: {
+    borderColor: "#29DE91", // Green border for correct answers
   },
-  leaveQuizButton:{
-    paddingHorizontal: width * 0.05,
-    paddingVertical:10,
-    marginVertical: 5,
-    marginHorizontal: 20,
-    backgroundColor: "#F44D19",
-    paddingHorizontal: width * 0.05,
-    borderRadius:20,
+  wrongContainer: {
+    backgroundColor: "#F44D19", // Red background for wrong answers
   },
-  leaveQuizPopUp:{
-    backgroundColor: "#fff", 
-    marginTop: height*0.4, 
-    margin:50, 
-    padding: 20, 
-    alignItems: "center", 
-    borderRadius: 10, 
-    height: height * 0.15
-  }
-})
-{
-  /* <FlatList
-          data={quizData[currentQuestion].choice}
-          renderItem={({item})=>(
-            <QuizChoice content={item}/>
-          )}
-          keyExtractor={(item)=>item.id}
-          ListHeaderComponent={<Text style={styles.headerText}>Choice</Text>}
-        /> */}
+});

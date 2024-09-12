@@ -60,12 +60,6 @@ const DevPage = () => {
         <Text className="text-lg">Guild</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">UserFinder</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
         onPress={() => router.push("/ArchiveSystem/E2_NoteDetailed")}
         className="bg-green-600 p-2 rounded-xl"
       >
@@ -94,12 +88,6 @@ const DevPage = () => {
         className="bg-green-600 p-2 rounded-xl"
       >
         <Text className="text-lg">QuizID1</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/quiz/66d005e69a4ee7cfdad9beee")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">QuizID2</Text>
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => router.push("/quizzes/F3_quizflow")}

@@ -48,9 +48,14 @@ const AddNotePage = () => {
     setContent("");
   };
 
+  const [isPublishing, setIsPublishing] = useState(false); 
+
   const Publish = async () => {
+    if (isPublishing) return; 
+    setIsPublishing(true); 
     if (name === "" || description === "" || tag === "" || content === "") {
       ShowErrorEmptyFieldWindow();
+      setIsPublishing(false); // Reset state
     } else {
       const tags = tag.split(",");
       const data = {
@@ -64,9 +69,12 @@ const AddNotePage = () => {
       const res = await createSource(data);
       if (!res) {
         Alert.alert("Failed");
+        setIsPublishing(false); // Reset state if failed
         return;
       }
       ShowUploadComplete();
+      resetFields();
+      setIsPublishing(false); // Reset state after successful submission
     }
   };
 

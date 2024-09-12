@@ -34,6 +34,7 @@ const QuizFlow = () => {
   //   },
   // ];
   const [quizData, setQuizData] = useState([]);
+  const [eachQuestionAnswers, setEachQuestionAnswers] = useState([]);
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
@@ -44,9 +45,15 @@ const QuizFlow = () => {
     const correctAnswer = quizData[currentQuestion].answer;
     const isCorrect =
       JSON.stringify(correctAnswer) === JSON.stringify(userAnswer.map(Number));
+    const updatedAnswers = [...eachQuestionAnswers];
+    updatedAnswers[currentQuestion] = isCorrect ? 1 : 0;
+    setEachQuestionAnswers(updatedAnswers);
 
     if (isCorrect) {
       setScore(score + 1);
+      setEachQuestionAnswers([...eachQuestionAnswers, 1]);
+    } else {
+      setEachQuestionAnswers([...eachQuestionAnswers, 0]);
     }
 
     setUserAnswers([...userAnswers, userAnswer]);
@@ -56,6 +63,7 @@ const QuizFlow = () => {
     } else {
       setQuizFinished(true);
     }
+    console.log(updatedAnswers);
   };
 
   useEffect(() => {
@@ -91,6 +99,7 @@ const QuizFlow = () => {
           score={score}
           userAnswers={userAnswers}
           quizData={quizData}
+          eachQuestionAnswers={[eachQuestionAnswers]}
         />
       )}
     </View>
