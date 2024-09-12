@@ -69,7 +69,22 @@ export class QuizsService {
   }
 
   async findById(id: ObjectId): Promise<Quiz | null> {
-    return this.quizModel.findById(id).populate('ownerId', 'username').exec();
+    const quiz = await this.quizModel
+      .findById(id)
+      .populate('ownerId', 'username')
+      .exec();
+    const rating = quiz.rating || []; // Ensure 'rating' exists
+    const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+    const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+    const quizObj = quiz.toObject();
+    delete quizObj.rating;
+    const transformedSources = {
+      ...quizObj,
+      count: rating.length,
+      averageScore,
+    };
+    return transformedSources;
+    // return this.quizModel.findById(id).populate('ownerId', 'username').exec();
   }
 
   async getRating(id: ObjectId) {
@@ -87,6 +102,19 @@ export class QuizsService {
       .findByIdAndUpdate(id, updateQuizDto, { new: true })
       .exec();
   }
+
+  async updateRatingScores(){
+    let objs = await this.quizModel.find().exec();
+    let rating;
+    for (let i = 0; i < objs.length; i++){
+      rating = await this.getRating(objs[i]._id as ObjectId);
+      objs[i].avg_rating_score = rating.Rating;
+      objs[i].rating_count = rating.Count;
+      objs[i].save();
+    }
+    return objs
+  }
+
 
   async addHistory(id: ObjectId, userId: ObjectId, res: boolean[]) {
     const quiz = await this.quizModel.findById(id).exec();
@@ -124,13 +152,16 @@ export class QuizsService {
   }
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
-    let obj = await this.quizModel.findById(id).exec();
+    const obj = await this.quizModel.findById(id).exec();
     obj.rating = obj.rating.filter(
-      (r) => r.raterId.toString() !== raterId.toString()
+      (r) => r.raterId.toString() !== raterId.toString(),
     );
-      obj.rating.push({ raterId: raterId, score: score });
+    obj.rating.push({ raterId: raterId, score: score });
     await obj.save();
-    return obj;
+    let rating_score = await this.getRating(id);
+    obj.avg_rating_score = rating_score.Rating;
+    obj.rating_count = rating_score.Count;
+    return await obj.save();
   }
 
   async dataReset(id: ObjectId) {
@@ -216,5 +247,61 @@ export class QuizsService {
       tag.quizs = tag.quizs.filter((element) => String(element) !== String(id));
       tag.save();
     }
+  }
+
+  async findByOffsetWithTitle(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    title: string,
+  ): Promise<Quiz[] | null> {
+    const size = 10;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
+    const quizzes = await this.quizModel
+      .find({ $text: { $search: title } })
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
+      .populate('ownerId', 'username')
+      .exec();
+    offset--;
+    offset *= size;
+    const transformedSources = quizzes
+      .slice(offset, offset + size)
+      .map((quiz) => {
+        const rating = quiz.rating || []; // Ensure 'rating' exists
+        const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+        const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+        const quizObj = quiz.toObject();
+        delete quizObj.rating;
+        return {
+          ...quizObj, // Convert Mongoose document to plain object
+          averageScore, // Add averageScore
+        };
+      });
+    return transformedSources;
+  }
+
+  async searchByTitle(keyword: string): Promise<Quiz[]> {
+    return this.quizModel.find({ $text: { $search: keyword } }).exec();
+  }
+
+  async findSourcesByTags(tags: string[]) {
+    return this.quizModel
+      .find({
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
+      })
+      .exec();
+  }
+
+  async findSourcesByTagsAndTitle(tags: string[], title: string) {
+    return this.quizModel
+      .find({
+        $text: { $search: title },
+        $and: tags.map((tag) => ({
+          tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
+        })),
+      })
+      .exec();
   }
 }

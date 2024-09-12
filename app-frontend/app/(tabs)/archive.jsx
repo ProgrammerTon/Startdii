@@ -37,10 +37,12 @@ const ArchiveMainPage = () => {
     if (e && !isSearchNote) {
       setIsSearchNote(e);
       fetchToggle(1, true); // Fetch first page of notes
+      setData([]);
     }
     if (!e && isSearchNote) {
       setIsSearchNote(e);
       fetchToggle(1, true); // Fetch first page of quizzes
+      setData([]);
     }
   };
 
@@ -59,7 +61,7 @@ const ArchiveMainPage = () => {
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder);
+      const quizs = await getQuiz(of, sortOrder, searchField);
 
       if (quizs.length !== 0) {
         setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
@@ -81,7 +83,7 @@ const ArchiveMainPage = () => {
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder);
+      const quizs = await getQuiz(of, sortOrder, searchField);
 
       if (quizs.length !== 0) {
         setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
@@ -95,6 +97,7 @@ const ArchiveMainPage = () => {
   // Handle refresh to reset offset and refetch data
   const handleRefresh = async () => {
     setOffset(1); // Reset offset
+    setData([]);
     fetchData(1, true); // Fetch first page of data
   };
 
@@ -146,7 +149,7 @@ const ArchiveMainPage = () => {
 
   const handleSubmitSearch = () => {
     setData([]);
-    fetchData(1, true, false);
+    fetchData(1, true);
   };
 
   return (

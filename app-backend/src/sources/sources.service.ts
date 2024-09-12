@@ -77,14 +77,29 @@ export class SourcesService {
     return updatedSource;
   }
 
+  async updateRatingScores(){
+    let objs = await this.sourceModel.find().exec();
+    let rating;
+    for (let i = 0; i < objs.length; i++){
+      rating = await this.getRating(objs[i]._id as ObjectId);
+      objs[i].avg_rating_score = rating.Rating;
+      objs[i].rating_count = rating.Count;
+      objs[i].save();
+    }
+    return objs
+  }
+
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
-    let obj = await this.sourceModel.findById(id).exec();
+    const obj = await this.sourceModel.findById(id).exec();
     obj.rating = obj.rating.filter(
-      (r) => r.raterId.toString() !== raterId.toString()
+      (r) => r.raterId.toString() !== raterId.toString(),
     );
-      obj.rating.push({ raterId: raterId, score: score });
+    obj.rating.push({ raterId: raterId, score: score });
     await obj.save();
-    return obj;
+    let rating_score = await this.getRating(id);
+    obj.avg_rating_score = rating_score.Rating;
+    obj.rating_count = rating_score.Count;
+    return await obj.save();
   }
 
   async dataReset(id: ObjectId) {
