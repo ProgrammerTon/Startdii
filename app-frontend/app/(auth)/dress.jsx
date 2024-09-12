@@ -19,6 +19,19 @@ import Char3 from '../../components/charactor/Charactor03';
 import Char4 from '../../components/charactor/Charactor04'; 
 import Char5 from '../../components/charactor/Charactor05'; 
 import Char6 from '../../components/charactor/Charactor06'; 
+import HNone from '../../components/hat/hat_none';
+import HBanana from '../../components/hat/hat_banana';
+import HCap from '../../components/hat/hat_cap';
+import HCowboy from '../../components/hat/hat_cowboy';
+import HCrown from '../../components/hat/hat_crown';
+import HDeer from '../../components/hat/hat_deer';
+import HFlower from '../../components/hat/hat_flower';
+import HMagic from '../../components/hat/hat_magic';
+import HPlant from "../../components/hat/hat_plant";
+import HPlaster from "../../components/hat/hat_plaster";
+import HShark from "../../components/hat/hat_shark";
+import HXmas from "../../components/hat/hat_xmas";
+
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -122,9 +135,52 @@ function HatDetails() {
     return (
         <SafeAreaView style={styles.bg}>
             <ScrollView style={{backgroundColor:colors.white}}>
-                <View>
-                    {/* Your settings screen content */}
-                    <Text style={{ color: colors.text }}>hat Screen</Text>
+                <View style={styles.rowcontainer}>
+                    <View style={styles.eachcontainer}>
+                        <HNone/>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <HBanana/>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <HCap/>
+                    </View>
+                </View>
+
+                <View style={styles.rowcontainer}>
+                    <View style={styles.eachcontainer}>
+                        <HCowboy/>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <HCrown/>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <HDeer/>
+                    </View>
+                </View>
+
+                <View style={styles.rowcontainer}>
+                    <View style={styles.eachcontainer}>
+                        <HFlower/>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <HMagic/>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <HPlant/>
+                    </View>
+                </View>
+
+                <View style={styles.rowcontainer}>
+                    <View style={styles.eachcontainer}>
+                        <HPlaster/>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <HShark/>
+                    </View>
+                    <View style={styles.eachcontainer}>
+                        <HXmas/>
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
