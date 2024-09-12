@@ -5,11 +5,20 @@ import { router } from "expo-router";
 import TagList from "./TagList";
 import { FontAwesome } from "@expo/vector-icons"; // Importing icons for heart and stars
 import images from "../constants/images";
+import { favoriteSource, unfavoriteSource } from "../services/SourceService";
+import { useGlobalContext } from "../context/GlobalProvider";
 
 const SourceCard = ({ id, title, author, tags, rating }) => {
+  const { user } = useGlobalContext();
   const [isLiked, setIsLiked] = useState(false);
 
-  const toggleHeart = () => {
+  const toggleHeart = async () => {
+    if(!isLiked){
+      const data = await favoriteSource(id, user._id)
+    }
+    else {
+      const data = await unfavoriteSource(id, user._id);
+    }
     setIsLiked(!isLiked);
   };
 

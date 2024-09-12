@@ -75,3 +75,28 @@ export async function ratingSource(id: string, userId: string, score: number) {
   const result = await res.json();
   return result;
 }
+
+export async function favoriteSource(id: string, userId: string): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_sources/add/${userId}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
+export async function unfavoriteSource(id: string, userId: string): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_sources/remove/${userId}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
