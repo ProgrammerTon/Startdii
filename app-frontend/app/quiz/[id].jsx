@@ -33,7 +33,7 @@ const SumQuizPage = () => {
   const TotalQuestion = 11;
   const [quiz, setQuiz] = useState(null);
   const { user } = useGlobalContext();
-  const { setQuestions } = useQuestionContext();
+  const { setQuestions, setQuizId } = useQuestionContext();
 
   // State to hold the list of comments
   const [comments, setComments] = useState([]);
@@ -121,6 +121,7 @@ const SumQuizPage = () => {
 
   useEffect(() => {
     setRefreshing(true);
+    setQuizId(id);
     fetchQuiz();
     fetchComments();
     setRefreshing(false);
