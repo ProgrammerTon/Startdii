@@ -15,7 +15,7 @@ import QuestionComponent from "./QuestionComponent";
 import { useQuizContext } from "../../context/QuizProvider";
 import { createQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import {router,useRouter} from "expo-router";
+import { router, useRouter } from "expo-router";
 const { width } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
@@ -45,52 +45,71 @@ const QuizMakerPage = () => {
   };
 
   const Publish = async () => {
+    // Transform tags from a string into an array
     transformTags = tags.split(",");
     console.log(title, description, transformTags);
     console.log(`Total Questions:`, questions.length);
-    const questionsNew = questions.map((question, index) => {
-      console.log(`-------------`);
-      const {
-        questionText,
-        selectedOption,
-        value,
-        choices,
-        textInputs,
-        activeButtons,
-      } = question.templateData || {};
-      // console.log(`Question ${index + 1}:`, questionText);
-      // console.log(`Choice Choosen: ${selectedOption}`);
-      // if (selectedOption === "fill") {
-      //   console.log(`Number Answer: ${value}`);
-      // } else if (selectedOption === "choice") {
-      //   console.log(`Number of Choices: ${choices}`);
-      //   for (let i = 0; i < choices; i++) {
-      //     console.log(`Choices ${i + 1}: ${textInputs[i] || ""}`);
-      //   }
-      //   console.log(`Correct Choices: ${activeButtons}`);
-      // }
-      return {
-        question: questionText,
-        qType: selectedOption,
-        choices: selectedOption === "choice" ? Object.values(textInputs) : [],
-        answers: selectedOption === "fill" ? value : activeButtons,
-      };
-    });
-    console.log(questionsNew);
-    const data = await createQuiz(
-      user._id,
-      title,
-      description,
-      transformTags,
-      questionsNew
-    );
-    if (data) {
-      Alert.alert("Create Success");
-      //setQuestions([{ id: Date.now(), templateData: {} }]);
-      router.back()
-      router.back()
-    } else {
-      Alert.alert("Failed");
+
+    // Map through the questions and validate inputs
+    try {
+      const questionsNew = questions.map((question, index) => {
+        console.log(`-------------`);
+        const {
+          questionText,
+          selectedOption,
+          value,
+          choices,
+          textInputs,
+          activeButtons,
+        } = question.templateData || {};
+
+        // Validation: Check if the question text exists
+        if (!questionText || questionText.trim() === "") {
+          Alert.alert(`Please fill in the question text for Question ${index + 1}`);
+          throw new Error("Unfilled question text");
+        }
+
+        // Validation: Check if all choices are filled when it's a "choice" question
+        if (selectedOption === "choice") {
+          const choicesArray = Object.values(textInputs);
+          const allChoicesFilled = choicesArray.every(
+            (choice) => choice && choice.trim() !== ""
+          );
+          if (!allChoicesFilled) {
+            Alert.alert(`Please finish Question ${index + 1}`);
+            throw new Error("Unfilled choices");
+          }
+        }
+
+        return {
+          question: questionText,
+          qType: selectedOption,
+          choices: selectedOption === "choice" ? Object.values(textInputs) : [],
+          answers: selectedOption === "fill" ? value : activeButtons,
+        };
+      });
+
+      console.log(questionsNew);
+
+      // Create quiz with the validated questions
+      const data = await createQuiz(
+        user._id,
+        title,
+        description,
+        transformTags,
+        questionsNew
+      );
+
+      if (data) {
+        Alert.alert("Create Success");
+        // Navigate back after success
+        router.back();
+        router.back();
+      } else {
+        Alert.alert("Failed");
+      }
+    } catch (error) {
+      console.log("Quiz creation failed: ", error);
     }
   };
 
