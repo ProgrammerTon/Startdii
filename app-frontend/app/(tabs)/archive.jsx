@@ -115,9 +115,14 @@ const ArchiveMainPage = () => {
   };
 
   const extractTitleAndTags = (input) => {
-    const parts = input.split(" +"); // Split by " +"
+    const parts = input.split(" "); // Split by " +"
+    const tags = parts.map((word) => {
+      if (word.startsWith("+")) {
+        return word;
+      }
+      return null;
+    });
     const title = parts[0]; // The first part is the title
-    const tags = parts.slice(1); // The rest are the tags
     return { title, tags };
   };
 
