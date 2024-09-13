@@ -29,23 +29,45 @@ export class SourcesController {
     return this.sourcesService.create(createSourceDto);
   }
 
-  @Get()
+ @Get()
   findByOffset(
     @Query()
     query: {
       offset: number;
       sortOrder: 'asc' | 'desc';
       title: string | null;
+      tags: string;
     },
   ) {
     if (!query.offset) return this.sourcesService.findAll();
     const offset = query.offset;
     const sortOrder = query.sortOrder;
-    if (!query.title) {
+    if (!query.title && query.tags.length === 2) {
       return this.sourcesService.findByOffset(offset, sortOrder);
     }
     const title = query.title;
-    return this.sourcesService.findByOffsetWithTitle(offset, sortOrder, title);
+    if (title && query.tags.length === 2) {
+      return this.sourcesService.findByOffsetWithTitle(
+        offset,
+        sortOrder,
+        title,
+      );
+    }
+    const tagsTransform = query.tags
+      .slice(1, query.tags.length - 1)
+      .split(',')
+      .map((tag) => {
+        return tag.trim();
+      });
+    if (title && query.tags.length !== 2) {
+      return this.sourcesService.findSourcesByTagsAndTitle(
+        tagsTransform,
+        title,
+      );
+    }
+    if (query.tags.length !== 2) {
+      return this.sourcesService.findSourcesByTags(tagsTransform);
+    }
   }
 
   @Get('search')
