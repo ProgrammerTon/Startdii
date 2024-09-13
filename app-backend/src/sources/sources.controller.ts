@@ -62,12 +62,17 @@ export class SourcesController {
     if (title && query.tags.length !== 2) {
       return this.sourcesService.findSourcesByTagsAndTitle(
         offset,
+        sortOrder,
         tagsTransform,
         title,
       );
     }
     if (query.tags.length !== 2) {
-      return this.sourcesService.findSourcesByTags(offset, tagsTransform);
+      return this.sourcesService.findSourcesByTags(
+        offset,
+        sortOrder,
+        tagsTransform,
+      );
     }
   }
 

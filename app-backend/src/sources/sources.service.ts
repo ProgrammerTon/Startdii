@@ -222,25 +222,39 @@ export class SourcesService {
     return transformedSources;
   }
 
-  async searchByTitle(offset: number, keyword: string): Promise<Source[]> {
+  async searchByTitle(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    keyword: string,
+  ): Promise<Source[]> {
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
     const size = 10;
     const skip = (offset - 1) * size;
     return this.sourceModel
       .find({ $text: { $search: keyword } })
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
       .skip(skip)
       .limit(size)
       .exec();
   }
 
-  async findSourcesByTags(offset: number, tags: string[]) {
+  async findSourcesByTags(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    tags: string[],
+  ) {
     const size = 10;
     const skip = (offset - 1) * size;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
     return this.sourceModel
       .find({
         $and: tags.map((tag) => ({
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
       .skip(skip)
       .limit(size)
       .exec();
@@ -248,11 +262,13 @@ export class SourcesService {
 
   async findSourcesByTagsAndTitle(
     offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
     tags: string[],
     title: string,
   ) {
     const size = 10;
     const skip = (offset - 1) * size;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
     return this.sourceModel
       .find({
         $text: { $search: title },
@@ -260,6 +276,8 @@ export class SourcesService {
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
       .skip(skip)
       .limit(size)
       .exec();

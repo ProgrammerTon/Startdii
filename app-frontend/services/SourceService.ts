@@ -33,6 +33,9 @@ export async function getSource(
   if (!title) {
     title = "";
   }
+  console.log(
+    `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}`
+  );
   const res = await fetch(
     `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}`,
     {
