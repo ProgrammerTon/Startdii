@@ -122,7 +122,12 @@ const ArchiveMainPage = () => {
       }
       return null;
     });
-    const title = parts[0]; // The first part is the title
+    let title;
+    if (parts[0].startsWith("+")) {
+      title = null;
+    } else {
+      title = parts[0];
+    }
     return { title, tags };
   };
 
