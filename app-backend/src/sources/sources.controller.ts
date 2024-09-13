@@ -61,31 +61,32 @@ export class SourcesController {
       });
     if (title && query.tags.length !== 2) {
       return this.sourcesService.findSourcesByTagsAndTitle(
+        offset,
         tagsTransform,
         title,
       );
     }
     if (query.tags.length !== 2) {
-      return this.sourcesService.findSourcesByTags(tagsTransform);
+      return this.sourcesService.findSourcesByTags(offset, tagsTransform);
     }
   }
 
-  @Get('search')
-  findByTitle(@Body() searchSourceDto: SearchSourceDto) {
-    if (searchSourceDto.tags.length === 0) {
-      return this.sourcesService.searchByTitle(searchSourceDto.title);
-    }
-    if (!searchSourceDto.title && searchSourceDto.tags.length === 1) {
-      return this.tagsService.getSources(searchSourceDto.tags[0]);
-    }
-    if (!searchSourceDto.title) {
-      return this.sourcesService.findSourcesByTags(searchSourceDto.tags);
-    }
-    return this.sourcesService.findSourcesByTagsAndTitle(
-      searchSourceDto.tags,
-      searchSourceDto.title,
-    );
-  }
+  // @Get('search')
+  // findByTitle(@Body() searchSourceDto: SearchSourceDto) {
+  //   if (searchSourceDto.tags.length === 0) {
+  //     return this.sourcesService.searchByTitle(searchSourceDto.title);
+  //   }
+  //   if (!searchSourceDto.title && searchSourceDto.tags.length === 1) {
+  //     return this.tagsService.getSources(searchSourceDto.tags[0]);
+  //   }
+  //   if (!searchSourceDto.title) {
+  //     return this.sourcesService.findSourcesByTags(searchSourceDto.tags);
+  //   }
+  //   return this.sourcesService.findSourcesByTagsAndTitle(
+  //     searchSourceDto.tags,
+  //     searchSourceDto.title,
+  //   );
+  // }
 
   @Get(':id')
   findById(@Param('id') id: ObjectId) {

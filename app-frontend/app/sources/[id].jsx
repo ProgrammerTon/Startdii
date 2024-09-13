@@ -49,9 +49,10 @@ const SourceDetailPage = () => {
       content: data.content,
       tags: data.tags,
       updated_at: formattedDateTime,
-      score: data.averageScore ? data.averageScore : 0,
-      count: data.count,
+      score: data.avg_rating_score ? data.avg_rating_score : 0,
+      count: data.rating_count ? data.rating_count : 0,
     });
+    console.log(data);
   };
 
   useEffect(() => {
