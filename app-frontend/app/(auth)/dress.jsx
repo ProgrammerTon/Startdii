@@ -1,4 +1,4 @@
-import React, { useState }from "react";
+import React, { useState, useContext }from "react";
 import {
     View,
     Text,
@@ -19,7 +19,7 @@ import Char3 from '../../components/charactor/Charactor03';
 import Char4 from '../../components/charactor/Charactor04'; 
 import Char5 from '../../components/charactor/Charactor05'; 
 import Char6 from '../../components/charactor/Charactor06'; 
-
+import { CharacterContext } from "../profile/charcontext";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -136,6 +136,7 @@ function HatDetails() {
 export default function DressTest() {
     const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.image} />);
     const [selectedColor, setSelectedColor] = useState(colors.pink);
+    // const { selectedChar, setSelectedChar, selectedColor, setSelectedColor } = useContext(CharacterContext);
 
     const getCharacterComponent = (char) => {
         switch (char) {
