@@ -189,8 +189,20 @@ export class GuildsService {
     if (!guild) {
       return null;
     }
+
+    const member = guild.memberIdList.filter(
+      (elementId) => elementId.toString() === userId.toString(),
+    );
+    if (member.length > 0) {
+      throw new HttpException(
+        'User is already in the guild',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     guild.memberIdList.push(userId);
-    return await this.guildModel
+
+    return this.guildModel
       .findByIdAndUpdate(guild._id, guild, { new: true })
       .exec();
   }
