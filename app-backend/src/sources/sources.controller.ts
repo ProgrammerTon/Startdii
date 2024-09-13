@@ -101,13 +101,11 @@ export class SourcesController {
   updateRatingScores() {
     return this.sourcesService.updateRatingScores();
   }
-  
+
   @Patch(':id')
   update(@Param('id') id: ObjectId, @Body() updateSourceDto: UpdateSourceDto) {
     return this.sourcesService.update(id, updateSourceDto);
   }
-
-  
 
   @Patch(':id/rating')
   userRating(
