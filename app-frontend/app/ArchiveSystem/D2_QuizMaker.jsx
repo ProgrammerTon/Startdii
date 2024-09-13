@@ -15,7 +15,7 @@ import QuestionComponent from "./QuestionComponent";
 import { useQuizContext } from "../../context/QuizProvider";
 import { createQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider";
-
+import {router,useRouter} from "expo-router";
 const { width } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
@@ -86,6 +86,9 @@ const QuizMakerPage = () => {
     );
     if (data) {
       Alert.alert("Create Success");
+      //setQuestions([{ id: Date.now(), templateData: {} }]);
+      router.back()
+      router.back()
     } else {
       Alert.alert("Failed");
     }
