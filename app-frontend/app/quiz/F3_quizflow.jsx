@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import QuizFill from "../quizzes/F3_quizfill";
 import QuizChoices from "../quizzes/F3_quizchoice";
-import QuizSummaryPage from "../quizzes/F4_quizsummary";
 import { useQuestionContext } from "../../context/QuestionProvider";
+import QuizSummaryPage from "./F4_quizsummary";
 
 const QuizFlow = () => {
-  const { questions } = useQuestionContext();
+  const { questions, quizId } = useQuestionContext();
   // const quizData = [
   //   {
   //     question: "Charay Cool or not?",
@@ -100,6 +100,7 @@ const QuizFlow = () => {
           userAnswers={userAnswers}
           quizData={quizData}
           eachQuestionAnswers={[eachQuestionAnswers]}
+          quizId={quizId}
         />
       )}
     </View>
