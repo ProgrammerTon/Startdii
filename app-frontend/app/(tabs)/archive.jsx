@@ -260,7 +260,7 @@ const ArchiveMainPage = () => {
                 title={item?.title}
                 author={item?.ownerId?.username}
                 tags={item?.tags}
-                rating={item?.averageScore}
+                rating={item?.avg_rating_score}
                 isFavorite={fav}
               />
             );
@@ -271,7 +271,7 @@ const ArchiveMainPage = () => {
                 title={item?.title}
                 author={item?.ownerId?.username}
                 tags={item?.tags}
-                rating={item?.averageScore}
+                rating={item?.avg_rating_score}
               />
             );
           }
