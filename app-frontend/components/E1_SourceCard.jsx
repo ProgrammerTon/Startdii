@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity,ScrollView } from "react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import TagList from "./TagList";
@@ -26,7 +26,9 @@ const SourceCard = ({ id, title, author, tags, rating }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>{title}</Text>
+        <Text style={styles.titleText}>
+            {title.length > 20 ? `${title.slice(0, 20)}...` : title}
+        </Text>
           <Text style={styles.authorText}>By {author}</Text>
           <TagList tags={tags} title={title} id={id} />
           <View style={styles.ratingContainer}>

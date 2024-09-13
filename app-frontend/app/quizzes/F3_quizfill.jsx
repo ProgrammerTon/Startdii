@@ -34,7 +34,7 @@ export default function QuizFill({ questionData, onSubmit, questionNumber, total
   ];
   */
   useEffect(() => {
-    setSelectedChoice([]);
+    setUserInput();
   }, [questionData]);
 
   return (
