@@ -32,6 +32,7 @@ const ArchiveMainPage = () => {
   const { isLogged } = useGlobalContext();
   const [searchField, setSearchField] = useState("");
   const [isSearchNote, setIsSearchNote] = useState(true);
+  const { user } = useGlobalContext();
 
   const handleToggleSearch = (e) => {
     if (e && !isSearchNote) {
@@ -240,6 +241,9 @@ const ArchiveMainPage = () => {
         data={data}
         renderItem={({ item }) => {
           if (isSearchNote) {
+            const fav = user?.favorite_sources?.includes(item?._id)
+              ? true
+              : false;
             return (
               <SourceCard
                 id={item?._id}
@@ -247,6 +251,7 @@ const ArchiveMainPage = () => {
                 author={item?.ownerId?.username}
                 tags={item?.tags}
                 rating={item?.averageScore}
+                isFavorite={fav}
               />
             );
           } else {
