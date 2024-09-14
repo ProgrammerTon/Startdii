@@ -61,6 +61,7 @@ export default function QuizChoiceSolution() {
                 onPress={() => null} // No need for onPress since answers are pre-selected
                 isCorrect={isCorrect(index)} // Check if the choice is correct
                 isSolutionType={true} // Display as a solution
+                isMultipleAnswer={(parsedQuestionData.answer.length > 1)}
               />
             ))}
           </ScrollView>
