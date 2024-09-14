@@ -66,7 +66,7 @@ const ArchiveMainPage = () => {
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder, searchField);
+      const quizs = await getQuiz(of, sortOrder, title, tags);
 
       if (quizs?.length !== 0) {
         setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
@@ -98,7 +98,7 @@ const ArchiveMainPage = () => {
         }
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder, title);
+      const quizs = await getQuiz(of, sortOrder, title, tags);
 
       if (quizs && quizs?.length !== 0) {
         if (!isSearch) {

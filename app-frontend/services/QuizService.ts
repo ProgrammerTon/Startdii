@@ -27,13 +27,14 @@ type Question = {
 export async function getQuiz(
   offset: number,
   sortOrder: "asc" | "desc",
-  title: string | null
+  title: string | null,
+  tags: string[]
 ): Promise<any[] | null> {
   if (!title) {
     title = "";
   }
   const res = await fetch(
-    `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}&title=${title}`,
+    `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}`,
     {
       method: "GET",
       headers: {
@@ -41,12 +42,36 @@ export async function getQuiz(
       },
     }
   );
+  const data: any[] = await res.json();
   if (!res.ok) {
     return null;
   }
-  const data: any[] = await res.json();
   return data;
 }
+
+// export async function getQuiz(
+//   offset: number,
+//   sortOrder: "asc" | "desc",
+//   title: string | null
+// ): Promise<any[] | null> {
+//   if (!title) {
+//     title = "";
+//   }
+//   const res = await fetch(
+//     `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}&title=${title}`,
+//     {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+//   if (!res.ok) {
+//     return null;
+//   }
+//   const data: any[] = await res.json();
+//   return data;
+// }
 
 export async function findQuiz(id: string): Promise<any> {
   const res = await fetch(`${baseUrl}/quizs/${id}`, {
