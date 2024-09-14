@@ -30,5 +30,13 @@ export class CreateSourceDto {
 
   @ApiProperty()
   @IsOptional()
+  filename: string;
+
+  @ApiProperty()
+  @IsOptional()
+  originalname: string;
+
+  @ApiProperty()
+  @IsOptional()
   tags: string[] = [];
 }

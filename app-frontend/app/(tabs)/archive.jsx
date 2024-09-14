@@ -32,6 +32,7 @@ const ArchiveMainPage = () => {
   const { isLogged } = useGlobalContext();
   const [searchField, setSearchField] = useState("");
   const [isSearchNote, setIsSearchNote] = useState(true);
+  const { user } = useGlobalContext();
 
   const handleToggleSearch = (e) => {
     if (e && !isSearchNote) {
@@ -65,7 +66,7 @@ const ArchiveMainPage = () => {
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder, searchField);
+      const quizs = await getQuiz(of, sortOrder, title, tags);
 
       if (quizs?.length !== 0) {
         setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
@@ -97,7 +98,7 @@ const ArchiveMainPage = () => {
         }
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder, title);
+      const quizs = await getQuiz(of, sortOrder, title, tags);
 
       if (quizs && quizs?.length !== 0) {
         if (!isSearch) {
@@ -114,9 +115,19 @@ const ArchiveMainPage = () => {
   };
 
   const extractTitleAndTags = (input) => {
-    const parts = input.split(" +"); // Split by " +"
-    const title = parts[0]; // The first part is the title
-    const tags = parts.slice(1); // The rest are the tags
+    const parts = input.split(" "); // Split by " +"
+    const tags = parts.map((word) => {
+      if (word.startsWith("+")) {
+        return word;
+      }
+      return null;
+    });
+    let title;
+    if (parts[0].startsWith("+")) {
+      title = null;
+    } else {
+      title = parts[0];
+    }
     return { title, tags };
   };
 
@@ -240,13 +251,17 @@ const ArchiveMainPage = () => {
         data={data}
         renderItem={({ item }) => {
           if (isSearchNote) {
+            const fav = user?.favorite_sources?.includes(item?._id)
+              ? true
+              : false;
             return (
               <SourceCard
                 id={item?._id}
                 title={item?.title}
                 author={item?.ownerId?.username}
                 tags={item?.tags}
-                rating={item?.averageScore}
+                rating={item?.avg_rating_score}
+                isFavorite={fav}
               />
             );
           } else {
@@ -256,7 +271,7 @@ const ArchiveMainPage = () => {
                 title={item?.title}
                 author={item?.ownerId?.username}
                 tags={item?.tags}
-                rating={item?.averageScore}
+                rating={item?.avg_rating_score}
               />
             );
           }

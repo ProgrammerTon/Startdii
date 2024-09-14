@@ -9,6 +9,8 @@ type SourceRequest = {
   content?: string;
   published?: boolean;
   tags?: string[];
+  filename: string;
+  originalname: string;
 };
 
 export async function createSource(data: SourceRequest): Promise<any | null> {
@@ -33,35 +35,20 @@ export async function getSource(
   if (!title) {
     title = "";
   }
-  if (tags?.length === 0) {
-    const res = await fetch(
-      `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const data: SourceRespond[] = await res.json();
-    if (!res.ok) {
-      return null;
-    }
-    return data;
-  } else {
-    const res = await fetch(`${baseUrl}/sources/search`, {
-      method: "POST",
+  const res = await fetch(
+    `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}`,
+    {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, tags }),
-    });
-    const data: SourceRespond[] = await res.json();
-    if (!res.ok) {
-      return null;
     }
-    return data;
+  );
+  const data: SourceRespond[] = await res.json();
+  if (!res.ok) {
+    return null;
   }
+  return data;
 }
 
 export async function findSource(id: string): Promise<SourceRespond | null> {

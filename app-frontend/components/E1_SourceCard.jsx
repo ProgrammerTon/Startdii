@@ -1,17 +1,21 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity,ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import TagList from "./TagList";
 import { FontAwesome } from "@expo/vector-icons"; // Importing icons for heart and stars
 import images from "../constants/images";
 
-const SourceCard = ({ id, title, author, tags, rating }) => {
+const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const toggleHeart = () => {
     setIsLiked(!isLiked);
   };
+
+  useEffect(() => {
+    setIsLiked(isFavorite);
+  }, [isFavorite]);
 
   return (
     <TouchableOpacity onPress={() => router.push(`/sources/${id}`)}>

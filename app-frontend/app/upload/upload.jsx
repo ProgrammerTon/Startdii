@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import FileUpload from "../components/FileUpload";
+import FileUpload from "../../components/FileUpload";
 
 const UploadPage = () => {
   return (
-    <View>
+    <ScrollView>
       <Text>UploadPage</Text>
       <FileUpload />
-    </View>
+    </ScrollView>
   );
 };
 
