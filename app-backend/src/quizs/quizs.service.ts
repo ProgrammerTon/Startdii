@@ -300,6 +300,7 @@ export class QuizsService {
       .sort({ createdAt: sortValue })
       .skip(skip)
       .limit(size)
+      .populate('ownerId', 'username')
       .exec();
   }
 
@@ -323,6 +324,7 @@ export class QuizsService {
       .sort({ createdAt: sortValue })
       .skip(skip)
       .limit(size)
+      .populate('ownerId', 'username')
       .exec();
   }
 }
