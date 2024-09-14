@@ -8,9 +8,10 @@ import {
   RefreshControl,
   TextInput,
   Alert,
+  Linking,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import TagList from "../../components/TagList";
 import CommentBox from "../Quiz_Component/CommentBlock";
 import RatingBlock from "../Quiz_Component/Rating";
@@ -22,6 +23,8 @@ import {
   createCommentSource,
 } from "../../services/CommentService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { Image } from "expo-image";
+import { baseUrl } from "@/constants/const";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -51,8 +54,20 @@ const SourceDetailPage = () => {
       updated_at: formattedDateTime,
       score: data.avg_rating_score ? data.avg_rating_score : 0,
       count: data.rating_count ? data.rating_count : 0,
+      filename: data.filename ? data.filename : null,
     });
-    console.log(data);
+    console.log({
+      title: data.title,
+      ownerName: data.ownerId.username,
+      description: data.description,
+      content: data.content,
+      tags: data.tags,
+      updated_at: formattedDateTime,
+      score: data.avg_rating_score ? data.avg_rating_score : 0,
+      count: data.rating_count ? data.rating_count : 0,
+      filename: data.filename ? data.filename : null,
+    });
+    console.log(data?.filename);
   };
 
   useEffect(() => {
@@ -113,6 +128,19 @@ const SourceDetailPage = () => {
     setRefreshing(false);
   };
 
+  const handleDownload = async () => {
+    if (source?.filename) {
+      const filetype = source.filename.endsWith(".pdf") ? "pdfs" : "images";
+      const url = `${baseUrl}/files/${filetype}/${source.filename}`;
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        console.log("Don't know how to open this URL: " + url);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -144,9 +172,18 @@ const SourceDetailPage = () => {
           </View>
         </View>
 
+        {["png", "jpg"].some((extension) =>
+          source?.filename?.endsWith(extension)
+        ) ? (
+          <Image
+            source={{ uri: `${baseUrl}/files/images/${source?.filename}` }}
+            style={{ width: 200, height: 200 }} // Adjust the width/height as needed
+          />
+        ) : null}
+
         {/* Buttons */}
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleDownload}>
             <FontAwesome name="download" size={24} color="#0E68D9" />
             <Text style={styles.buttonText}>Download</Text>
           </TouchableOpacity>

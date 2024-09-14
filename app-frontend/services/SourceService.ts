@@ -9,6 +9,8 @@ type SourceRequest = {
   content?: string;
   published?: boolean;
   tags?: string[];
+  filename: string;
+  originalname: string;
 };
 
 export async function createSource(data: SourceRequest): Promise<any | null> {
