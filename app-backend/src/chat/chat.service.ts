@@ -4,12 +4,14 @@ import { Model, Types } from 'mongoose';
 import { Chat, ChatDocument, messageType } from './entities/chat.entity';
 import { UsersService } from 'src/users/users.service';
 import { ObjectId } from 'mongodb';
+import { ChatListService } from 'src/users/chatlist.service';
 
 @Injectable()
 export class ChatService {
   constructor(
     @InjectModel(Chat.name)
     private chatModel: Model<ChatDocument>,
+    private chatListService: ChatListService,
 
     private userService: UsersService,
   ) {}
@@ -30,7 +32,9 @@ export class ChatService {
     chat.msgType = msg.type;
     chat.userId = user._id;
     const createdChat = new this.chatModel(chat);
-    return createdChat.save();
+    const savedChat = await createdChat.save();
+    await this.chatListService.updateChatList(chat.chatId, savedChat._id);
+    return savedChat;
   }
 
   async findAll() {
