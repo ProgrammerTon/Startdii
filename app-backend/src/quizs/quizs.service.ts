@@ -103,18 +103,17 @@ export class QuizsService {
       .exec();
   }
 
-  async updateRatingScores(){
+  async updateRatingScores() {
     let objs = await this.quizModel.find().exec();
     let rating;
-    for (let i = 0; i < objs.length; i++){
+    for (let i = 0; i < objs.length; i++) {
       rating = await this.getRating(objs[i]._id as ObjectId);
       objs[i].avg_rating_score = rating.Rating;
       objs[i].rating_count = rating.Count;
       objs[i].save();
     }
-    return objs
+    return objs;
   }
-
 
   async addHistory(id: ObjectId, userId: ObjectId, res: boolean[]) {
     const quiz = await this.quizModel.findById(id).exec();
@@ -255,28 +254,27 @@ export class QuizsService {
     title: string,
   ): Promise<Quiz[] | null> {
     const size = 10;
+    const skip = (offset - 1) * size;
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const quizzes = await this.quizModel
       .find({ $text: { $search: title } })
       .select('-updatedAt')
       .sort({ createdAt: sortValue })
+      .skip(skip)
+      .limit(size)
       .populate('ownerId', 'username')
       .exec();
-    offset--;
-    offset *= size;
-    const transformedSources = quizzes
-      .slice(offset, offset + size)
-      .map((quiz) => {
-        const rating = quiz.rating || []; // Ensure 'rating' exists
-        const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
-        const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
-        const quizObj = quiz.toObject();
-        delete quizObj.rating;
-        return {
-          ...quizObj, // Convert Mongoose document to plain object
-          averageScore, // Add averageScore
-        };
-      });
+    const transformedSources = quizzes.map((quiz) => {
+      const rating = quiz.rating || []; // Ensure 'rating' exists
+      const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+      const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+      const quizObj = quiz.toObject();
+      delete quizObj.rating;
+      return {
+        ...quizObj, // Convert Mongoose document to plain object
+        averageScore, // Add averageScore
+      };
+    });
     return transformedSources;
   }
 
@@ -284,17 +282,36 @@ export class QuizsService {
     return this.quizModel.find({ $text: { $search: keyword } }).exec();
   }
 
-  async findSourcesByTags(tags: string[]) {
+  async findQuizsByTags(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    tags: string[],
+  ) {
+    const size = 10;
+    const skip = (offset - 1) * size;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
     return this.quizModel
       .find({
         $and: tags.map((tag) => ({
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
+      .skip(skip)
+      .limit(size)
       .exec();
   }
 
-  async findSourcesByTagsAndTitle(tags: string[], title: string) {
+  async findQuizsByTagsAndTitle(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    tags: string[],
+    title: string,
+  ) {
+    const size = 10;
+    const skip = (offset - 1) * size;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
     return this.quizModel
       .find({
         $text: { $search: title },
@@ -302,6 +319,10 @@ export class QuizsService {
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
+      .select('-updatedAt')
+      .sort({ createdAt: sortValue })
+      .skip(skip)
+      .limit(size)
       .exec();
   }
 }

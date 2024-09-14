@@ -42,34 +42,58 @@ export class QuizsController {
       offset: number;
       sortOrder: 'asc' | 'desc';
       title: string | null;
+      tags: string;
     },
   ) {
     if (!query.offset) return this.quizsService.findAll();
     const offset = query.offset;
     const sortOrder = query.sortOrder;
-    if (!query.title) {
+    if (!query.title && query.tags.length === 2) {
       return this.quizsService.findByOffset(offset, sortOrder);
     }
     const title = query.title;
-    return this.quizsService.findByOffsetWithTitle(offset, sortOrder, title);
+    if (title && query.tags.length === 2) {
+      return this.quizsService.findByOffsetWithTitle(offset, sortOrder, title);
+    }
+    const tagsTransform = query.tags
+      .slice(1, query.tags.length - 1)
+      .split(',')
+      .map((tag) => {
+        return tag.trim();
+      });
+    if (title && query.tags.length !== 2) {
+      return this.quizsService.findQuizsByTagsAndTitle(
+        offset,
+        sortOrder,
+        tagsTransform,
+        title,
+      );
+    }
+    if (query.tags.length !== 2) {
+      return this.quizsService.findQuizsByTags(
+        offset,
+        sortOrder,
+        tagsTransform,
+      );
+    }
   }
 
-  @Get('search')
-  findByTitle(@Body() searchSourceDto: SearchQuizDto) {
-    if (searchSourceDto.tags.length === 0) {
-      return this.quizsService.searchByTitle(searchSourceDto.title);
-    }
-    if (!searchSourceDto.title && searchSourceDto.tags.length === 1) {
-      return this.tagsService.getQuizs(searchSourceDto.tags[0]);
-    }
-    if (!searchSourceDto.title) {
-      return this.quizsService.findSourcesByTags(searchSourceDto.tags);
-    }
-    return this.quizsService.findSourcesByTagsAndTitle(
-      searchSourceDto.tags,
-      searchSourceDto.title,
-    );
-  }
+  // @Get('search')
+  // findByTitle(@Body() searchSourceDto: SearchQuizDto) {
+  //   if (searchSourceDto.tags.length === 0) {
+  //     return this.quizsService.searchByTitle(searchSourceDto.title);
+  //   }
+  //   if (!searchSourceDto.title && searchSourceDto.tags.length === 1) {
+  //     return this.tagsService.getQuizs(searchSourceDto.tags[0]);
+  //   }
+  //   if (!searchSourceDto.title) {
+  //     return this.quizsService.findSourcesByTags(searchSourceDto.tags);
+  //   }
+  //   return this.quizsService.findSourcesByTagsAndTitle(
+  //     searchSourceDto.tags,
+  //     searchSourceDto.title,
+  //   );
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: ObjectId) {
@@ -90,8 +114,6 @@ export class QuizsController {
   update(@Param('id') id: ObjectId, @Body() updateQuizDto: UpdateQuizDto) {
     return this.quizsService.update(id as ObjectId, updateQuizDto);
   }
-
-  
 
   @Patch(':id/:userId/submit')
   submitQuiz(
