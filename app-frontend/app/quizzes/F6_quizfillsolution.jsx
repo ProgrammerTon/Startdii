@@ -62,7 +62,9 @@ export default function QuizFillSolution() {
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
-          <Text style={styles.textNumber}>Your Answer: </Text>
+          {parsedQuestionAnswer !== parseInt(parsedQuestionData.answer) &&
+            <Text style={styles.textNumber}>Your Answer: </Text>
+          }
           <QuizChoice
             content={parsedQuestionAnswer}
             isSelected={true}
