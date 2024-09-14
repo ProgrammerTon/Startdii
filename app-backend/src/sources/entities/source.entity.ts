@@ -4,12 +4,18 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type SourceDocument = Source & Document;
 
+export enum Status {
+  private = 'private',
+  public = 'public',
+  guild = 'guild',
+}
+
 @Schema({ timestamps: true })
 export class Source {
   @Prop({ type: ObjectId, auto: true })
   id: ObjectId;
 
-  @Prop({ type: ObjectId })
+  @Prop({ type: ObjectId, name: 'owner', ref: 'User' })
   ownerId: ObjectId;
 
   @Prop({ name: 'title' })
@@ -25,10 +31,24 @@ export class Source {
   content: string;
 
   @Prop({ name: 'published' })
-  published: boolean;
+  published: Status;
+
+  @Prop({ name: 'guildId' })
+  guildId: ObjectId;
 
   @Prop({ name: 'tags' })
   tags: string[];
+
+  @Prop({ name: 'rating' })
+  rating: { raterId: ObjectId; score: number }[] = [];
+
+  @Prop({ name: 'avg_rating_score'})
+  avg_rating_score: number = 0;
+
+  @Prop({ name: 'rating_count'})
+  rating_count: number = 0;
 }
 
-export const SourceSchema = SchemaFactory.createForClass(Source);
+export const SourceSchema = SchemaFactory.createForClass(Source).index({
+  title: 'text',
+});

@@ -1,59 +1,107 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
-import fonts from "../constants/font";
-import colors from "../constants/color";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get('window');
 
-const QuizChoice = ({ content, isSelected = false, onPress, isCorrect = false, isMultipleAnswer = false, isSolutionType = false, isFillType=false}) => {
-  const correctandnotselected = isCorrect && !isSelected && isSolutionType
-  const incorrectedandselected = !isCorrect && isSelected && isSolutionType
+const QuizChoice = ({ content, isSelected = false, isCorrect = false, isSolutionType = false, onPress , isMultipleAnswer = false}) => {
+  const getChoiceStyle = () => {
+    if (isSolutionType) {
+      if (isMultipleAnswer) {
+        return isCorrect ? (isSelected ? styles.correctContainer : styles.correctnotSelectedContainer) : (isSelected ? styles.wrongSelectedContainer : styles.choiceContainer);
+      }
+      else{
+        return isCorrect ? styles.correctContainer : (isSelected ? styles.wrongContainer : styles.choiceContainer);
+      }
+    } else {
+      return isSelected ? styles.selectedContainer : styles.choiceContainer;
+    }
+  };
+
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={[styles.choiceContainer, (isSelected)? (incorrectedandselected)? styles.incorrect : styles.selectedContainer : (correctandnotselected)? styles.correctandnotselected : null, isMultipleAnswer && styles.multipleAnswer, isFillType && styles.fillType]}>
-        {(isMultipleAnswer)? (incorrectedandselected)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={{alignSelf:"center", marginRight: 5}}/>
-         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(correctandnotselected)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={{alignSelf:"center", marginRight: 5}}/> : null}
-        <Text style={styles.textStyle}> {content} </Text>
+    <TouchableOpacity onPress={onPress} disabled={isSolutionType}>
+      <View style={getChoiceStyle()}>
+        {(isMultipleAnswer)? (!isCorrect && isSelected && isSolutionType)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={{alignSelf:"center", marginRight: 5}}/>
+         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(isCorrect && !isSelected && isSolutionType)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={{alignSelf:"center", marginRight: 5}}/> : null}
+        <Text style={styles.textStyle}>{content}</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
+
 const styles = StyleSheet.create({
-  choiceContainer:{
-    backgroundColor:"#fff",
+  choiceContainer: {
+    backgroundColor: "#fff",
     paddingVertical: 20,
     paddingHorizontal: 10,
-    marginTop:10,
-    borderWidth:3,
-    borderColor:"#04B36E", // Green
-    borderStyle:"solid",
-    borderRadius:10,
-    flexDirection:"row",
-    justifyContent:"center",
+    marginTop: 10,
+    borderWidth: 3,
+    borderColor: "#04B36E", // Green border for default
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   selectedContainer: {
-    backgroundColor: "#04B36E", // Green
+    backgroundColor: "#04B36E", // Green background when selected
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginTop: 10,
+    borderWidth: 3,
+    borderColor: "#04B36E", // Green border for default
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
-  multipleAnswer:{
-    justifyContent:"space between",
+  correctContainer: {
+    backgroundColor: "#04B36E", // Green border for correct answers
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginTop: 10,
+    borderWidth: 3,
+    borderColor: "#04B36E", // Green border for default
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
-  incorrect:{
-    borderColor:"#F44D19",
-    backgroundColor:"#04B36E",
+  correctnotSelectedContainer: {
+    backgroundColor: "#fff", // Green border for correct answers
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginTop: 10,
+    borderWidth: 3,
+    borderColor: "#F44D19", // Green border for default
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
-  correctandnotselected:{
-    borderColor:"#F44D19",
-    backgroundColor:"#fff",
+  wrongSelectedContainer: {
+    backgroundColor: "#04B36E", // Green background for correct answers
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginTop: 10,
+    borderWidth: 3,
+    borderColor: "#F44D19", // Red border for wrong answers
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
-  fillType:{
-    backgroundColor:"#fff",
+  wrongContainer: {
+    backgroundColor: "#F44D19", // Green background for correct answers
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginTop: 10,
+    borderWidth: 3,
+    borderColor: "#F44D19", // Red border for wrong answers
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "center",
   },
-  textStyle:{
+  textStyle: {
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 });
+
 
 export default QuizChoice;

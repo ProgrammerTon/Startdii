@@ -8,19 +8,20 @@ import {
   Modal,
   TextInput
 } from "react-native";
-import { React , useState } from "react";
+import { React , useState , useEffect} from "react";
 import QuizChoice from "../../components/QuizChoice";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 const { width, height } = Dimensions.get('window');
 
-export default function Quiz4choice() {
+export default function QuizFill({ questionData, onSubmit, questionNumber, totalQuestions  }) {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState([]);
   const [closeQuiz, setCloseQuiz] = useState(false);
-  const [userInput, setUserInput] = useState('');
-  const quizData = [
+  const [userInput, setUserInput] = useState();
+  /*
+  const  questionData = [
     {
       totalQuestion: 5,
       questionId: 3,
@@ -31,6 +32,11 @@ export default function Quiz4choice() {
       answer : ["3"]
     }
   ];
+  */
+  useEffect(() => {
+    setUserInput();
+  }, [questionData]);
+
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
@@ -40,10 +46,10 @@ export default function Quiz4choice() {
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
-            <Text style={styles.textNumber}>{quizData[currentQuestion].questionId} / {quizData[currentQuestion].totalQuestion}</Text>
+            <Text style={styles.textNumber}>{questionNumber} / {totalQuestions}</Text>
         </View>
         <View style={styles.question}>
-            <Text style={styles.textStyle}> {quizData[currentQuestion].question} </Text>
+            <Text style={styles.textStyle}> {questionData.question} </Text>
         </View>
       </View>
       
@@ -59,7 +65,7 @@ export default function Quiz4choice() {
         />
         </View>
         <View>
-          <TouchableOpacity style={styles.nextButton} onPress={() => console.log(answer)}>
+          <TouchableOpacity style={styles.nextButton} onPress={() => onSubmit([userInput])}>
             <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
           </TouchableOpacity>
         </View>
