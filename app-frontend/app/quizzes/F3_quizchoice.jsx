@@ -21,24 +21,6 @@ export default function QuizChoices({
 }) {
   const [selectedChoice, setSelectedChoice] = useState([]);
   const [closeQuiz, setCloseQuiz] = useState(false);
-<<<<<<< HEAD
-  const quizData = [
-    {
-      totalQuestion: 5,
-      questionId: 1,
-      question: "What does the cat says?",
-      choicecount: 4,
-      choice: ["Meaw", "AOUUU", "Miau", "21", "Purr", "Car"],
-      isMultipleAnswer: true,
-      answer : ["AOUUU", "Miau"]
-    }
-  ];
-  const handleChoiceSelect = (choice) => {
-    if(quizData[currentQuestion].isMultipleAnswer){
-      if (selectedChoice.includes(choice)) {
-        const newSelectedChoice = selectedChoice.filter((item) => item !== choice)
-        setSelectedChoice(newSelectedChoice); // Unselect if the same choice is pressed
-=======
 
   useEffect(() => {
     setSelectedChoice([]);
@@ -52,7 +34,6 @@ export default function QuizChoices({
           (item) => item !== index
         );
         setSelectedChoice(newSelectedChoice); // Unselect if the same index is pressed
->>>>>>> 5cf9474ef70bbbd7ae7bb0a6449caa70932b089c
       } else {
         const newSelectedChoice = [...selectedChoice, index].sort(); // Sort the array after adding the new index
         setSelectedChoice(newSelectedChoice); // Select the new index
