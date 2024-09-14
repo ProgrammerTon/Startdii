@@ -21,9 +21,11 @@ const QuizChoice = ({ content, isSelected = false, isCorrect = false, isSolution
   return (
     <TouchableOpacity onPress={onPress} disabled={isSolutionType}>
       <View style={getChoiceStyle()}>
-        {(isMultipleAnswer)? (!isCorrect && isSelected && isSolutionType)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={{alignSelf:"center", marginRight: 5}}/>
-         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(isCorrect && !isSelected && isSolutionType)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={{alignSelf:"center", marginRight: 5}}/> : null}
-        <Text style={styles.textStyle}>{content}</Text>
+        {(isMultipleAnswer)? (!isCorrect && isSelected && isSolutionType)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={styles.iconStyle}/>
+         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(isCorrect && !isSelected && isSolutionType)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={styles.iconStyle}/> : null}
+        <View style={styles.textWrapper}>
+          <Text style={styles.textStyle}>{content}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -54,23 +56,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   correctContainer: {
-    backgroundColor: "#04B36E", // Green border for correct answers
+    backgroundColor: "#04B36E", // Green background when selected
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#04B36E", // Green border for default
+    borderColor: "#04B36E", // Green border for correct answers
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
   correctnotSelectedContainer: {
-    backgroundColor: "#fff", // Green border for correct answers
+    backgroundColor: "#fff", // White background when not selected
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#F44D19", // Green border for default
+    borderColor: "#F44D19", // Red border for correct and not selected answers
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   wrongContainer: {
-    backgroundColor: "#F44D19", // Green background for correct answers
+    backgroundColor: "#F44D19", // Red background for wrong answers
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
@@ -97,11 +99,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+  iconStyle:{
+    alignSelf: "flex-start",
+    marginLeft: 8,
+  },
+  textWrapper: {
+    flex: 1,
+    alignItems: 'center',
+    marginLeft: -8,
+  },
   textStyle: {
     fontSize: 20,
     fontWeight: "bold",
+    alignSelf:"center",
   },
 });
-
 
 export default QuizChoice;
