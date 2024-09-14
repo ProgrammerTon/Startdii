@@ -29,7 +29,7 @@ export class SourcesController {
     return this.sourcesService.create(createSourceDto);
   }
 
-  @Get()
+ @Get()
   findByOffset(
     @Query()
     query: {
