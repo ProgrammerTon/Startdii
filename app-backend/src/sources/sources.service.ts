@@ -236,6 +236,7 @@ export class SourcesService {
       .sort({ createdAt: sortValue })
       .skip(skip)
       .limit(size)
+      .populate('ownerId', 'username')
       .exec();
   }
 
@@ -257,6 +258,7 @@ export class SourcesService {
       .sort({ createdAt: sortValue })
       .skip(skip)
       .limit(size)
+      .populate('ownerId', 'username')
       .exec();
   }
 
@@ -280,6 +282,7 @@ export class SourcesService {
       .sort({ createdAt: sortValue })
       .skip(skip)
       .limit(size)
+      .populate('ownerId', 'username')
       .exec();
   }
 
