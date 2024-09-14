@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
   },
   floatingButtonText: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: "bold",
   },
 });
