@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { View, Button, Image, Alert } from "react-native";
+import { View, Button, Alert, FlatList, Text } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
+import { uploadFile } from "../services/MyFileService";
+import { Image } from "expo-image";
 
 const FileUpload = () => {
   const [selectedDocuments, setSelectedDocuments] = useState([]);
@@ -15,13 +17,10 @@ const FileUpload = () => {
         const successResult = result;
 
         // To limit the amount of documents that is added to the array "selectedDocuments"
-        if (selectedDocuments.length + successResult.assets.length <= 5) {
-          setSelectedDocuments((prevSelectedDocuments) => [
-            ...prevSelectedDocuments,
-            ...successResult.assets,
-          ]);
+        if (selectedDocuments.length + successResult.assets.length <= 1) {
+          setSelectedDocuments([...successResult.assets]);
         } else {
-          console.log("Maximum of 5 documents allowed.");
+          console.log("Maximum of 1 documents allowed.");
         }
       } else {
         console.log("Document selection cancelled.");
@@ -47,36 +46,45 @@ const FileUpload = () => {
   };
 
   const uploadDocuments = async () => {
-    Alert.alert("You Cant Upload Yet.");
-    return;
-    const formData = createFormData(selectedDocuments);
-
-    try {
-      const response = await fetch("https://data.236sec.org/files/upload", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      const result = await response.json();
-      console.log("Upload successful:", result);
-    } catch (err) {
-      console.error("Error uploading documents:", err);
+    const formData = await createFormData(selectedDocuments);
+    const data = await uploadFile(formData);
+    if (data) {
+      setSelectedDocuments([]);
+      Alert.alert("Upload Success!!");
     }
+    console.log("We Got", data);
   };
 
   const removeDocument = (index) => {
-    setSelectedDocuments((prevSelectedDocuments) =>
-      prevSelectedDocuments.filter((_, i) => i !== index)
-    );
+    setSelectedDocuments([]);
   };
 
   return (
     <View>
-      <Button title="Pick an image from camera roll" onPress={pickDocuments} />
-      <Button title="Upload Image" onPress={uploadDocuments} />
+      <FlatList
+        data={selectedDocuments}
+        scrollEnabled={false}
+        renderItem={(item) => {
+          // return <Text>{item.item.name}</Text>;
+          return (
+            <Image
+              source={{ uri: item.item.uri }}
+              style={{ width: 200, height: 200 }} // Adjust the width/height as needed
+            />
+          );
+        }}
+      />
+      <Button
+        title="Pick an image from Gallery"
+        onPress={() => pickDocuments()}
+      />
+      <Button title="Upload Image" onPress={() => uploadDocuments()} />
+      <Button
+        title="Remove File"
+        onPress={() => {
+          removeDocument();
+        }}
+      />
     </View>
   );
 };

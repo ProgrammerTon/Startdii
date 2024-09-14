@@ -96,7 +96,7 @@ const DevPage = () => {
         <Text className="text-lg">QuizFlow</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/upload")}
+        onPress={() => router.push("/upload/upload")}
         className="bg-green-600 p-2 rounded-xl"
       >
         <Text className="text-lg">UploadFile</Text>
