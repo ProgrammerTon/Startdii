@@ -120,8 +120,8 @@ const QuizMakerPage = () => {
       if (data) {
         Alert.alert("Create Success");
         // Navigate back after success
-        //router.back();
-        //router.back();
+        router.back();
+        router.back();
       } else {
         Alert.alert("Failed");
       }
