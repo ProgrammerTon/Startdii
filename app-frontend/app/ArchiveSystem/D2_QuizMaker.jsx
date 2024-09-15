@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useRef} from "react";
 import {
   Text,
   View,
@@ -32,9 +32,23 @@ const QuizMakerPage = () => {
   }, [questions]);
 
   const addNewQuestion = () => {
-    setQuestions([...questions, { id: Date.now(), templateData: {} }]);
+    if (questions.length <= 99) {
+      setQuestions([...questions, { id: Date.now(), templateData: {} }]);
+    }
+    else {
+      Alert.alert(`คุณขยันมาก แต่ผมแนะนำไปสร้างแบบทดสอบใหม่ดีกว่าครับ`);
+      return;
+    }
     //console.log('All questions:', JSON.stringify(questions, null, 2));
   };
+
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollToEnd({ animated: true });
+    }
+  }, [questions]);
 
   const deleteQuestion = (idToRemove) => {
     const updatedQuestions = questions.filter(
@@ -46,6 +60,10 @@ const QuizMakerPage = () => {
 
   const Publish = async () => {
     // Transform tags from a string into an array
+    if (questions.length < 5) {
+      Alert.alert(`You need to create at least 5 questions before publishing`);
+      return;
+    }
     transformTags = tags.split(",");
     console.log(title, description, transformTags);
     console.log(`Total Questions:`, questions.length);
@@ -69,17 +87,16 @@ const QuizMakerPage = () => {
           throw new Error("Unfilled question text");
         }
 
-        // Validation: Check if all choices are filled when it's a "choice" question
-        if (selectedOption === "choice") {
-          const choicesArray = Object.values(textInputs);
-          const allChoicesFilled = choicesArray.every(
-            (choice) => choice && choice.trim() !== ""
-          );
-          if (!allChoicesFilled) {
-            Alert.alert(`Please finish Question ${index + 1}`);
-            throw new Error("Unfilled choices");
-          }
+        if (selectedOption === "fill" && (!value || value.trim() === "")) {
+          Alert.alert(`Please fill in the answer for Question ${index + 1}`);
+          throw new Error("Unfilled answer in fill question");
         }
+
+        if (selectedOption === "choice" && (!textInputs || Object.keys(textInputs).length !== choices || Object.values(textInputs).some(input => !input || input.trim() === ""))) {
+          Alert.alert(`Please fill in all choice text inputs for Question ${index + 1}`);
+          throw new Error("Incomplete choices");
+        }
+        
 
         return {
           question: questionText,
@@ -103,8 +120,8 @@ const QuizMakerPage = () => {
       if (data) {
         Alert.alert("Create Success");
         // Navigate back after success
-        router.back();
-        router.back();
+        //router.back();
+        //router.back();
       } else {
         Alert.alert("Failed");
       }
@@ -133,6 +150,7 @@ const QuizMakerPage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        //ref={listRef} 
         data={questions}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
