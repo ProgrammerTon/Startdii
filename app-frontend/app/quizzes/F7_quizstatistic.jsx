@@ -8,8 +8,18 @@ import { router } from "expo-router";
 const { width, height } = Dimensions.get('window');
 
 const QuizStatistics = ({ statistic_data = { 
-    totalQuestions: 10, 
-    usersScore: [6, 5, 3, 2, 1, 4, 5, 2, 2, 3, 4, 4, 7, 8, 0] ,
+    totalQuestions: 5, 
+    allUsersScore: [4,1,3] ,
+    allUsersAnswers: [
+      [[0], ["4"], [0, 2], [1,2,4], [10]],
+      [[1], ["4"], [0, 2], [1,2], [5]],
+      [[0], ["2"], [1, 2], [1,2,4], [5]],
+    ],
+    allUsersEachQuestionAnswers: [
+      [1,1,0,1,1],
+      [0,1,0,0,0],
+      [1,0,1,1,0],
+    ],
     quizData: [
         {
           question: "Charay Cool or not?",
@@ -41,10 +51,10 @@ const QuizStatistics = ({ statistic_data = {
           choice: [], // No choices, since it's a fill-in question
           answer: [10], // The correct answer is 4
         },
-      ]
+      ],
 }}) => {
     
-  const { totalQuestions, usersScore } = statistic_data;
+  const { totalQuestions, allUsersScore } = statistic_data;
 
   // Initialize a frequency object with all possible scores from 0 to totalQuestions
   const frequency = {};
@@ -53,7 +63,7 @@ const QuizStatistics = ({ statistic_data = {
   }
 
   // Calculate the frequency of each score in usersScore
-  usersScore.forEach(score => {
+  allUsersScore.forEach(score => {
     if (frequency.hasOwnProperty(score)) {
       frequency[score] += 1;
     }
@@ -93,7 +103,7 @@ const QuizStatistics = ({ statistic_data = {
 
       <ScrollView style={styles.bottomPart}>
         {/* User Count */}
-        <Text style={styles.userCount}>Number of users: {usersScore.length}</Text>
+        <Text style={styles.userCount}>Number of users: {allUsersScore.length}</Text>
 
         {/* Bar Chart */}
         <View style={styles.chartContainer}>
@@ -115,6 +125,8 @@ const QuizStatistics = ({ statistic_data = {
         <View style={styles.textContainer}>
           <Text style={styles.totalQuestionsText}>Total Questions: {totalQuestions}</Text>
         </View>
+        
+        {/*pie chart*/ }
       </ScrollView>
     </View>
   );

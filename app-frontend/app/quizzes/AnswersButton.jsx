@@ -5,6 +5,7 @@ import { useRouter, useNavigation } from "expo-router";
 const { width } = Dimensions.get('window'); // Get screen width for responsive sizing
 
 const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
+  //console.log(userAnswers)
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null); // Keep track of the selected answer
   const router = useRouter();
