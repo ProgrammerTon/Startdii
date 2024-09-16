@@ -38,6 +38,12 @@ const ChatH1 = () => {
     const filteredData = chatList.map((chat) => ({
       username: chat.userId.username,
       url: `/chatroom/${chat.chatroom}`,
+      lastMessage: chat?.lastMessage?.message
+        ? chat.lastMessage.message
+        : "sample message",
+      msgTime: chat?.lastMessage?.createdAt
+        ? chat.lastMessage.createdAt
+        : new Date().toISOString(),
     }));
     setRefreshing(false);
     setUserData(filteredData);
