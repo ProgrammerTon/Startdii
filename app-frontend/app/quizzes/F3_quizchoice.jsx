@@ -28,7 +28,7 @@ export default function QuizChoices({
   
   const handleChoiceSelect = (index) => {
     // Allow multiple selections
-    if (questionData.answer.length >= -1) {
+    if (questionData.answer.length > 1) {
       if (selectedChoice.includes(index)) {
         const newSelectedChoice = selectedChoice.filter(
           (item) => item !== index
@@ -82,6 +82,7 @@ export default function QuizChoices({
                   content={item}
                   isSelected={selectedChoice.includes(index)}
                   onPress={() => handleChoiceSelect(index)}
+                  isMultipleAnswer={(questionData.answer.length > 1)}
                 />
               );
             })}

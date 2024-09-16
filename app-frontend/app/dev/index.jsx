@@ -72,10 +72,10 @@ const DevPage = () => {
         <Text className="text-lg">test</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/F2.1_FirstPageQuiz/F2.1_FirstQuizPage")}
+        onPress={() => router.push("/favoritesSystem/FavoritePage")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">Quiz</Text>
+        <Text className="text-lg">Favorite</Text>
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => router.push("/F2.2_SumPageQuiz/F2.2_SumQuizPage")}
@@ -90,10 +90,10 @@ const DevPage = () => {
         <Text className="text-lg">QuizID1</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/quizzes/F3_quizflow")}
+        onPress={() => router.push("/quizzes/F7_quizstatistic")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">QuizFlow</Text>
+        <Text className="text-lg">QuizStatistic</Text>
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => router.push("/upload/upload")}

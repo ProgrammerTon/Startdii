@@ -30,7 +30,9 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>{title}</Text>
+        <Text style={styles.titleText}>
+            {title.length > 20 ? `${title.slice(0, 20)}...` : title}
+        </Text>
           <Text style={styles.authorText}>By {author}</Text>
           <TagList tags={tags} title={title} id={id} />
           <View style={styles.ratingContainer}>
@@ -48,7 +50,7 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
           <TouchableOpacity onPress={toggleHeart}>
             <FontAwesome
               name={isLiked ? "heart" : "heart-o"}
-              size={30}
+              size={20}
               color={isLiked ? "red" : "gray"}
               style={styles.heartIcon}
             />
@@ -56,7 +58,7 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
           <TouchableOpacity>
             <FontAwesome
               name="share"
-              size={30}
+              size={20}
               color="gray"
               style={styles.shareIcon}
             />

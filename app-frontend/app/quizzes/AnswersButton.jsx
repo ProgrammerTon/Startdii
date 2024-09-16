@@ -5,6 +5,7 @@ import { useRouter, useNavigation } from "expo-router";
 const { width } = Dimensions.get('window'); // Get screen width for responsive sizing
 
 const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
+  //console.log(userAnswers)
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null); // Keep track of the selected answer
   const router = useRouter();
@@ -151,13 +152,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center', // Center items horizontally
   },
   answerButton: {
-    flex: 1, // Ensure buttons take up equal space
-    padding: 15,
+    flexBasis: '15%', 
+    paddingVertical: 15,
     margin: 5,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 40, // Set a minimum width for buttons
+    backgroundColor: '#007BFF', 
   },
   answerText: {
     fontSize: 11,

@@ -212,13 +212,13 @@ const ArchiveMainPage = () => {
       <View style={styles.filterContainer}>
         <TouchableOpacity
           style={
-            ActiveFilter === "Relevance"
+            ActiveFilter === "Favorite"
               ? styles.filterButton
               : styles.inactiveFilterButton
           }
-          onPress={() => ToggleFilterChange("Relevance")}
+          onPress={() => ToggleFilterChange("Favorite")}
         >
-          <Text style={styles.filterText}>Relevance</Text>
+          <Text style={styles.filterText}>Favorite</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={
@@ -280,6 +280,7 @@ const ArchiveMainPage = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
+        contentContainerStyle={{ paddingBottom: 110 }}
         onEndReached={() => fetchData()} // Load more data when the list reaches the end
         onEndReachedThreshold={0.1} // Adjust as needed
       />
@@ -299,6 +300,7 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: "#f8f8f8",
     padding: 20,
+    paddingTop: 50,
   },
   headerContainer: {
     flexDirection: "row",
@@ -363,7 +365,7 @@ const styles = StyleSheet.create({
   },
   floatingButtonText: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: "bold",
   },
 });

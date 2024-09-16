@@ -22,8 +22,7 @@ import { router } from "expo-router";
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Relevance");
   const [AddWindowVisible, setAddWindowVisible] = useState(false);
-  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] =
-    useState(false);
+  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] = useState(false);
   const [filterDirection, setFilterDirection] = useState("↓");
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
@@ -104,13 +103,13 @@ const ArchiveMainPage = () => {
       <View style={styles.filterContainer}>
         <TouchableOpacity
           style={
-            ActiveFilter === "Relevance"
+            ActiveFilter === "Favorite"
               ? styles.filterButton
               : styles.inactiveFilterButton
           }
-          onPress={() => ToggleFilterChange("Relevance")}
+          onPress={() => ToggleFilterChange("Favorite")}
         >
-          <Text style={styles.filterText}>Relevance</Text>
+          <Text style={styles.filterText}>Favorite</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={
@@ -158,6 +157,7 @@ const ArchiveMainPage = () => {
         onEndReached={fetchData}
         onEndReachedThreshold={0.1} // Adjust as needed
         ListFooterComponent={refreshing && <ActivityIndicator />}
+        contentContainerStyle={{ paddingBottom: 300 }}
       />
       <View className="my-5"></View>
       {/* <QuizCard /> */}

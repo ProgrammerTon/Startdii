@@ -16,9 +16,11 @@ const GuildButton = ({ guild, onPress }) => {
         </Text>
         <Text style={styles.members}>{guild.members} Members</Text>
       </View>
+      {/*
       <View style={styles.notification}>
         <Text style={styles.notificationText}>{noti}</Text>
       </View>
+      */}     
     </TouchableOpacity>
   );
 };
