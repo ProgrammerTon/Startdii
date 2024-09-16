@@ -34,6 +34,7 @@ const SumQuizPage = () => {
   const [quiz, setQuiz] = useState(null);
   const { user } = useGlobalContext();
   const { setQuestions, setQuizId } = useQuestionContext();
+  const [isDone, setIsDone] = useState(false);
 
   // State to hold the list of comments
   const [comments, setComments] = useState([]);
@@ -124,6 +125,8 @@ const SumQuizPage = () => {
     setQuizId(id);
     fetchQuiz();
     fetchComments();
+    const isdoit = user.quiz_history.some((entry) => entry.id === id);
+    setIsDone(isdoit);
     setRefreshing(false);
   }, []);
 
@@ -151,6 +154,7 @@ const SumQuizPage = () => {
       </View>
       <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
       <StartButton handleOnPress={() => router.push("/quiz/F3_quizflow")} />
+      {isDone ? <SumButton /> : null}
       <RatingBlock
         ScoreRating={Math.round(quiz?.avg_rating_score)}
         numComment={quiz?.rating_count}
