@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Dimensions, TouchableOpacity,ScrollView,FlatList } from 'react-native';
-import { BarChart, Grid } from 'react-native-svg-charts';
+import { BarChart, Grid , PieChart} from 'react-native-svg-charts';
 import { Text as SvgText } from 'react-native-svg';
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from "expo-router";
@@ -15,7 +15,7 @@ const QuizStatistics = ({ statistic_data = {
       [[1], ["4"], [0, 2], [1,2], [5]],
       [[0], ["2"], [1, 2], [1,2,4], [5]],
     ],
-    allUsersEachQuestionAnswers: [
+    allUsersEachQuestionScore: [
       [1,1,0,1,1],
       [0,1,0,0,0],
       [1,0,1,1,0],
