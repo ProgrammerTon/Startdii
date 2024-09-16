@@ -33,7 +33,11 @@ export class ChatService {
     chat.userId = user._id;
     const createdChat = new this.chatModel(chat);
     const savedChat = await createdChat.save();
-    await this.chatListService.updateChatList(chat.chatId, savedChat._id);
+    const newUpdate = await this.chatListService.updateChatList(
+      chat.chatId,
+      savedChat._id,
+    );
+    console.log(newUpdate);
     return savedChat;
   }
 

@@ -47,10 +47,11 @@ export class ChatListService {
     return createdChat.save();
   }
 
-  async updateChatList(id: ObjectId, msgId: ObjectId) {
-    return await this.chatListModel.findByIdAndUpdate(id, {
-      lastMessage: msgId,
-    });
+  async updateChatList(chatroom: ObjectId, msgId: ObjectId) {
+    return await this.chatListModel.updateMany(
+      { chatroom }, // Find chat lists by ownerId
+      { $set: { lastMessage: msgId } }, // Update lastMessage field
+    );
   }
 
   async findAllChatList(ownerId: ObjectId) {

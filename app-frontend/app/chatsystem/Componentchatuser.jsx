@@ -12,8 +12,18 @@ import {
 const { width } = Dimensions.get("window");
 
 const Componentchatuser = ({ item }) => {
-  const message = "sample message";
-  const time = "12.15";
+  let timeString = "Invalid time";
+
+  try {
+    const newDate = new Date(item.msgTime);
+    if (!isNaN(newDate)) {
+      const hours = String(newDate.getHours()).padStart(2, "0");
+      const minutes = String(newDate.getMinutes()).padStart(2, "0");
+      timeString = `${hours}.${minutes}`;
+    }
+  } catch (error) {
+    console.error("Error parsing date:", error);
+  }
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -24,9 +34,9 @@ const Componentchatuser = ({ item }) => {
       >
         <View style={styles.textContainer}>
           <Text style={styles.username}>{item.username}</Text>
-          <Text style={styles.message}>{message}</Text>
+          <Text style={styles.message}>{item.lastMessage}</Text>
         </View>
-        <Text style={styles.time}>{time}</Text>
+        <Text style={styles.time}>{timeString}</Text>
       </TouchableOpacity>
     </View>
   );
