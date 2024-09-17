@@ -5,11 +5,21 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import TagList from "./TagList";
 import { FontAwesome } from "@expo/vector-icons";
+import { favoriteQuiz, unfavoriteQuiz } from "../services/QuizService";
+import { useGlobalContext } from "../context/GlobalProvider";
 
-const QuizCard = ({ id, title, author, tags, rating }) => {
-  const [isLiked, setIsLiked] = useState(false);
+const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
+  const { user } = useGlobalContext();
+  const [isLiked, setIsLiked] = useState(isFavorite);
 
-  const toggleHeart = () => {
+  const toggleHeart = async () => {
+    if(!isLiked){
+      const data = await favoriteQuiz(id, user._id)
+      user?.favorite_quizzes?.push(id);
+    } else {
+      const data = await unfavoriteQuiz(id, user._id);
+      user?.favorite_quizzes?.pop(id);
+    }
     setIsLiked(!isLiked);
   };
 
