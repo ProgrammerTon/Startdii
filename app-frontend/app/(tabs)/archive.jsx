@@ -279,6 +279,9 @@ const ArchiveMainPage = () => {
               />
             );
           } else {
+            const fav = user?.favorite_quizzes?.includes(item?._id)
+              ? true
+              : false;
             return (
               <QuizCard
                 id={item?._id}
@@ -286,6 +289,7 @@ const ArchiveMainPage = () => {
                 author={item?.ownerId?.username}
                 tags={item?.tags}
                 rating={item?.avg_rating_score}
+                isFavorite={fav}
               />
             );
           }
