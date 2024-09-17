@@ -43,17 +43,25 @@ export class QuizsController {
       sortOrder: 'asc' | 'desc';
       title: string | null;
       tags: string;
+      sortBy: 'time' | 'rating' | null;
     },
   ) {
     if (!query.offset) return this.quizsService.findAll();
+    const sortBy = query.sortBy === 'rating' ? 'rating' : 'time';
+    const sortField = sortBy === 'time' ? 'createdAt' : 'avg_rating_score';
     const offset = query.offset;
     const sortOrder = query.sortOrder;
     if (!query.title && query.tags.length === 2) {
-      return this.quizsService.findByOffset(offset, sortOrder);
+      return this.quizsService.findByOffset(offset, sortOrder, sortField);
     }
     const title = query.title;
     if (title && query.tags.length === 2) {
-      return this.quizsService.findByOffsetWithTitle(offset, sortOrder, title);
+      return this.quizsService.findByOffsetWithTitle(
+        offset,
+        sortOrder,
+        title,
+        sortField,
+      );
     }
     const tagsTransform = query.tags
       .slice(1, query.tags.length - 1)
@@ -67,6 +75,7 @@ export class QuizsController {
         sortOrder,
         tagsTransform,
         title,
+        sortField,
       );
     }
     if (query.tags.length !== 2) {
@@ -74,6 +83,7 @@ export class QuizsController {
         offset,
         sortOrder,
         tagsTransform,
+        sortField,
       );
     }
   }

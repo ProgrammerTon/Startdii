@@ -43,13 +43,14 @@ export class QuizsService {
   async findByOffset(
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
+    sortField: 'createdAt' | 'avg_rating_score',
   ): Promise<Quiz[] | null> {
     const size = 10;
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const quizs = await this.quizModel
       .find()
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .populate('ownerId', 'username')
       .exec();
     offset--;
@@ -252,6 +253,7 @@ export class QuizsService {
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
     title: string,
+    sortField: 'createdAt' | 'avg_rating_score',
   ): Promise<Quiz[] | null> {
     const size = 10;
     const skip = (offset - 1) * size;
@@ -259,7 +261,7 @@ export class QuizsService {
     const quizzes = await this.quizModel
       .find({ $text: { $search: title } })
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
       .populate('ownerId', 'username')
@@ -286,6 +288,7 @@ export class QuizsService {
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
     tags: string[],
+    sortField: 'createdAt' | 'avg_rating_score',
   ) {
     const size = 10;
     const skip = (offset - 1) * size;
@@ -297,7 +300,7 @@ export class QuizsService {
         })),
       })
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
       .populate('ownerId', 'username')
@@ -309,6 +312,7 @@ export class QuizsService {
     sortOrder: 'asc' | 'desc' = 'desc',
     tags: string[],
     title: string,
+    sortField: 'createdAt' | 'avg_rating_score',
   ) {
     const size = 10;
     const skip = (offset - 1) * size;
@@ -321,7 +325,7 @@ export class QuizsService {
         })),
       })
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
       .populate('ownerId', 'username')
