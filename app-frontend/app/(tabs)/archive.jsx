@@ -36,14 +36,18 @@ const ArchiveMainPage = () => {
 
   const handleToggleSearch = (e) => {
     if (e && !isSearchNote) {
+      setRefreshing(true);
       setIsSearchNote(e);
-      fetchToggle(1, true); // Fetch first page of notes
       setData([]);
+      fetchToggle(1, true); // Fetch first page of notes
+      setRefreshing(false);
     }
     if (!e && isSearchNote) {
+      setRefreshing(true);
       setIsSearchNote(e);
-      fetchToggle(1, true); // Fetch first page of quizzes
       setData([]);
+      fetchToggle(1, true); // Fetch first page of quizzes
+      setRefreshing(false);
     }
   };
 
@@ -53,7 +57,6 @@ const ArchiveMainPage = () => {
       isSearch = true;
     }
     const { title, tags } = extractTitleAndTags(searchField);
-    setRefreshing(true);
     if (!isSearchNote) {
       const sources = await getSource(of, sortOrder, title, tags);
 
@@ -73,45 +76,50 @@ const ArchiveMainPage = () => {
         setOffset(of + 1); // Increment the offset for pagination
       }
     }
-
-    setRefreshing(false);
   };
 
   const fetchData = async (of = offset, reset = false, isSearch = false) => {
-    const sortOrder = filterDirection === "↓" ? "desc" : "asc";
-    if (searchField.trim() !== "") {
-      isSearch = true;
-    }
-    const { title, tags } = extractTitleAndTags(searchField);
-    console.log(title, tags);
-    setRefreshing(true);
-    if (isSearchNote) {
-      const sources = await getSource(of, sortOrder, title, tags, ActiveFilter);
+    if (!refreshing) {
+      const sortOrder = filterDirection === "↓" ? "desc" : "asc";
+      if (searchField.trim() !== "") {
+        isSearch = true;
+      }
+      const { title, tags } = extractTitleAndTags(searchField);
+      console.log(title, tags);
+      if (isSearchNote) {
+        const sources = await getSource(
+          of,
+          sortOrder,
+          title,
+          tags,
+          ActiveFilter
+        );
 
-      if (sources && sources?.length !== 0) {
-        if (!isSearch) {
-          setData((prevData) => (reset ? sources : [...prevData, ...sources]));
-          setOffset(of + 1); // Increment the offset for pagination
-        } else {
-          setData([...sources]);
-          setOffset(of + 1); // Increment the offset for pagination
+        if (sources && sources?.length !== 0) {
+          if (!isSearch) {
+            setData((prevData) =>
+              reset ? sources : [...prevData, ...sources]
+            );
+            setOffset(of + 1); // Increment the offset for pagination
+          } else {
+            setData([...sources]);
+            setOffset(of + 1); // Increment the offset for pagination
+          }
+        }
+      } else {
+        const quizs = await getQuiz(of, sortOrder, title, tags);
+
+        if (quizs && quizs?.length !== 0) {
+          if (!isSearch) {
+            setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
+            setOffset(of + 1); // Increment the offset for pagination
+          } else {
+            setData([...quizs]);
+            setOffset(of + 1); // Increment the offset for pagination
+          }
         }
       }
-    } else {
-      const quizs = await getQuiz(of, sortOrder, title, tags);
-
-      if (quizs && quizs?.length !== 0) {
-        if (!isSearch) {
-          setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
-          setOffset(of + 1); // Increment the offset for pagination
-        } else {
-          setData([...quizs]);
-          setOffset(of + 1); // Increment the offset for pagination
-        }
-      }
     }
-
-    setRefreshing(false);
   };
 
   const extractTitleAndTags = (input) => {
@@ -133,9 +141,11 @@ const ArchiveMainPage = () => {
 
   // Handle refresh to reset offset and refetch data
   const handleRefresh = async () => {
+    setRefreshing(true);
     setOffset(1); // Reset offset
     setData([]);
     await fetchData(1, true); // Fetch first page of data
+    setRefreshing(false);
   };
 
   // Trigger data fetch when filterDirection changes
@@ -148,7 +158,9 @@ const ArchiveMainPage = () => {
     if (!isLogged) {
       router.replace("/sign-in");
     } else {
+      setRefreshing(true);
       fetchData(); // Initial data fetch
+      setRefreshing(false);
     }
   }, []);
 
@@ -185,8 +197,10 @@ const ArchiveMainPage = () => {
   };
 
   const handleSubmitSearch = () => {
+    setRefreshing(true);
     setData([]);
     fetchData(1, true);
+    setRefreshing(false);
   };
 
   return (
