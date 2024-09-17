@@ -100,3 +100,14 @@ export async function unfavoriteSource(id: string, userId: string): Promise<any 
   return result;
 }
 
+export async function getFavoriteSource(userId: string): Promise<any[] | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_sources/${userId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result: any[] = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}

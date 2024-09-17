@@ -105,6 +105,22 @@ export class UsersController {
     return this.usersService.removeFavoriteSource(userId, sourceId);
   }
 
+  @Patch('favorite_quizzes/add/:userId/:quizId')
+  addFavoriteQuiz(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('quizId', ParseObjectIdPipe) quizId: ObjectId,
+  ) {
+    return this.usersService.addFavoriteQuiz(userId, quizId);
+  }
+
+  @Patch('favorite_quizzes/remove/:userId/:quizId')
+  removeFavoriteQuiz(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('quizId', ParseObjectIdPipe) quizId: ObjectId,
+  ) {
+    return this.usersService.removeFavoriteQuiz(userId, quizId);
+  }
+
   // @Patch(':id')
   // update(
   //   @Param('id', ParseObjectIdPipe) id: ObjectId,

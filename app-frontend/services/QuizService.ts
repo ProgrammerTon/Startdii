@@ -99,3 +99,39 @@ export async function createQuiz(
   const result = await res.json();
   return result;
 }
+
+export async function favoriteQuiz(id: string, userId: string): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_quizzes/add/${userId}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
+export async function unfavoriteQuiz(id: string, userId: string): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_quizzes/remove/${userId}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
+export async function getFavoriteQuiz(userId: string): Promise<any[] | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_quizzes/${userId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result: any[] = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}

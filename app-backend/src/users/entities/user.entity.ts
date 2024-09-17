@@ -44,6 +44,9 @@ export class User {
   @Prop({ name: 'quizzes', ref: 'Quiz' })
   quizzes: ObjectId[];
 
+  @Prop({ name: 'favorite_quizzes', ref: 'Quiz' })
+  favorite_quizzes: ObjectId[] = [];
+
   @Prop({ name: 'quizHistory', ref: 'Quiz' })
   quiz_history: { id: ObjectId; results: boolean[] }[] = [];
 }

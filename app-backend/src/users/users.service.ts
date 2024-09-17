@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Source, SourceDocument } from 'src/sources/entities/source.entity';
 import { ObjectId } from 'mongodb';
+import { promises } from 'dns';
 
 @Injectable()
 export class UsersService {
@@ -128,6 +129,27 @@ export class UsersService {
       (element) => String(element) !== String(sourceId),
     );
     console.log(sourceId);
+    return await this.userModel
+      .findByIdAndUpdate(id, user, { new: true })
+      .exec();
+  }
+
+  async addFavoriteQuiz(id: ObjectId, quizId: ObjectId) {
+    const user = await this.userModel.findById(id).exec();
+    if (!user.favorite_quizzes.includes(quizId)) {
+      user.favorite_quizzes.push(quizId);
+    }
+    return await this.userModel
+      .findByIdAndUpdate(id, user, { new: true })
+      .exec();
+  }
+
+  async removeFavoriteQuiz(id: ObjectId, quizId: ObjectId) {
+    const user = await this.userModel.findById(id).exec();
+    user.favorite_quizzes = user.favorite_quizzes.filter(
+      (element) => String(element) !== String(quizId),
+    );
+    console.log(quizId);
     return await this.userModel
       .findByIdAndUpdate(id, user, { new: true })
       .exec();
