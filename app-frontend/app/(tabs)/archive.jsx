@@ -46,13 +46,17 @@ const ArchiveMainPage = () => {
     }
   };
 
-  const fetchToggle = async (of = offset, reset = false) => {
+  const fetchToggle = async (of = offset, reset = false, isSearch = false) => {
     const sortOrder = filterDirection === "↓" ? "desc" : "asc";
+    if (searchField.trim() !== "") {
+      isSearch = true;
+    }
+    const { title, tags } = extractTitleAndTags(searchField);
     setRefreshing(true);
     if (!isSearchNote) {
-      const sources = await getSource(of, sortOrder, searchField);
+      const sources = await getSource(of, sortOrder, title, tags);
 
-      if (sources.length !== 0) {
+      if (sources && sources?.length !== 0) {
         if (reset) {
           setData([...sources]);
         } else {
@@ -63,7 +67,7 @@ const ArchiveMainPage = () => {
     } else {
       const quizs = await getQuiz(of, sortOrder, searchField);
 
-      if (quizs.length !== 0) {
+      if (quizs?.length !== 0) {
         setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
         setOffset(of + 1); // Increment the offset for pagination
       }
@@ -72,33 +76,55 @@ const ArchiveMainPage = () => {
     setRefreshing(false);
   };
 
-  const fetchData = async (of = offset, reset = false, toggle = false) => {
+  const fetchData = async (of = offset, reset = false, isSearch = false) => {
     const sortOrder = filterDirection === "↓" ? "desc" : "asc";
+    if (searchField.trim() !== "") {
+      isSearch = true;
+    }
+    const { title, tags } = extractTitleAndTags(searchField);
+    console.log(title, tags);
     setRefreshing(true);
     if (isSearchNote) {
-      const sources = await getSource(of, sortOrder, searchField);
+      const sources = await getSource(of, sortOrder, title, tags);
 
-      if (sources.length !== 0) {
-        setData((prevData) => (reset ? sources : [...prevData, ...sources]));
-        setOffset(of + 1); // Increment the offset for pagination
+      if (sources && sources?.length !== 0) {
+        if (!isSearch) {
+          setData((prevData) => (reset ? sources : [...prevData, ...sources]));
+          setOffset(of + 1); // Increment the offset for pagination
+        } else {
+          setData([...sources]);
+          setOffset(of + 1); // Increment the offset for pagination
+        }
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder, searchField);
+      const quizs = await getQuiz(of, sortOrder, title);
 
-      if (quizs.length !== 0) {
-        setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
-        setOffset(of + 1); // Increment the offset for pagination
+      if (quizs && quizs?.length !== 0) {
+        if (!isSearch) {
+          setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
+          setOffset(of + 1); // Increment the offset for pagination
+        } else {
+          setData([...quizs]);
+          setOffset(of + 1); // Increment the offset for pagination
+        }
       }
     }
 
     setRefreshing(false);
+  };
+
+  const extractTitleAndTags = (input) => {
+    const parts = input.split(" +"); // Split by " +"
+    const title = parts[0]; // The first part is the title
+    const tags = parts.slice(1); // The rest are the tags
+    return { title, tags };
   };
 
   // Handle refresh to reset offset and refetch data
   const handleRefresh = async () => {
     setOffset(1); // Reset offset
     setData([]);
-    fetchData(1, true); // Fetch first page of data
+    await fetchData(1, true); // Fetch first page of data
   };
 
   // Trigger data fetch when filterDirection changes
