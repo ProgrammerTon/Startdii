@@ -7,9 +7,12 @@ export const useQuestionContext = () => useContext(QuestionContext);
 
 const QuestionProvider = ({ children }) => {
   const [questions, setQuestions] = useState([]);
+  const [quizId, setQuizId] = useState("");
 
   return (
-    <QuestionContext.Provider value={{ questions, setQuestions }}>
+    <QuestionContext.Provider
+      value={{ questions, setQuestions, quizId, setQuizId }}
+    >
       {children}
     </QuestionContext.Provider>
   );

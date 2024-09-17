@@ -33,7 +33,8 @@ const SumQuizPage = () => {
   const TotalQuestion = 11;
   const [quiz, setQuiz] = useState(null);
   const { user } = useGlobalContext();
-  const { setQuestions } = useQuestionContext();
+  const { setQuestions, setQuizId } = useQuestionContext();
+  const [isDone, setIsDone] = useState(false);
 
   // State to hold the list of comments
   const [comments, setComments] = useState([]);
@@ -110,8 +111,10 @@ const SumQuizPage = () => {
   };
 
   const onRefresh = async () => {
+    setRefreshing(true);
     await fetchQuiz();
     await fetchComments();
+    setRefreshing(false);
   };
 
   const handleRating = async (sc) => {
@@ -121,8 +124,11 @@ const SumQuizPage = () => {
 
   useEffect(() => {
     setRefreshing(true);
+    setQuizId(id);
     fetchQuiz();
     fetchComments();
+    const isdoit = user.quiz_history.some((entry) => entry.id === id);
+    setIsDone(isdoit);
     setRefreshing(false);
   }, []);
 
@@ -150,9 +156,14 @@ const SumQuizPage = () => {
       </View>
       <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
       <StartButton handleOnPress={() => router.push("/quiz/F3_quizflow")} />
+      {isDone ? (
+        <SumButton
+          handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
+        />
+      ) : null}
       <RatingBlock
-        ScoreRating={Math.round(quiz?.averageScore)}
-        numComment={quiz?.count}
+        ScoreRating={Math.round(quiz?.avg_rating_score)}
+        numComment={quiz?.rating_count}
       />
       <RatingBar onRatingChange={handleRating} />
 

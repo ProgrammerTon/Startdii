@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     right: -30,
   },
   InteractButton: {
-    backgroundColor: "#fc8601",
+    backgroundColor: "#000000",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,

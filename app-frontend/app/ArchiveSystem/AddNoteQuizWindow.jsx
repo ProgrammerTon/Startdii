@@ -15,10 +15,16 @@ const AddNoteQuizWindow = ({ visible, onClose }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <TouchableOpacity style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/C1_AddNotePage")}>
+          <TouchableOpacity style={styles.InteractButton} onPress={() => {
+            router.push("/ArchiveSystem/C1_AddNotePage")
+            onClose();}
+            }>
             <AntDesign name="addfile" size={20} color="#ffffff" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.InteractButton} onPress={() => router.push("/ArchiveSystem/D1_AddQuizPage")}>
+          <TouchableOpacity style={styles.InteractButton} onPress={() => {
+            router.push("/ArchiveSystem/D1_AddQuizPage")
+            onClose();}
+            }>
           <MaterialCommunityIcons name="file-question-outline" size={20} color="#ffffff" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.InteractButton} onPress={onClose}>

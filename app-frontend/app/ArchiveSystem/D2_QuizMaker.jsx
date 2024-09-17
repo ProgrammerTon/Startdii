@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useRef} from "react";
 import {
   Text,
   View,
@@ -15,7 +15,7 @@ import QuestionComponent from "./QuestionComponent";
 import { useQuizContext } from "../../context/QuizProvider";
 import { createQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider";
-
+import { router, useRouter } from "expo-router";
 const { width } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
@@ -32,9 +32,23 @@ const QuizMakerPage = () => {
   }, [questions]);
 
   const addNewQuestion = () => {
-    setQuestions([...questions, { id: Date.now(), templateData: {} }]);
+    if (questions.length <= 99) {
+      setQuestions([...questions, { id: Date.now(), templateData: {} }]);
+    }
+    else {
+      Alert.alert(`คุณขยันมาก แต่ผมแนะนำไปสร้างแบบทดสอบใหม่ดีกว่าครับ`);
+      return;
+    }
     //console.log('All questions:', JSON.stringify(questions, null, 2));
   };
+
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollToEnd({ animated: true });
+    }
+  }, [questions]);
 
   const deleteQuestion = (idToRemove) => {
     const updatedQuestions = questions.filter(
@@ -45,49 +59,74 @@ const QuizMakerPage = () => {
   };
 
   const Publish = async () => {
+    // Transform tags from a string into an array
+    if (questions.length < 5) {
+      Alert.alert(`You need to create at least 5 questions before publishing`);
+      return;
+    }
     transformTags = tags.split(",");
     console.log(title, description, transformTags);
     console.log(`Total Questions:`, questions.length);
-    const questionsNew = questions.map((question, index) => {
-      console.log(`-------------`);
-      const {
-        questionText,
-        selectedOption,
-        value,
-        choices,
-        textInputs,
-        activeButtons,
-      } = question.templateData || {};
-      // console.log(`Question ${index + 1}:`, questionText);
-      // console.log(`Choice Choosen: ${selectedOption}`);
-      // if (selectedOption === "fill") {
-      //   console.log(`Number Answer: ${value}`);
-      // } else if (selectedOption === "choice") {
-      //   console.log(`Number of Choices: ${choices}`);
-      //   for (let i = 0; i < choices; i++) {
-      //     console.log(`Choices ${i + 1}: ${textInputs[i] || ""}`);
-      //   }
-      //   console.log(`Correct Choices: ${activeButtons}`);
-      // }
-      return {
-        question: questionText,
-        qType: selectedOption,
-        choices: selectedOption === "choice" ? Object.values(textInputs) : [],
-        answers: selectedOption === "fill" ? value : activeButtons,
-      };
-    });
-    console.log(questionsNew);
-    const data = await createQuiz(
-      user._id,
-      title,
-      description,
-      transformTags,
-      questionsNew
-    );
-    if (data) {
-      Alert.alert("Create Success");
-    } else {
-      Alert.alert("Failed");
+
+    // Map through the questions and validate inputs
+    try {
+      const questionsNew = questions.map((question, index) => {
+        console.log(`-------------`);
+        const {
+          questionText,
+          selectedOption,
+          value,
+          choices,
+          textInputs,
+          activeButtons,
+        } = question.templateData || {};
+
+        // Validation: Check if the question text exists
+        if (!questionText || questionText.trim() === "") {
+          Alert.alert(`Please fill in the question text for Question ${index + 1}`);
+          throw new Error("Unfilled question text");
+        }
+
+        if (selectedOption === "fill" && (!value || value.trim() === "")) {
+          Alert.alert(`Please fill in the answer for Question ${index + 1}`);
+          throw new Error("Unfilled answer in fill question");
+        }
+
+        if (selectedOption === "choice" && (!textInputs || Object.keys(textInputs).length !== choices || Object.values(textInputs).some(input => !input || input.trim() === ""))) {
+          Alert.alert(`Please fill in all choice text inputs for Question ${index + 1}`);
+          throw new Error("Incomplete choices");
+        }
+        
+
+        return {
+          question: questionText,
+          qType: selectedOption,
+          choices: selectedOption === "choice" ? Object.values(textInputs) : [],
+          answers: selectedOption === "fill" ? value : activeButtons,
+        };
+      });
+
+      console.log(questionsNew);
+
+      // Create quiz with the validated questions
+      const data = await createQuiz(
+        user._id,
+        title,
+        description,
+        transformTags,
+        questionsNew
+      );
+
+      if (data) {
+        Alert.alert("Create Success");
+        // Navigate back after success
+        router.back();
+        router.back();
+      } else {
+        Alert.alert("Failed");
+      }
+    } catch (error) {
+      console.log("Quiz creation failed: ", error);
     }
   };
 
@@ -111,6 +150,7 @@ const QuizMakerPage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        //ref={listRef} 
         data={questions}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}

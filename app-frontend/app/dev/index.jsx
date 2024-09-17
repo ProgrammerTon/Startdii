@@ -60,12 +60,6 @@ const DevPage = () => {
         <Text className="text-lg">Guild</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/UserFinderSystem/G1_UserFinder")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">UserFinder</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
         onPress={() => router.push("/ArchiveSystem/E2_NoteDetailed")}
         className="bg-green-600 p-2 rounded-xl"
       >
@@ -78,10 +72,10 @@ const DevPage = () => {
         <Text className="text-lg">test</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/F2.1_FirstPageQuiz/F2.1_FirstQuizPage")}
+        onPress={() => router.push("/favoritesSystem/FavoritePage")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">Quiz</Text>
+        <Text className="text-lg">Favorite</Text>
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => router.push("/F2.2_SumPageQuiz/F2.2_SumQuizPage")}
@@ -90,25 +84,19 @@ const DevPage = () => {
         <Text className="text-lg">Quiz2</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/quiz/66da76bead73dfed0f571ecc")}
+        onPress={() => router.push("/quizzes/PieChartQuestion")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">QuizID1</Text>
+        <Text className="text-lg">PieChart</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/quiz/66d005e69a4ee7cfdad9beee")}
+        onPress={() => router.push("/quizzes/F7_quizstatistic")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">QuizID2</Text>
+        <Text className="text-lg">QuizStatistic</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/quizzes/F3_quizflow")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">QuizFlow</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/upload")}
+        onPress={() => router.push("/upload/upload")}
         className="bg-green-600 p-2 rounded-xl"
       >
         <Text className="text-lg">UploadFile</Text>

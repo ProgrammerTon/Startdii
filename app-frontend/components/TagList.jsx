@@ -10,7 +10,7 @@ export default function TagList({ tags, title, id }) {
             className="bg-[#D9D9D9] p-1 rounded-xl"
             key={`${tag}-${id}-${i}`}
           >
-            <Text className="font-semibold">#{tag}</Text>
+            <Text className="text-xs">#{tag}</Text>
           </View>
         );
       })}

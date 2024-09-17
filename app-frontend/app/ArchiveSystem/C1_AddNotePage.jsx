@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  FlatList,
   KeyboardAvoidingView,
   Alert,
 } from "react-native";
@@ -13,6 +14,9 @@ import UploadCompleteWindow from "../../components/UploadCompleteWindow";
 import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
 import { createSource } from "../../services/SourceService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import * as DocumentPicker from "expo-document-picker";
+import { Image } from "expo-image";
+import { uploadFile } from "../../services/MyFileService";
 
 const AddNotePage = () => {
   const [name, setName] = useState("");
@@ -48,10 +52,25 @@ const AddNotePage = () => {
     setContent("");
   };
 
+  const [isPublishing, setIsPublishing] = useState(false);
+
   const Publish = async () => {
+    if (isPublishing) return;
+    setIsPublishing(true);
     if (name === "" || description === "" || tag === "" || content === "") {
       ShowErrorEmptyFieldWindow();
+      setIsPublishing(false); // Reset state
     } else {
+      let filename = null;
+      let originalname = null;
+
+      if (selectedDocuments.length == 1) {
+        const result = await uploadDocuments();
+        if (result) {
+          filename = result.filename;
+          originalname = result.originalname;
+        }
+      }
       const tags = tag.split(",");
       const data = {
         ownerId: user._id,
@@ -60,14 +79,75 @@ const AddNotePage = () => {
         content: content,
         published: true,
         tags: tags,
+        filename,
+        originalname,
       };
       const res = await createSource(data);
       if (!res) {
         Alert.alert("Failed");
+        setIsPublishing(false); // Reset state if failed
         return;
       }
       ShowUploadComplete();
+      resetFields();
+      setIsPublishing(false); // Reset state after successful submission
     }
+  };
+
+  //---File Upload---//
+  const [selectedDocuments, setSelectedDocuments] = useState([]);
+
+  const pickDocuments = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: false, // Allows the user to select any file
+      });
+
+      if (!result.canceled) {
+        const successResult = result;
+
+        // To limit the amount of documents that is added to the array "selectedDocuments"
+        if (successResult.assets.length <= 1) {
+          setSelectedDocuments([...successResult.assets]);
+        } else {
+          console.log("Maximum of 1 documents allowed.");
+        }
+      } else {
+        console.log("Document selection cancelled.");
+      }
+    } catch (error) {
+      console.log("Error picking documents:", error);
+    }
+  };
+
+  const createFormData = (documents) => {
+    const formData = new FormData();
+
+    documents.forEach((document, index) => {
+      const { uri, name, mimeType } = document;
+      formData.append("files", {
+        uri,
+        name,
+        type: mimeType,
+      });
+    });
+
+    return formData;
+  };
+
+  const uploadDocuments = async () => {
+    const formData = await createFormData(selectedDocuments);
+    const data = await uploadFile(formData);
+    if (data) {
+      setSelectedDocuments([]);
+      Alert.alert("Upload Success!!");
+    }
+    console.log("We Got", data);
+    return data;
+  };
+
+  const removeDocument = (index) => {
+    setSelectedDocuments([]);
   };
 
   return (
@@ -92,7 +172,9 @@ const AddNotePage = () => {
           multiline
         />
 
-        <Text style={styles.label}>Tag (Use comma to seperate Tag. Example : KU,Mining)</Text>
+        <Text style={styles.label}>
+          Tag (Use comma to seperate Tag. Example : KU,Mining)
+        </Text>
         <TextInput
           style={styles.input}
           value={tag}
@@ -110,9 +192,33 @@ const AddNotePage = () => {
           multiline
         />
 
-        <TouchableOpacity style={styles.uploadButton}>
-          <Text style={styles.uploadButtonText}>Upload</Text>
-        </TouchableOpacity>
+        <FlatList
+          data={selectedDocuments}
+          scrollEnabled={false}
+          renderItem={(item) => {
+            // return <Text>{item.item.name}</Text>;
+            return (
+              <Image
+                source={{ uri: item.item.uri }}
+                style={{ width: 200, height: 200 }} // Adjust the width/height as needed
+              />
+            );
+          }}
+        />
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.uploadButton} onPress={pickDocuments}>
+            <Text style={styles.uploadButtonText}>Upload</Text>
+          </TouchableOpacity>
+          {selectedDocuments.length >= 1 ? (
+            <TouchableOpacity
+              style={styles.uploadButton}
+              onPress={removeDocument}
+            >
+              <Text style={styles.resetButton}>Cancel Upload</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.resetButton} onPress={resetFields}>

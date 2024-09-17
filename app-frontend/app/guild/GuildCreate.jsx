@@ -12,18 +12,28 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
     cover: 1,
   });
 
+  const [isPublishing, setIsPublishing] = useState(false);
+
   const create = async () => {
+    if (isPublishing) return; 
+    setIsPublishing(true); 
     if (guildFormat.name === "") {
       Alert.alert("Error", "Please fill in all fields");
-    }
-    else {
+      setIsPublishing(false); 
+    } else {
       try {
         const data = await createGuild(user._id, guildFormat);
         if (!data) {
           Alert.alert("Guild creation failed");
         } else {
           Alert.alert("Guild successfully created");
+          setGuildFormat({
+            name: "",
+            description: "",
+            cover: 1,
+          }); // Clear the input fields
           loadData();
+          setIsPublishing(false);
         }
       } catch (error) {
         Alert.alert("Error", error.message);
@@ -64,7 +74,7 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
             </TouchableOpacity>
             <TouchableOpacity 
               style={styles.copyButton}
-              onPress={create}
+              onPress={() => { create(); onClose(); }}
             >
               <Text style={styles.copyButtonText}>Create</Text>
             </TouchableOpacity>
