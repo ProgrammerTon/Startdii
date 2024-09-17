@@ -24,6 +24,7 @@ const GoalProcess = ({
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: '1%',
+    marginTop: '4%',
   },
   title: {
     marginLeft: '5%',
@@ -38,11 +39,10 @@ const styles = StyleSheet.create({
     elevation: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    width: '90%',
+    width: 385,
     height: 70,
     paddingVertical: '0.5%',
     paddingHorizontal: '1%',
-    marginTop: '1%',
   },
   ProcessContainer: {
     backgroundColor: colors.blue,
