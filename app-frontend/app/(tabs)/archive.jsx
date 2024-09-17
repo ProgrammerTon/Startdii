@@ -21,7 +21,7 @@ import { router } from "expo-router";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid.jsx";
 
 const ArchiveMainPage = () => {
-  const [ActiveFilter, setActiveFilter] = useState("Relevance");
+  const [ActiveFilter, setActiveFilter] = useState("Latest");
   const [AddWindowVisible, setAddWindowVisible] = useState(false);
   const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] =
     useState(false);
@@ -86,7 +86,7 @@ const ArchiveMainPage = () => {
     console.log(title, tags);
     setRefreshing(true);
     if (isSearchNote) {
-      const sources = await getSource(of, sortOrder, title, tags);
+      const sources = await getSource(of, sortOrder, title, tags, ActiveFilter);
 
       if (sources && sources?.length !== 0) {
         if (!isSearch) {

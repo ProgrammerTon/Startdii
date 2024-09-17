@@ -30,25 +30,46 @@ export async function getSource(
   offset: number,
   sortOrder: "asc" | "desc",
   title: string | null,
-  tags: string[]
+  tags: string[],
+  activeFilter: string
 ): Promise<SourceRespond[] | null> {
   if (!title) {
     title = "";
   }
-  const res = await fetch(
-    `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  console.log(activeFilter, sortOrder);
+  if (activeFilter === "Latest" || activeFilter === "Oldest") {
+    const res = await fetch(
+      `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}&sortBy=time`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data: SourceRespond[] = await res.json();
+    if (!res.ok) {
+      return null;
     }
-  );
-  const data: SourceRespond[] = await res.json();
-  if (!res.ok) {
-    return null;
+    return data;
   }
-  return data;
+  if (activeFilter === "Rating") {
+    const res = await fetch(
+      `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}&sortBy=rating`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data: SourceRespond[] = await res.json();
+    if (!res.ok) {
+      return null;
+    }
+    return data;
+  }
+  return null;
 }
 
 export async function findSource(id: string): Promise<SourceRespond | null> {
