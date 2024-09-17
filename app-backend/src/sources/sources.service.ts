@@ -177,6 +177,7 @@ export class SourcesService {
   async findByOffset(
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
+    sortField: 'createdAt' | 'avg_rating_score',
   ): Promise<Source[] | null> {
     const size = 10;
     const skip = (offset - 1) * size;
@@ -184,7 +185,7 @@ export class SourcesService {
     const sources = await this.sourceModel
       .find()
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
       .populate('ownerId', 'username')
@@ -196,6 +197,7 @@ export class SourcesService {
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
     title: string,
+    sortField: 'createdAt' | 'avg_rating_score',
   ): Promise<Source[] | null> {
     const size = 10;
     const skip = (offset - 1) * size;
@@ -203,7 +205,7 @@ export class SourcesService {
     const sources = await this.sourceModel
       .find({ $text: { $search: title } })
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
       .populate('ownerId', 'username')
@@ -226,6 +228,7 @@ export class SourcesService {
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
     keyword: string,
+    sortField: 'createdAt' | 'avg_rating_score',
   ): Promise<Source[]> {
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const size = 10;
@@ -233,7 +236,7 @@ export class SourcesService {
     return this.sourceModel
       .find({ $text: { $search: keyword } })
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
       .populate('ownerId', 'username')
@@ -244,6 +247,7 @@ export class SourcesService {
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
     tags: string[],
+    sortField: 'createdAt' | 'avg_rating_score',
   ) {
     const size = 10;
     const skip = (offset - 1) * size;
@@ -255,7 +259,7 @@ export class SourcesService {
         })),
       })
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
       .populate('ownerId', 'username')
@@ -267,6 +271,7 @@ export class SourcesService {
     sortOrder: 'asc' | 'desc' = 'desc',
     tags: string[],
     title: string,
+    sortField: 'createdAt' | 'avg_rating_score',
   ) {
     const size = 10;
     const skip = (offset - 1) * size;
@@ -279,7 +284,7 @@ export class SourcesService {
         })),
       })
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
       .populate('ownerId', 'username')
