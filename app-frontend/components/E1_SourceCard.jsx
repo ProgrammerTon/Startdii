@@ -14,22 +14,18 @@ import { useGlobalContext } from "../context/GlobalProvider";
 
 const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const { user } = useGlobalContext();
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(isFavorite);
 
   const toggleHeart = async () => {
     if (!isLiked) {
       const data = await favoriteSource(id, user._id);
-      user.favorite_sources.add(id);
+      user?.favorite_sources?.push(id);
     } else {
       const data = await unfavoriteSource(id, user._id);
-      user.favorite_sources.pop(id);
+      user?.favorite_sources?.pop(id);
     }
     setIsLiked(!isLiked);
   };
-
-  useEffect(() => {
-    setIsLiked(isFavorite);
-  }, [isFavorite]);
 
   return (
     <TouchableOpacity onPress={() => router.push(`/sources/${id}`)}>

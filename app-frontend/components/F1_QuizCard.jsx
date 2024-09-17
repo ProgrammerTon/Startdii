@@ -8,18 +8,17 @@ import { FontAwesome } from "@expo/vector-icons";
 import { favoriteQuiz, unfavoriteQuiz } from "../services/QuizService";
 import { useGlobalContext } from "../context/GlobalProvider";
 
-const QuizCard = ({ id, title, author, tags, rating }) => {
+const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const { user } = useGlobalContext();
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(isFavorite);
 
   const toggleHeart = async () => {
     if(!isLiked){
       const data = await favoriteQuiz(id, user._id)
-      user.favorite_quizzes.add(id);
-    }
-    else {
+      user?.favorite_quizzes?.push(id);
+    } else {
       const data = await unfavoriteQuiz(id, user._id);
-      user.favorite_quizzes.pop(id);
+      user?.favorite_quizzes?.pop(id);
     }
     setIsLiked(!isLiked);
   };
