@@ -29,7 +29,7 @@ export class SourcesController {
     return this.sourcesService.create(createSourceDto);
   }
 
- @Get()
+  @Get()
   findByOffset(
     @Query()
     query: {
@@ -37,13 +37,16 @@ export class SourcesController {
       sortOrder: 'asc' | 'desc';
       title: string | null;
       tags: string;
+      sortBy: 'time' | 'rating' | null;
     },
   ) {
     if (!query.offset) return this.sourcesService.findAll();
+    const sortBy = query.sortBy === 'rating' ? 'rating' : 'time';
+    const sortField = sortBy === 'time' ? 'createdAt' : 'avg_rating_score';
     const offset = query.offset;
     const sortOrder = query.sortOrder;
     if (!query.title && query.tags.length === 2) {
-      return this.sourcesService.findByOffset(offset, sortOrder);
+      return this.sourcesService.findByOffset(offset, sortOrder, sortField);
     }
     const title = query.title;
     if (title && query.tags.length === 2) {
@@ -51,6 +54,7 @@ export class SourcesController {
         offset,
         sortOrder,
         title,
+        sortField,
       );
     }
     const tagsTransform = query.tags
@@ -65,6 +69,7 @@ export class SourcesController {
         sortOrder,
         tagsTransform,
         title,
+        sortField,
       );
     }
     if (query.tags.length !== 2) {
@@ -72,6 +77,7 @@ export class SourcesController {
         offset,
         sortOrder,
         tagsTransform,
+        sortField,
       );
     }
   }
