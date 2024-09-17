@@ -134,9 +134,9 @@ function HatDetails() {
 
 
 export default function DressTest() {
-    const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.image} />);
-    const [selectedColor, setSelectedColor] = useState(colors.pink);
-    // const { selectedChar, setSelectedChar, selectedColor, setSelectedColor } = useContext(CharacterContext);
+    // const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.image} />);
+    // const [selectedColor, setSelectedColor] = useState(colors.pink);
+    const { selectedChar, setSelectedChar, selectedColor, setSelectedColor } = useContext(CharacterContext);
 
     const getCharacterComponent = (char) => {
         switch (char) {
