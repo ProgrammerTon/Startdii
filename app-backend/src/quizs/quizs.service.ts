@@ -8,6 +8,7 @@ import { plainToInstance } from 'class-transformer';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
 import { ObjectId } from 'mongodb';
 import { User, UserDocument } from 'src/users/entities/user.entity';
+import { QuizStat, QuizStatDocument } from './entities/quizStat.entity';
 
 @Injectable()
 export class QuizsService {
@@ -18,6 +19,8 @@ export class QuizsService {
     private tagModel: Model<TagDocument>,
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
+    @InjectModel(QuizStat.name)
+    private quizStatModel: Model<QuizStatDocument>,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -117,8 +120,8 @@ export class QuizsService {
 
 
   async addHistory(id: ObjectId, userId: ObjectId, res: boolean[]) {
-    const quiz = await this.quizModel.findById(id).exec();
-    const user = await this.userModel.findById(userId).exec();
+    let quiz = await this.quizModel.findById(id).exec();
+    let user = await this.userModel.findById(userId).exec();
     if (!quiz.players.includes(userId)) {
       quiz.players.push(userId);
       if (quiz.total_score)
@@ -132,22 +135,15 @@ export class QuizsService {
       console.log(user);
       user.quiz_history.push({ id: id, results: res });
     }
-    await this.quizModel
-      .findByIdAndUpdate(
-        id,
-        { $set: quiz },
-        { new: true, useFindAndModify: false }, // Return the updated document
-      )
-      .exec();
     await quiz.save();
     await user.save();
     return quiz;
   }
 
   async submitQuiz(id: ObjectId, userId: ObjectId, ans: (number | number[])[]) {
-    console.log('calculating results');
+    //console.log('calculating results');
     const results = await this.checkResults(id, ans);
-    console.log('got results');
+    //console.log('got results');
     return this.addHistory(id, userId, results);
   }
 
