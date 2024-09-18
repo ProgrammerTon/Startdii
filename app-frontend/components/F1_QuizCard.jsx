@@ -5,11 +5,21 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import TagList from "./TagList";
 import { FontAwesome } from "@expo/vector-icons";
+import { favoriteQuiz, unfavoriteQuiz } from "../services/QuizService";
+import { useGlobalContext } from "../context/GlobalProvider";
 
-const QuizCard = ({ id, title, author, tags, rating }) => {
-  const [isLiked, setIsLiked] = useState(false);
+const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
+  const { user } = useGlobalContext();
+  const [isLiked, setIsLiked] = useState(isFavorite);
 
-  const toggleHeart = () => {
+  const toggleHeart = async () => {
+    if(!isLiked){
+      const data = await favoriteQuiz(id, user._id)
+      user?.favorite_quizzes?.push(id);
+    } else {
+      const data = await unfavoriteQuiz(id, user._id);
+      user?.favorite_quizzes?.pop(id);
+    }
     setIsLiked(!isLiked);
   };
 
@@ -25,7 +35,9 @@ const QuizCard = ({ id, title, author, tags, rating }) => {
           <Text style={styles.timestamp}>1 day ago</Text>
         </View>
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>{title}</Text>
+        <Text style={styles.titleText}>
+            {title.length > 18 ? `${title.slice(0, 18)}...` : title}
+        </Text>
           <Text style={styles.authorText}>By {author}</Text>
           <TagList tags={tags} title={title} />
           <View style={styles.ratingContainer}>

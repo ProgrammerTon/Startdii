@@ -38,6 +38,12 @@ const ChatH1 = () => {
     const filteredData = chatList.map((chat) => ({
       username: chat.userId.username,
       url: `/chatroom/${chat.chatroom}`,
+      lastMessage: chat?.lastMessage?.message
+        ? chat.lastMessage.message
+        : "sample message",
+      msgTime: chat?.lastMessage?.createdAt
+        ? chat.lastMessage.createdAt
+        : new Date().toISOString(),
     }));
     setRefreshing(false);
     setUserData(filteredData);
@@ -92,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 35,
   },
   headerContainer: {
     backgroundColor: "#007bff", // Blue background color

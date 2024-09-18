@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import TagList from "./TagList";
 import { FontAwesome } from "@expo/vector-icons"; // Importing icons for heart and stars
 import images from "../constants/images";
+import {
+  favoriteSource,
+  unfavoriteSource,
+  getFavoriteSource,
+} from "../services/SourceService";
+import { useGlobalContext } from "../context/GlobalProvider";
 
-const SourceCard = ({ id, title, author, tags, rating }) => {
-  const [isLiked, setIsLiked] = useState(false);
+const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
+  const { user } = useGlobalContext();
+  const [isLiked, setIsLiked] = useState(isFavorite);
 
-  const toggleHeart = () => {
+  const toggleHeart = async () => {
+    if (!isLiked) {
+      const data = await favoriteSource(id, user._id);
+      user?.favorite_sources?.push(id);
+    } else {
+      const data = await unfavoriteSource(id, user._id);
+      user?.favorite_sources?.pop(id);
+    }
     setIsLiked(!isLiked);
   };
 
@@ -26,7 +40,9 @@ const SourceCard = ({ id, title, author, tags, rating }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>{title}</Text>
+          <Text style={styles.titleText}>
+            {title.length > 20 ? `${title.slice(0, 20)}...` : title}
+          </Text>
           <Text style={styles.authorText}>By {author}</Text>
           <TagList tags={tags} title={title} id={id} />
           <View style={styles.ratingContainer}>
@@ -44,7 +60,7 @@ const SourceCard = ({ id, title, author, tags, rating }) => {
           <TouchableOpacity onPress={toggleHeart}>
             <FontAwesome
               name={isLiked ? "heart" : "heart-o"}
-              size={30}
+              size={20}
               color={isLiked ? "red" : "gray"}
               style={styles.heartIcon}
             />
@@ -52,7 +68,7 @@ const SourceCard = ({ id, title, author, tags, rating }) => {
           <TouchableOpacity>
             <FontAwesome
               name="share"
-              size={30}
+              size={20}
               color="gray"
               style={styles.shareIcon}
             />

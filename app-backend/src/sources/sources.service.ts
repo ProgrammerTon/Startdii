@@ -77,16 +77,16 @@ export class SourcesService {
     return updatedSource;
   }
 
-  async updateRatingScores(){
+  async updateRatingScores() {
     let objs = await this.sourceModel.find().exec();
     let rating;
-    for (let i = 0; i < objs.length; i++){
+    for (let i = 0; i < objs.length; i++) {
       rating = await this.getRating(objs[i]._id as ObjectId);
       objs[i].avg_rating_score = rating.Rating;
       objs[i].rating_count = rating.Count;
       objs[i].save();
     }
-    return objs
+    return objs;
   }
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
@@ -177,79 +177,105 @@ export class SourcesService {
   async findByOffset(
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
+    sortField: 'createdAt' | 'avg_rating_score',
   ): Promise<Source[] | null> {
     const size = 10;
+    const skip = (offset - 1) * size;
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const sources = await this.sourceModel
       .find()
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
+      .skip(skip)
+      .limit(size)
       .populate('ownerId', 'username')
       .exec();
-    offset--;
-    offset *= size;
-    const transformedSources = sources
-      .slice(offset, offset + size)
-      .map((source) => {
-        const rating = source.rating || []; // Ensure 'rating' exists
-        const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
-        const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
-        const sourceObj = source.toObject();
-        delete sourceObj.rating;
-        return {
-          ...sourceObj, // Convert Mongoose document to plain object
-          averageScore, // Add averageScore
-        };
-      });
-    return transformedSources;
+    return sources;
   }
 
   async findByOffsetWithTitle(
     offset: number,
     sortOrder: 'asc' | 'desc' = 'desc',
     title: string,
+    sortField: 'createdAt' | 'avg_rating_score',
   ): Promise<Source[] | null> {
     const size = 10;
+    const skip = (offset - 1) * size;
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const sources = await this.sourceModel
       .find({ $text: { $search: title } })
       .select('-updatedAt')
-      .sort({ createdAt: sortValue })
+      .sort({ [sortField]: sortValue })
+      .skip(skip)
+      .limit(size)
       .populate('ownerId', 'username')
       .exec();
-    offset--;
-    offset *= size;
-    const transformedSources = sources
-      .slice(offset, offset + size)
-      .map((source) => {
-        const rating = source.rating || []; // Ensure 'rating' exists
-        const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
-        const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
-        const sourceObj = source.toObject();
-        delete sourceObj.rating;
-        return {
-          ...sourceObj, // Convert Mongoose document to plain object
-          averageScore, // Add averageScore
-        };
-      });
+    const transformedSources = sources.map((source) => {
+      const rating = source.rating || []; // Ensure 'rating' exists
+      const totalScore = rating.reduce((sum, r) => sum + r.score, 0); // Calculate total score
+      const averageScore = rating.length ? totalScore / rating.length : 0; // Calculate average score
+      const sourceObj = source.toObject();
+      delete sourceObj.rating;
+      return {
+        ...sourceObj, // Convert Mongoose document to plain object
+        averageScore, // Add averageScore
+      };
+    });
     return transformedSources;
   }
 
-  async searchByTitle(keyword: string): Promise<Source[]> {
-    return this.sourceModel.find({ $text: { $search: keyword } }).exec();
+  async searchByTitle(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    keyword: string,
+    sortField: 'createdAt' | 'avg_rating_score',
+  ): Promise<Source[]> {
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
+    const size = 10;
+    const skip = (offset - 1) * size;
+    return this.sourceModel
+      .find({ $text: { $search: keyword } })
+      .select('-updatedAt')
+      .sort({ [sortField]: sortValue })
+      .skip(skip)
+      .limit(size)
+      .populate('ownerId', 'username')
+      .exec();
   }
 
-  async findSourcesByTags(tags: string[]) {
+  async findSourcesByTags(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    tags: string[],
+    sortField: 'createdAt' | 'avg_rating_score',
+  ) {
+    const size = 10;
+    const skip = (offset - 1) * size;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
     return this.sourceModel
       .find({
         $and: tags.map((tag) => ({
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
+      .select('-updatedAt')
+      .sort({ [sortField]: sortValue })
+      .skip(skip)
+      .limit(size)
+      .populate('ownerId', 'username')
       .exec();
   }
 
-  async findSourcesByTagsAndTitle(tags: string[], title: string) {
+  async findSourcesByTagsAndTitle(
+    offset: number,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    tags: string[],
+    title: string,
+    sortField: 'createdAt' | 'avg_rating_score',
+  ) {
+    const size = 10;
+    const skip = (offset - 1) * size;
+    const sortValue = sortOrder === 'asc' ? 1 : -1;
     return this.sourceModel
       .find({
         $text: { $search: title },
@@ -257,6 +283,11 @@ export class SourcesService {
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
+      .select('-updatedAt')
+      .sort({ [sortField]: sortValue })
+      .skip(skip)
+      .limit(size)
+      .populate('ownerId', 'username')
       .exec();
   }
 

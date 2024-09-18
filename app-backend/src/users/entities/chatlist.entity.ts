@@ -19,6 +19,9 @@ export class ChatList {
 
   @Prop({ name: 'chatroom' })
   chatroom: ObjectId;
+
+  @Prop({ name: 'lastMessage', type: ObjectId, ref: 'Chat' })
+  lastMessage: ObjectId;
 }
 
 export const ChatListSchema = SchemaFactory.createForClass(ChatList);

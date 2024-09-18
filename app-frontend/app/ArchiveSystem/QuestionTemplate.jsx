@@ -43,8 +43,18 @@ const QuestionTemplate = ({ question, setQuestions }) => {
   }, [selectedOption, choices, value, textInputs, activeButtons]);
 
   const handleChoiceChange = (type) => {
+    if (choices == 2) {
+      const newChoices = type === "increase" ? choices + 1 : choices;
+      setChoices(newChoices);
+    }
+    else if (choices == 6) {
+      const newChoices = type === "increase" ? choices : choices-1;
+      setChoices(newChoices);
+    }
+    else if (choices >= 3 && choices <= 5) {
     const newChoices = type === "increase" ? choices + 1 : choices - 1;
     setChoices(newChoices);
+    }
   };
 
   const handleChange = (text) => {

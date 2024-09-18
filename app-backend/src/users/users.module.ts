@@ -17,7 +17,7 @@ import { GuildsModule } from 'src/guilds/guilds.module';
     GuildsModule,
   ],
   providers: [UsersService, ChatListService],
-  exports: [UsersService],
+  exports: [UsersService, ChatListService],
   controllers: [UsersController],
 })
 export class UsersModule {}

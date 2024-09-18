@@ -9,6 +9,8 @@ type SourceRequest = {
   content?: string;
   published?: boolean;
   tags?: string[];
+  filename: string;
+  originalname: string;
 };
 
 export async function createSource(data: SourceRequest): Promise<any | null> {
@@ -27,25 +29,47 @@ export async function createSource(data: SourceRequest): Promise<any | null> {
 export async function getSource(
   offset: number,
   sortOrder: "asc" | "desc",
-  title: string | null
+  title: string | null,
+  tags: string[],
+  activeFilter: string
 ): Promise<SourceRespond[] | null> {
   if (!title) {
     title = "";
   }
-  const res = await fetch(
-    `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  console.log(activeFilter, sortOrder);
+  if (activeFilter === "Latest" || activeFilter === "Oldest") {
+    const res = await fetch(
+      `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}&sortBy=time`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data: SourceRespond[] = await res.json();
+    if (!res.ok) {
+      return null;
     }
-  );
-  const data: SourceRespond[] = await res.json();
-  if (!res.ok) {
-    return null;
+    return data;
   }
-  return data;
+  if (activeFilter === "Rating") {
+    const res = await fetch(
+      `${baseUrl}/sources?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}&sortBy=rating`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data: SourceRespond[] = await res.json();
+    if (!res.ok) {
+      return null;
+    }
+    return data;
+  }
+  return null;
 }
 
 export async function findSource(id: string): Promise<SourceRespond | null> {
@@ -73,5 +97,41 @@ export async function ratingSource(id: string, userId: string, score: number) {
     return null;
   }
   const result = await res.json();
+  return result;
+}
+
+export async function favoriteSource(id: string, userId: string): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_sources/add/${userId}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
+export async function unfavoriteSource(id: string, userId: string): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_sources/remove/${userId}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
+export async function getFavoriteSource(userId: string): Promise<any[] | null> {
+  const res = await fetch(`${baseUrl}/users/favorite_sources/${userId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result: any[] = await res.json();
+  if (!res.ok) {
+    return null;
+  }
   return result;
 }

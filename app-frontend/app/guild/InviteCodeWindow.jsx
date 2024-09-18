@@ -7,8 +7,13 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
+import * as Clipboard from "expo-clipboard";
 
 const InviteCodeWindow = ({ visible, onClose, code }) => {
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(`${code}`);
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -25,7 +30,10 @@ const InviteCodeWindow = ({ visible, onClose, code }) => {
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.copyButton}>
+            <TouchableOpacity
+              style={styles.copyButton}
+              onPress={copyToClipboard}
+            >
               <Text style={styles.copyButtonText}>Copy</Text>
             </TouchableOpacity>
           </View>

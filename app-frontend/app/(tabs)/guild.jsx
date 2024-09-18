@@ -8,6 +8,7 @@ import {
   FlatList,
   RefreshControl,
   SafeAreaView,
+  Dimensions
 } from "react-native";
 import GuildButton from "../guild/GuildButton";
 import { Redirect, router } from "expo-router";
@@ -16,6 +17,8 @@ import { guildList } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
+import fonts from "../../constants/font";
+import colors from "../../constants/color";
 
 const GuildPage = () => {
   const [guilds, setGuilds] = useState([]);
@@ -103,6 +106,7 @@ const GuildPage = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={loadGuildsData} />
         }
+        contentContainerStyle={{ paddingBottom: 200 }}
       />
       <TouchableOpacity
         style={styles.floatingButton}
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 0,
+    paddingTop: 35,
   },
   header: {
     backgroundColor: "#FFB6C1",
@@ -138,7 +142,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   floatingButton: {
-    backgroundColor: "#FF6347",
+    backgroundColor: "#000000",
     borderRadius: 30,
     width: 60,
     height: 60,

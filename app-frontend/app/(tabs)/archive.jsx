@@ -21,7 +21,7 @@ import { router } from "expo-router";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid.jsx";
 
 const ArchiveMainPage = () => {
-  const [ActiveFilter, setActiveFilter] = useState("Relevance");
+  const [ActiveFilter, setActiveFilter] = useState("Latest");
   const [AddWindowVisible, setAddWindowVisible] = useState(false);
   const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] =
     useState(false);
@@ -32,27 +32,35 @@ const ArchiveMainPage = () => {
   const { isLogged } = useGlobalContext();
   const [searchField, setSearchField] = useState("");
   const [isSearchNote, setIsSearchNote] = useState(true);
+  const { user } = useGlobalContext();
 
   const handleToggleSearch = (e) => {
     if (e && !isSearchNote) {
+      setRefreshing(true);
       setIsSearchNote(e);
-      fetchToggle(1, true); // Fetch first page of notes
       setData([]);
+      fetchToggle(1, true); // Fetch first page of notes
+      setRefreshing(false);
     }
     if (!e && isSearchNote) {
+      setRefreshing(true);
       setIsSearchNote(e);
-      fetchToggle(1, true); // Fetch first page of quizzes
       setData([]);
+      fetchToggle(1, true); // Fetch first page of quizzes
+      setRefreshing(false);
     }
   };
 
-  const fetchToggle = async (of = offset, reset = false) => {
+  const fetchToggle = async (of = offset, reset = false, isSearch = false) => {
     const sortOrder = filterDirection === "↓" ? "desc" : "asc";
-    setRefreshing(true);
+    if (searchField.trim() !== "") {
+      isSearch = true;
+    }
+    const { title, tags } = extractTitleAndTags(searchField);
     if (!isSearchNote) {
-      const sources = await getSource(of, sortOrder, searchField);
+      const sources = await getSource(of, sortOrder, title, tags);
 
-      if (sources.length !== 0) {
+      if (sources && sources?.length !== 0) {
         if (reset) {
           setData([...sources]);
         } else {
@@ -61,44 +69,83 @@ const ArchiveMainPage = () => {
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder, searchField);
+      const quizs = await getQuiz(of, sortOrder, title, tags);
 
-      if (quizs.length !== 0) {
+      if (quizs?.length !== 0) {
         setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
         setOffset(of + 1); // Increment the offset for pagination
       }
     }
-
-    setRefreshing(false);
   };
 
-  const fetchData = async (of = offset, reset = false, toggle = false) => {
-    const sortOrder = filterDirection === "↓" ? "desc" : "asc";
-    setRefreshing(true);
-    if (isSearchNote) {
-      const sources = await getSource(of, sortOrder, searchField);
-
-      if (sources.length !== 0) {
-        setData((prevData) => (reset ? sources : [...prevData, ...sources]));
-        setOffset(of + 1); // Increment the offset for pagination
+  const fetchData = async (of = offset, reset = false, isSearch = false) => {
+    if (!refreshing) {
+      const sortOrder = filterDirection === "↓" ? "desc" : "asc";
+      if (searchField.trim() !== "") {
+        isSearch = true;
       }
-    } else {
-      const quizs = await getQuiz(of, sortOrder, searchField);
+      const { title, tags } = extractTitleAndTags(searchField);
+      console.log(title, tags);
+      if (isSearchNote) {
+        const sources = await getSource(
+          of,
+          sortOrder,
+          title,
+          tags,
+          ActiveFilter
+        );
 
-      if (quizs.length !== 0) {
-        setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
-        setOffset(of + 1); // Increment the offset for pagination
+        if (sources && sources?.length !== 0) {
+          if (!isSearch) {
+            setData((prevData) =>
+              reset ? sources : [...prevData, ...sources]
+            );
+            setOffset(of + 1); // Increment the offset for pagination
+          } else {
+            setData([...sources]);
+            setOffset(of + 1); // Increment the offset for pagination
+          }
+        }
+      } else {
+        const quizs = await getQuiz(of, sortOrder, title, tags);
+
+        if (quizs && quizs?.length !== 0) {
+          if (!isSearch) {
+            setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
+            setOffset(of + 1); // Increment the offset for pagination
+          } else {
+            setData([...quizs]);
+            setOffset(of + 1); // Increment the offset for pagination
+          }
+        }
       }
     }
+  };
 
-    setRefreshing(false);
+  const extractTitleAndTags = (input) => {
+    const parts = input.split(" "); // Split by " +"
+    const tags = parts.map((word) => {
+      if (word.startsWith("+")) {
+        return word;
+      }
+      return null;
+    });
+    let title;
+    if (parts[0].startsWith("+")) {
+      title = null;
+    } else {
+      title = parts[0];
+    }
+    return { title, tags };
   };
 
   // Handle refresh to reset offset and refetch data
   const handleRefresh = async () => {
+    setRefreshing(true);
     setOffset(1); // Reset offset
     setData([]);
-    fetchData(1, true); // Fetch first page of data
+    await fetchData(1, true); // Fetch first page of data
+    setRefreshing(false);
   };
 
   // Trigger data fetch when filterDirection changes
@@ -111,7 +158,9 @@ const ArchiveMainPage = () => {
     if (!isLogged) {
       router.replace("/sign-in");
     } else {
+      setRefreshing(true);
       fetchData(); // Initial data fetch
+      setRefreshing(false);
     }
   }, []);
 
@@ -148,8 +197,10 @@ const ArchiveMainPage = () => {
   };
 
   const handleSubmitSearch = () => {
+    setRefreshing(true);
     setData([]);
     fetchData(1, true);
+    setRefreshing(false);
   };
 
   return (
@@ -175,13 +226,13 @@ const ArchiveMainPage = () => {
       <View style={styles.filterContainer}>
         <TouchableOpacity
           style={
-            ActiveFilter === "Relevance"
+            ActiveFilter === "Favorite"
               ? styles.filterButton
               : styles.inactiveFilterButton
           }
-          onPress={() => ToggleFilterChange("Relevance")}
+          onPress={() => ToggleFilterChange("Favorite")}
         >
-          <Text style={styles.filterText}>Relevance</Text>
+          <Text style={styles.filterText}>Favorite</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={
@@ -214,23 +265,31 @@ const ArchiveMainPage = () => {
         data={data}
         renderItem={({ item }) => {
           if (isSearchNote) {
+            const fav = user?.favorite_sources?.includes(item?._id)
+              ? true
+              : false;
             return (
               <SourceCard
                 id={item?._id}
                 title={item?.title}
                 author={item?.ownerId?.username}
                 tags={item?.tags}
-                rating={item?.averageScore}
+                rating={item?.avg_rating_score}
+                isFavorite={fav}
               />
             );
           } else {
+            const fav = user?.favorite_quizzes?.includes(item?._id)
+              ? true
+              : false;
             return (
               <QuizCard
                 id={item?._id}
                 title={item?.title}
                 author={item?.ownerId?.username}
                 tags={item?.tags}
-                rating={item?.averageScore}
+                rating={item?.avg_rating_score}
+                isFavorite={fav}
               />
             );
           }
@@ -239,6 +298,7 @@ const ArchiveMainPage = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
+        contentContainerStyle={{ paddingBottom: 110 }}
         onEndReached={() => fetchData()} // Load more data when the list reaches the end
         onEndReachedThreshold={0.1} // Adjust as needed
       />
@@ -258,6 +318,7 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: "#f8f8f8",
     padding: 20,
+    paddingTop: 50,
   },
   headerContainer: {
     flexDirection: "row",
@@ -322,7 +383,7 @@ const styles = StyleSheet.create({
   },
   floatingButtonText: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: "bold",
   },
 });

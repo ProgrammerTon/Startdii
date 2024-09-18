@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  RefreshControl,
+} from "react-native";
 import CommentBox from "../Quiz_Component/CommentBlock";
 import RatingBlock from "../Quiz_Component/Rating";
 import SumButton from "../Quiz_Component/SummaryButton";
 import CommentBar from "../Quiz_Component/CommentBar";
 import RatingBar from "../Quiz_Component/RatingBar";
 import { TimeDateBlock, UsernameBlock } from "../Quiz_Component/Time_Username";
-import AnswerButton from "./AnswersButton";
-import ScoreProgress from "./ScoreProgressBar";
+import AnswerButton from "../quizzes/AnswersButton";
+import ScoreProgress from "../quizzes/ScoreProgressBar";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { findQuiz } from "../../services/QuizService";
+import { getCommentsQuiz } from "../../services/CommentService";
+import { createCommentSource } from "../../services/CommentService";
+import { ratingQuiz } from "../../services/QuizService";
 
 const { width, height } = Dimensions.get("window");
 
@@ -18,6 +28,7 @@ const QuizSummaryPage = ({
   userAnswers,
   quizData,
   eachQuestionAnswers,
+  quizId,
 }) => {
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState("");
@@ -38,7 +49,7 @@ const QuizSummaryPage = ({
     // Add the new comment to the top of the comments list
     setComments([newComment, ...comments]);
 
-    const data = await createCommentSource(null, id, commentInput);
+    const data = await createCommentSource(null, quizId, commentInput);
     if (!data) {
       Alert.alert("Failed");
     }
@@ -48,7 +59,8 @@ const QuizSummaryPage = ({
   };
 
   const fetchQuiz = async () => {
-    const data = await findQuiz(id);
+    console.log("Id", quizId);
+    const data = await findQuiz(quizId);
     if (!data) {
       return null;
     }
@@ -64,25 +76,10 @@ const QuizSummaryPage = ({
     }).format(date);
     data.date = formattedDate;
     setQuiz(data);
-    const transformQuestions = data.questions.map((question) => {
-      let answer;
-      if (typeof question.answers === "string") {
-        answer = [Number(question.answers)];
-      } else {
-        answer = question.answers;
-      }
-      return {
-        question: question.question,
-        qtype: question.qType,
-        choice: question.choices,
-        answer: answer,
-      };
-    });
-    setQuestions([...transformQuestions]);
   };
 
   const fetchComments = async () => {
-    const data = await getCommentsQuiz(id);
+    const data = await getCommentsQuiz(quizId);
     const newComment = data.map((com) => ({
       username: com.parentComment.username, // Replace with dynamic username if available
       date: new Date(com.parentComment.updatedAt).toLocaleDateString(),
@@ -98,7 +95,7 @@ const QuizSummaryPage = ({
   };
 
   const handleRating = async (sc) => {
-    const data = await ratingQuiz(id, user._id, sc);
+    const data = await ratingQuiz(quizId, user._id, sc);
     console.log(data);
   };
 
@@ -110,7 +107,16 @@ const QuizSummaryPage = ({
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={["#9Bd35A", "#689F38"]} // Optional: Customize refresh colors
+        />
+      }
+    >
       <View style={styles.header}>
         <Text style={styles.headerText}>Finished</Text>
       </View>
@@ -134,7 +140,7 @@ const QuizSummaryPage = ({
           ScoreRating={Math.round(quiz?.averageScore)}
           numComment={quiz?.count}
         />
-        <RatingBar />
+        <RatingBar onRatingChange={handleRating} />
 
         {/* CommentBar with input */}
         <CommentBar
@@ -153,7 +159,7 @@ const QuizSummaryPage = ({
           />
         ))}
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 

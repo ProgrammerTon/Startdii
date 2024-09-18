@@ -8,7 +8,7 @@ import {
   Modal,
   TextInput
 } from "react-native";
-import { React , useState } from "react";
+import { React , useState , useEffect} from "react";
 import QuizChoice from "../../components/QuizChoice";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -33,6 +33,10 @@ export default function QuizFill({ questionData, onSubmit, questionNumber, total
     }
   ];
   */
+  useEffect(() => {
+    setUserInput();
+  }, [questionData]);
+
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
