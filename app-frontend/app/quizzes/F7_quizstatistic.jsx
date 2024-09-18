@@ -12,11 +12,6 @@ const { width, height } = Dimensions.get('window');
 const QuizStatistics = ({ statistic_data = { 
     totalQuestions: 5, 
     allUsersScore: [4, 1, 3,5,5,5,5,5,5,2,2,3,4,5,5,3,2, 1, 3,5,5,5,5,5,5,2,2,3,4,5,5,3,2, 1, 3,5,5,5,5,5,5,2,2,3,4,5,5,3,2],
-    allUsersAnswers: [
-      [[0], ["4"], [0, 2], [1, 2, 4], [10]],
-      [[1], ["4"], [0, 2], [1, 2,3], [5]],
-      [[0], ["2"], [1, 2], [1, 2, 4], [5]],
-    ],
     allUsersEachQuestionScore: [
       [1, 1, 0, 1, 1],
       [0, 1, 0, 0, 0],
@@ -55,7 +50,7 @@ const QuizStatistics = ({ statistic_data = {
         },
       ],
 }}) => {
-  const { totalQuestions, allUsersScore, allUsersAnswers, quizData, allUsersEachQuestionScore } = statistic_data;
+  const { totalQuestions, allUsersScore, quizData, allUsersEachQuestionScore } = statistic_data;
 
   // Render pie charts for each question
   const renderPieCharts = () => {
