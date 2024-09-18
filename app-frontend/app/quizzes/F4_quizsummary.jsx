@@ -19,6 +19,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { findQuiz } from "../../services/QuizService";
 import { getCommentsQuiz } from "../../services/CommentService";
 import StatButton from "../Quiz_Component/StatButton";
+import { createCommentSource } from "../../services/CommentService";
 
 const { width, height } = Dimensions.get("window");
 
