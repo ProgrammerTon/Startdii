@@ -63,7 +63,6 @@ const QuizStatistics = ({ statistic_data = {
       <PieChartQuestion
         key={index}
         questionData={questionData}
-        allUsersAnswers={allUsersAnswers.map(userAnswers => userAnswers[index])}
         allUsersScore={allUsersEachQuestionScore.map(userScores => userScores[index])}
       />
     ));

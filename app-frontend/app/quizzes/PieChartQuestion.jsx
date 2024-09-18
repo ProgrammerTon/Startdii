@@ -4,26 +4,8 @@ import { PieChart } from 'react-native-svg-charts';
 import { Text as SvgText } from 'react-native-svg';
 const { width, height } = Dimensions.get('window');
 
-const PieChartQuestion = ({ questionData, allUsersAnswers, allUsersScore }) => {
+const PieChartQuestion = ({ questionData, allUsersScore }) => {
   const colors = ['#4CAF50', '#FFC107', '#FF5722', '#03A9F4', '#9C27B0', '#000000']; // Colors for choices
-
-  // Function to calculate frequency for choice questions
-  const calculateChoiceFrequency = (answers, choices) => {
-    const frequency = new Array(choices.length).fill(0);
-    answers.forEach(userAnswer => {
-      userAnswer.forEach(choiceIndex => {
-        frequency[choiceIndex]++;
-      });
-    });
-    return frequency.map((count, index) => ({
-      key: choices[index],
-      value: count,
-      svg: { fill: colors[index % colors.length] },
-      arc: { outerRadius: '100%', padAngle: 0.03 },
-      labelCentroid: ({ centroid }) => [centroid[0], centroid[1]],
-      label: ({ value }) => `${((value / allUsersAnswers.length) * 100).toFixed(0)}%`,
-    }));
-  };
 
   // Function to prepare score data for fill type questions
   const calculateScoreRatio = (scores) => {
@@ -35,24 +17,25 @@ const PieChartQuestion = ({ questionData, allUsersAnswers, allUsersScore }) => {
   };
 
   const renderPieChart = () => {
-    if (questionData.qtype === 'choice') {
-      const choiceData = calculateChoiceFrequency(allUsersAnswers, questionData.choice);
-      return <PieChart style={{ height: 200 }} data={choiceData} />;
-    } else if (questionData.qtype === 'fill') {
-      const scoreData = calculateScoreRatio(allUsersScore);
-      return <PieChart style={{ height: 200 }} data={scoreData} />;
-    }
+    const scoreData = calculateScoreRatio(allUsersScore);
+    return <PieChart style={{ height: 200 }} data={scoreData} />;
   };
 
   // Render the legend for the pie chart
   const renderLegend = () => {
-    if (questionData.qtype === 'choice') {
-      return questionData.choice.map((choice, index) => (
-        <View key={index} style={styles.legendItem}>
-          <View style={[styles.colorBox, { backgroundColor: colors[index % colors.length] }]} />
-          <Text style={styles.legendText}>{choice}</Text>
-        </View>
-      ));
+    if (questionData.qtype === 'choice' ) {
+      return (
+        <>
+          <View style={styles.legendItem}>
+            <View style={[styles.colorBox, { backgroundColor: '#32cd32' }]} />
+            <Text style={styles.legendText}>Correct (1)</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.colorBox, { backgroundColor: '#ff6347' }]} />
+            <Text style={styles.legendText}>Incorrect (0)</Text>
+          </View>
+        </>
+      );
     } else if (questionData.qtype === 'fill') {
       return (
         <>
