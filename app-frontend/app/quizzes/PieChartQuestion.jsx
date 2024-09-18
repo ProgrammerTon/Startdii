@@ -23,8 +23,7 @@ const PieChartQuestion = ({ questionData, allUsersScore }) => {
 
   // Render the legend for the pie chart
   const renderLegend = () => {
-    if (questionData.qtype === 'choice' ) {
-      return (
+    return (
         <>
           <View style={styles.legendItem}>
             <View style={[styles.colorBox, { backgroundColor: '#32cd32' }]} />
@@ -36,30 +35,12 @@ const PieChartQuestion = ({ questionData, allUsersScore }) => {
           </View>
         </>
       );
-    } else if (questionData.qtype === 'fill') {
-      return (
-        <>
-          <View style={styles.legendItem}>
-            <View style={[styles.colorBox, { backgroundColor: '#32cd32' }]} />
-            <Text style={styles.legendText}>Correct (1)</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <View style={[styles.colorBox, { backgroundColor: '#ff6347' }]} />
-            <Text style={styles.legendText}>Incorrect (0)</Text>
-          </View>
-        </>
-      );
-    }
-    return null;
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.question}>{questionData.question}</Text>
       {renderPieChart()}
-      <View style={styles.legendContainer}>
-        {renderLegend()}
-      </View>
     </View>
   );
 };
