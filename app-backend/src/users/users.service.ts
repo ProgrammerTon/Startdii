@@ -112,6 +112,22 @@ export class UsersService {
       .exec();
   }
 
+  async getFavoriteSources(userId: ObjectId) {
+    return await this.userModel
+      .findById(userId)
+      .select('favorite_sources')
+      .populate('favorite_sources')
+      .exec();
+  }
+
+  async getFavoriteQuizzes(userId: ObjectId) {
+    return await this.userModel
+      .findById(userId)
+      .select('favorite_quizzes')
+      .populate('favorite_quizzes')
+      .exec();
+  }
+
   // --------------------------- Update ---------------------------
   async addFavoriteSource(id: ObjectId, sourceId: ObjectId) {
     const user = await this.userModel.findById(id).exec();

@@ -121,6 +121,20 @@ export class UsersController {
     return this.usersService.removeFavoriteQuiz(userId, quizId);
   }
 
+  @Get('favorite_sources/:userId')
+  getFavoriteSource(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+  ) {
+    return this.usersService.getFavoriteSources(userId);
+  }
+
+  @Get('favorite_quizzes/:userId')
+  getFavoriteQuiz(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+  ) {
+    return this.usersService.getFavoriteQuizzes(userId);
+  }
+
   // @Patch(':id')
   // update(
   //   @Param('id', ParseObjectIdPipe) id: ObjectId,
