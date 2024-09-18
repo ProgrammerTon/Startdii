@@ -13,8 +13,8 @@ import ToggleNoteQuiz from "../../components/ToggleNoteQuiz.jsx";
 import SourceCard from "../../components/E1_SourceCard.jsx";
 import QuizCard from "../../components/F1_QuizCard.jsx";
 import Feather from "@expo/vector-icons/Feather";
-import { getSource } from "../../services/SourceService";
-import { getQuiz } from "../../services/QuizService";
+import { getFavoriteSource, getSource } from "../../services/SourceService";
+import { getFavoriteQuiz, getQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
 import { router } from "expo-router";
@@ -87,35 +87,45 @@ const ArchiveMainPage = () => {
       const { title, tags } = extractTitleAndTags(searchField);
       console.log(title, tags);
       if (isSearchNote) {
-        const sources = await getSource(
-          of,
-          sortOrder,
-          title,
-          tags,
-          ActiveFilter
-        );
+        if(ActiveFilter === "Favorite") {
+          const fav_sources = await getFavoriteSource(user._id)
+          setData(fav_sources.favorite_sources);
+        } else {
+          const sources = await getSource(
+            of,
+            sortOrder,
+            title,
+            tags,
+            ActiveFilter
+          );
 
-        if (sources && sources?.length !== 0) {
-          if (!isSearch) {
-            setData((prevData) =>
-              reset ? sources : [...prevData, ...sources]
-            );
-            setOffset(of + 1); // Increment the offset for pagination
-          } else {
-            setData([...sources]);
-            setOffset(of + 1); // Increment the offset for pagination
+          if (sources && sources?.length !== 0) {
+            if (!isSearch) {
+              setData((prevData) =>
+                reset ? sources : [...prevData, ...sources]
+              );
+              setOffset(of + 1); // Increment the offset for pagination
+            } else {
+              setData([...sources]);
+              setOffset(of + 1); // Increment the offset for pagination
+            }
           }
         }
       } else {
-        const quizs = await getQuiz(of, sortOrder, title, tags);
+        if(ActiveFilter === "Favorite") {
+          const fav_quizzes = await getFavoriteQuiz(user._id)
+          setData(fav_quizzes.favorite_quizzes);
+        } else {
+          const quizs = await getQuiz(of, sortOrder, title, tags);
 
-        if (quizs && quizs?.length !== 0) {
-          if (!isSearch) {
-            setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
-            setOffset(of + 1); // Increment the offset for pagination
-          } else {
-            setData([...quizs]);
-            setOffset(of + 1); // Increment the offset for pagination
+          if (quizs && quizs?.length !== 0) {
+            if (!isSearch) {
+              setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
+              setOffset(of + 1); // Increment the offset for pagination
+            } else {
+              setData([...quizs]);
+              setOffset(of + 1); // Increment the offset for pagination
+            }
           }
         }
       }
