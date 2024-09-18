@@ -18,6 +18,7 @@ import ScoreProgress from "./ScoreProgressBar";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { findQuiz } from "../../services/QuizService";
 import { getCommentsQuiz } from "../../services/CommentService";
+import StatButton from "../Quiz_Component/StatButton";
 
 const { width, height } = Dimensions.get("window");
 
@@ -127,7 +128,7 @@ const QuizSummaryPage = ({
           <ScoreProgress percent={(score / quizData.length) * 100} />
         </View>
 
-        <SumButton />
+        <StatButton />
         <AnswerButton
           eachQuestionAnswers={eachQuestionAnswers}
           userAnswers={userAnswers}
