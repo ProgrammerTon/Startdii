@@ -21,8 +21,10 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
       const data = await favoriteSource(id, user._id);
       user?.favorite_sources?.push(id);
     } else {
-      const data = await unfavoriteSource(id, user._id);
-      user?.favorite_sources?.pop(id);
+      await unfavoriteSource(id, user._id);
+      user.favorite_sources = user.favorite_sources?.filter(
+        (sourceId) => sourceId !== id
+      );
     }
     setIsLiked(!isLiked);
   };

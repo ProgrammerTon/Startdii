@@ -13,12 +13,14 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const [isLiked, setIsLiked] = useState(isFavorite);
 
   const toggleHeart = async () => {
-    if(!isLiked){
-      const data = await favoriteQuiz(id, user._id)
+    if (!isLiked) {
+      const data = await favoriteQuiz(id, user._id);
       user?.favorite_quizzes?.push(id);
     } else {
       const data = await unfavoriteQuiz(id, user._id);
-      user?.favorite_quizzes?.pop(id);
+      user.favorite_quizzes = user.favorite_quizzes?.filter(
+        (quizId) => quizId !== id
+      );
     }
     setIsLiked(!isLiked);
   };
@@ -35,9 +37,9 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
           <Text style={styles.timestamp}>1 day ago</Text>
         </View>
         <View style={styles.contentContainer}>
-        <Text style={styles.titleText}>
+          <Text style={styles.titleText}>
             {title.length > 18 ? `${title.slice(0, 18)}...` : title}
-        </Text>
+          </Text>
           <Text style={styles.authorText}>By {author}</Text>
           <TagList tags={tags} title={title} />
           <View style={styles.ratingContainer}>

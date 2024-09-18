@@ -1,4 +1,5 @@
 import { baseUrl } from "@/constants/const";
+import { getCurrentToken } from "@/utils/asyncstroage";
 
 type QuizRespond = {};
 
@@ -125,11 +126,17 @@ export async function createQuiz(
   return result;
 }
 
-export async function favoriteQuiz(id: string, userId: string): Promise<any | null> {
-  const res = await fetch(`${baseUrl}/users/favorite_quizzes/add/${userId}/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-  });
+export async function favoriteQuiz(
+  id: string,
+  userId: string
+): Promise<any | null> {
+  const res = await fetch(
+    `${baseUrl}/users/favorite_quizzes/add/${userId}/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
   const result = await res.json();
   if (!res.ok) {
     return null;
@@ -137,11 +144,17 @@ export async function favoriteQuiz(id: string, userId: string): Promise<any | nu
   return result;
 }
 
-export async function unfavoriteQuiz(id: string, userId: string): Promise<any | null> {
-  const res = await fetch(`${baseUrl}/users/favorite_quizzes/remove/${userId}/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-  });
+export async function unfavoriteQuiz(
+  id: string,
+  userId: string
+): Promise<any | null> {
+  const res = await fetch(
+    `${baseUrl}/users/favorite_quizzes/remove/${userId}/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
   const result = await res.json();
   if (!res.ok) {
     return null;
@@ -153,6 +166,41 @@ export async function getFavoriteQuiz(userId: string): Promise<any[] | null> {
   const res = await fetch(`${baseUrl}/users/favorite_quizzes/${userId}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
+  });
+  const result: any[] = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
+export async function submitQuiz(
+  quizId: string,
+  userId: string,
+  userAnswer: number[]
+): Promise<any[] | null> {
+  const res = await fetch(`${baseUrl}/quizs/${quizId}/${userId}/submit`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ans: userAnswer,
+    }),
+  });
+  const result: any[] = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
+export async function getAnswers(quizId: string): Promise<any[] | null> {
+  const token = await getCurrentToken();
+  const res = await fetch(`${baseUrl}/users/answerQuiz/${quizId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
   const result: any[] = await res.json();
   if (!res.ok) {
