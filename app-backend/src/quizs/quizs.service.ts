@@ -8,7 +8,6 @@ import { plainToInstance } from 'class-transformer';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
 import { ObjectId } from 'mongodb';
 import { User, UserDocument } from 'src/users/entities/user.entity';
-import { QuizStat, QuizStatDocument } from './entities/quizStat.entity';
 
 @Injectable()
 export class QuizsService {
@@ -19,8 +18,6 @@ export class QuizsService {
     private tagModel: Model<TagDocument>,
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
-    @InjectModel(QuizStat.name)
-    private quizStatModel: Model<QuizStatDocument>,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -119,7 +116,7 @@ export class QuizsService {
     return objs;
   }
 
-  async addHistory(id: ObjectId, userId: ObjectId, res: boolean[]) {
+  async addHistory(id: ObjectId, userId: ObjectId, res: boolean[], ans: (number | number[])[]) {
     let quiz = await this.quizModel.findById(id).exec();
     let user = await this.userModel.findById(userId).exec();
     if (!quiz.players.includes(userId)) {
@@ -133,9 +130,15 @@ export class QuizsService {
         else quiz.questions[i].correct = Number(res[i]);
       }
       console.log(user);
-      user.quiz_history.push({ id: id, results: res });
+      user.quiz_history.push({ id: id, results: res, answers: ans });
     }
-    await quiz.save();
+    await this.quizModel
+      .findByIdAndUpdate(
+        id,
+        { $set: quiz },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
     await user.save();
     return quiz;
   }
@@ -144,7 +147,7 @@ export class QuizsService {
     //console.log('calculating results');
     const results = await this.checkResults(id, ans);
     //console.log('got results');
-    return this.addHistory(id, userId, results);
+    return this.addHistory(id, userId, results, ans);
   }
 
   async userRating(id: ObjectId, score: number, raterId: ObjectId) {
@@ -162,9 +165,26 @@ export class QuizsService {
 
   async dataReset(id: ObjectId) {
     const obj = await this.quizModel.findById(id).exec();
+    let user;
+    for (let p = 0; p < obj.players.length; p++) {
+      let pid = obj.players[p];
+      user = await this.userModel.findById(pid).exec();
+      user.quiz_history = user.quiz_history.filter((element) => element.id.toString() !== id.toString());
+      await this.userModel
+      .findByIdAndUpdate(
+        pid,
+        { $set: user },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+    }
     obj.players = [];
     obj.total_score = 0;
     obj.rating = [];
+    for (let q = 0; q < obj.questions.length; q++) {
+      obj.questions[q].correct = 0;
+    }
+    
     await this.quizModel
       .findByIdAndUpdate(
         id,
@@ -172,7 +192,6 @@ export class QuizsService {
         { new: true, useFindAndModify: false }, // Return the updated document
       )
       .exec();
-    await obj.save();
     return obj;
   }
 
