@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  Alert,
   RefreshControl,
 } from "react-native";
 import CommentBox from "../Quiz_Component/CommentBlock";
@@ -20,21 +21,22 @@ import { findQuiz } from "../../services/QuizService";
 import { getCommentsQuiz } from "../../services/CommentService";
 import { createCommentSource } from "../../services/CommentService";
 import { ratingQuiz } from "../../services/QuizService";
+import { router } from "expo-router";
+import { getAnswers } from "../../services/QuizService";
+import { useQuestionContext } from "../../context/QuestionProvider";
 
 const { width, height } = Dimensions.get("window");
 
-const QuizSummaryPage = ({
-  score,
-  userAnswers,
-  quizData,
-  eachQuestionAnswers,
-  quizId,
-}) => {
+const QuizSummaryPage = () => {
+  const [eachQuestionAnswers, setEachQuestionAnswers] = useState([]);
+  const { questions, quizId } = useQuestionContext();
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState("");
+  const [userAnswers, setUserAnswers] = useState([]);
   const [quiz, setQuiz] = useState(null);
   const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
+  const [score, setScore] = useState(0);
 
   const handleSubmitComment = async () => {
     if (commentInput.trim() === "") return; // Prevent empty comments
@@ -59,7 +61,6 @@ const QuizSummaryPage = ({
   };
 
   const fetchQuiz = async () => {
-    console.log("Id", quizId);
     const data = await findQuiz(quizId);
     if (!data) {
       return null;
@@ -80,13 +81,15 @@ const QuizSummaryPage = ({
 
   const fetchComments = async () => {
     const data = await getCommentsQuiz(quizId);
-    const newComment = data.map((com) => ({
-      username: com.parentComment.username, // Replace with dynamic username if available
-      date: new Date(com.parentComment.updatedAt).toLocaleDateString(),
-      comment: com.parentComment.content,
-    }));
-    const reversedComments = newComment.reverse();
-    setComments([...reversedComments]);
+    if (data) {
+      const newComment = data.map((com) => ({
+        username: com.parentComment.username, // Replace with dynamic username if available
+        date: new Date(com.parentComment.updatedAt).toLocaleDateString(),
+        comment: com.parentComment.content,
+      }));
+      const reversedComments = newComment.reverse();
+      setComments([...reversedComments]);
+    }
   };
 
   const onRefresh = async () => {
@@ -98,6 +101,30 @@ const QuizSummaryPage = ({
     const data = await ratingQuiz(quizId, user._id, sc);
     console.log(data);
   };
+
+  const fetchGetAnswers = async () => {
+    const data = await getAnswers(quizId);
+    console.log(data);
+    if (data) {
+      setUserAnswers(data.answers);
+      let countScore = 0;
+      const numericArray = data.results.map((item) => {
+        if (item) {
+          countScore += 1;
+          return 1;
+        }
+        return 0;
+      });
+      setScore(countScore);
+      setEachQuestionAnswers([numericArray]);
+    }
+  };
+
+  useEffect(() => {
+    if (quizId) {
+      fetchGetAnswers();
+    }
+  }, [quizId]);
 
   useEffect(() => {
     setRefreshing(true);
@@ -125,17 +152,21 @@ const QuizSummaryPage = ({
         {/* Score and progress bar container */}
         <View style={styles.scoreProgressContainer}>
           <Text style={styles.scoreText}>
-            {score} / {quizData.length}
+            {score} / {questions?.length}
           </Text>
-          <ScoreProgress percent={(score / quizData.length) * 100} />
+          <ScoreProgress percent={(score / questions?.length) * 100} />
         </View>
 
-        <SumButton />
-        <AnswerButton
-          eachQuestionAnswers={eachQuestionAnswers}
-          userAnswers={userAnswers}
-          quizData={quizData}
+        <SumButton
+          handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
         />
+        {userAnswers?.length && eachQuestionAnswers?.length ? (
+          <AnswerButton
+            eachQuestionAnswers={eachQuestionAnswers}
+            userAnswers={userAnswers}
+            quizData={questions}
+          />
+        ) : null}
         <RatingBlock
           ScoreRating={Math.round(quiz?.averageScore)}
           numComment={quiz?.count}

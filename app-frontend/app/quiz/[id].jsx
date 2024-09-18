@@ -157,9 +157,7 @@ const SumQuizPage = () => {
       <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
       <StartButton handleOnPress={() => router.push("/quiz/F3_quizflow")} />
       {isDone ? (
-        <SumButton
-          handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
-        />
+        <SumButton handleOnPress={() => router.push("/quiz/F4_quizsummary")} />
       ) : null}
       <RatingBlock
         ScoreRating={Math.round(quiz?.avg_rating_score)}

@@ -30,6 +30,21 @@ export class UsersService {
 
   // --------------------------- Get ---------------------------
 
+  async getAnswer(userId: ObjectId, quizId: string) {
+    const user = await this.findById(userId);
+    const quiz = user.quiz_history.find((item) => (item.id as any) === quizId);
+    if (quiz) {
+      const { results, answers } = quiz;
+      return { results, answers };
+    } else {
+      return null;
+    }
+  }
+
+  async findById(userId: ObjectId) {
+    return this.userModel.findById(userId);
+  }
+
   async findAll() {
     return this.userModel.find().exec();
   }

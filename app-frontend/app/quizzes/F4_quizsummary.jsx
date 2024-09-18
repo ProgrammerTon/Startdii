@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  RefreshControl,
+} from "react-native";
 import CommentBox from "../Quiz_Component/CommentBlock";
 import RatingBlock from "../Quiz_Component/Rating";
 import SumButton from "../Quiz_Component/SummaryButton";
@@ -10,6 +17,7 @@ import AnswerButton from "./AnswersButton";
 import ScoreProgress from "./ScoreProgressBar";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { findQuiz } from "../../services/QuizService";
+import { getCommentsQuiz } from "../../services/CommentService";
 
 const { width, height } = Dimensions.get("window");
 
@@ -18,6 +26,7 @@ const QuizSummaryPage = ({
   userAnswers,
   quizData,
   eachQuestionAnswers,
+  id,
 }) => {
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState("");
@@ -64,21 +73,6 @@ const QuizSummaryPage = ({
     }).format(date);
     data.date = formattedDate;
     setQuiz(data);
-    const transformQuestions = data.questions.map((question) => {
-      let answer;
-      if (typeof question.answers === "string") {
-        answer = [Number(question.answers)];
-      } else {
-        answer = question.answers;
-      }
-      return {
-        question: question.question,
-        qtype: question.qType,
-        choice: question.choices,
-        answer: answer,
-      };
-    });
-    setQuestions([...transformQuestions]);
   };
 
   const fetchComments = async () => {
@@ -115,7 +109,16 @@ const QuizSummaryPage = ({
         <Text style={styles.headerText}>Finished</Text>
       </View>
 
-      <ScrollView style={styles.containerBottom}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#9Bd35A", "#689F38"]} // Optional: Customize refresh colors
+          />
+        }
+      >
         {/* Score and progress bar container */}
         <View style={styles.scoreProgressContainer}>
           <Text style={styles.scoreText}>

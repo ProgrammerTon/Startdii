@@ -3,10 +3,13 @@ import { StyleSheet, View } from "react-native";
 import QuizFill from "../quizzes/F3_quizfill";
 import QuizChoices from "../quizzes/F3_quizchoice";
 import { useQuestionContext } from "../../context/QuestionProvider";
-import QuizSummaryPage from "./F4_quizsummary";
+import QuizSummaryPage from "../quizzes/F4_quizsummary";
+import { submitQuiz } from "../../services/QuizService";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const QuizFlow = () => {
   const { questions, quizId } = useQuestionContext();
+  const { user } = useGlobalContext();
   // const quizData = [
   //   {
   //     question: "Charay Cool or not?",
@@ -72,6 +75,35 @@ const QuizFlow = () => {
     }
   }, [questions]);
 
+  const handleSubmitQuiz = async () => {
+    const numericUserAns = userAnswers.map((subArray) => {
+      // Map through each element in the sub-array
+      return subArray.map((item) => (item !== undefined ? Number(item) : null));
+    });
+    const data = await submitQuiz(quizId, user._id, numericUserAns);
+    console.log(data);
+    if (data) {
+      user.quiz_history.push({ id: quizId });
+    }
+  };
+
+  useEffect(() => {
+    if (quizFinished) {
+      console.log("Score", score);
+      console.log("QuizData", quizData);
+      console.log("AnswerQuestion", [eachQuestionAnswers]);
+      console.log("UserAns", userAnswers);
+      const numericUserAns = userAnswers.map((subArray) => {
+        // Map through each element in the sub-array
+        return subArray.map((item) =>
+          item !== undefined ? Number(item) : null
+        );
+      });
+      console.log("Transform UserAns", numericUserAns);
+      handleSubmitQuiz();
+    }
+  }, [quizFinished]);
+
   if (quizData.length === 0) {
     return null;
   }
@@ -100,7 +132,7 @@ const QuizFlow = () => {
           userAnswers={userAnswers}
           quizData={quizData}
           eachQuestionAnswers={[eachQuestionAnswers]}
-          quizId={quizId}
+          id={quizId}
         />
       )}
     </View>

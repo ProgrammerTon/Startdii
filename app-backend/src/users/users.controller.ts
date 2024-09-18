@@ -56,6 +56,14 @@ export class UsersController {
 
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('/answerQuiz/:quizId')
+  getAnswers(@Param('quizId') quizId: string, @Request() req) {
+    const user = this.usersService.getAnswer(req.user.id, quizId);
+    return user;
+  }
+
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('guild')
   findGuildByMemberId(@Request() req) {
     const memberId = new Types.ObjectId(req.user.id);
@@ -122,16 +130,12 @@ export class UsersController {
   }
 
   @Get('favorite_sources/:userId')
-  getFavoriteSource(
-    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
-  ) {
+  getFavoriteSource(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
     return this.usersService.getFavoriteSources(userId);
   }
 
   @Get('favorite_quizzes/:userId')
-  getFavoriteQuiz(
-    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
-  ) {
+  getFavoriteQuiz(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
     return this.usersService.getFavoriteQuizzes(userId);
   }
 
