@@ -101,6 +101,18 @@ const DevPage = () => {
       >
         <Text className="text-lg">UploadFile</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/profile/profile")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Profile</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/profile/profile_test")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Profile_Test</Text>
+      </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </ScrollView>
   );
