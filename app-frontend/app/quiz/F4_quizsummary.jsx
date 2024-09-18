@@ -24,6 +24,7 @@ import { ratingQuiz } from "../../services/QuizService";
 import { router } from "expo-router";
 import { getAnswers } from "../../services/QuizService";
 import { useQuestionContext } from "../../context/QuestionProvider";
+import StatButton from "../Quiz_Component/StatButton";
 
 const { width, height } = Dimensions.get("window");
 
@@ -157,7 +158,7 @@ const QuizSummaryPage = () => {
           <ScoreProgress percent={(score / questions?.length) * 100} />
         </View>
 
-        <SumButton
+        <StatButton
           handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
         />
         {userAnswers?.length && eachQuestionAnswers?.length ? (

@@ -129,6 +129,21 @@ const QuizStatistics = ({
         textAnchor="middle"
       />
     ));
+  
+  const renderLegend = () => {
+    return (
+        <>
+          <View style={styles.legendItem}>
+            <View style={[styles.colorBox, { backgroundColor: '#32cd32' }]} />
+            <Text style={styles.legendText}>Correct</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.colorBox, { backgroundColor: '#ff6347' }]} />
+            <Text style={styles.legendText}>Incorrect</Text>
+          </View>
+        </>
+      );
+  };
 
   return (
     <View style={styles.container}>
@@ -185,6 +200,7 @@ const QuizStatistics = ({
           </View>
         </View>
 
+        {renderLegend()}
         {/* Render Pie Charts */}
         {renderPieCharts()}
       </ScrollView>
@@ -243,5 +259,24 @@ const styles = StyleSheet.create({
   chart: {
     flex: 1,
     height: 200, // Adjust the height of the bar chart
+  },
+  legendContainer: {
+    marginTop: 20,
+    flexDirection: 'column',  // Changed from 'row' to 'column' for vertical layout
+    justifyContent: 'flex-start',  // Align legend items to the top
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,  // Add margin between legend items
+    marginRight: 30
+  },
+  colorBox: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  legendText: {
+    fontSize: 16,
   },
 });

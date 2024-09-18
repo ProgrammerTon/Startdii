@@ -20,7 +20,7 @@ import { ActivityIndicator } from "react-native";
 import { router } from "expo-router";
 
 const ArchiveMainPage = () => {
-  const [ActiveFilter, setActiveFilter] = useState("Relevance");
+  const [ActiveFilter, setActiveFilter] = useState("Favorite");
   const [AddWindowVisible, setAddWindowVisible] = useState(false);
   const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] = useState(false);
   const [filterDirection, setFilterDirection] = useState("↓");
@@ -54,13 +54,13 @@ const ArchiveMainPage = () => {
   }, []);
 
   const ToggleFilterChange = (filter) => {
-    if (ActiveFilter === filter) {
+    if (ActiveFilter === "Latest" || ActiveFilter === "Oldest") {
       setFilterDirection((prevDirection) =>
         prevDirection === "↓" ? "↑" : "↓"
       );
     } else {
       setActiveFilter(filter);
-      setFilterDirection(filter === "Latest" ? "↓" : "↑");
+      //setFilterDirection(filter === "Latest" || filter === "Oldest" ? "↓" : "↑");
     }
   };
 
