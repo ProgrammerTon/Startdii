@@ -5,6 +5,7 @@ import {
     Dimensions,
     TouchableOpacity,
     Alert,
+    FlatList,
 } from "react-native";
 import React from "react";
 import { useState, useContext } from "react";
@@ -12,22 +13,29 @@ import { ScrollView } from "react-native";
 import AuthService from "../../services/AuthService";
 import { router } from "expo-router";
 import { useCharContext, CharacterContext } from "./charcontext";
+import { NavigationContainer } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
 import GoalProcess from "../../components/GoalProcess";
 import SignoutButton from "../../components/SignoutButton";
 import PencilIcon from "../../components/PencilIcon";
 import Level from "../../components/Level";
-import Char1 from '../../components/charactor/Charactor01'; 
-import Char2 from '../../components/charactor/Charactor02'; 
-import Char3 from '../../components/charactor/Charactor03'; 
-import Char4 from '../../components/charactor/Charactor04'; 
-import Char5 from '../../components/charactor/Charactor05'; 
-import Char6 from '../../components/charactor/Charactor06'; 
+import Char1 from '../../components/charactor/Charactor01';
+import Char2 from '../../components/charactor/Charactor02';
+import Char3 from '../../components/charactor/Charactor03';
+import Char4 from '../../components/charactor/Charactor04';
+import Char5 from '../../components/charactor/Charactor05';
+import Char6 from '../../components/charactor/Charactor06';
+import Menu from "../../components/menu";
+import WeeklyGoals from "../../components/WeeklyGoal";
+import Inventory from "../../components/Inventory";
+import History from "../../components/History"
 
 export default function ProfileTest() {
+    const [activeMenu, setActiveMenu] = useState('Weekly Goals');
     const { selectedChar, selectedColor } = useCharContext();
-    
+
     const getCharacterComponent = React.useMemo(() => {
         switch (selectedChar) {
             case 'Char1':
@@ -47,6 +55,37 @@ export default function ProfileTest() {
         }
     }, [selectedChar, selectedColor]);
 
+    const renderHeader = () => (
+        <>
+            <View style={styles.levelContainer}>
+                <Level level="1" percent="50%" />
+            </View>
+            <View style={styles.charContainer}>
+                {getCharacterComponent}
+            </View>
+            <Menu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+        </>
+    );
+
+    const renderContent = () => {
+        switch (activeMenu) {
+            case 'Weekly Goals':
+                return <WeeklyGoals />;
+            case 'Inventory':
+                return <Inventory />;
+            case 'History':
+                return <History />;
+            default:
+                return <WeeklyGoals />;
+        }
+    };
+
+    const menuItems = [
+        { id: '1', name: 'Weekly Goals' },
+        { id: '2', name: 'Inventory' },
+        { id: '3', name: 'History' },
+    ];
+
     return (
         <SafeAreaView style={styles.bg}>
             <View style={styles.toptab}>
@@ -60,22 +99,13 @@ export default function ProfileTest() {
                     <SignoutButton />
                 </View>
             </View>
-            <ScrollView>
-                <View style={styles.levelContainer}>
-                    <Level
-                        level="1"
-                        percent="50%" />
-                </View>
-                <View style={styles.charContainer}>
-                    {getCharacterComponent}
-                </View>
-                <View>
-                    <GoalProcess
-                        title="ทำครบ 3 Quiz"
-                        percent="80%" />
-                </View>
 
-            </ScrollView>
+            <FlatList
+                ListHeaderComponent={renderHeader}
+                data={[{}]}  // Ensuring there is data to render the header.
+                renderItem={() => renderContent()}
+                keyExtractor={(item, index) => index.toString()}
+            />
         </SafeAreaView>
     );
 }
@@ -113,17 +143,26 @@ const styles = {
         bottom: -2,
         marginLeft: 6,
     },
+    goalContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     levelContainer: {
         alignItems: 'center',
         left: '3%',
-        bottom: '10%',
     },
     charContainer: {
+        height: 400,
+        width: 400,
         alignItems: 'center',
+        justifyContent: 'center',
+        left: '4%',
+        // bottom: '15%',
     },
     image: {
-        width: 400,
-        height: 400,
+        width: '100%',
+        height: '100%',
         resizeMode: 'contain',
     },
 }
