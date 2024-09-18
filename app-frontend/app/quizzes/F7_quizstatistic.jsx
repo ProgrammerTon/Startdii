@@ -14,8 +14,8 @@ const QuizStatistics = ({ statistic_data = {
     allUsersScore: [4, 1, 3,5,5,5,5,5,5,2,2,3,4,5,5,3,2, 1, 3,5,5,5,5,5,5,2,2,3,4,5,5,3,2, 1, 3,5,5,5,5,5,5,2,2,3,4,5,5,3,2],
     allUsersEachQuestionScore: [
       [0, 1, 0, 1, 1],
-      [0, 1, 0, 0, 0],
-      [0, 0, 1, 1, 0],
+      [0, 1, 0, 0, 1],
+      [0, 0, 1, 1, 1],
     ],
     quizData: [
         {
@@ -57,11 +57,11 @@ const QuizStatistics = ({ statistic_data = {
         <>
           <View style={styles.legendItem}>
             <View style={[styles.colorBox, { backgroundColor: '#32cd32' }]} />
-            <Text style={styles.legendText}>Correct (1)</Text>
+            <Text style={styles.legendText}>Correct</Text>
           </View>
           <View style={styles.legendItem}>
             <View style={[styles.colorBox, { backgroundColor: '#ff6347' }]} />
-            <Text style={styles.legendText}>Incorrect (0)</Text>
+            <Text style={styles.legendText}>Incorrect</Text>
           </View>
         </>
       );
