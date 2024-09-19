@@ -12,7 +12,6 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { router } from "expo-router";
 import PieChartQuestion from "../quizzes/PieChartQuestion"; // Import the PieChartQuestion component
 import { Text as SvgText } from "react-native-svg";
-import { useQuestionContext } from "../../context/QuestionProvider";
 import { YAxis, XAxis } from "react-native-svg-charts";
 
 const { width, height } = Dimensions.get("window");
@@ -20,10 +19,8 @@ const { width, height } = Dimensions.get("window");
 const QuizStatistics = ({
   statistic_data = {
     totalQuestions: 5,
-    allUsersScore: [
-      4, 1, 3, 5, 5, 5, 5, 5, 5, 2, 2, 3, 4, 5, 5, 3, 2, 1, 3, 5, 5, 5, 5, 5, 5,
-      2, 2, 3, 4, 5, 5, 3, 2, 1, 3, 5, 5, 5, 5, 5, 5, 2, 2, 3, 4, 5, 5, 3, 2,
-    ],
+    totalPlayer: 3,
+    allUsersScore: [3, 2, 3],
     allUsersEachQuestionScore: [0, 2, 1, 2, 3],
     quizData: [
       {
@@ -68,26 +65,38 @@ const QuizStatistics = ({
   const {
     totalQuestions,
     allUsersScore,
-    allUsersAnswers,
+    totalPlayer,
     quizData,
     allUsersEachQuestionScore,
   } = statistic_data;
-  const { questions, quizId } = useQuestionContext();
+
+  const renderLegend = () => {
+    return (
+      <>
+        <View style={styles.legendItem}>
+          <View style={[styles.colorBox, { backgroundColor: "#32cd32" }]} />
+          <Text style={styles.legendText}>Correct</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.colorBox, { backgroundColor: "#ff6347" }]} />
+          <Text style={styles.legendText}>Incorrect</Text>
+        </View>
+      </>
+    );
+  };
 
   // Render pie charts for each question
   const renderPieCharts = () => {
-    return quizData.map((questionData, index) => (
-      <PieChartQuestion
-        key={index}
-        questionData={questionData}
-        allUsersAnswers={allUsersAnswers.map(
-          (userAnswers) => userAnswers[index]
-        )}
-        allUsersScore={allUsersEachQuestionScore.map(
-          (userScores) => userScores[index]
-        )}
-      />
-    ));
+    return quizData.map((questionData, index) => {
+      return (
+        <PieChartQuestion
+          key={index}
+          questionData={questionData}
+          usercorrect={allUsersEachQuestionScore[index]}
+          userwrong={totalPlayer - allUsersEachQuestionScore[index]}
+        />
+      );
+    });
   };
 
   // Initialize a frequency object with all possible scores from 0 to totalQuestions
@@ -123,21 +132,6 @@ const QuizStatistics = ({
       />
     ));
 
-  const renderLegend = () => {
-    return (
-      <>
-        <View style={styles.legendItem}>
-          <View style={[styles.colorBox, { backgroundColor: "#32cd32" }]} />
-          <Text style={styles.legendText}>Correct</Text>
-        </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.colorBox, { backgroundColor: "#ff6347" }]} />
-          <Text style={styles.legendText}>Incorrect</Text>
-        </View>
-      </>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.topPart}>
@@ -155,9 +149,7 @@ const QuizStatistics = ({
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* User Count */}
-        <Text style={styles.userCount}>
-          Number of users: {allUsersScore.length}
-        </Text>
+        <Text style={styles.userCount}>Number of users: {totalPlayer}</Text>
 
         {/* Bar Chart */}
         <View style={{ flexDirection: "row", height: 220, marginBottom: 20 }}>
