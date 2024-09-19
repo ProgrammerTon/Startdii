@@ -127,17 +127,18 @@ export class QuizsService {
   ) {
     let quiz = await this.quizModel.findById(id).exec();
     let user = await this.userModel.findById(userId).exec();
+    const score = res.reduce((sum, r) => sum + Number(r), 0);
     if (!quiz.players.includes(userId)) {
       quiz.players.push(userId);
       if (quiz.total_score)
         quiz.total_score += res.filter((value) => value).length;
       else quiz.total_score = res.filter((value) => value).length;
+      quiz.playing_scores.push(score);
       for (let i = 0; i < quiz.questions.length; i++) {
         if (quiz.questions[i].correct)
           quiz.questions[i].correct += Number(res[i]);
         else quiz.questions[i].correct = Number(res[i]);
       }
-      console.log(user);
       user.quiz_history.push({ id: id, results: res, answers: ans });
     }
     await this.quizModel
@@ -191,6 +192,7 @@ export class QuizsService {
     obj.players = [];
     obj.total_score = 0;
     obj.rating = [];
+    obj.playing_scores = [];
     for (let q = 0; q < obj.questions.length; q++) {
       obj.questions[q].correct = 0;
     }

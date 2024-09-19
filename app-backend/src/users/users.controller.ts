@@ -70,6 +70,8 @@ export class UsersController {
     return quizs;
   }
 
+
+
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('guild')
@@ -145,6 +147,18 @@ export class UsersController {
   @Get('favorite_quizzes/:userId')
   getFavoriteQuiz(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
     return this.usersService.getFavoriteQuizzes(userId);
+  }
+
+  @Get(':userId/rating/source/:sourceId')
+  getSourceRating(@Param('userId', ParseObjectIdPipe) userId: ObjectId
+, @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId) {
+    return this.usersService.getSourceRating(userId, sourceId);
+  }
+
+  @Get(':userId/rating/quiz/:quizId')
+  getQuizRating(@Param('userId', ParseObjectIdPipe) userId: ObjectId
+, @Param('quizId', ParseObjectIdPipe) quizId: ObjectId) {
+  return this.usersService.getQuizRating(userId, quizId);
   }
 
   // @Patch(':id')
