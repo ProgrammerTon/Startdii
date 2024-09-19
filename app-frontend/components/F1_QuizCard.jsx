@@ -38,7 +38,7 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
         </View>
         <View style={styles.contentContainer}>
           <Text style={styles.titleText}>
-            {title.length > 18 ? `${title.slice(0, 18)}...` : title}
+            {title?.length > 18 ? `${title?.slice(0, 18)}...` : title}
           </Text>
           <Text style={styles.authorText}>By {author}</Text>
           <TagList tags={tags} title={title} />
