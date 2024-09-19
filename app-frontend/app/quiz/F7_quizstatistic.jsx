@@ -19,20 +19,9 @@ const { width, height } = Dimensions.get("window");
 const QuizStatistics = ({
   statistic_data = {
     totalQuestions: 5,
-    allUsersScore: [
-      4, 1, 3, 5, 5, 5, 5, 5, 5, 2, 2, 3, 4, 5, 5, 3, 2, 1, 3, 5, 5, 5, 5, 5, 5,
-      2, 2, 3, 4, 5, 5, 3, 2, 1, 3, 5, 5, 5, 5, 5, 5, 2, 2, 3, 4, 5, 5, 3, 2,
-    ],
-    allUsersAnswers: [
-      [[0], ["4"], [0, 2], [1, 2, 4], [10]],
-      [[1], ["4"], [0, 2], [1, 2, 3], [5]],
-      [[0], ["2"], [1, 2], [1, 2, 4], [5]],
-    ],
-    allUsersEachQuestionScore: [
-      [1, 1, 0, 1, 1],
-      [0, 1, 0, 0, 0],
-      [1, 0, 1, 1, 0],
-    ],
+    totalPlayer: 3,
+    allUsersScore: [3, 2, 3],
+    allUsersEachQuestionScore: [0, 2, 1, 2, 3],
     quizData: [
       {
         question: "Charay Cool or not?",
@@ -76,25 +65,38 @@ const QuizStatistics = ({
   const {
     totalQuestions,
     allUsersScore,
-    allUsersAnswers,
+    totalPlayer,
     quizData,
     allUsersEachQuestionScore,
   } = statistic_data;
 
+  const renderLegend = () => {
+    return (
+      <>
+        <View style={styles.legendItem}>
+          <View style={[styles.colorBox, { backgroundColor: "#32cd32" }]} />
+          <Text style={styles.legendText}>Correct</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.colorBox, { backgroundColor: "#ff6347" }]} />
+          <Text style={styles.legendText}>Incorrect</Text>
+        </View>
+      </>
+    );
+  };
+
   // Render pie charts for each question
   const renderPieCharts = () => {
-    return quizData.map((questionData, index) => (
-      <PieChartQuestion
-        key={index}
-        questionData={questionData}
-        allUsersAnswers={allUsersAnswers.map(
-          (userAnswers) => userAnswers[index]
-        )}
-        allUsersScore={allUsersEachQuestionScore.map(
-          (userScores) => userScores[index]
-        )}
-      />
-    ));
+    return quizData.map((questionData, index) => {
+      return (
+        <PieChartQuestion
+          key={index}
+          questionData={questionData}
+          usercorrect={allUsersEachQuestionScore[index]}
+          userwrong={totalPlayer - allUsersEachQuestionScore[index]}
+        />
+      );
+    });
   };
 
   // Initialize a frequency object with all possible scores from 0 to totalQuestions
@@ -129,21 +131,6 @@ const QuizStatistics = ({
         textAnchor="middle"
       />
     ));
-  
-  const renderLegend = () => {
-    return (
-        <>
-          <View style={styles.legendItem}>
-            <View style={[styles.colorBox, { backgroundColor: '#32cd32' }]} />
-            <Text style={styles.legendText}>Correct</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <View style={[styles.colorBox, { backgroundColor: '#ff6347' }]} />
-            <Text style={styles.legendText}>Incorrect</Text>
-          </View>
-        </>
-      );
-  };
 
   return (
     <View style={styles.container}>
@@ -162,9 +149,7 @@ const QuizStatistics = ({
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* User Count */}
-        <Text style={styles.userCount}>
-          Number of users: {allUsersScore.length}
-        </Text>
+        <Text style={styles.userCount}>Number of users: {totalPlayer}</Text>
 
         {/* Bar Chart */}
         <View style={{ flexDirection: "row", height: 220, marginBottom: 20 }}>
@@ -262,14 +247,14 @@ const styles = StyleSheet.create({
   },
   legendContainer: {
     marginTop: 20,
-    flexDirection: 'column',  // Changed from 'row' to 'column' for vertical layout
-    justifyContent: 'flex-start',  // Align legend items to the top
+    flexDirection: "column", // Changed from 'row' to 'column' for vertical layout
+    justifyContent: "flex-start", // Align legend items to the top
   },
   legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,  // Add margin between legend items
-    marginRight: 30
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10, // Add margin between legend items
+    marginRight: 30,
   },
   colorBox: {
     width: 20,

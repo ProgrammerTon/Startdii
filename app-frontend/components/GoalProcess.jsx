@@ -3,12 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import fonts from "../constants/font";
 import colors from "../constants/color";
 
-const GoalProcess = ({
-  title,
-  percent,
-  otherStyles,
-}) => {
-
+const GoalProcess = ({ title, percent, otherStyles }) => {
   return (
     <View style={[styles.container, otherStyles]}>
       <Text style={[fonts.ThaiMedium18, styles.title]}>{title}</Text>
@@ -23,11 +18,15 @@ const GoalProcess = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: '1%',
-    marginTop: '4%',
+    marginHorizontal: "1%",
+    marginTop: "4%",
+    width: "100%",
+    alignItems: "center",
   },
   title: {
-    marginLeft: '5%',
+    textAlign: "left",
+    width: "85%",
+    marginLeft: "5%",
   },
   inputContainer: {
     backgroundColor: colors.white,
@@ -37,25 +36,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: 385,
+    flexDirection: "row",
+    alignItems: "center",
+    width: "87%",
     height: 70,
-    paddingVertical: '0.5%',
-    paddingHorizontal: '1%',
+    paddingVertical: "0.5%",
+    paddingHorizontal: "1%",
   },
   ProcessContainer: {
     backgroundColor: colors.blue,
     borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '90%',
-    padding: '4%',
+    alignItems: "center",
+    justifyContent: "center",
+    height: "90%",
+    padding: "4%",
   },
   PercentText: {
     flex: 1,
     color: colors.white,
-  }
+  },
 });
 
 export default GoalProcess;
