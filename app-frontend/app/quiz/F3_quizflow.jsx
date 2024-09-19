@@ -6,43 +6,30 @@ import { useQuestionContext } from "../../context/QuestionProvider";
 import QuizSummaryPage from "../quizzes/F4_quizsummary";
 import { submitQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import QuizStatistics from "./F7_quizstatistic";
+import { BackHandler } from "react-native";
+import { router } from "expo-router";
 
 const QuizFlow = () => {
-  const { questions, quizId } = useQuestionContext();
+  const { questions, quizId, quizFinished, setQuizFinished } =
+    useQuestionContext();
   const { user } = useGlobalContext();
-  // const quizData = [
-  //   {
-  //     question: "Charay Cool or not?",
-  //     qtype: "choice",
-  //     choice: ["Not", "Cool"],
-  //     answer: [0], // Correct choice is 'Cool'
-  //   },
-  //   {
-  //     question: "2+2",
-  //     qtype: "fill",
-  //     choice: [], // No choices, since it's a fill-in question
-  //     answer: [4], // The correct answer is 4
-  //   },
-  //   {
-  //     question: "2+5 and 4+5",
-  //     qtype: "choice",
-  //     choice: ["0", "7", "9", "1"],
-  //     answer: [1, 2], // Correct answers are '7' and '9'
-  //   },
-  //   {
-  //     question: "2+5 and 3+2 and 1+8",
-  //     qtype: "choice",
-  //     choice: ["0", "7", "9", "1", "5"],
-  //     answer: [1, 2, 4], // Correct answers are '7' and '9' and '5'
-  //   },
-  // ];
   const [quizData, setQuizData] = useState([]);
   const [eachQuestionAnswers, setEachQuestionAnswers] = useState([]);
+  const [userState, setUserState] = useState("Answer");
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
-  const [quizFinished, setQuizFinished] = useState(false);
+
+  BackHandler.addEventListener("hardwareBackPress", () => {
+    if (userState === "Statistic") {
+      setUserState("Summary");
+      return true;
+    }
+    router.push(`/quiz/${quizId}`);
+    return false;
+  });
 
   const handleAnswerSubmit = (userAnswer) => {
     const correctAnswer = quizData[currentQuestion].answer;
@@ -65,6 +52,7 @@ const QuizFlow = () => {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setQuizFinished(true);
+      setUserState("Summary");
     }
     console.log(updatedAnswers);
   };
@@ -89,10 +77,6 @@ const QuizFlow = () => {
 
   useEffect(() => {
     if (quizFinished) {
-      console.log("Score", score);
-      console.log("QuizData", quizData);
-      console.log("AnswerQuestion", [eachQuestionAnswers]);
-      console.log("UserAns", userAnswers);
       const numericUserAns = userAnswers.map((subArray) => {
         // Map through each element in the sub-array
         return subArray.map((item) =>
@@ -126,15 +110,19 @@ const QuizFlow = () => {
             totalQuestions={quizData.length}
           />
         )
-      ) : (
+      ) : null}
+      {quizFinished && userState === "Summary" ? (
         <QuizSummaryPage
           score={score}
           userAnswers={userAnswers}
           quizData={quizData}
           eachQuestionAnswers={[eachQuestionAnswers]}
           id={quizId}
+          handlesetUserState={(state) => setUserState(state)}
         />
-      )}
+      ) : null}
+
+      {quizFinished && userState === "Statistic" ? <QuizStatistics /> : null}
     </View>
   );
 };

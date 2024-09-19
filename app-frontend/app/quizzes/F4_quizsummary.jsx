@@ -21,6 +21,7 @@ import { getCommentsQuiz } from "../../services/CommentService";
 import StatButton from "../Quiz_Component/StatButton";
 import { createCommentSource } from "../../services/CommentService";
 import { router } from "expo-router";
+import { ratingQuiz } from "../../services/QuizService";
 
 const { width, height } = Dimensions.get("window");
 
@@ -30,6 +31,7 @@ const QuizSummaryPage = ({
   quizData,
   eachQuestionAnswers,
   id,
+  handlesetUserState,
 }) => {
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState("");
@@ -130,9 +132,7 @@ const QuizSummaryPage = ({
           <ScoreProgress percent={(score / quizData.length) * 100} />
         </View>
 
-        <StatButton
-          handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
-        />
+        <StatButton handleOnPress={() => handlesetUserState("Statistic")} />
         <AnswerButton
           eachQuestionAnswers={eachQuestionAnswers}
           userAnswers={userAnswers}
@@ -142,7 +142,7 @@ const QuizSummaryPage = ({
           ScoreRating={Math.round(quiz?.averageScore)}
           numComment={quiz?.count}
         />
-        <RatingBar />
+        <RatingBar onRatingChange={handleRating} />
 
         {/* CommentBar with input */}
         <CommentBar

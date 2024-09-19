@@ -8,10 +8,18 @@ export const useQuestionContext = () => useContext(QuestionContext);
 const QuestionProvider = ({ children }) => {
   const [questions, setQuestions] = useState([]);
   const [quizId, setQuizId] = useState("");
+  const [quizFinished, setQuizFinished] = useState(false);
 
   return (
     <QuestionContext.Provider
-      value={{ questions, setQuestions, quizId, setQuizId }}
+      value={{
+        questions,
+        setQuestions,
+        quizId,
+        setQuizId,
+        quizFinished,
+        setQuizFinished,
+      }}
     >
       {children}
     </QuestionContext.Provider>
