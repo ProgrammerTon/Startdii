@@ -46,11 +46,14 @@ export class QuizsService {
     sortField: 'createdAt' | 'avg_rating_score',
   ): Promise<Quiz[] | null> {
     const size = 10;
+    const skip = (offset - 1) * size;
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const quizs = await this.quizModel
       .find()
       .select('-updatedAt')
       .sort({ [sortField]: sortValue })
+      .skip(skip)
+      .limit(size)
       .populate('ownerId', 'username')
       .exec();
     offset--;
@@ -116,7 +119,12 @@ export class QuizsService {
     return objs;
   }
 
-  async addHistory(id: ObjectId, userId: ObjectId, res: boolean[], ans: (number | number[])[]) {
+  async addHistory(
+    id: ObjectId,
+    userId: ObjectId,
+    res: boolean[],
+    ans: (number | number[])[],
+  ) {
     let quiz = await this.quizModel.findById(id).exec();
     let user = await this.userModel.findById(userId).exec();
     if (!quiz.players.includes(userId)) {
@@ -169,14 +177,16 @@ export class QuizsService {
     for (let p = 0; p < obj.players.length; p++) {
       let pid = obj.players[p];
       user = await this.userModel.findById(pid).exec();
-      user.quiz_history = user.quiz_history.filter((element) => element.id.toString() !== id.toString());
+      user.quiz_history = user.quiz_history.filter(
+        (element) => element.id.toString() !== id.toString(),
+      );
       await this.userModel
-      .findByIdAndUpdate(
-        pid,
-        { $set: user },
-        { new: true, useFindAndModify: false }, // Return the updated document
-      )
-      .exec();
+        .findByIdAndUpdate(
+          pid,
+          { $set: user },
+          { new: true, useFindAndModify: false }, // Return the updated document
+        )
+        .exec();
     }
     obj.players = [];
     obj.total_score = 0;
@@ -184,7 +194,7 @@ export class QuizsService {
     for (let q = 0; q < obj.questions.length; q++) {
       obj.questions[q].correct = 0;
     }
-    
+
     await this.quizModel
       .findByIdAndUpdate(
         id,

@@ -58,7 +58,7 @@ const ArchiveMainPage = () => {
     }
     const { title, tags } = extractTitleAndTags(searchField);
     if (!isSearchNote) {
-      const sources = await getSource(of, sortOrder, title, tags);
+      const sources = await getSource(of, sortOrder, title, tags, ActiveFilter);
 
       if (sources && sources?.length !== 0) {
         if (reset) {
@@ -69,7 +69,7 @@ const ArchiveMainPage = () => {
         setOffset(of + 1); // Increment the offset for pagination
       }
     } else {
-      const quizs = await getQuiz(of, sortOrder, title, tags);
+      const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
 
       if (quizs?.length !== 0) {
         setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
@@ -87,8 +87,8 @@ const ArchiveMainPage = () => {
       const { title, tags } = extractTitleAndTags(searchField);
       console.log(title, tags);
       if (isSearchNote) {
-        if(ActiveFilter === "Favorite") {
-          const fav_sources = await getFavoriteSource(user._id)
+        if (ActiveFilter === "Favorite") {
+          const fav_sources = await getFavoriteSource(user._id);
           setData(fav_sources.favorite_sources);
         } else {
           const sources = await getSource(
@@ -112,11 +112,11 @@ const ArchiveMainPage = () => {
           }
         }
       } else {
-        if(ActiveFilter === "Favorite") {
-          const fav_quizzes = await getFavoriteQuiz(user._id)
+        if (ActiveFilter === "Favorite") {
+          const fav_quizzes = await getFavoriteQuiz(user._id);
           setData(fav_quizzes.favorite_quizzes);
         } else {
-          const quizs = await getQuiz(of, sortOrder, title, tags);
+          const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
 
           if (quizs && quizs?.length !== 0) {
             if (!isSearch) {

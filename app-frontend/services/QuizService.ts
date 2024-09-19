@@ -29,25 +29,46 @@ export async function getQuiz(
   offset: number,
   sortOrder: "asc" | "desc",
   title: string | null,
-  tags: string[]
+  tags: string[],
+  activeFilter: string
 ): Promise<any[] | null> {
   if (!title) {
     title = "";
   }
-  const res = await fetch(
-    `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  console.log(activeFilter, sortOrder);
+  if (activeFilter === "Latest" || activeFilter === "Oldest") {
+    const res = await fetch(
+      `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}&sortBy=time`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data: any[] = await res.json();
+    if (!res.ok) {
+      return null;
     }
-  );
-  const data: any[] = await res.json();
-  if (!res.ok) {
-    return null;
+    return data;
   }
-  return data;
+  if (activeFilter === "Rating") {
+    const res = await fetch(
+      `${baseUrl}/quizs?offset=${offset}&sortOrder=${sortOrder}&title=${title}&tags=${tags}&sortBy=rating`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data: any[] = await res.json();
+    if (!res.ok) {
+      return null;
+    }
+    return data;
+  }
+  return null;
 }
 
 // export async function getQuiz(
