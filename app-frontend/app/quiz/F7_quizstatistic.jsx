@@ -12,6 +12,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { router } from "expo-router";
 import PieChartQuestion from "../quizzes/PieChartQuestion"; // Import the PieChartQuestion component
 import { Text as SvgText } from "react-native-svg";
+import { useQuestionContext } from "../../context/QuestionProvider";
 import { YAxis, XAxis } from "react-native-svg-charts";
 
 const { width, height } = Dimensions.get("window");
@@ -23,16 +24,7 @@ const QuizStatistics = ({
       4, 1, 3, 5, 5, 5, 5, 5, 5, 2, 2, 3, 4, 5, 5, 3, 2, 1, 3, 5, 5, 5, 5, 5, 5,
       2, 2, 3, 4, 5, 5, 3, 2, 1, 3, 5, 5, 5, 5, 5, 5, 2, 2, 3, 4, 5, 5, 3, 2,
     ],
-    allUsersAnswers: [
-      [[0], ["4"], [0, 2], [1, 2, 4], [10]],
-      [[1], ["4"], [0, 2], [1, 2, 3], [5]],
-      [[0], ["2"], [1, 2], [1, 2, 4], [5]],
-    ],
-    allUsersEachQuestionScore: [
-      [1, 1, 0, 1, 1],
-      [0, 1, 0, 0, 0],
-      [1, 0, 1, 1, 0],
-    ],
+    allUsersEachQuestionScore: [0, 2, 1, 2, 3],
     quizData: [
       {
         question: "Charay Cool or not?",
@@ -80,6 +72,7 @@ const QuizStatistics = ({
     quizData,
     allUsersEachQuestionScore,
   } = statistic_data;
+  const { questions, quizId } = useQuestionContext();
 
   // Render pie charts for each question
   const renderPieCharts = () => {
@@ -129,20 +122,20 @@ const QuizStatistics = ({
         textAnchor="middle"
       />
     ));
-  
+
   const renderLegend = () => {
     return (
-        <>
-          <View style={styles.legendItem}>
-            <View style={[styles.colorBox, { backgroundColor: '#32cd32' }]} />
-            <Text style={styles.legendText}>Correct</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <View style={[styles.colorBox, { backgroundColor: '#ff6347' }]} />
-            <Text style={styles.legendText}>Incorrect</Text>
-          </View>
-        </>
-      );
+      <>
+        <View style={styles.legendItem}>
+          <View style={[styles.colorBox, { backgroundColor: "#32cd32" }]} />
+          <Text style={styles.legendText}>Correct</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.colorBox, { backgroundColor: "#ff6347" }]} />
+          <Text style={styles.legendText}>Incorrect</Text>
+        </View>
+      </>
+    );
   };
 
   return (
@@ -262,14 +255,14 @@ const styles = StyleSheet.create({
   },
   legendContainer: {
     marginTop: 20,
-    flexDirection: 'column',  // Changed from 'row' to 'column' for vertical layout
-    justifyContent: 'flex-start',  // Align legend items to the top
+    flexDirection: "column", // Changed from 'row' to 'column' for vertical layout
+    justifyContent: "flex-start", // Align legend items to the top
   },
   legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,  // Add margin between legend items
-    marginRight: 30
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10, // Add margin between legend items
+    marginRight: 30,
   },
   colorBox: {
     width: 20,
