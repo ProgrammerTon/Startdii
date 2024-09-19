@@ -166,6 +166,18 @@ export class UsersService {
       .exec();
   }
 
+  async getSourceRating(userId: ObjectId,oid: ObjectId) {
+    let obj = await this.sourceModel.findById(oid);
+    obj.rating = obj.rating.filter(rating => rating.raterId.toString() === userId.toString());
+    return obj.rating.length > 0 ? obj.rating[0].score : 0;
+  }
+
+  async getQuizRating(userId: ObjectId,oid: ObjectId) {
+    let obj = await this.quizModel.findById(oid);
+    obj.rating = obj.rating.filter(rating => rating.raterId.toString() === userId.toString());
+    return obj.rating.length > 0 ? obj.rating[0].score : 0;
+  }
+
   // --------------------------- Update ---------------------------
   async addFavoriteSource(id: ObjectId, sourceId: ObjectId) {
     const user = await this.userModel.findById(id).exec();

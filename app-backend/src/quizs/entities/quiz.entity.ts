@@ -63,8 +63,9 @@ export class Quiz {
   @Prop({ name: 'rating_count'})
   rating_count: number = 0;
 
-  @Prop({ name: 'test_attr'})
-  test_attr: number = 0;
+  @Prop({ name: 'playing_scores'})
+  playing_scores: number[] = [];
+
 }
 
 export const QuizSchema = SchemaFactory.createForClass(Quiz).index({
