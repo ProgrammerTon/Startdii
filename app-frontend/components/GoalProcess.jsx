@@ -25,8 +25,12 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: '1%',
     marginTop: '4%',
+    width: '100%',
+    alignItems: 'center',
   },
   title: {
+    textAlign: 'left',
+    width: '85%',
     marginLeft: '5%',
   },
   inputContainer: {
@@ -39,7 +43,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    width: 385,
+    width: '87%',
     height: 70,
     paddingVertical: '0.5%',
     paddingHorizontal: '1%',
