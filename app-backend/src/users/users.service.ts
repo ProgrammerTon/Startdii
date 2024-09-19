@@ -48,9 +48,11 @@ export class UsersService {
     const userfind = new Types.ObjectId(userId);
     const user = await this.findById(userfind);
     const quizIds = user.quiz_history.map((q) => q.id);
-    const quizzes = await this.quizModel.find({
-      _id: { $in: quizIds },
-    });
+    const quizzes = await this.quizModel
+      .find({
+        _id: { $in: quizIds },
+      })
+      .populate('ownerId', 'username');
     const populatedQuizHistory = user.quiz_history.map((quizEntry) => {
       const quiz = quizzes.find((quiz: any) => quiz._id.equals(quizEntry.id));
       const { questions, players, ...restQuiz } = quiz.toObject();
