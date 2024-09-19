@@ -6,7 +6,6 @@ import {
     ScrollView,
     Dimensions,
     StyleSheet,
-    Image,
     TouchableOpacity,
 } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -93,8 +92,8 @@ function ColourDetails({ onColorSelect }) {
             <ScrollView style={{backgroundColor:colors.white}}>
                 <View style={styles.rowcontainer}>
                     <View style={styles.eachcontainer}>
-                        <TouchableOpacity onPress={() => onColorSelect(colors.pink)}>
-                            <View style={[styles.colorbutton, { backgroundColor: colors.pink }]} />
+                        <TouchableOpacity onPress={() => onColorSelect(colors.green)}>
+                            <View style={[styles.colorbutton, { backgroundColor: colors.green }]} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.eachcontainer}>
@@ -111,8 +110,8 @@ function ColourDetails({ onColorSelect }) {
 
                 <View style={styles.rowcontainer}>
                     <View style={styles.eachcontainer}>
-                        <TouchableOpacity onPress={() => onColorSelect(colors.green)}>
-                            <View style={[styles.colorbutton, { backgroundColor: colors.green }]} />
+                        <TouchableOpacity onPress={() => onColorSelect(colors.pink)}>
+                            <View style={[styles.colorbutton, { backgroundColor: colors.pink }]} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.eachcontainer}>
@@ -192,7 +191,7 @@ function HatDetails({ onHatSelect }) {
 
 export default function DressTest() {
     const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.char} />);
-    const [selectedColor, setSelectedColor] = useState(colors.pink);
+    const [selectedColor, setSelectedColor] = useState(colors.green);
     const [selectedHat, setSelectedHat] = useState('HNone');
 
     const getCharacterComponent = (char) => {
