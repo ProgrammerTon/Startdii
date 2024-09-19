@@ -28,9 +28,9 @@ import Char6 from "../../components/charactor/Charactor06";
 import Menu from "../../components/menu";
 import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
-import History from "../../components/History";
 import DressButton from "../../components/DressButton";
 import Frame from "../../components/Frame";
+import History from "../quiz_history_page";
 
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
@@ -106,7 +106,6 @@ export default function ProfileTest() {
           <SignoutButton />
         </View>
       </View>
-
       <FlatList
         ListHeaderComponent={renderHeader}
         data={[{}]} // Ensuring there is data to render the header.
