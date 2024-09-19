@@ -13,11 +13,9 @@ import { ScrollView } from "react-native";
 import AuthService from "../../services/AuthService";
 import { router } from "expo-router";
 import { useCharContext, CharacterContext } from "./charcontext";
-import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
-import GoalProcess from "../../components/GoalProcess";
 import SignoutButton from "../../components/SignoutButton";
 import PencilIcon from "../../components/PencilIcon";
 import Level from "../../components/Level";
@@ -31,6 +29,8 @@ import Menu from "../../components/menu";
 import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
 import History from "../../components/History"
+import DressButton from "../../components/DressButton";
+import Frame from "../../components/Frame";
 
 export default function ProfileTest() {
     const [activeMenu, setActiveMenu] = useState('Weekly Goals');
@@ -60,8 +60,17 @@ export default function ProfileTest() {
             <View style={styles.levelContainer}>
                 <Level level="1" percent="50%" />
             </View>
+            <View style={styles.dressButton}>
+                <DressButton/>
+            </View>
             <View style={styles.charContainer}>
                 {getCharacterComponent}
+            </View>
+            <View style={styles.frameContainer}>
+                <Frame/>
+                <View style={styles.textContainer}>
+                    <Text style={[fonts.EngMedium22, styles.text]}>Beginner</Text>
+                </View>
             </View>
             <Menu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
         </>
@@ -96,7 +105,7 @@ export default function ProfileTest() {
                     </View>
                 </TouchableOpacity>
                 <View style={styles.signoutContainer}>
-                    <SignoutButton />
+                    <SignoutButton/>
                 </View>
             </View>
 
@@ -154,15 +163,39 @@ const styles = {
     },
     charContainer: {
         height: 400,
-        width: 400,
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        left: '4%',
-        // bottom: '15%',
+        marginVertical: '-10%',
+        marginTop: '-10%',
     },
     image: {
         width: '100%',
         height: '100%',
         resizeMode: 'contain',
     },
+    dressButton: {
+        width: '90%',
+        alignItems: 'flex-end',
+        zIndex: 1,
+    },
+    frameContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: '8%',
+    },
+    frame: {
+        width: '100%',
+    },
+    textContainer: {
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+    },
+    text: {
+        color: colors.black,
+        fontSize: 20,
+    }
 }
