@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -13,62 +13,18 @@ import { router } from "expo-router";
 import PieChartQuestion from "../quizzes/PieChartQuestion"; // Import the PieChartQuestion component
 import { Text as SvgText } from "react-native-svg";
 import { YAxis, XAxis } from "react-native-svg-charts";
+import { useQuestionContext } from "../../context/QuestionProvider";
+import { findQuiz } from "../../services/QuizService";
 
 const { width, height } = Dimensions.get("window");
 
-const QuizStatistics = ({
-  statistic_data = {
-    totalQuestions: 5,
-    totalPlayer: 3,
-    allUsersScore: [3, 2, 3],
-    allUsersEachQuestionScore: [0, 2, 1, 2, 3],
-    quizData: [
-      {
-        question: "Charay Cool or not?",
-        qtype: "choice",
-        choice: ["Not", "Cool"],
-        answer: [0], // Correct choice is 'Not'
-      },
-      {
-        question: "2+2",
-        qtype: "fill",
-        choice: [],
-        answer: [4], // Correct answer is 4
-      },
-      {
-        question: "2+5 and 4+5",
-        qtype: "choice",
-        choice: ["0", "7", "9", "1"],
-        answer: [1, 2], // Correct answers are '7' and '9'
-      },
-      {
-        question: "2+5 and 3+2 and 1+8",
-        qtype: "choice",
-        choice: [
-          "00fSDFJdsIFNSDFnsdzlfnsdlkfndfdfadfjsipdfjsail",
-          "7",
-          "9",
-          "1",
-          "5",
-        ],
-        answer: [1, 2, 4], // Correct answers are '7', '9', and '5'
-      },
-      {
-        question: "5+5fdsFDFDSfdfdFDFdsfdszfdsfdszfzsdfsdzfsdzf",
-        qtype: "fill",
-        choice: [],
-        answer: [10], // Correct answer is 10
-      },
-    ],
-  },
-}) => {
-  const {
-    totalQuestions,
-    allUsersScore,
-    totalPlayer,
-    quizData,
-    allUsersEachQuestionScore,
-  } = statistic_data;
+const QuizStatistics = () => {
+  const { quizId, questions } = useQuestionContext();
+  const [quizData, setQuizData] = useState([]);
+  const [allUsersScore, setAllUsersScore] = useState([]);
+  const [allUsersEachQuestionScore, setAllUsersEachQuestionScore] = useState(
+    []
+  );
 
   const renderLegend = () => {
     return (
@@ -93,7 +49,11 @@ const QuizStatistics = ({
           key={index}
           questionData={questionData}
           usercorrect={allUsersEachQuestionScore[index]}
-          userwrong={totalPlayer - allUsersEachQuestionScore[index]}
+          userwrong={
+            allUsersScore.length - allUsersEachQuestionScore[index] >= 0
+              ? allUsersScore.length - allUsersEachQuestionScore[index]
+              : 0
+          }
         />
       );
     });
@@ -101,7 +61,7 @@ const QuizStatistics = ({
 
   // Initialize a frequency object with all possible scores from 0 to totalQuestions
   const frequency = {};
-  for (let i = 0; i <= totalQuestions; i++) {
+  for (let i = 0; i <= quizData.length; i++) {
     frequency[i] = 0;
   }
 
@@ -118,6 +78,17 @@ const QuizStatistics = ({
     count: frequency[score],
   }));
 
+  const fetchQuiz = async () => {
+    const data = await findQuiz(quizId);
+    if (!data) {
+      return null;
+    }
+    console.log("Quiz", data);
+    setAllUsersScore(data.playing_scores);
+    const transformCorrect = data.questions.map((question) => question.correct);
+    setAllUsersEachQuestionScore(transformCorrect);
+  };
+
   // Custom labels for the bar chart
   const Labels = ({ x, y, bandwidth, data }) =>
     data.map((value, index) => (
@@ -131,6 +102,19 @@ const QuizStatistics = ({
         textAnchor="middle"
       />
     ));
+
+  useEffect(() => {
+    if (quizId) {
+      fetchQuiz();
+    }
+    console.log(quizId);
+  }, [quizId]);
+
+  useEffect(() => {
+    if (questions?.length !== 0) {
+      setQuizData(questions);
+    }
+  }, [questions]);
 
   return (
     <View style={styles.container}>
@@ -149,7 +133,9 @@ const QuizStatistics = ({
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* User Count */}
-        <Text style={styles.userCount}>Number of users: {totalPlayer}</Text>
+        <Text style={styles.userCount}>
+          Number of users: {allUsersScore.length}
+        </Text>
 
         {/* Bar Chart */}
         <View style={{ flexDirection: "row", height: 220, marginBottom: 20 }}>

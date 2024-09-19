@@ -27,34 +27,30 @@ const Quiz_History_Page = () => {
   }, []);
 
   return (
-    <View>
-      <Text>Quiz_History_Page</Text>
-      <FlatList
-        data={data}
-        renderItem={({ item }) => {
-          const fav = user?.favorite_quizzes?.includes(item?.quiz?._id)
-            ? true
-            : false;
-          return (
-            <QuizCard
-              id={item?.quiz?._id}
-              title={item?.quiz?.title}
-              author={item?.quiz?.ownerId?.username}
-              tags={item?.quiz?.tags}
-              rating={item?.quiz?.avg_rating_score}
-              isFavorite={fav}
-            />
-          );
-        }}
-        keyExtractor={(item, ind) => `${item._id}-${ind}`}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-        contentContainerStyle={{ paddingBottom: 110 }}
-        onEndReached={() => fetchData()} // Load more data when the list reaches the end
-        onEndReachedThreshold={0.1} // Adjust as needed
-      />
-    </View>
+    <FlatList
+      data={data}
+      scrollEnabled={false}
+      renderItem={({ item }) => {
+        const fav = user?.favorite_quizzes?.includes(item?.quiz?._id)
+          ? true
+          : false;
+        return (
+          <QuizCard
+            id={item?.quiz?._id}
+            title={item?.quiz?.title}
+            author={item?.quiz?.ownerId?.username}
+            tags={item?.quiz?.tags}
+            rating={item?.quiz?.avg_rating_score}
+            isFavorite={fav}
+          />
+        );
+      }}
+      keyExtractor={(item, ind) => `${item._id}-${ind}`}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+      contentContainerStyle={{ paddingBottom: 110 }}
+    />
   );
 };
 

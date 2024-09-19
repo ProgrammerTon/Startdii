@@ -20,6 +20,7 @@ import { findQuiz } from "../../services/QuizService";
 import { getCommentsQuiz } from "../../services/CommentService";
 import StatButton from "../Quiz_Component/StatButton";
 import { createCommentSource } from "../../services/CommentService";
+import { router } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
 
@@ -129,7 +130,9 @@ const QuizSummaryPage = ({
           <ScoreProgress percent={(score / quizData.length) * 100} />
         </View>
 
-        <StatButton />
+        <StatButton
+          handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
+        />
         <AnswerButton
           eachQuestionAnswers={eachQuestionAnswers}
           userAnswers={userAnswers}
