@@ -64,6 +64,14 @@ export class UsersController {
 
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('/quiz_history')
+  getQuizHistory(@Request() req) {
+    const quizs = this.usersService.getQuizHistory(req.user.id);
+    return quizs;
+  }
+
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('guild')
   findGuildByMemberId(@Request() req) {
     const memberId = new Types.ObjectId(req.user.id);

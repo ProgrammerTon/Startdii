@@ -7,7 +7,8 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Source, SourceDocument } from 'src/sources/entities/source.entity';
 import { ObjectId } from 'mongodb';
-import { promises } from 'dns';
+import { Types } from 'mongoose';
+import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +17,8 @@ export class UsersService {
     private userModel: Model<UserDocument>,
     @InjectModel(Source.name)
     private sourceModel: Model<SourceDocument>,
+    @InjectModel(Quiz.name)
+    private quizModel: Model<QuizDocument>,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -39,6 +42,24 @@ export class UsersService {
     } else {
       return null;
     }
+  }
+
+  async getQuizHistory(userId: string) {
+    const userfind = new Types.ObjectId(userId);
+    const user = await this.findById(userfind);
+    const quizIds = user.quiz_history.map((q) => q.id);
+    const quizzes = await this.quizModel.find({
+      _id: { $in: quizIds },
+    });
+    const populatedQuizHistory = user.quiz_history.map((quizEntry) => {
+      const quiz = quizzes.find((quiz: any) => quiz._id.equals(quizEntry.id));
+      const { questions, players, ...restQuiz } = quiz.toObject();
+      return {
+        ...quizEntry,
+        quiz: restQuiz,
+      };
+    });
+    return populatedQuizHistory;
   }
 
   async findById(userId: ObjectId) {
