@@ -216,6 +216,9 @@ export async function submitQuiz(
 
 export async function getAnswers(quizId: string): Promise<any[] | null> {
   const token = await getCurrentToken();
+  if (!token) {
+    throw Error("Token Needed!");
+  }
   const res = await fetch(`${baseUrl}/users/answerQuiz/${quizId}`, {
     method: "GET",
     headers: {
