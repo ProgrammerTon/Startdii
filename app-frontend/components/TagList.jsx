@@ -1,19 +1,39 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React from "react";
+import colors from "../constants/color";
+import fonts from "../constants/font";
 
 export default function TagList({ tags=[], title, id }) {
   return (
-    <View className="flex flex-row gap-3">
+    <View style={styles.container}>
       {tags?.map((tag, i) => {
         return (
           <View
-            className="bg-[#D9D9D9] p-1 rounded-xl"
+            style={styles.tag}
             key={`${tag}-${id}-${i}`}
           >
-            <Text className="text-xs">#{tag}</Text>
+            <Text style={[fonts.EngMedium12, styles.text]}>#{tag}</Text>
           </View>
         );
       })}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    // flex: 1,
+    flexDirection: "row",
+    gap: 5,
+  },
+  tag: {
+    height: 24,
+    backgroundColor: colors.gray_button,
+    borderRadius: 50,
+    padding: 3,
+    paddingHorizontal: 8,
+  },
+  text: {
+    color: colors.black,
+  },
+})

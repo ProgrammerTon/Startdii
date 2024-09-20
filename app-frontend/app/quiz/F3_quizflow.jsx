@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View,Alert } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import QuizFill from "../quizzes/F3_quizfill";
 import QuizChoices from "../quizzes/F3_quizchoice";
 import { useQuestionContext } from "../../context/QuestionProvider";
@@ -33,9 +33,9 @@ const QuizFlow = () => {
         {
           text: "Cancel",
           onPress: () => null,
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "YES", onPress: () => router.back() }
+        { text: "YES", onPress: () => router.back() },
       ]);
       return true;
     }
