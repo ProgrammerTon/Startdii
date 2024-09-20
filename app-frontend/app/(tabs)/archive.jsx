@@ -19,6 +19,7 @@ import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
 import { router } from "expo-router";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid.jsx";
+import colors from "../../constants/color.js";
 
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Latest");
@@ -220,7 +221,7 @@ const ArchiveMainPage = () => {
           onPress={openAddToggleNoteQuizVisible}
           style={{ marginRight: 10 }}
         >
-          <Feather name="menu" size={24} color="black" />
+          <Feather name="menu" size={24} color={colors.black} />
         </TouchableOpacity>
         <ToggleNoteQuiz
           visible={AddToggleNoteQuizVisible}
@@ -326,9 +327,10 @@ export default ArchiveMainPage;
 const styles = StyleSheet.create({
   container: {
     flex: 2,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: colors.gray_bg,
     padding: 20,
     paddingTop: 50,
+    // alignItems: "center",
   },
   headerContainer: {
     flexDirection: "row",
@@ -342,7 +344,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   filterButton: {
-    backgroundColor: "#3367d6",
+    backgroundColor: colors.blue,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
@@ -351,7 +353,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inactiveFilterButton: {
-    backgroundColor: "#cccccc",
+    backgroundColor: colors.gray_button,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
@@ -360,14 +362,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   filterText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 12,
+  },
+  listContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flatList: {
+    width: '100%',
   },
   emptyContainer: {
     flex: 1,
   },
   floatingButton: {
-    backgroundColor: "#FF6347",
+    backgroundColor: colors.red,
     borderRadius: 30,
     width: 60,
     height: 60,
@@ -376,23 +386,23 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 100,
     right: 20,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
     shadowRadius: 4,
+    elevation: 5,
     zIndex: 1000,
   },
   toggleButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#ef6d11",
+    backgroundColor: colors.black,
     justifyContent: "center",
     alignItems: "center",
   },
   floatingButtonText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 32,
     fontWeight: "bold",
   },

@@ -7,16 +7,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import images from "../constants/images";
 import colors from "../constants/color";
 import fonts from "../constants/font";
-import {
-  favoriteSource,
-  unfavoriteSource,
-  getFavoriteSource,
-} from "../services/SourceService";
-import { useGlobalContext } from "../context/GlobalProvider";
 
-const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
-  const { user } = useGlobalContext();
-  const [isLiked, setIsLiked] = useState(isFavorite);
+const SourceCard = ({ id, title, author, tags }) => {
+  const rating = 4;
+
+  const [isLiked, setIsLiked] = useState(false);
 
   const toggleHeart = async () => {
     if (!isLiked) {
@@ -44,9 +39,9 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={[fonts.EngBold18, styles.titleText]}>{title.length > 20 ? `${title.slice(0, 20)}...` : title}</Text>
-          <Text style={[fonts.EngMedium14, styles.authorText]}>By {author}</Text>
-          <TagList tags={tags} title={title} id={id} />
+          <Text style={[fonts.EngBold18, styles.titleText]}>{title}</Text>
+          <Text style={[fonts.EngMedium12, styles.authorText]}>By {author}</Text>
+          <TagList tags={tags.slice(0, 3).map(tag => tag.length > 8 ? `${tag.slice(0, 8)}...` : tag)} title={title} id={id} />
           <View style={styles.ratingContainer}>
             {[...Array(5)].map((_, index) => (
               <FontAwesome
@@ -85,10 +80,10 @@ export default SourceCard;
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: "white",
-    width: "87%",
+    backgroundColor: colors.white,
+    width: "100%",
     height: 140,
-    marginTop: 13,
+    marginTop: 15,
     flexDirection: "row",
     borderRadius: 10,
     overflow: "hidden",
@@ -123,15 +118,15 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: colors.black,
-    marginVertical: 3,
+    marginVertical: 2,
   },
   authorText: {
     color: colors.gray_font,
-    marginBottom: 10,
+    marginBottom: 6,
   },
   ratingContainer: {
     flexDirection: "row",
-    marginTop: 5,
+    marginTop: 7,
     gap: 4,
   },
   iconContainer: {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View,Alert } from "react-native";
 import QuizFill from "../quizzes/F3_quizfill";
 import QuizChoices from "../quizzes/F3_quizchoice";
 import { useQuestionContext } from "../../context/QuestionProvider";
@@ -9,6 +9,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import QuizStatistics from "./F7_quizstatistic";
 import { BackHandler } from "react-native";
 import { router } from "expo-router";
+import { useCallback } from "react";
 
 const QuizFlow = () => {
   const { questions, quizId, quizFinished, setQuizFinished } =
@@ -22,6 +23,32 @@ const QuizFlow = () => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
 
+  const backAction = useCallback(() => {
+    console.log(userState);
+    if (userState === "Statistic") {
+      setUserState("Summary");
+      return true;
+    } else {
+      Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "YES", onPress: () => router.back() }
+      ]);
+      return true;
+    }
+  }, [userState]);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [backAction]);
   BackHandler.addEventListener("hardwareBackPress", () => {
     if (userState === "Statistic") {
       setUserState("Summary");
