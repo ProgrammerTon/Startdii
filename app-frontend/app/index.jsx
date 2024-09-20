@@ -128,6 +128,12 @@ export default function App() {
           >
             <Text className="text-lg">Dress</Text>
           </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => router.push("/test_loading/test")}
+            className="bg-green-600 p-2 rounded-xl"
+          >
+            <Text className="text-lg">Test</Text>
+          </TouchableHighlight>
           {isLogged ? <LogoutButton /> : null}
         </ScrollView>
       </SafeAreaView>
