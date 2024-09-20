@@ -112,7 +112,7 @@ const SumQuizPage = () => {
     setComments([...reversedComments]);
   };
 
-  const fecthRating = async () => {
+  const fetchRating = async () => {
     const data = await getUserRatingQuiz(user._id, id);
     setRatingScore(data);
   };
@@ -121,6 +121,7 @@ const SumQuizPage = () => {
     setRefreshing(true);
     await fetchQuiz();
     await fetchComments();
+    await fetchRating();
     setRefreshing(false);
   };
 
@@ -137,7 +138,7 @@ const SumQuizPage = () => {
     const isdoit = user.quiz_history.some((entry) => entry.id === id);
     setIsDone(isdoit);
     setQuizFinished(false);
-    fecthRating();
+    fetchRating();
     setRefreshing(false);
   }, []);
 
