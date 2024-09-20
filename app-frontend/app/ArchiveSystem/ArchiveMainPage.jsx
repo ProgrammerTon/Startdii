@@ -18,6 +18,8 @@ import { getSource } from "../../services/SourceService";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
 import { router } from "expo-router";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Favorite");
@@ -92,7 +94,7 @@ const ArchiveMainPage = () => {
           onPress={openAddToggleNoteQuizVisible}
           style={{ marginRight: 10 }}
         >
-          <Feather name="menu" size={24} color="black" />
+          <Feather name="menu" size={24} color={colors.black} />
         </TouchableOpacity>
         <ToggleNoteQuiz
           visible={AddToggleNoteQuizVisible}
@@ -173,7 +175,7 @@ export default ArchiveMainPage;
 const styles = StyleSheet.create({
   container: {
     flex: 2,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: colors.gray_bg,
     padding: 20,
   },
   headerContainer: {
@@ -206,14 +208,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   filterText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 12,
   },
   emptyContainer: {
     flex: 1,
   },
   floatingButton: {
-    backgroundColor: "#FF6347",
+    backgroundColor: colors.red,
     borderRadius: 30,
     width: 60,
     height: 60,
@@ -222,11 +224,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 100,
     right: 20,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
     shadowRadius: 4,
+    elevation: 5,
     zIndex: 1000,
   },
   toggleButton: {
