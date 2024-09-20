@@ -8,10 +8,10 @@ import images from "../constants/images";
 import colors from "../constants/color";
 import fonts from "../constants/font";
 
-const SourceCard = ({ id, title, author, tags }) => {
+const SourceCard = ({ id, title, author, tags, isFavorite }) => {
   const rating = 4;
 
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(isFavorite);
 
   const toggleHeart = async () => {
     if (!isLiked) {
@@ -40,8 +40,16 @@ const SourceCard = ({ id, title, author, tags }) => {
 
         <View style={styles.contentContainer}>
           <Text style={[fonts.EngBold18, styles.titleText]}>{title}</Text>
-          <Text style={[fonts.EngMedium12, styles.authorText]}>By {author}</Text>
-          <TagList tags={tags.slice(0, 3).map(tag => tag.length > 8 ? `${tag.slice(0, 8)}...` : tag)} title={title} id={id} />
+          <Text style={[fonts.EngMedium12, styles.authorText]}>
+            By {author}
+          </Text>
+          <TagList
+            tags={tags
+              .slice(0, 3)
+              .map((tag) => (tag.length > 8 ? `${tag.slice(0, 8)}...` : tag))}
+            title={title}
+            id={id}
+          />
           <View style={styles.ratingContainer}>
             {[...Array(5)].map((_, index) => (
               <FontAwesome
