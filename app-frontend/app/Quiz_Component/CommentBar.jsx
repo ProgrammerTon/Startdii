@@ -4,48 +4,36 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  KeyboardAvoidingView,
-  Platform,
   Text
 } from "react-native";
 
 const CommentBar = ({ value, handleChangeText, onSubmit }) => {
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <View style={styles.commentContainer}>
-        <TextInput
-          style={styles.commentInput}
-          placeholder="Add a comment..."
-          placeholderTextColor="#c4c4c4"
-          value={value}
-          onChangeText={handleChangeText}
-          multiline 
-          scrollEnabled={true}
-        />
-        
-        {/* Submit Button */}
-        <TouchableOpacity onPress={onSubmit} style={styles.submitButton}>
-          <Text style={styles.submitText}>Submit</Text>
+    <View style={styles.commentContainer}>
+      <TextInput
+        style={styles.commentInput}
+        placeholder="Add a comment..."
+        placeholderTextColor="#c4c4c4"
+        value={value}
+        onChangeText={handleChangeText}
+        multiline
+        scrollEnabled
+      />
+      
+      <TouchableOpacity onPress={onSubmit} style={styles.submitButton}>
+        <Text style={styles.submitText}>Submit</Text>
+      </TouchableOpacity>
+      
+      {value.length > 0 && (
+        <TouchableOpacity onPress={() => handleChangeText('')}>
+          <Text style={styles.clearButton}>X</Text>
         </TouchableOpacity>
-        
-        {/* Clear Button */}
-        {value.length > 0 && (
-          <TouchableOpacity onPress={() => handleChangeText('')}>
-            <Text style={styles.clearButton}>X</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    </KeyboardAvoidingView>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   commentContainer: {
     flexDirection: "row",
     backgroundColor: "#ffffff",

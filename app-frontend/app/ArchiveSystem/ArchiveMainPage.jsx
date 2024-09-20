@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  RefreshControl
 } from "react-native";
 import AddNoteQuizWindow from "./AddNoteQuizWindow.jsx";
 import ArchiveSearchBar from "../../components/ArchiveSearchBar.jsx";
@@ -19,41 +20,47 @@ import { ActivityIndicator } from "react-native";
 import { router } from "expo-router";
 
 const ArchiveMainPage = () => {
-  const [ActiveFilter, setActiveFilter] = useState("Relevance");
+  const [ActiveFilter, setActiveFilter] = useState("Favorite");
   const [AddWindowVisible, setAddWindowVisible] = useState(false);
-  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] =
-    useState(false);
+  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] = useState(false);
   const [filterDirection, setFilterDirection] = useState("↓");
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
   const { isLogged } = useGlobalContext();
 
   const fetchData = async () => {
-    setLoading(true);
+    setRefreshing(true);
     const sources = await getSource(offset);
     if (sources.length !== 0) {
       setData([...data, ...sources]);
       setOffset(offset + 1);
     }
-    setLoading(false);
+    setRefreshing(false)
   };
+
+  const handleRefresh = () => {
+    setOffset(1);
+    setData([])
+    fetchData()
+  }
 
   useEffect(() => {
     if (!isLogged) {
       router.replace("/sign-in");
     }
     fetchData();
+    setRefreshing(false);
   }, []);
 
   const ToggleFilterChange = (filter) => {
-    if (ActiveFilter === filter) {
+    if (ActiveFilter === "Latest" || ActiveFilter === "Oldest") {
       setFilterDirection((prevDirection) =>
         prevDirection === "↓" ? "↑" : "↓"
       );
     } else {
       setActiveFilter(filter);
-      setFilterDirection(filter === "Latest" ? "↓" : "↑");
+      //setFilterDirection(filter === "Latest" || filter === "Oldest" ? "↓" : "↑");
     }
   };
 
@@ -96,13 +103,13 @@ const ArchiveMainPage = () => {
       <View style={styles.filterContainer}>
         <TouchableOpacity
           style={
-            ActiveFilter === "Relevance"
+            ActiveFilter === "Favorite"
               ? styles.filterButton
               : styles.inactiveFilterButton
           }
-          onPress={() => ToggleFilterChange("Relevance")}
+          onPress={() => ToggleFilterChange("Favorite")}
         >
-          <Text style={styles.filterText}>Relevance</Text>
+          <Text style={styles.filterText}>Favorite</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={
@@ -143,10 +150,14 @@ const ArchiveMainPage = () => {
             />
           );
         }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
         keyExtractor={(item) => `${item._id}`}
         onEndReached={fetchData}
         onEndReachedThreshold={0.1} // Adjust as needed
-        ListFooterComponent={loading && <ActivityIndicator />}
+        ListFooterComponent={refreshing && <ActivityIndicator />}
+        contentContainerStyle={{ paddingBottom: 300 }}
       />
       <View className="my-5"></View>
       {/* <QuizCard /> */}
@@ -209,7 +220,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    bottom: 20,
+    bottom: 100,
     right: 20,
     elevation: 5,
     shadowColor: "#000",

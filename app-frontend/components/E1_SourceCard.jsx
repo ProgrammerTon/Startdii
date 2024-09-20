@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
@@ -7,13 +7,27 @@ import { FontAwesome } from "@expo/vector-icons";
 import images from "../constants/images";
 import colors from "../constants/color";
 import fonts from "../constants/font";
+import {
+  favoriteSource,
+  unfavoriteSource,
+  getFavoriteSource,
+} from "../services/SourceService";
+import { useGlobalContext } from "../context/GlobalProvider";
 
-const SourceCard = ({ id, title, author, tags }) => {
-  const rating = 4;
+const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
+  const { user } = useGlobalContext();
+  const [isLiked, setIsLiked] = useState(isFavorite);
 
-  const [isLiked, setIsLiked] = useState(false);
-
-  const toggleHeart = () => {
+  const toggleHeart = async () => {
+    if (!isLiked) {
+      const data = await favoriteSource(id, user._id);
+      user?.favorite_sources?.push(id);
+    } else {
+      await unfavoriteSource(id, user._id);
+      user.favorite_sources = user.favorite_sources?.filter(
+        (sourceId) => sourceId !== id
+      );
+    }
     setIsLiked(!isLiked);
   };
 
@@ -30,7 +44,7 @@ const SourceCard = ({ id, title, author, tags }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={[fonts.EngBold18, styles.titleText]}>{title}</Text>
+          <Text style={[fonts.EngBold18, styles.titleText]}>{title.length > 20 ? `${title.slice(0, 20)}...` : title}</Text>
           <Text style={[fonts.EngMedium14, styles.authorText]}>By {author}</Text>
           <TagList tags={tags} title={title} id={id} />
           <View style={styles.ratingContainer}>

@@ -36,6 +36,16 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @Post('chatlist')
+  addChatList(@Body() createChatListDto: CreateChatDto) {
+    return this.chatListService.create(createChatListDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('profile')
@@ -44,10 +54,23 @@ export class UsersController {
     return user;
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('/answerQuiz/:quizId')
+  getAnswers(@Param('quizId') quizId: string, @Request() req) {
+    const user = this.usersService.getAnswer(req.user.id, quizId);
+    return user;
   }
+
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('/quiz_history')
+  getQuizHistory(@Request() req) {
+    const quizs = this.usersService.getQuizHistory(req.user.id);
+    return quizs;
+  }
+
+
 
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -65,16 +88,6 @@ export class UsersController {
     return this.chatListService.findAllChatList(ownerId);
   }
 
-  @Post('chatlist')
-  addChatList(@Body() createChatListDto: CreateChatDto) {
-    return this.chatListService.create(createChatListDto);
-  }
-
-  @Get('sources/:ownerId')
-  findSourcesByUserId(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
-    return this.usersService.findSourcesByUserId(id);
-  }
-
   @Get(':username')
   async findUserByUsername(@Param('username') username: string) {
     const data = await this.usersService.findByUsername(username);
@@ -82,6 +95,16 @@ export class UsersController {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
     return data;
+  }
+
+  @Get(':ownerId/sources')
+  getSources(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
+    return this.usersService.getSources(id);
+  }
+
+  @Get(':ownerId/quizs')
+  getQuizzes(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
+    return this.usersService.getQuizzes(id);
   }
 
   @Patch('favorite_sources/add/:userId/:sourceId')
@@ -98,6 +121,44 @@ export class UsersController {
     @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
   ) {
     return this.usersService.removeFavoriteSource(userId, sourceId);
+  }
+
+  @Patch('favorite_quizzes/add/:userId/:quizId')
+  addFavoriteQuiz(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('quizId', ParseObjectIdPipe) quizId: ObjectId,
+  ) {
+    return this.usersService.addFavoriteQuiz(userId, quizId);
+  }
+
+  @Patch('favorite_quizzes/remove/:userId/:quizId')
+  removeFavoriteQuiz(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('quizId', ParseObjectIdPipe) quizId: ObjectId,
+  ) {
+    return this.usersService.removeFavoriteQuiz(userId, quizId);
+  }
+
+  @Get('favorite_sources/:userId')
+  getFavoriteSource(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
+    return this.usersService.getFavoriteSources(userId);
+  }
+
+  @Get('favorite_quizzes/:userId')
+  getFavoriteQuiz(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
+    return this.usersService.getFavoriteQuizzes(userId);
+  }
+
+  @Get(':userId/rating/source/:sourceId')
+  getSourceRating(@Param('userId', ParseObjectIdPipe) userId: ObjectId
+, @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId) {
+    return this.usersService.getSourceRating(userId, sourceId);
+  }
+
+  @Get(':userId/rating/quiz/:quizId')
+  getQuizRating(@Param('userId', ParseObjectIdPipe) userId: ObjectId
+, @Param('quizId', ParseObjectIdPipe) quizId: ObjectId) {
+  return this.usersService.getQuizRating(userId, quizId);
   }
 
   // @Patch(':id')

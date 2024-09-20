@@ -7,6 +7,8 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Source, SourceDocument } from 'src/sources/entities/source.entity';
 import { ObjectId } from 'mongodb';
+import { Types } from 'mongoose';
+import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +17,11 @@ export class UsersService {
     private userModel: Model<UserDocument>,
     @InjectModel(Source.name)
     private sourceModel: Model<SourceDocument>,
+    @InjectModel(Quiz.name)
+    private quizModel: Model<QuizDocument>,
   ) {}
+
+  // --------------------------- Create ---------------------------
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = plainToInstance(User, createUserDto);
@@ -25,14 +31,41 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async hashPassword(password: string): Promise<string> {
-    try {
-      const saltRounds = 10;
-      password = await bcrypt.hash(password, saltRounds);
-      return password;
-    } catch (error) {
-      console.log(error);
+  // --------------------------- Get ---------------------------
+
+  async getAnswer(userId: ObjectId, quizId: string) {
+    const user = await this.findById(userId);
+    const quiz = user.quiz_history.find((item) => (item.id as any) === quizId);
+    if (quiz) {
+      const { results, answers } = quiz;
+      return { results, answers };
+    } else {
+      return null;
     }
+  }
+
+  async getQuizHistory(userId: string) {
+    const userfind = new Types.ObjectId(userId);
+    const user = await this.findById(userfind);
+    const quizIds = user.quiz_history.map((q) => q.id);
+    const quizzes = await this.quizModel
+      .find({
+        _id: { $in: quizIds },
+      })
+      .populate('ownerId', 'username');
+    const populatedQuizHistory = user.quiz_history.map((quizEntry) => {
+      const quiz = quizzes.find((quiz: any) => quiz._id.equals(quizEntry.id));
+      const { questions, players, ...restQuiz } = quiz.toObject();
+      return {
+        ...quizEntry,
+        quiz: restQuiz,
+      };
+    });
+    return populatedQuizHistory;
+  }
+
+  async findById(userId: ObjectId) {
+    return this.userModel.findById(userId);
   }
 
   async findAll() {
@@ -101,10 +134,51 @@ export class UsersService {
     // return transformedUser;
   }
 
-  async findSourcesByUserId(ownerId: ObjectId) {
-    return await this.sourceModel.find({ ownerId }).exec();
+  async getSources(ownerId: ObjectId) {
+    return await this.userModel
+      .findById(ownerId)
+      .select('sources')
+      .populate('sources')
+      .exec();
   }
 
+  async getQuizzes(ownerId: ObjectId) {
+    return await this.userModel
+      .findById(ownerId)
+      .select('quizzes')
+      .populate('quizzes')
+      .exec();
+  }
+
+  async getFavoriteSources(userId: ObjectId) {
+    return await this.userModel
+      .findById(userId)
+      .select('favorite_sources')
+      .populate('favorite_sources')
+      .exec();
+  }
+
+  async getFavoriteQuizzes(userId: ObjectId) {
+    return await this.userModel
+      .findById(userId)
+      .select('favorite_quizzes')
+      .populate('favorite_quizzes')
+      .exec();
+  }
+
+  async getSourceRating(userId: ObjectId,oid: ObjectId) {
+    let obj = await this.sourceModel.findById(oid);
+    obj.rating = obj.rating.filter(rating => rating.raterId.toString() === userId.toString());
+    return obj.rating.length > 0 ? obj.rating[0].score : 0;
+  }
+
+  async getQuizRating(userId: ObjectId,oid: ObjectId) {
+    let obj = await this.quizModel.findById(oid);
+    obj.rating = obj.rating.filter(rating => rating.raterId.toString() === userId.toString());
+    return obj.rating.length > 0 ? obj.rating[0].score : 0;
+  }
+
+  // --------------------------- Update ---------------------------
   async addFavoriteSource(id: ObjectId, sourceId: ObjectId) {
     const user = await this.userModel.findById(id).exec();
     if (!user.favorite_sources.includes(sourceId)) {
@@ -124,5 +198,38 @@ export class UsersService {
     return await this.userModel
       .findByIdAndUpdate(id, user, { new: true })
       .exec();
+  }
+
+  async addFavoriteQuiz(id: ObjectId, quizId: ObjectId) {
+    const user = await this.userModel.findById(id).exec();
+    if (!user.favorite_quizzes.includes(quizId)) {
+      user.favorite_quizzes.push(quizId);
+    }
+    return await this.userModel
+      .findByIdAndUpdate(id, user, { new: true })
+      .exec();
+  }
+
+  async removeFavoriteQuiz(id: ObjectId, quizId: ObjectId) {
+    const user = await this.userModel.findById(id).exec();
+    user.favorite_quizzes = user.favorite_quizzes.filter(
+      (element) => String(element) !== String(quizId),
+    );
+    console.log(quizId);
+    return await this.userModel
+      .findByIdAndUpdate(id, user, { new: true })
+      .exec();
+  }
+
+  // --------------------------- Misc. ---------------------------
+
+  async hashPassword(password: string): Promise<string> {
+    try {
+      const saltRounds = 10;
+      password = await bcrypt.hash(password, saltRounds);
+      return password;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

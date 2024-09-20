@@ -8,27 +8,28 @@ import {
   RefreshControl,
   TextInput,
   Alert,
+  Linking,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import TagList from "../../components/TagList";
 import CommentBox from "../Quiz_Component/CommentBlock";
 import RatingBlock from "../Quiz_Component/Rating";
 import CommentBar from "../Quiz_Component/CommentBar";
 import RatingBar from "../Quiz_Component/RatingBar";
-import { findSource } from "../../services/SourceService";
+import { findSource, ratingSource } from "../../services/SourceService";
 import {
   getCommentsSource,
   createCommentSource,
 } from "../../services/CommentService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { Image } from "expo-image";
+import { baseUrl } from "@/constants/const";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
   const [source, setSource] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const score = 4.8;
-  const count = 999;
   const { user } = useGlobalContext();
 
   const fecthSource = async (id) => {
@@ -42,7 +43,6 @@ const SourceDetailPage = () => {
       hour: "2-digit",
       minute: "2-digit",
     }); // "11:38"
-
     // Combine date and time
     const formattedDateTime = `${formattedDate} ${formattedTime}`;
     setSource({
@@ -52,12 +52,29 @@ const SourceDetailPage = () => {
       content: data.content,
       tags: data.tags,
       updated_at: formattedDateTime,
+      score: data.avg_rating_score ? data.avg_rating_score : 0,
+      count: data.rating_count ? data.rating_count : 0,
+      filename: data.filename ? data.filename : null,
     });
+    console.log({
+      title: data.title,
+      ownerName: data.ownerId.username,
+      description: data.description,
+      content: data.content,
+      tags: data.tags,
+      updated_at: formattedDateTime,
+      score: data.avg_rating_score ? data.avg_rating_score : 0,
+      count: data.rating_count ? data.rating_count : 0,
+      filename: data.filename ? data.filename : null,
+    });
+    console.log(data?.filename);
   };
 
   useEffect(() => {
+    setRefreshing(true);
     fecthSource(id);
     fetchComments(id);
+    setRefreshing(false);
   }, []);
 
   // State to hold the list of comments
@@ -88,6 +105,11 @@ const SourceDetailPage = () => {
     setCommentInput("");
   };
 
+  const handleRating = async (sc) => {
+    const data = await ratingSource(id, user._id, sc);
+    console.log(data);
+  };
+
   const fetchComments = async () => {
     const data = await getCommentsSource(id);
     const newComment = data.map((com) => ({
@@ -99,13 +121,24 @@ const SourceDetailPage = () => {
     setComments([...reversedComments]);
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
+    await fecthSource(id);
+    await fetchComments(id);
+    setRefreshing(false);
+  };
 
-    // Simulate a network request or some refresh operation
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+  const handleDownload = async () => {
+    if (source?.filename) {
+      const filetype = source.filename.endsWith(".pdf") ? "pdfs" : "images";
+      const url = `${baseUrl}/files/${filetype}/${source.filename}`;
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        console.log("Don't know how to open this URL: " + url);
+      }
+    }
   };
 
   return (
@@ -139,9 +172,18 @@ const SourceDetailPage = () => {
           </View>
         </View>
 
+        {["png", "jpg"].some((extension) =>
+          source?.filename?.endsWith(extension)
+        ) ? (
+          <Image
+            source={{ uri: `${baseUrl}/files/images/${source?.filename}` }}
+            style={{ width: 200, height: 200 }} // Adjust the width/height as needed
+          />
+        ) : null}
+
         {/* Buttons */}
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleDownload}>
             <FontAwesome name="download" size={24} color="#0E68D9" />
             <Text style={styles.buttonText}>Download</Text>
           </TouchableOpacity>
@@ -151,8 +193,11 @@ const SourceDetailPage = () => {
           </TouchableOpacity>
         </View>
 
-        <RatingBlock ScoreRating={score} numComment={count} />
-        <RatingBar />
+        <RatingBlock
+          ScoreRating={Math.round(source?.score)}
+          numComment={source?.count}
+        />
+        <RatingBar onRatingChange={handleRating} />
 
         {/* CommentBar with input */}
         <CommentBar

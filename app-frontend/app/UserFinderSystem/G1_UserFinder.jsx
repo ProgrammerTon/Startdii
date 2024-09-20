@@ -8,6 +8,7 @@ import {
   Alert,
   FlatList,
   RefreshControl,
+  ScrollView,
 } from "react-native";
 import UserSearchBar from "../../components/UserSearchBar";
 import UserNameComponent from "./UserNameComponent";
@@ -55,6 +56,8 @@ const UserFinderPage = () => {
         handleChangeText={(e) => setSearchUsername(e)}
         onSubmit={onSubmit}
       />
+      
+      <ScrollView className="mb-20">
       {userFound.map((user, ind) => {
         return (
           <UserNameComponent
@@ -65,6 +68,7 @@ const UserFinderPage = () => {
           />
         );
       })}
+      </ScrollView>
     </View>
   );
 };
