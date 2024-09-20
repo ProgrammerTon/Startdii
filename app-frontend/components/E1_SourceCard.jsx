@@ -3,8 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import TagList from "./TagList";
-import { FontAwesome } from "@expo/vector-icons"; // Importing icons for heart and stars
+import { FontAwesome } from "@expo/vector-icons";
 import images from "../constants/images";
+import colors from "../constants/color";
+import fonts from "../constants/font";
 import {
   favoriteSource,
   unfavoriteSource,
@@ -42,18 +44,16 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>
-            {title.length > 20 ? `${title.slice(0, 20)}...` : title}
-          </Text>
-          <Text style={styles.authorText}>By {author}</Text>
-          <TagList tags={tags.slice(0, 3).map(tag => tag.length > 8 ? `${tag.slice(0, 8)}...` : tag)} title={title} id={id} />
+          <Text style={[fonts.EngBold18, styles.titleText]}>{title.length > 20 ? `${title.slice(0, 20)}...` : title}</Text>
+          <Text style={[fonts.EngMedium14, styles.authorText]}>By {author}</Text>
+          <TagList tags={tags} title={title} id={id} />
           <View style={styles.ratingContainer}>
             {[...Array(5)].map((_, index) => (
               <FontAwesome
                 key={index}
                 name={index < rating ? "star" : "star-o"}
-                size={16}
-                color="#FEDD3A"
+                size={20}
+                color={colors.yellow}
               />
             ))}
           </View>
@@ -62,16 +62,16 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
           <TouchableOpacity onPress={toggleHeart}>
             <FontAwesome
               name={isLiked ? "heart" : "heart-o"}
-              size={25}
-              color={isLiked ? "red" : "gray"}
+              size={30}
+              color={isLiked ? colors.red : colors.gray_button}
               style={styles.heartIcon}
             />
           </TouchableOpacity>
           <TouchableOpacity>
             <FontAwesome
               name="share"
-              size={25}
-              color="gray"
+              size={30}
+              color={colors.gray_font}
               style={styles.shareIcon}
             />
           </TouchableOpacity>
@@ -86,35 +86,35 @@ export default SourceCard;
 const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: "white",
-    width: "100%",
-    height: 120,
+    width: "87%",
+    height: 140,
     marginTop: 13,
     flexDirection: "row",
     borderRadius: 10,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
     elevation: 5,
   },
   imageContainer: {
-    width: 75,
+    width: 90,
     height: "100%",
-    backgroundColor: "#FEDD3A",
+    backgroundColor: colors.yellow,
     justifyContent: "center",
     alignItems: "center",
   },
   bookImage: {
-    width: 50,
-    height: 50,
+    width: 85,
+    height: 85,
+    right: 8,
   },
   timestamp: {
     position: "absolute",
     bottom: 8,
-    left: 8,
     fontSize: 12,
-    color: "#888888",
+    color: colors.gray_font,
   },
   contentContainer: {
     flex: 1,
@@ -122,28 +122,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   titleText: {
-    fontSize: 18,
-    fontWeight: "bold",
+    color: colors.black,
+    marginVertical: 3,
   },
   authorText: {
-    fontSize: 14,
-    color: "gray",
-    marginBottom: 5,
+    color: colors.gray_font,
+    marginBottom: 10,
   },
   ratingContainer: {
     flexDirection: "row",
     marginTop: 5,
+    gap: 4,
   },
   iconContainer: {
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
   },
   shareIcon: {
     marginVertical: 5,
+    color: colors.gray_font,
   },
   heartIcon: {
     marginVertical: 5,
+    color: colors.gray_button,
   },
 });
