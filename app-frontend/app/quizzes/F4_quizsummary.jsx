@@ -108,6 +108,14 @@ const QuizSummaryPage = ({
   const handleRating = async (sc) => {
     await ratingQuiz(id, user._id, sc);
     setRatingScore(sc);
+  const onRefresh = async () => {
+    await fetchQuiz();
+    await fetchComments();
+  };
+
+  const handleRating = async (sc) => {
+    const data = await ratingQuiz(id, user._id, sc);
+    console.log(data);
   };
 
   useEffect(() => {

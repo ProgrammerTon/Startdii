@@ -7,11 +7,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import images from "../constants/images";
 import colors from "../constants/color";
 import fonts from "../constants/font";
-
-const SourceCard = ({ id, title, author, tags }) => {
-  const rating = 4;
-
-  const [isLiked, setIsLiked] = useState(false);
 import {
   favoriteSource,
   unfavoriteSource,
@@ -49,8 +44,8 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>{title}</Text>
-          <Text style={styles.authorText}>By {author}</Text>
+          <Text style={[fonts.EngBold18, styles.titleText]}>{title.length > 20 ? `${title.slice(0, 20)}...` : title}</Text>
+          <Text style={[fonts.EngMedium14, styles.authorText]}>By {author}</Text>
           <TagList tags={tags} title={title} id={id} />
           <View style={styles.ratingContainer}>
             {[...Array(5)].map((_, index) => (
