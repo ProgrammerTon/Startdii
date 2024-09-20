@@ -10,24 +10,13 @@ export async function reportToAdmin(
   if (!token) {
     throw Error("Token Needed!");
   }
-  let mybody = { reason, description } as any;
-  if (option === "user") {
-    mybody.userId = targetId;
-  }
-  if (option === "source") {
-    mybody.sourceId = targetId;
-  }
-  if (option === "quiz") {
-    mybody.quizId = targetId;
-  }
-
   const res = await fetch(`${baseUrl}/reports/${targetId}?option=${option}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(mybody),
+    body: JSON.stringify({ reason, description }),
   });
   if (res.status === 404) {
     console.log("User not found (404).");
