@@ -100,11 +100,17 @@ export async function ratingSource(id: string, userId: string, score: number) {
   return result;
 }
 
-export async function favoriteSource(id: string, userId: string): Promise<any | null> {
-  const res = await fetch(`${baseUrl}/users/favorite_sources/add/${userId}/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-  });
+export async function favoriteSource(
+  id: string,
+  userId: string
+): Promise<any | null> {
+  const res = await fetch(
+    `${baseUrl}/users/favorite_sources/add/${userId}/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
   const result = await res.json();
   if (!res.ok) {
     return null;
@@ -112,11 +118,17 @@ export async function favoriteSource(id: string, userId: string): Promise<any | 
   return result;
 }
 
-export async function unfavoriteSource(id: string, userId: string): Promise<any | null> {
-  const res = await fetch(`${baseUrl}/users/favorite_sources/remove/${userId}/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-  });
+export async function unfavoriteSource(
+  id: string,
+  userId: string
+): Promise<any | null> {
+  const res = await fetch(
+    `${baseUrl}/users/favorite_sources/remove/${userId}/${id}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
   const result = await res.json();
   if (!res.ok) {
     return null;
@@ -130,6 +142,24 @@ export async function getFavoriteSource(userId: string): Promise<any[] | null> {
     headers: { "Content-Type": "application/json" },
   });
   const result: any[] = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
+
+export async function getUserRatingSource(
+  userId: string,
+  sourceId: string
+): Promise<any[] | null> {
+  const res = await fetch(
+    `${baseUrl}/users/${userId}/rating/source/${sourceId}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+  const result: any = await res.json();
   if (!res.ok) {
     return null;
   }

@@ -232,3 +232,18 @@ export async function getAnswers(quizId: string): Promise<any[] | null> {
   }
   return result;
 }
+
+export async function getUserRatingQuiz(
+  userId: string,
+  quizId: string
+): Promise<any[] | null> {
+  const res = await fetch(`${baseUrl}/users/${userId}/rating/quiz/${quizId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result: any = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}

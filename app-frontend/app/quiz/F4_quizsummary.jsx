@@ -25,6 +25,8 @@ import { router } from "expo-router";
 import { getAnswers } from "../../services/QuizService";
 import { useQuestionContext } from "../../context/QuestionProvider";
 import StatButton from "../Quiz_Component/StatButton";
+import { getUserRatingQuiz } from "../../services/QuizService";
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -38,6 +40,7 @@ const QuizSummaryPage = () => {
   const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
   const [score, setScore] = useState(0);
+  const [ratingScore, setRatingScore] = useState(0);
 
   const handleSubmitComment = async () => {
     if (commentInput.trim() === "") return; // Prevent empty comments
@@ -93,19 +96,25 @@ const QuizSummaryPage = () => {
     }
   };
 
+  const fetchRating = async () => {
+    const data = await getUserRatingQuiz(user._id, quizId);
+    setRatingScore(data);
+  };
+
   const onRefresh = async () => {
     await fetchQuiz();
     await fetchComments();
+    await fetchRating();
   };
 
   const handleRating = async (sc) => {
-    const data = await ratingQuiz(quizId, user._id, sc);
-    console.log(data);
+    await ratingQuiz(quizId, user._id, sc);
+    setRatingScore(sc);
   };
 
   const fetchGetAnswers = async () => {
     const data = await getAnswers(quizId);
-    console.log(data);
+    console.log("User Ans",data);
     if (data) {
       setUserAnswers(data.answers);
       let countScore = 0;
@@ -130,6 +139,7 @@ const QuizSummaryPage = () => {
   useEffect(() => {
     setRefreshing(true);
     fetchQuiz();
+    fetchRating();
     fetchComments();
     setRefreshing(false);
   }, []);
@@ -172,7 +182,7 @@ const QuizSummaryPage = () => {
           ScoreRating={Math.round(quiz?.averageScore)}
           numComment={quiz?.count}
         />
-        <RatingBar onRatingChange={handleRating} />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
 
         {/* CommentBar with input */}
         <CommentBar

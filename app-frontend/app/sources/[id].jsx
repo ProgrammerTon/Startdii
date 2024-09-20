@@ -25,14 +25,16 @@ import {
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { Image } from "expo-image";
 import { baseUrl } from "@/constants/const";
+import { getUserRatingSource } from "../../services/SourceService";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
   const [source, setSource] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
+  const [ratingScore, setRatingScore] = useState(0);
 
-  const fecthSource = async (id) => {
+  const fetchSource = async (id) => {
     const data = await findSource(id);
     const dateStr = data.updatedAt;
     const date = new Date(dateStr);
@@ -72,8 +74,9 @@ const SourceDetailPage = () => {
 
   useEffect(() => {
     setRefreshing(true);
-    fecthSource(id);
+    fetchSource(id);
     fetchComments(id);
+    fetchRating();
     setRefreshing(false);
   }, []);
 
@@ -107,7 +110,13 @@ const SourceDetailPage = () => {
 
   const handleRating = async (sc) => {
     const data = await ratingSource(id, user._id, sc);
+    setRatingScore(sc);
     console.log(data);
+  };
+
+  const fetchRating = async () => {
+    const data = await getUserRatingSource(user._id, id);
+    setRatingScore(data);
   };
 
   const fetchComments = async () => {
@@ -123,7 +132,8 @@ const SourceDetailPage = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fecthSource(id);
+    await fetchSource(id);
+    await fetchRating();
     await fetchComments(id);
     setRefreshing(false);
   };
@@ -197,7 +207,7 @@ const SourceDetailPage = () => {
           ScoreRating={Math.round(source?.score)}
           numComment={source?.count}
         />
-        <RatingBar onRatingChange={handleRating} />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
 
         {/* CommentBar with input */}
         <CommentBar
