@@ -7,7 +7,10 @@ import {
   TouchableOpacity,
   TextInput,
   Animated,
+  Dimensions,
 } from "react-native";
+
+const { width, height } = Dimensions.get("window");
 
 // Reason Modal Component
 const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
@@ -17,12 +20,13 @@ const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
     "Inappropriate Content",
     "Plagiarism",
   ];
-
-  const slideAnimation = useRef(new Animated.Value(-200)).current; // Start above the screen
+  const startPosition = 80;
+  const slideAnimation = useRef(new Animated.Value(startPosition)).current; 
 
   if (visible) {
+    slideAnimation.setValue(startPosition); 
     Animated.timing(slideAnimation, {
-      toValue: reasonButtonY, // Slide down from Select Reason channel
+      toValue: height*0.11,
       duration: 400,
       useNativeDriver: true,
     }).start();
@@ -157,6 +161,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
+  modalOverlayReason: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   modalContainer: {
     width: "80%",
     backgroundColor: "#ffffff",
@@ -198,7 +207,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     alignItems: "center",
-    borderColor: "#FF5722", 
     borderWidth: 1,
   },
   reasonButton: {
