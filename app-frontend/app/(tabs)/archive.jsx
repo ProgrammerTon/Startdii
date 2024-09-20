@@ -30,10 +30,9 @@ const ArchiveMainPage = () => {
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
   const [refreshing, setRefreshing] = useState(true);
-  const { isLogged } = useGlobalContext();
   const [searchField, setSearchField] = useState("");
   const [isSearchNote, setIsSearchNote] = useState(true);
-  const { user } = useGlobalContext();
+  const { user, isLogged } = useGlobalContext();
 
   const handleToggleSearch = (e) => {
     if (e && !isSearchNote) {
@@ -367,11 +366,11 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   flatList: {
-    width: '100%',
+    width: "100%",
   },
   emptyContainer: {
     flex: 1,
