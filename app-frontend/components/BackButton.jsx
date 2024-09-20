@@ -2,11 +2,11 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import colors from '../constants/color';
 import Svg, { Path } from 'react-native-svg';
-import { router } from 'expo-router';
+import { router,useRouter } from 'expo-router';
 const BackButton = () => {
 
   return (
-    <TouchableOpacity style={styles.button} onPress={() => router.back()} >
+    <TouchableOpacity style={styles.button} onPress={() => router.push("/(tabs)/profile")} >
       <Svg
         style={styles.iconContainer}
         viewBox="0 0 22 19"
