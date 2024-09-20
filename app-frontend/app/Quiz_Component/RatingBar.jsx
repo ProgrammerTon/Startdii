@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get("window"); // Get screen width for responsiveness
 

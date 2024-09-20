@@ -49,6 +49,14 @@ const QuizFlow = () => {
 
     return () => backHandler.remove();
   }, [backAction]);
+  BackHandler.addEventListener("hardwareBackPress", () => {
+    if (userState === "Statistic") {
+      setUserState("Summary");
+      return true;
+    }
+    router.push(`/quiz/${quizId}`);
+    return false;
+  });
 
   const handleAnswerSubmit = (userAnswer) => {
     const correctAnswer = quizData[currentQuestion].answer;
