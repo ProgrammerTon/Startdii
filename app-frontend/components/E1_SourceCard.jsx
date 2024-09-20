@@ -12,16 +12,6 @@ const SourceCard = ({ id, title, author, tags }) => {
   const rating = 4;
 
   const [isLiked, setIsLiked] = useState(false);
-import {
-  favoriteSource,
-  unfavoriteSource,
-  getFavoriteSource,
-} from "../services/SourceService";
-import { useGlobalContext } from "../context/GlobalProvider";
-
-const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
-  const { user } = useGlobalContext();
-  const [isLiked, setIsLiked] = useState(isFavorite);
 
   const toggleHeart = async () => {
     if (!isLiked) {
@@ -49,7 +39,7 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>{title}</Text>
+          <Text style={[fonts.EngBold18, styles.titleText]}>{title}</Text>
           <Text style={styles.authorText}>By {author}</Text>
           <TagList tags={tags} title={title} id={id} />
           <View style={styles.ratingContainer}>
