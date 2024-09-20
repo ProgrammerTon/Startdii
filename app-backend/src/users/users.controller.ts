@@ -6,6 +6,7 @@ import {
   Request,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -70,8 +71,6 @@ export class UsersController {
     return quizs;
   }
 
-
-
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('guild')
@@ -98,13 +97,31 @@ export class UsersController {
   }
 
   @Get(':ownerId/sources')
-  getSources(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
-    return this.usersService.getSources(id);
+  getSources(
+    @Param('ownerId', ParseObjectIdPipe) id: ObjectId,
+    @Query()
+    query: {
+      title: string | null;
+    },
+  ) {
+    if (!query.title) {
+      query.title = '';
+    }
+    return this.usersService.getSources(id, query.title);
   }
 
   @Get(':ownerId/quizs')
-  getQuizzes(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
-    return this.usersService.getQuizzes(id);
+  getQuizzes(
+    @Param('ownerId', ParseObjectIdPipe) id: ObjectId,
+    @Query()
+    query: {
+      title: string | null;
+    },
+  ) {
+    if (!query.title) {
+      query.title = '';
+    }
+    return this.usersService.getQuizzes(id, query.title);
   }
 
   @Patch('favorite_sources/add/:userId/:sourceId')
@@ -150,15 +167,19 @@ export class UsersController {
   }
 
   @Get(':userId/rating/source/:sourceId')
-  getSourceRating(@Param('userId', ParseObjectIdPipe) userId: ObjectId
-, @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId) {
+  getSourceRating(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
+  ) {
     return this.usersService.getSourceRating(userId, sourceId);
   }
 
   @Get(':userId/rating/quiz/:quizId')
-  getQuizRating(@Param('userId', ParseObjectIdPipe) userId: ObjectId
-, @Param('quizId', ParseObjectIdPipe) quizId: ObjectId) {
-  return this.usersService.getQuizRating(userId, quizId);
+  getQuizRating(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('quizId', ParseObjectIdPipe) quizId: ObjectId,
+  ) {
+    return this.usersService.getQuizRating(userId, quizId);
   }
 
   // @Patch(':id')

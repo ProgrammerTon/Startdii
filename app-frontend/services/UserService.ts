@@ -98,3 +98,45 @@ export async function getQuizHistory(token: string): Promise<any> {
   const data: any = await res.json();
   return data;
 }
+
+export async function getSourceInventory(userId: string) {
+  const res = await fetch(`${baseUrl}/users/${userId}/sources`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (res.status === 404) {
+    console.log("User not found (404).");
+    return null; // or return a specific message or throw an error
+  }
+
+  if (!res.ok) {
+    console.error("Fetch error:", res.status, res.statusText);
+    return null;
+  }
+
+  const data: any = await res.json();
+  return data;
+}
+
+export async function getQuizInventory(userId: string) {
+  const res = await fetch(`${baseUrl}/users/${userId}/quizs`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (res.status === 404) {
+    console.log("User not found (404).");
+    return null; // or return a specific message or throw an error
+  }
+
+  if (!res.ok) {
+    console.error("Fetch error:", res.status, res.statusText);
+    return null;
+  }
+
+  const data: any = await res.json();
+  return data;
+}
