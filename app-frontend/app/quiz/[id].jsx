@@ -27,6 +27,7 @@ import {
   createCommentSource,
 } from "../../services/CommentService";
 import { useQuestionContext } from "../../context/QuestionProvider";
+import { getUserRatingQuiz } from "../../services/QuizService";
 
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();
@@ -35,6 +36,7 @@ const SumQuizPage = () => {
   const { user } = useGlobalContext();
   const { setQuestions, setQuizId, setQuizFinished } = useQuestionContext();
   const [isDone, setIsDone] = useState(false);
+  const [ratingScore, setRatingScore] = useState(0);
 
   // State to hold the list of comments
   const [comments, setComments] = useState([]);
@@ -110,16 +112,22 @@ const SumQuizPage = () => {
     setComments([...reversedComments]);
   };
 
+  const fetchRating = async () => {
+    const data = await getUserRatingQuiz(user._id, id);
+    setRatingScore(data);
+  };
+
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchQuiz();
     await fetchComments();
+    await fetchRating();
     setRefreshing(false);
   };
 
   const handleRating = async (sc) => {
-    const data = await ratingQuiz(id, user._id, sc);
-    console.log(data);
+    await ratingQuiz(id, user._id, sc);
+    setRatingScore(sc);
   };
 
   useEffect(() => {
@@ -130,6 +138,7 @@ const SumQuizPage = () => {
     const isdoit = user.quiz_history.some((entry) => entry.id === id);
     setIsDone(isdoit);
     setQuizFinished(false);
+    fetchRating();
     setRefreshing(false);
   }, []);
 
@@ -164,7 +173,7 @@ const SumQuizPage = () => {
         ScoreRating={Math.round(quiz?.avg_rating_score)}
         numComment={quiz?.rating_count}
       />
-      <RatingBar onRatingChange={handleRating} />
+      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
 
       {/* CommentBar with input */}
       <CommentBar
