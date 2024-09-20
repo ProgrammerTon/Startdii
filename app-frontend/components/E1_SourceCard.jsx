@@ -40,8 +40,8 @@ const SourceCard = ({ id, title, author, tags }) => {
 
         <View style={styles.contentContainer}>
           <Text style={[fonts.EngBold18, styles.titleText]}>{title}</Text>
-          <Text style={styles.authorText}>By {author}</Text>
-          <TagList tags={tags} title={title} id={id} />
+          <Text style={[fonts.EngMedium12, styles.authorText]}>By {author}</Text>
+          <TagList tags={tags.slice(0, 3).map(tag => tag.length > 8 ? `${tag.slice(0, 8)}...` : tag)} title={title} id={id} />
           <View style={styles.ratingContainer}>
             {[...Array(5)].map((_, index) => (
               <FontAwesome
@@ -58,7 +58,7 @@ const SourceCard = ({ id, title, author, tags }) => {
             <FontAwesome
               name={isLiked ? "heart" : "heart-o"}
               size={30}
-              color={isLiked ? "red" : "gray"}
+              color={isLiked ? colors.red : colors.gray_button}
               style={styles.heartIcon}
             />
           </TouchableOpacity>
@@ -66,7 +66,7 @@ const SourceCard = ({ id, title, author, tags }) => {
             <FontAwesome
               name="share"
               size={30}
-              color="gray"
+              color={colors.gray_font}
               style={styles.shareIcon}
             />
           </TouchableOpacity>
@@ -80,10 +80,10 @@ export default SourceCard;
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: "white",
-    width: "87%",
+    backgroundColor: colors.white,
+    width: "100%",
     height: 140,
-    marginTop: 13,
+    marginTop: 15,
     flexDirection: "row",
     borderRadius: 10,
     overflow: "hidden",
@@ -118,15 +118,15 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: colors.black,
-    marginVertical: 3,
+    marginVertical: 2,
   },
   authorText: {
     color: colors.gray_font,
-    marginBottom: 10,
+    marginBottom: 6,
   },
   ratingContainer: {
     flexDirection: "row",
-    marginTop: 5,
+    marginTop: 7,
     gap: 4,
   },
   iconContainer: {
