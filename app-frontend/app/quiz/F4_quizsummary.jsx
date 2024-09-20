@@ -108,7 +108,7 @@ const QuizSummaryPage = () => {
   };
 
   const handleRating = async (sc) => {
-    await ratingQuiz(id, user._id, sc);
+    await ratingQuiz(quizId, user._id, sc);
     setRatingScore(sc);
   };
 
