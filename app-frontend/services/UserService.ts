@@ -73,3 +73,28 @@ export async function getUser(token: string): Promise<any> {
   console.log("User Data from fetch", data);
   return data;
 }
+
+export async function getQuizHistory(token: string): Promise<any> {
+  if (!token) {
+    throw Error("Token Needed!");
+  }
+  const res = await fetch(`${baseUrl}/users/quiz_history`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (res.status === 404) {
+    console.log("User not found (404).");
+    return null; // or return a specific message or throw an error
+  }
+
+  if (!res.ok) {
+    console.error("Fetch error:", res.status, res.statusText);
+    return null;
+  }
+
+  const data: any = await res.json();
+  return data;
+}

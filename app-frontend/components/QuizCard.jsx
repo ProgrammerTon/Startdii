@@ -10,7 +10,7 @@ export default function QuizCard({ title }) {
   const tags = ["datasci", "datamining"];
   const id = "01";
   return (
-    <TouchableOpacity onPress={() => router.push(`/quizs/${id}`)}>
+    <TouchableOpacity onPress={() => router.push(`/quizzes/${id}`)}>
       <View className="bg-white w-full h-[100px] mt-[13px] flex flex-row rounded-[10px] overflow-hidden drop-shadow-2xl">
         <View className="w-[75px] h-[100px] mr-[6px] bg-[#04B36E] relative">
           <Image

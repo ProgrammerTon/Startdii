@@ -30,37 +30,107 @@ export class SourcesController {
   }
 
   @Get()
-  findByOffset(@Query() query: { offset: number }) {
+  findByOffset(
+    @Query()
+    query: {
+      offset: number;
+      sortOrder: 'asc' | 'desc';
+      title: string | null;
+      tags: string;
+      sortBy: 'time' | 'rating' | null;
+    },
+  ) {
     if (!query.offset) return this.sourcesService.findAll();
+    const sortBy = query.sortBy === 'rating' ? 'rating' : 'time';
+    const sortField = sortBy === 'time' ? 'createdAt' : 'avg_rating_score';
     const offset = query.offset;
-    return this.sourcesService.findByOffset(offset);
+    const sortOrder = query.sortOrder;
+    if (!query.title && query.tags.length === 2) {
+      return this.sourcesService.findByOffset(offset, sortOrder, sortField);
+    }
+    const title = query.title;
+    if (title && query.tags.length === 2) {
+      return this.sourcesService.findByOffsetWithTitle(
+        offset,
+        sortOrder,
+        title,
+        sortField,
+      );
+    }
+    const tagsTransform = query.tags
+      .slice(1, query.tags.length - 1)
+      .split(',')
+      .map((tag) => {
+        return tag.trim();
+      });
+    if (title && query.tags.length !== 2) {
+      return this.sourcesService.findSourcesByTagsAndTitle(
+        offset,
+        sortOrder,
+        tagsTransform,
+        title,
+        sortField,
+      );
+    }
+    if (query.tags.length !== 2) {
+      return this.sourcesService.findSourcesByTags(
+        offset,
+        sortOrder,
+        tagsTransform,
+        sortField,
+      );
+    }
   }
 
-  @Get('search')
-  findByTitle(@Body() searchSourceDto: SearchSourceDto) {
-    if (searchSourceDto.tags.length === 0) {
-      return this.sourcesService.searchByTitle(searchSourceDto.title);
-    }
-    if (!searchSourceDto.title && searchSourceDto.tags.length === 1) {
-      return this.tagsService.getSources(searchSourceDto.tags[0]);
-    }
-    if (!searchSourceDto.title) {
-      return this.sourcesService.findSourcesByTags(searchSourceDto.tags);
-    }
-    return this.sourcesService.findSourcesByTagsAndTitle(
-      searchSourceDto.tags,
-      searchSourceDto.title,
-    );
-  }
+  // @Get('search')
+  // findByTitle(@Body() searchSourceDto: SearchSourceDto) {
+  //   if (searchSourceDto.tags.length === 0) {
+  //     return this.sourcesService.searchByTitle(searchSourceDto.title);
+  //   }
+  //   if (!searchSourceDto.title && searchSourceDto.tags.length === 1) {
+  //     return this.tagsService.getSources(searchSourceDto.tags[0]);
+  //   }
+  //   if (!searchSourceDto.title) {
+  //     return this.sourcesService.findSourcesByTags(searchSourceDto.tags);
+  //   }
+  //   return this.sourcesService.findSourcesByTagsAndTitle(
+  //     searchSourceDto.tags,
+  //     searchSourceDto.title,
+  //   );
+  // }
 
   @Get(':id')
   findById(@Param('id') id: ObjectId) {
     return this.sourcesService.findById(id);
   }
 
+  @Get(':id/rating')
+  getRating(@Param('id') id: ObjectId) {
+    return this.sourcesService.getRating(id);
+  }
+
+  @Patch('rating')
+  updateRatingScores() {
+    return this.sourcesService.updateRatingScores();
+  }
+
   @Patch(':id')
   update(@Param('id') id: ObjectId, @Body() updateSourceDto: UpdateSourceDto) {
     return this.sourcesService.update(id, updateSourceDto);
+  }
+
+  @Patch(':id/rating')
+  userRating(
+    @Param('id') id: ObjectId,
+    @Body('score') score: number,
+    @Body('raterId') raterId: ObjectId,
+  ) {
+    return this.sourcesService.userRating(id, score, raterId as ObjectId);
+  }
+
+  @Patch(':id/reset')
+  dataReset(@Param('id') id: ObjectId) {
+    return this.sourcesService.dataReset(id);
   }
 
   @Delete(':id')

@@ -24,15 +24,35 @@ import { Types } from 'mongoose';
 
 import { ParseObjectIdPipe } from 'src/common/pipes';
 import genInviteCode from './utils/guilds.genInviteCode';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Guild')
 @Controller('guilds')
 export class GuildsController {
   constructor(private readonly guildsService: GuildsService) {}
+
+  @Post(':leaderId')
+  create(
+    @Param('leaderId', ParseObjectIdPipe) leaderId: ObjectId,
+    @Body() createGuildDto: CreateGuildDto,
+  ) {
+    createGuildDto.inviteCode = genInviteCode();
+    createGuildDto.leaderId = leaderId;
+    createGuildDto.viceLeaderIdList = [];
+    createGuildDto.memberIdList = [leaderId];
+
+    return this.guildsService.create(createGuildDto);
+  }
 
   @Get()
   findAll() {
     return this.guildsService.findAll();
   }
+
+  // @Get('test/:id')
+  // findOne(@Param('id', ParseObjectIdPipe) id: ObjectId) {
+  //   return this.guildsService.findOne(id);
+  // }
 
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -57,19 +77,6 @@ export class GuildsController {
     @Param('memberId', ParseObjectIdPipe) memberId: ObjectId,
   ) {
     return this.guildsService.getRoleByMemberId(id, memberId);
-  }
-
-  @Post(':leaderId')
-  create(
-    @Param('leaderId', ParseObjectIdPipe) leaderId: ObjectId,
-    @Body() createGuildDto: CreateGuildDto,
-  ) {
-    createGuildDto.inviteCode = genInviteCode();
-    createGuildDto.leaderId = leaderId;
-    createGuildDto.viceLeaderIdList = [];
-    createGuildDto.memberIdList = [leaderId];
-
-    return this.guildsService.create(createGuildDto);
   }
 
   @Patch(':id')
@@ -120,9 +127,4 @@ export class GuildsController {
   remove(@Param('id', ParseObjectIdPipe) id: ObjectId) {
     return this.guildsService.remove(id);
   }
-
-  // @Get('test/:id')
-  // findOne(@Param('id', ParseObjectIdPipe) id: ObjectId) {
-  //   return this.guildsService.findOne(id);
-  // }
 }

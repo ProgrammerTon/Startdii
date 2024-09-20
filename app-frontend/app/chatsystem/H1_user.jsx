@@ -81,14 +81,6 @@ const ChatH1 = () => {
           </TouchableOpacity>
         </View>
       ))} */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          router.push("/UserFinderSystem/G1_UserFinder");
-        }}
-      >
-        <Text style={styles.addButtonText}>Add Chat</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -144,6 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginVertical: 20,
+    marginBottom: 125,
     width: width - 40, // Responsive width
     alignSelf: "center",
   },

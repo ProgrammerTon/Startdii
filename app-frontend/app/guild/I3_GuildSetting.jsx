@@ -13,13 +13,8 @@ const GuildSettingPage = () => {
   const guildName = "Test_guild";
   const [InviteWindowVisible, setInviteWindowVisible] = useState(false);
   const [LeaveGuildWindowVisible, setLeaveGuildWindowVisible] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
   const { guild } = useGuildContext();
   const { user } = useGlobalContext();
-
-  const handlePress = () => {
-    setIsMuted(!isMuted);
-  };
 
   const openInviteWindow = () => {
     setInviteWindowVisible(true);
@@ -61,14 +56,6 @@ const GuildSettingPage = () => {
 
       {/* Buttons */}
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
-          <FontAwesome
-            name={isMuted ? "volume-off" : "volume-up"}
-            size={24}
-            color="green"
-          />
-          <Text style={styles.buttonText}>{isMuted ? "MUTE" : "UNMUTE"}</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
