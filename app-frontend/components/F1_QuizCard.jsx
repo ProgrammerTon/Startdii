@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import images from "../constants/images";
 import { Image } from "expo-image";
 import { router } from "expo-router";
@@ -13,26 +11,7 @@ import { useGlobalContext } from "../context/GlobalProvider";
 const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const { user } = useGlobalContext();
   const [isLiked, setIsLiked] = useState(isFavorite);
-import { router } from "expo-router";
-import TagList from "./TagList";
-import { FontAwesome } from "@expo/vector-icons";
-import { favoriteQuiz, unfavoriteQuiz } from "../services/QuizService";
-import { useGlobalContext } from "../context/GlobalProvider";
 
-const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
-  const { user } = useGlobalContext();
-  const [isLiked, setIsLiked] = useState(isFavorite);
-
-  const toggleHeart = async () => {
-    if (!isLiked) {
-      const data = await favoriteQuiz(id, user._id);
-      user?.favorite_quizzes?.push(id);
-    } else {
-      const data = await unfavoriteQuiz(id, user._id);
-      user.favorite_quizzes = user.favorite_quizzes?.filter(
-        (quizId) => quizId !== id
-      );
-    }
   const toggleHeart = async () => {
     if (!isLiked) {
       const data = await favoriteQuiz(id, user._id);
@@ -48,7 +27,6 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
 
   return (
     <TouchableOpacity onPress={() => router.push(`/quiz/${id}`)}>
-    <TouchableOpacity onPress={() => router.push(`/quiz/${id}`)}>
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
           <Image
@@ -62,9 +40,6 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
           <Text style={styles.titleText}>
             {title?.length > 18 ? `${title?.slice(0, 18)}...` : title}
           </Text>
-          <Text style={styles.titleText}>
-            {title?.length > 18 ? `${title?.slice(0, 18)}...` : title}
-          </Text>
           <Text style={styles.authorText}>By {author}</Text>
           <TagList tags={tags.slice(0, 3).map(tag => tag.length > 8 ? `${tag.slice(0, 8)}...` : tag)} title={title} id={id} />
           <View style={styles.ratingContainer}>
@@ -72,31 +47,13 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
               <FontAwesome
                 key={index}
                 name={index < rating ? "star" : "star-o"}
-                name={index < rating ? "star" : "star-o"}
                 size={16}
-                color="#FEDD3A"
                 color="#FEDD3A"
               />
             ))}
           </View>
         </View>
         <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={toggleHeart}>
-            <FontAwesome
-              name={isLiked ? "heart" : "heart-o"}
-              size={25}
-              color={isLiked ? "red" : "gray"}
-              style={styles.heartIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome
-              name="share"
-              size={25}
-              color="gray"
-              style={styles.icon}
-            />
-          </TouchableOpacity>
           <TouchableOpacity onPress={toggleHeart}>
             <FontAwesome
               name={isLiked ? "heart" : "heart-o"}
@@ -126,15 +83,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: "100%",
     height: 120,
-    backgroundColor: "white",
-    width: "100%",
-    height: 120,
     marginTop: 13,
     flexDirection: "row",
-    flexDirection: "row",
     borderRadius: 10,
-    overflow: "hidden",
-    shadowColor: "#000",
     overflow: "hidden",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -144,10 +95,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: 75,
-    height: "100%",
-    backgroundColor: "#FEDD3A",
-    justifyContent: "center",
-    alignItems: "center",
     height: "100%",
     backgroundColor: "#FEDD3A",
     justifyContent: "center",
