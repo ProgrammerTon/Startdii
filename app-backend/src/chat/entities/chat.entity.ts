@@ -23,10 +23,10 @@ export class Chat {
   @Prop({ name: 'message' })
   message?: string;
 
-  @Prop({ type: ObjectId, name: 'sourceId' })
+  @Prop({ type: ObjectId, name: 'sourceId', ref: 'Source' })
   sourceId?: ObjectId;
 
-  @Prop({ type: ObjectId, name: 'quizId' })
+  @Prop({ type: ObjectId, name: 'quizId', ref: 'Quiz' })
   quizId?: ObjectId;
 
   @Prop({ type: ObjectId, name: 'userId', ref: 'User' })

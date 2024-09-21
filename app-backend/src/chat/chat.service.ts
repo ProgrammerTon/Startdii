@@ -58,17 +58,50 @@ export class ChatService {
       .skip(offset)
       .limit(size)
       .populate('userId', 'username')
+      .populate({
+        path: 'sourceId',
+        select: 'title tags avg_rating_score',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .populate({
+        path: 'quizId',
+        select: 'title tags avg_rating_score',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
       .exec();
-    const transformMessages = (messages) => {
-      return messages.map((msg) => ({
-        text: msg.message,
-        sender: msg.userId.username,
-        type: 'Text', // Assuming all messages are of type "Text"
-        time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
-      }));
-    };
-    const formattedMessages = transformMessages(messages);
-    return formattedMessages;
+    const transformMessages: any = messages.map((msg: any) => {
+      if (msg.msgType === messageType.text) {
+        return {
+          text: msg.message,
+          sender: msg.userId.username,
+          type: msg.msgType,
+          time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
+        };
+      }
+      if (msg.msgType === messageType.source) {
+        return {
+          source: msg.sourceId,
+          sender: msg.userId.username,
+          type: msg.msgType,
+          time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
+        };
+      }
+      if (msg.msgType === messageType.quiz) {
+        return {
+          quiz: msg.quizId,
+          sender: msg.userId.username,
+          type: msg.msgType,
+          time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
+        };
+      }
+    });
+    return transformMessages;
   }
 }
 
