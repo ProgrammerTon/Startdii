@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { TouchableOpacity, StyleSheet, Text } from "react-native";
+import React, { useState } from 'react';
+import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import Entypo from "@expo/vector-icons/Entypo";
-import ReportQuizWindow from "./QuizReport";
+import ReportNoteWindow from './NoteReport';
 
-const TestReport = () => {
+const TestReportNote = ({sourceId}) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -19,21 +19,23 @@ const TestReport = () => {
       <TouchableOpacity style={styles.reportButton} onPress={openModal}>
         <Entypo name="warning" size={16} color="white" />
       </TouchableOpacity>
-
-      <ReportQuizWindow
+      
+      <ReportNoteWindow
+        sourceId = {sourceId}
         visible={isModalVisible}
         onClose={closeModal}
         onSubmit={(reason, description) => {
           console.log("Selected Reason:", reason);
           console.log("Description:", description);
           closeModal();
-        }}
+        }
+   }
       />
     </>
   );
 };
 
-export default TestReport;
+export default TestReportNote;
 
 const styles = StyleSheet.create({
   reportButton: {

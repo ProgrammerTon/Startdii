@@ -9,26 +9,25 @@ import {
   Animated,
   Dimensions,
 } from "react-native";
-import { getCurrentToken } from "../../utils/asyncstroage";
+import { getCurrentToken }from "../../utils/asyncstroage";
 import { reportToAdmin } from "../../services/ReportService";
-import { useQuestionContext } from "../../context/QuestionProvider";
 const { width, height } = Dimensions.get("window");
 
 // Reason Modal Component
 const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
   const reasons = [
-    "Incorrect Solution",
-    "Misleading Question",
+    "Incorrect Information",
+    "ohoh",
     "Inappropriate Content",
     "Plagiarism",
   ];
   const startPosition = 80;
-  const slideAnimation = useRef(new Animated.Value(startPosition)).current;
+  const slideAnimation = useRef(new Animated.Value(startPosition)).current; 
 
   if (visible) {
-    slideAnimation.setValue(startPosition);
+    slideAnimation.setValue(startPosition); 
     Animated.timing(slideAnimation, {
-      toValue: height * 0.11,
+      toValue: height*0.11,
       duration: 400,
       useNativeDriver: true,
     }).start();
@@ -64,13 +63,11 @@ const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
 };
 
 // Main ReportQuizWindow Component
-const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
+const ReportNoteWindow = ({ visible, onClose, onSubmit,sourceId }) => {
   const [reasonModalVisible, setReasonModalVisible] = useState(false);
   const [selectedReason, setSelectedReason] = useState("Select reason");
   const [description, setDescription] = useState("");
   const [reasonButtonY, setReasonButtonY] = useState(0); // Get the Y position of the reason button
-  const { questions, quizId, quizFinished, setQuizFinished } =
-    useQuestionContext();
   // Function to handle reason selection
   const handleSelectReason = (reason) => {
     setSelectedReason(reason);
@@ -80,14 +77,14 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
   // Function to handle submit
 
   const handleSubmit = async () => {
-    if (selectedReason === "Select reason" || !description) {
+    if (selectedReason === 'Select reason' || !description) {
       alert("Please fill in all fields.");
       return;
     }
-
+  
     try {
       const token = await getCurrentToken();
-      const targetId = await quizId;
+      const targetId = sourceId;
       console.log("Retrieved Token:", token || "No Token Found");
       console.log("User Token:", token);
       console.log("Retrieved Target Id:", targetId);
@@ -99,19 +96,19 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
       const data = {
         token: token,
         targetId: targetId,
-        option: "quiz",
+        option: "source",
         reason: selectedReason,
         description: description,
       };
 
       console.log(data);
       const res = await reportToAdmin(data);
-
+  
       if (!res) {
         alert("Failed to submit report.");
         return;
       }
-
+  
       onSubmit(selectedReason, description);
       resetForm();
     } catch (error) {
@@ -121,12 +118,12 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
   };
 
   const resetForm = () => {
-    setSelectedReason("Select reason");
-    setDescription("");
+    setSelectedReason("Select reason"); 
+    setDescription(""); 
   };
 
   const handleClose = () => {
-    resetForm();
+    resetForm(); 
     onClose();
   };
 
@@ -141,48 +138,42 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
         <View style={styles.modalContainer}>
           {/* Orange Header with rounded corners */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Report Quiz</Text>
+            <Text style={styles.headerText}>Report Note</Text>
           </View>
           <View style={styles.modalContent}>
-            {/* Select Reason */}
-            <TouchableOpacity
-              style={styles.selectReasonContainer}
-              onPress={(e) => {
-                e.target.measure((fx, fy, width, height, px, py) => {
-                  setReasonButtonY(py); // Set the Y coordinate of the button for animation
-                });
-                setReasonModalVisible(true);
-              }}
-            >
-              <Text>{selectedReason}</Text>
+          {/* Select Reason */}
+          <TouchableOpacity
+            style={styles.selectReasonContainer}
+            onPress={(e) => {
+              e.target.measure((fx, fy, width, height, px, py) => {
+                setReasonButtonY(py); // Set the Y coordinate of the button for animation
+              });
+              setReasonModalVisible(true);
+            }}
+          >
+            <Text>{selectedReason}</Text>
+          </TouchableOpacity>
+
+          {/* Description Label */}
+          <Text style={styles.descriptionLabel}>Description</Text>
+
+          {/* Description Input */}
+          <TextInput
+            style={styles.descriptionInput}
+            value={description}
+            onChangeText={(text) => setDescription(text)}
+            placeholder="Describe the issue here"
+            multiline
+          />
+
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity style={styles.cancelButton} onPress={handleClose}>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
-
-            {/* Description Label */}
-            <Text style={styles.descriptionLabel}>Description</Text>
-
-            {/* Description Input */}
-            <TextInput
-              style={styles.descriptionInput}
-              value={description}
-              onChangeText={(text) => setDescription(text)}
-              placeholder="Describe the issue here"
-              multiline
-            />
-
-            <View style={styles.buttonsContainer}>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={handleClose}
-              >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.submitButton}
-                onPress={handleSubmit}
-              >
-                <Text style={styles.submitButtonText}>Submit</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+              <Text style={styles.submitButtonText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
           </View>
         </View>
       </View>
@@ -225,8 +216,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalContent: {
-    padding: 20,
-    width: "100%",
+    padding: 20, 
+    width: '100%',
   },
   header: {
     width: "100%",
@@ -236,7 +227,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     marginBottom: 10,
-    borderColor: "#FF5722",
+    borderColor: "#FF5722", 
     borderWidth: 1,
   },
   headerText: {
@@ -314,8 +305,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: "100%",
     textAlignVertical: "top",
-    height: 80,
+    height: 80, 
   },
 });
 
-export default ReportQuizWindow;
+export default ReportNoteWindow;

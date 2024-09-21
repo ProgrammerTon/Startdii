@@ -229,5 +229,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: "#04B36E",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    position: "relative",
+    justifyContent: "center",
   },
 });

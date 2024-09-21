@@ -26,6 +26,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { Image } from "expo-image";
 import { baseUrl } from "@/constants/const";
 import { getUserRatingSource } from "../../services/SourceService";
+import TestReportNote from "../reportsystem/ReportNote";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -163,8 +164,12 @@ const SourceDetailPage = () => {
         }
       >
         {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>{source?.title}</Text>
+        <View style={styles.headerWrapper}>
+            <Text style={styles.headerStyle}>{source?.title}</Text>
+            <TestReportNote
+              sourceId={id} // Pass the sourceId to the report window
+              onPress={() => console.log('Report Button Pressed')}
+            />
         </View>
 
         {/* Description and Info */}
@@ -295,5 +300,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#0E68D9",
     marginTop: 5,
+  },
+  headerWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#FEDD3A",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    position: "relative",
+    justifyContent: "center",
+  },
+  headerStyle: {
+    fontSize: 24,
+    fontWeight: "bold"
   },
 });

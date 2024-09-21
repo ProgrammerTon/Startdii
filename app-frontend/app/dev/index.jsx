@@ -90,10 +90,10 @@ const DevPage = () => {
         <Text className="text-lg">PieChart</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/quizzes/F7_quizstatistic")}
+        onPress={() => router.push("/reportsystem/ReportTest")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">QuizStatistic</Text>
+        <Text className="text-lg">TestReport</Text>
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => router.push("/upload/upload")}
