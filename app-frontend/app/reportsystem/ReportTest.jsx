@@ -18,7 +18,6 @@ const TestReport = () => {
     <>
       <TouchableOpacity style={styles.reportButton} onPress={openModal}>
         <Entypo name="warning" size={16} color="white" />
-        <Text style={styles.buttonText}>Report</Text>
       </TouchableOpacity>
       
       <ReportQuizWindow
