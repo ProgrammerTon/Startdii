@@ -21,12 +21,11 @@ import { findQuiz } from "../../services/QuizService";
 import { getCommentsQuiz } from "../../services/CommentService";
 import { createCommentSource } from "../../services/CommentService";
 import { ratingQuiz } from "../../services/QuizService";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { getAnswers } from "../../services/QuizService";
 import { useQuestionContext } from "../../context/QuestionProvider";
 import StatButton from "../Quiz_Component/StatButton";
 import { getUserRatingQuiz } from "../../services/QuizService";
-
 
 const { width, height } = Dimensions.get("window");
 
@@ -114,7 +113,7 @@ const QuizSummaryPage = () => {
 
   const fetchGetAnswers = async () => {
     const data = await getAnswers(quizId);
-    console.log("User Ans",data);
+    console.log("User Ans", data);
     if (data) {
       setUserAnswers(data.answers);
       let countScore = 0;

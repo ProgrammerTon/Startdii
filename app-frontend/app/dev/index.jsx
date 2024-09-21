@@ -107,12 +107,6 @@ const DevPage = () => {
       >
         <Text className="text-lg">Profile</Text>
       </TouchableHighlight>
-      <TouchableHighlight
-        onPress={() => router.push("/quiz_history_page")}
-        className="bg-green-600 p-2 rounded-xl"
-      >
-        <Text className="text-lg">Quiz History</Text>
-      </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </ScrollView>
   );

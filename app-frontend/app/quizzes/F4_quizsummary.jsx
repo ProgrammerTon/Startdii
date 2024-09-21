@@ -22,8 +22,6 @@ import StatButton from "../Quiz_Component/StatButton";
 import { createCommentSource } from "../../services/CommentService";
 import { router } from "expo-router";
 import { ratingQuiz } from "../../services/QuizService";
-import { getUserRatingQuiz } from "../../services/QuizService";
-
 
 const { width, height } = Dimensions.get("window");
 
@@ -40,7 +38,6 @@ const QuizSummaryPage = ({
   const [quiz, setQuiz] = useState(null);
   const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
-  const [ratingScore, setRatingScore] = useState(0);
 
   const handleSubmitComment = async () => {
     if (commentInput.trim() === "") return; // Prevent empty comments
@@ -94,27 +91,20 @@ const QuizSummaryPage = ({
     setComments([...reversedComments]);
   };
 
-  const fetchRating = async () => {
-    const data = await getUserRatingQuiz(user._id, id);
-    setRatingScore(data);
-  };
-
   const onRefresh = async () => {
     await fetchQuiz();
     await fetchComments();
-    await fetchRating();
   };
 
   const handleRating = async (sc) => {
-    await ratingQuiz(id, user._id, sc);
-    setRatingScore(sc);
+    const data = await ratingQuiz(id, user._id, sc);
+    console.log(data);
   };
 
   useEffect(() => {
     setRefreshing(true);
     fetchQuiz();
     fetchComments();
-    fetchRating();
     setRefreshing(false);
   }, []);
 
@@ -152,7 +142,7 @@ const QuizSummaryPage = ({
           ScoreRating={Math.round(quiz?.averageScore)}
           numComment={quiz?.count}
         />
-        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+        <RatingBar onRatingChange={handleRating} />
 
         {/* CommentBar with input */}
         <CommentBar

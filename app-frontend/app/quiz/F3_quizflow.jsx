@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View,Alert } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import QuizFill from "../quizzes/F3_quizfill";
 import QuizChoices from "../quizzes/F3_quizchoice";
 import { useQuestionContext } from "../../context/QuestionProvider";
@@ -28,14 +28,18 @@ const QuizFlow = () => {
     if (userState === "Statistic") {
       setUserState("Summary");
       return true;
+    }
+    if (userState === "Checking") {
+      router.back();
+      return true;
     } else {
       Alert.alert("Hold on!", "Are you sure you want to go back?", [
         {
           text: "Cancel",
           onPress: () => null,
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "YES", onPress: () => router.back() }
+        { text: "YES", onPress: () => router.back() },
       ]);
       return true;
     }

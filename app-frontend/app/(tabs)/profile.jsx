@@ -7,12 +7,12 @@ import {
   Alert,
   FlatList,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import { ScrollView } from "react-native";
 import AuthService from "../../services/AuthService";
 import { router } from "expo-router";
-import { useCharContext } from "../profile/charcontext";
+import { useCharContext, CharacterContext } from "../profile/charcontext";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
@@ -30,11 +30,13 @@ import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
 import DressButton from "../../components/DressButton";
 import Frame from "../../components/Frame";
-import History from "../quiz_history_page";
+import QuizHistory from "../../components/QuizHistory";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
   const { selectedChar, selectedColor } = useCharContext();
+  const { isLogged } = useGlobalContext();
 
   const getCharacterComponent = React.useMemo(() => {
     switch (selectedChar) {
@@ -81,7 +83,7 @@ export default function ProfileTest() {
       case "Inventory":
         return <Inventory />;
       case "History":
-        return <History />;
+        return <QuizHistory />;
       default:
         return <WeeklyGoals />;
     }
@@ -93,6 +95,12 @@ export default function ProfileTest() {
     { id: "3", name: "History" },
   ];
 
+  useEffect(() => {
+    if (!isLogged) {
+      router.replace("/sign-in");
+    }
+  }, []);
+
   return (
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
@@ -103,11 +111,10 @@ export default function ProfileTest() {
           </View>
         </TouchableOpacity>
         <View style={styles.signoutContainer}>
-          <SignoutButton />
+          <SignoutButton onPress={() => {}} />
         </View>
       </View>
       <FlatList
-        contentContainerStyle={{ paddingBottom: 200 }}
         ListHeaderComponent={renderHeader}
         data={[{}]} // Ensuring there is data to render the header.
         renderItem={() => renderContent()}
