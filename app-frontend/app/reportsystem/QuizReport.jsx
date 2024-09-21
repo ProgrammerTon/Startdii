@@ -84,25 +84,24 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
     }
   
     try {
-      //const token = await getCurrentToken(); 
-      const token = '66cea26802136db1d334e56f';
-      const targetId = '66dff76625df1953474afcc7';
+      const token = await getCurrentToken();
+      const targetId = "66dff76625df1953474afcc7";
       console.log("Retrieved Token:", token || "No Token Found");
-      console.log("User Token:",user_.id);
+      console.log("User Token:", user._id);
       console.log("Retrieved Target Id:", targetId);
       if (!token) {
         alert("Failed to retrieve token.");
         return;
       }
-  
+
       const data = {
         token: token,
-        targetId: targetId, 
+        targetId: targetId,
         option: "quiz",
         reason: selectedReason,
-        description: description
+        description: description,
       };
-      
+
       console.log(data);
       const res = await reportToAdmin(data);
   

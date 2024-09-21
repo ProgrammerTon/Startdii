@@ -1,12 +1,18 @@
 import { baseUrl } from "@/constants/const";
 
-export async function reportToAdmin(
-  token: string,
-  targetId: string,
-  option: "user" | "source" | "quiz",
-  reason: string,
-  description: string
-): Promise<any> {
+export async function reportToAdmin({
+  token,
+  targetId,
+  option,
+  reason,
+  description,
+}: {
+  token: string;
+  targetId: string;
+  option: "user" | "source" | "quiz";
+  reason: string;
+  description: string;
+}): Promise<any> {
   if (!token) {
     throw Error("Token Needed!");
   }
