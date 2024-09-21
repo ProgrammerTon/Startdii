@@ -1,71 +1,54 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import Entypo from "@expo/vector-icons/Entypo";
 import ReportQuizWindow from './QuizReport';
+
 const TestReport = () => {
-  const [isModalVisible, setModalVisible] = useState(true);
-  const openAddWindow = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
     setModalVisible(true);
   };
 
-  const closeAddWindow = () => {
+  const closeModal = () => {
     setModalVisible(false);
   };
 
-
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.floatingButton} onPress={openAddWindow}>
-        <Text style={styles.floatingButtonText}>+</Text>
+    <>
+      <TouchableOpacity style={styles.reportButton} onPress={openModal}>
+        <Entypo name="warning" size={16} color="white" />
+        <Text style={styles.buttonText}>Report</Text>
       </TouchableOpacity>
+      
       <ReportQuizWindow
         visible={isModalVisible}
-        onClose={closeAddWindow}
+        onClose={closeModal}
         onSubmit={(reason, description) => {
-        console.log("Selected Reason:", reason);
-        console.log("Description:", description);
-        setModalVisible(false);  
-  }}
-/>
-    </View>
+          console.log("Selected Reason:", reason);
+          console.log("Description:", description);
+          closeModal();
+        }}
+      />
+    </>
   );
 };
 
 export default TestReport;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 0,
-  },
-  floatingButton: {
-    backgroundColor: "#FF6347",
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    justifyContent: "center",
+  reportButton: {
+    flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    bottom: 100,
-    right: 20,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    zIndex: 1000,
+    backgroundColor: "red",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginLeft: 10,
   },
-  toggleButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#ef6d11",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  floatingButtonText: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
+  buttonText: {
+    color: "white",
+    fontSize: 14,
+    marginLeft: 5,
   },
 });

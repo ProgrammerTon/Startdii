@@ -9,7 +9,8 @@ import {
   Animated,
   Dimensions,
 } from "react-native";
-
+import { getCurrentToken }from "../../utils/asyncstroage";
+import { reportToAdmin } from "../../services/ReportService";
 const { width, height } = Dimensions.get("window");
 
 // Reason Modal Component
@@ -75,20 +76,56 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
   };
 
   // Function to handle submit
-  const handleSubmit = () => {
-    onSubmit(selectedReason, description);
-    resetForm(); // Clear the form after submission
+
+  const handleSubmit = async () => {
+    if (selectedReason === 'Select reason' || !description) {
+      alert("Please fill in all fields.");
+      return;
+    }
+  
+    try {
+      //const token = await getCurrentToken(); 
+      const token = '66cea26802136db1d334e56f';
+      const targetId = '66dff76625df1953474afcc7';
+      console.log("Retrieved Token:", token || "No Token Found");
+      console.log("User Token:",user_.id);
+      console.log("Retrieved Target Id:", targetId);
+      if (!token) {
+        alert("Failed to retrieve token.");
+        return;
+      }
+  
+      const data = {
+        token: token,
+        targetId: targetId, 
+        option: "quiz",
+        reason: selectedReason,
+        description: description
+      };
+      
+      console.log(data);
+      const res = await reportToAdmin(data);
+  
+      if (!res) {
+        alert("Failed to submit report.");
+        return;
+      }
+  
+      onSubmit(selectedReason, description);
+      resetForm();
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
-  // Function to reset the form (clear the input and select)
   const resetForm = () => {
-    setSelectedReason("Select reason"); // Reset reason selection
-    setDescription(""); // Clear description input
+    setSelectedReason("Select reason"); 
+    setDescription(""); 
   };
 
-  // Function to handle closing the modal
   const handleClose = () => {
-    resetForm(); // Clear the form when modal is closed
+    resetForm(); 
     onClose();
   };
 

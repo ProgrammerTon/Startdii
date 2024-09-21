@@ -32,6 +32,7 @@ import DressButton from "../../components/DressButton";
 import Frame from "../../components/Frame";
 import QuizHistory from "../../components/QuizHistory";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import DevPage from "../dev/index";
 
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
