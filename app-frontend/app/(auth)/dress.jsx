@@ -20,7 +20,7 @@ import Char4 from '../../components/charactor/Charactor04';
 import Char5 from '../../components/charactor/Charactor05'; 
 import Char6 from '../../components/charactor/Charactor06'; 
 import { CharacterContext } from "../profile/charcontext";
-
+import { useRouter , router} from "expo-router";
 const Tab = createMaterialTopTabNavigator();
 
 
@@ -160,7 +160,7 @@ export default function DressTest() {
     return (
         <SafeAreaView style={styles.bg}>
             <View style={styles.toptab}> 
-                <BackButton></BackButton>
+                <BackButton />
             </View>
             <View style={{justifyContent: "center",alignItems: 'center'}}>
                 <View style={styles.main}>

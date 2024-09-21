@@ -28,6 +28,7 @@ import {
 } from "../../services/CommentService";
 import { useQuestionContext } from "../../context/QuestionProvider";
 import { getUserRatingQuiz } from "../../services/QuizService";
+import TestReport from "../reportsystem/ReportTest";
 
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();
@@ -153,7 +154,10 @@ const SumQuizPage = () => {
         />
       }
     >
-      <Text style={styles.headerStyle}>{quiz?.title}</Text>
+      <View style={styles.headerWrapper}>
+        <Text style={styles.headerStyle}>{quiz?.title}</Text>
+        <TestReport onPress={() => console.log("Report Button Pressed")} />
+      </View>
       <DescriptionBlock QuizDescription={quiz?.description} />
       <View style={styles.tagsContainer}>
         {quiz?.tags.map((tag, ind) => {
@@ -220,5 +224,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginVertical: 10,
+  },
+  headerWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#04B36E",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    position: "relative",
+    justifyContent: "center",
   },
 });

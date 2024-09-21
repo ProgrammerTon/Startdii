@@ -33,9 +33,10 @@ const Inventory = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container }>
       <FlatList
         data={data}
+        contentContainerStyle={{ paddingBottom: 300 }}
         renderItem={({ item }) => {
           return (
             <QuizCard

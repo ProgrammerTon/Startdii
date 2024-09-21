@@ -140,7 +140,6 @@ const AddNotePage = () => {
     const data = await uploadFile(formData);
     if (data) {
       setSelectedDocuments([]);
-      Alert.alert("Upload Success!!");
     }
     console.log("We Got", data);
     return data;

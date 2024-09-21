@@ -48,7 +48,11 @@ export class User {
   favorite_quizzes: ObjectId[] = [];
 
   @Prop({ name: 'quizHistory', ref: 'Quiz' })
-  quiz_history: { id: ObjectId; results: boolean[]; answers: (number | number[])[] }[] = [];
+  quiz_history: {
+    id: ObjectId;
+    results: boolean[];
+    answers: (number | number[])[];
+  }[] = [];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

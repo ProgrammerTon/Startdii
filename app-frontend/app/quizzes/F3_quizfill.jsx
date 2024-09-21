@@ -11,7 +11,8 @@ import {
 import { React , useState , useEffect} from "react";
 import QuizChoice from "../../components/QuizChoice";
 import AntDesign from '@expo/vector-icons/AntDesign';
-
+import { router } from "expo-router";
+import {Stack} from "expo-router";
 const { width, height } = Dimensions.get('window');
 
 export default function QuizFill({ questionData, onSubmit, questionNumber, totalQuestions  }) {
@@ -80,7 +81,7 @@ export default function QuizFill({ questionData, onSubmit, questionNumber, total
               <TouchableOpacity style={styles.closeQuizButton} onPress={()=>setCloseQuiz(false)}>
                 <Text style={{fontSize: 16, fontWeight: "bold"}}> Cancel </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.leaveQuizButton}>
+              <TouchableOpacity style={styles.leaveQuizButton} onPress={() => router.back()}>
                 <Text style={{fontSize: 16, fontWeight: "bold", color: "#fff"}}> Leave </Text>
               </TouchableOpacity>
             </View>
