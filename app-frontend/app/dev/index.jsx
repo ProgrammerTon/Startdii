@@ -113,6 +113,12 @@ const DevPage = () => {
       >
         <Text className="text-lg">Quiz History</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/ArchiveSystem/SharePage")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Share Page</Text>
+      </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </ScrollView>
   );
