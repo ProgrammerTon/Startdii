@@ -8,7 +8,8 @@ import {
   FlatList,
   RefreshControl,
   SafeAreaView,
-  Dimensions
+  TouchableHighlight,
+  Dimensions,
 } from "react-native";
 import GuildButton from "../guild/GuildButton";
 import { Redirect, router } from "expo-router";
@@ -90,6 +91,12 @@ const GuildPage = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Guild</Text>
       </View>
+      <TouchableHighlight
+        onPress={() => router.push("/dev")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Dev</Text>
+      </TouchableHighlight>
       <FlatList
         data={guilds}
         renderItem={({ item, index }) => (
