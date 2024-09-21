@@ -11,14 +11,13 @@ import {
 } from "react-native";
 import { getCurrentToken }from "../../utils/asyncstroage";
 import { reportToAdmin } from "../../services/ReportService";
-import { useQuestionContext } from "../../context/QuestionProvider";
 const { width, height } = Dimensions.get("window");
 
 // Reason Modal Component
 const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
   const reasons = [
-    "Incorrect Solution",
-    "Misleading Question",
+    "Incorrect Information",
+    "ohoh",
     "Inappropriate Content",
     "Plagiarism",
   ];
@@ -64,12 +63,11 @@ const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
 };
 
 // Main ReportQuizWindow Component
-const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
+const ReportNoteWindow = ({ visible, onClose, onSubmit,sourceId }) => {
   const [reasonModalVisible, setReasonModalVisible] = useState(false);
   const [selectedReason, setSelectedReason] = useState("Select reason");
   const [description, setDescription] = useState("");
   const [reasonButtonY, setReasonButtonY] = useState(0); // Get the Y position of the reason button
-  const { questions, quizId, quizFinished, setQuizFinished } = useQuestionContext();
   // Function to handle reason selection
   const handleSelectReason = (reason) => {
     setSelectedReason(reason);
@@ -86,7 +84,7 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
   
     try {
       const token = await getCurrentToken();
-      const targetId = await quizId;
+      const targetId = sourceId;
       console.log("Retrieved Token:", token || "No Token Found");
       console.log("User Token:", token);
       console.log("Retrieved Target Id:", targetId);
@@ -98,7 +96,7 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
       const data = {
         token: token,
         targetId: targetId,
-        option: "quiz",
+        option: "source",
         reason: selectedReason,
         description: description,
       };
@@ -140,7 +138,7 @@ const ReportQuizWindow = ({ visible, onClose, onSubmit }) => {
         <View style={styles.modalContainer}>
           {/* Orange Header with rounded corners */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Report Quiz</Text>
+            <Text style={styles.headerText}>Report Note</Text>
           </View>
           <View style={styles.modalContent}>
           {/* Select Reason */}
@@ -311,4 +309,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReportQuizWindow;
+export default ReportNoteWindow;
