@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, RefreshControl, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Pressable, RefreshControl, TouchableOpacity, Dimensions, ScrollView, Modal, Alert } from 'react-native';
 import { Redirect, router } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import Menu from "./FriendGuildMenu";
@@ -12,6 +12,7 @@ export default function SharePage() {
   const [refreshing, setRefreshing] = useState(true);
   const [selectedGuilds, setSelectedGuilds] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState([]);
+  const [comfirmShare, setConfirmShare] = useState(false);
 
   const menuData = [
     { name: 'Friends' } , { name: 'Guilds' }
@@ -124,6 +125,16 @@ export default function SharePage() {
     }
   };
 
+  const handleShare = () => {
+    if (selectedGuilds.length === 0 && selectedFriends.length === 0) {
+      setConfirmShare(false)
+      Alert.alert("Select at least 1 friend or guild!!");
+    }
+    else {
+      console.log(selectedFriends, selectedGuilds)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -143,12 +154,51 @@ export default function SharePage() {
       </View>
       <View>
         <TouchableOpacity
-          style={styles.nextButton}
-          onPress={() => console.log(selectedFriends, selectedGuilds)}
+          style={styles.shareButton}
+          onPress={() => {console.log(selectedFriends, selectedGuilds), setConfirmShare(true)}}
         >
-          <Text style={{ fontSize: 16, color: "#fff" }}> Next </Text>
+          <Text style={{ fontSize: 16, color: "#fff" }}> Share </Text>
         </TouchableOpacity>
       </View>
+      <Modal transparent={true} visible={comfirmShare}>
+        <View style={{ flex: 1, backgroundColor: "#555555aa" }}>
+          <View style={styles.sharePopUp}>
+            <View>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {" "}
+                Do you want to Share?{" "}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: 20,
+              }}
+            >
+              <TouchableOpacity
+                style={styles.cancelShareButton}
+                onPress={() => setConfirmShare(false)}
+              >
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                  {" "}
+                  Cancel{" "}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.confirmShareButton}
+                onPress={() => handleShare()}>
+                <Text
+                  style={{ fontSize: 16, fontWeight: "bold", color: "#fff" }}
+                >
+                  {" "}
+                  Share{" "}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -189,13 +239,40 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
   },
-  nextButton: {
+  shareButton: {
     paddingHorizontal: width * 0.05,
     paddingVertical: 10,
     marginRight: 20,
-    marginVertical: -height * 0.13,
+    marginBottom: height * 0.05,
     backgroundColor: "#0270ED",
     borderRadius: 20,
     alignSelf: "flex-end",
+  },
+  cancelShareButton: {
+    paddingHorizontal: width * 0.05,
+    paddingVertical: 10,
+    marginVertical: 5,
+    marginHorizontal: 20,
+    backgroundColor: "#bbb",
+    paddingHorizontal: width * 0.05,
+    borderRadius: 20,
+  },
+  confirmShareButton: {
+    paddingHorizontal: width * 0.05,
+    paddingVertical: 10,
+    marginVertical: 5,
+    marginHorizontal: 20,
+    backgroundColor: "#0270ED",
+    paddingHorizontal: width * 0.05,
+    borderRadius: 20,
+  },
+  sharePopUp: {
+    backgroundColor: "#fff",
+    marginTop: height * 0.4,
+    margin: 50,
+    padding: 20,
+    alignItems: "center",
+    borderRadius: 10,
+    height: height * 0.15,
   },
 });

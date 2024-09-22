@@ -25,26 +25,30 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingVertical: 20,
     paddingHorizontal: 10,
-    marginTop: 10,
-    borderWidth: 3,
-    borderColor: "#000", // Green border for default
+    marginTop: 5,
+    margin: 10,
+    borderWidth: 2,
+    borderColor: "#eee",
     borderRadius: 10,
+    shadowColor: "#919191",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
     flexDirection: "row",
     justifyContent: "center",
   },
   iconStyle:{
     alignSelf: "flex-start",
-    marginRight: 8,
+    marginRight: 10,
   },
   textWrapper: {
     flex: 1,
-    alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: 20,
   },
   textStyle: {
     fontSize: 20,
     fontWeight: "bold",
-    alignSelf:"center",
   },
 });
 
