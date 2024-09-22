@@ -8,6 +8,8 @@ import LeaveGuildWindow from "./LeaveGuildWindow";
 import { useGuildContext } from "../../context/GuildProvider";
 import { leavePerson } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import NoteGuildPage from "./I6_NoteGuild";
+import QuizGuildPage from "./I7_QuizGuild";
 
 const GuildSettingPage = () => {
   const guildName = "Test_guild";
@@ -98,11 +100,11 @@ const GuildSettingPage = () => {
 
       {/* Note and Quiz Buttons */}
       <View style={styles.noteQuizContainer}>
-        <TouchableOpacity style={styles.noteButton} onPress={() => {/* Note action */}}>
+        <TouchableOpacity style={styles.noteButton} onPress={() => router.push("/guild/I6_NoteGuild")}>
           <Text style={styles.noteQuizText}>Note</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.quizButton} onPress={() => {/* Quiz action */}}>
+        <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/guild/I7_QuizGuild")}>
           <Text style={styles.noteQuizText}>Quiz</Text>
         </TouchableOpacity>
       </View>

@@ -8,9 +8,7 @@ import images from "../constants/images";
 import colors from "../constants/color";
 import fonts from "../constants/font";
 
-const SourceCard = ({ id, title, author, tags, isFavorite }) => {
-  const rating = 4;
-
+const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const [isLiked, setIsLiked] = useState(isFavorite);
 
   const toggleHeart = async () => {
