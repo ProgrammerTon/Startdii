@@ -4,6 +4,9 @@ import { Redirect, router } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import Menu from "./FriendGuildMenu";
 import FriendGuildList from "./FriendGuildList";
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { useGuildContext } from "../../context/GuildProvider";
+import { guildList } from "../../services/GuildService";
 const { width, height } = Dimensions.get('window');
 
 export default function SharePage() {
