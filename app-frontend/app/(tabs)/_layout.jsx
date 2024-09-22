@@ -42,8 +42,8 @@ const animate2 = {
 
 const frame1 = {
   0: { scale: 0 },
-  0.3: { scale: 0.9 },
-  0.5: { scale: 0.2 },
+  0.3: { scale: 0.2 },
+  0.5: { scale: 0.5 },
   0.8: { scale: 0.7 },
   1: { scale: 1 },
 };
