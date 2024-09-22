@@ -17,65 +17,6 @@ export default function SharePage() {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [comfirmShare, setConfirmShare] = useState(false);
 
-  const menuData = [
-    { name: 'Friends' } , { name: 'Guilds' }
-  ]
-
-  const renderContent = () => {
-    switch (activeMenu) {
-      case "Friends":
-        return (
-          <ScrollView>
-            {loadFriendsData.map((item, index) => {
-              return (
-                <FriendGuildList
-                  key={index}
-                  content={item}
-                  isSelected={selectedFriends.includes(index)}
-                  onPress={() => handleFriendSelect(index)}
-                />
-              );
-            })}
-          </ScrollView>
-        );
-      case "Guilds":
-        return (
-          <ScrollView>
-            {loadGuildsData.map((item, index) => {
-              return (
-                <FriendGuildList
-                  key={index}
-                  content={item}
-                  isSelected={selectedGuilds.includes(index)}
-                  onPress={() => handleGuildSelect(index)}
-                />
-              );
-            })}
-          </ScrollView>
-        );
-      default:
-        return (
-          <ScrollView>
-            {loadFriendsData.map((item, index) => {
-              return (
-                <FriendGuildList
-                  key={index}
-                  content={item}
-                  isSelected={selectedFriends.includes(index)}
-                  onPress={() => handleFriendSelect(index)}
-                />
-              );
-            })}
-          </ScrollView>
-        );
-    }
-  };
-
-  const menuItems = [
-    { id: "1", name: "Friends" },
-    { id: "2", name: "Guilds" },
-  ];
-
   const loadGuildsData = [
     {
       id: 1,
@@ -149,6 +90,60 @@ export default function SharePage() {
       title: "Iron Fist"
     }
   ]
+
+  const menuData = [
+    { name: 'Friends' } , { name: 'Guilds' }
+  ]
+
+  const renderContent = () => {
+    switch (activeMenu) {
+      case "Friends":
+        return (
+          <ScrollView>
+            {loadFriendsData.map((item, index) => {
+              return (
+                <FriendGuildList
+                  key={index}
+                  content={item}
+                  isSelected={selectedFriends.includes(index)}
+                  onPress={() => handleFriendSelect(index)}
+                />
+              );
+            })}
+          </ScrollView>
+        );
+      case "Guilds":
+        return (
+          <ScrollView>
+            {loadGuildsData.map((item, index) => {
+              return (
+                <FriendGuildList
+                  key={index}
+                  content={item}
+                  isSelected={selectedGuilds.includes(index)}
+                  onPress={() => handleGuildSelect(index)}
+                />
+              );
+            })}
+          </ScrollView>
+        );
+      default:
+        return (
+          <ScrollView>
+            {loadFriendsData.map((item, index) => {
+              return (
+                <FriendGuildList
+                  key={index}
+                  content={item}
+                  isSelected={selectedFriends.includes(index)}
+                  onPress={() => handleFriendSelect(index)}
+                />
+              );
+            })}
+          </ScrollView>
+        );
+    }
+  };
 
   const handleFriendSelect = (index) => {
     // Allow multiple selections
