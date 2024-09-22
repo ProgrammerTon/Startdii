@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { router } from 'expo-router';
 const ChatSearch = () => {
   return (
     <View style={styles.container}>
@@ -20,12 +20,12 @@ const ChatSearch = () => {
       </View>
 
       {/* Note Button */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push("/chatsystem/H4_NoteUser")}>
         <Text style={styles.buttonText}>Note</Text>
       </TouchableOpacity>
 
       {/* Quiz Button */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push("/chatsystem/H5_QuizUser")}>
         <Text style={styles.buttonText}>Quiz</Text>
       </TouchableOpacity>
     </View>
