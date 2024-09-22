@@ -97,6 +97,54 @@ export default function SharePage() {
       id: 3,
       title: "tonkung",
     },
+    {
+      id: 4,
+      title: "Happy Frog"
+    },
+    {
+      id: 5,
+      title: "Silent Whisper"
+    },
+    {
+      id: 6,
+      title: "Golden Eagle"
+    },
+    {
+      id: 7,
+      title: "Crimson Tide"
+    },
+    {
+      id: 8,
+      title: "Blue Phoenix"
+    },
+    {
+      id: 9,
+      title: "Cosmic Dancer"
+    },
+    {
+      id: 10,
+      title: "Shadow Blade"
+    },
+    {
+      id: 11,
+      title: "Doom Bringer"
+    },
+    {
+      id: 12,
+      title: "Radiant Star"
+    },
+    {
+      id: 13,
+      title: "Nebula Knight"
+    },
+    {
+      id: 14,
+      title: "Thunder Strike"
+    },
+    {
+      id: 15,
+      title: "Iron Fist"
+    }
   ]
 
   const handleFriendSelect = (index) => {
@@ -243,6 +291,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     paddingVertical: 10,
     marginRight: 20,
+    marginTop: height * 0.02,
     marginBottom: height * 0.05,
     backgroundColor: "#0270ED",
     borderRadius: 20,
