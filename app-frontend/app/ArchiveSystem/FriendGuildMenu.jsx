@@ -5,7 +5,6 @@ import {
   StyleSheet,
 } from "react-native";
 import React, { useState } from "react";
-import colors from "../../constants/color";
 import fonts from "../../constants/font";
 
 export default function FriendGuildMenu({ menuData, activeMenu, setActiveMenu }) {
@@ -32,9 +31,10 @@ export default function FriendGuildMenu({ menuData, activeMenu, setActiveMenu })
               onPress={() => setActiveMenu(menu.name)}>
               <View style={styles.container}>
                 <Text
-                    style={activeButtonClass}
-                    onLayout={(event) => handleTextLayout(index, event)}>
-                    {menu.name}
+                  style={activeButtonClass}
+                  onLayout={(event) => handleTextLayout(index, event)}
+                >
+                  {menu.name}
                 </Text>
                 <View style={activeLineClass}></View>
               </View>
@@ -48,30 +48,30 @@ export default function FriendGuildMenu({ menuData, activeMenu, setActiveMenu })
 
 const styles = StyleSheet.create({
   menuContainer: {
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      paddingHorizontal: '10%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    paddingHorizontal: '10%',
   },
   container: {
-      alignItems: 'center',
+    alignItems: 'center',
   },
   selected: {
-      color: colors.red,
+    color: "#0270ED",
   },
   notselected: {
-      color: colors.gray_font,
+    color: "#888",
   },
   lineSelected: {
-      height: 3,
-      borderRadius: 50,
-      backgroundColor: colors.red,
-      marginTop: '8%',
+    height: 3,
+    borderRadius: 50,
+    backgroundColor: "#0270ED",
+    marginTop: 5,
   },
   lineNotSelected: {
-      height: 3,
-      borderRadius: 50,
-      backgroundColor: colors.gray_bg,
-      marginTop: '8%',
+    height: 3,
+    borderRadius: 50,
+    backgroundColor: "#888",
+    marginTop: 5,
   },
 });
