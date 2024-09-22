@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const ArchiveMainPage = () => {
+const ChatSearch = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -32,7 +32,7 @@ const ArchiveMainPage = () => {
   );
 };
 
-export default ArchiveMainPage;
+export default ChatSearch;
 
 const styles = StyleSheet.create({
   container: {

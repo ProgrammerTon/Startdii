@@ -48,10 +48,10 @@ const DevPage = () => {
         <Text className="text-lg">D2_QuizMaker</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/chatsystem/H1_user")}
+        onPress={() => router.push("/chatsystem/H3_user")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">Chat 2</Text>
+        <Text className="text-lg">ChatSearch</Text>
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => router.push("/guild/I1_GuildPage")}
