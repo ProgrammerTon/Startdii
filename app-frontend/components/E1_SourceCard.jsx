@@ -7,10 +7,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import images from "../constants/images";
 import colors from "../constants/color";
 import fonts from "../constants/font";
-
-const SourceCard = ({ id, title, author, tags, isFavorite }) => {
-  const rating = 4;
-
+import SharePage from "../app/ArchiveSystem/SharePage";
+const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const [isLiked, setIsLiked] = useState(isFavorite);
 
   const toggleHeart = async () => {
@@ -70,7 +68,7 @@ const SourceCard = ({ id, title, author, tags, isFavorite }) => {
               style={styles.heartIcon}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/ArchiveSystem/SharePage")}>
             <FontAwesome
               name="share"
               size={30}

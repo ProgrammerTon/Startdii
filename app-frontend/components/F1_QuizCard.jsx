@@ -64,7 +64,7 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
               style={styles.heartIcon}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/ArchiveSystem/SharePage")}>
             <FontAwesome
               name="share"
               size={30}

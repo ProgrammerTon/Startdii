@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
 import ChatSearchBar from "../../components/ChatSearchBar";
@@ -8,6 +8,8 @@ import LeaveGuildWindow from "./LeaveGuildWindow";
 import { useGuildContext } from "../../context/GuildProvider";
 import { leavePerson } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import NoteGuildPage from "./I6_NoteGuild";
+import QuizGuildPage from "./I7_QuizGuild";
 
 const GuildSettingPage = () => {
   const guildName = "Test_guild";
@@ -56,7 +58,6 @@ const GuildSettingPage = () => {
 
       {/* Buttons */}
       <View style={styles.buttonsContainer}>
-
         <TouchableOpacity
           style={styles.button}
           onPress={() => router.push("/guild/I4_Member")}
@@ -75,6 +76,17 @@ const GuildSettingPage = () => {
           code={guild.inviteCode}
         />
 
+        {/* Search Button */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            router.push("/guild/I5_Search");
+          }}
+        >
+          <Ionicons name="search" size={24} color="green" />
+          <Text style={styles.buttonText}>SEARCH</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.button} onPress={openLeaveWindow}>
           <Ionicons name="exit-outline" size={24} color="green" />
           <Text style={styles.buttonText}>LEAVE</Text>
@@ -85,9 +97,18 @@ const GuildSettingPage = () => {
           handleLeave={handleLeave}
         />
       </View>
-      <View style={styles.SearchContainer}>
-        <ChatSearchBar />
+
+      {/* Note and Quiz Buttons */}
+      <View style={styles.noteQuizContainer}>
+        <TouchableOpacity style={styles.noteButton} onPress={() => router.push("/guild/I6_NoteGuild")}>
+          <Text style={styles.noteQuizText}>Note</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/guild/I7_QuizGuild")}>
+          <Text style={styles.noteQuizText}>Quiz</Text>
+        </TouchableOpacity>
       </View>
+
     </View>
   );
 };
@@ -108,9 +129,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     position: "relative",
     justifyContent: "center",
-  },
-  backButton: {
-    marginRight: 10,
   },
   headerText: {
     color: "black",
@@ -148,5 +166,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     position: "relative",
     justifyContent: "center",
+  },
+  noteQuizContainer: {
+    flexDirection: "column",
+    justifyContent: "space-around",
+    marginTop: 30,
+  },
+  noteButton: {
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    padding: 100,
+    alignItems: "center",
+  },
+  quizButton: {
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    padding: 50,
+    alignItems: "center",
+  },
+  noteQuizText: {
+    fontSize: 30,
+    color: "black",
+    marginTop: 5,
+    fontWeight: "bold",
   },
 });
