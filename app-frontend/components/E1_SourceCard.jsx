@@ -40,14 +40,16 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={[fonts.EngBold18, styles.titleText]}>{title}</Text>
+        <Text style={[fonts.EngBold18, styles.titleText]}>
+            {title?.length > 18 ? `${title?.slice(0, 18)}...` : title}
+          </Text>
           <Text style={[fonts.EngMedium12, styles.authorText]}>
             By {author}
           </Text>
           <TagList
             tags={tags
-              .slice(0, 3)
-              .map((tag) => (tag.length > 8 ? `${tag.slice(0, 8)}...` : tag))}
+              .slice(0, 2)
+              .map((tag) => (tag.length > 4 ? `${tag.slice(0, 4)}...` : tag))}
             title={title}
             id={id}
           />
