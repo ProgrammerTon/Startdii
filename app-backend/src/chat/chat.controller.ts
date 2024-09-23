@@ -23,6 +23,16 @@ export class ChatController {
     return this.chatService.findAll();
   }
 
+  @Get(':chatId/note')
+  getNotes(@Param(':chatId', ParseObjectIdPipe) chatId: ObjectId) {
+    return this.chatService.getNotes(chatId);
+  }
+
+  @Get(':chatId/quiz')
+  getQuizzes(@Param(':chatId', ParseObjectIdPipe) chatId: ObjectId) {
+    return this.chatService.getQuizzes(chatId);
+  }
+  
   @Get(':chatId')
   findRecentChatOffset(
     @Query() query: { offset: number },

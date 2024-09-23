@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Chat, ChatDocument, messageType } from './entities/chat.entity';
+import { Quiz } from 'src/quizs/entities/quiz.entity';
+import { Source } from 'src/sources/entities/source.entity';
 import { UsersService } from 'src/users/users.service';
 import { ObjectId } from 'mongodb';
 import { ChatListService } from 'src/users/chatlist.service';
@@ -15,6 +17,14 @@ export class ChatService {
 
     private userService: UsersService,
   ) {}
+
+  async getNotes(chatId: ObjectId): Promise<any> {
+    return this.chatModel.find({ _id: chatId, msgType: 'note' }).exec();
+  }
+
+  async getQuizzes(chatId: ObjectId): Promise<any> {
+    return this.chatModel.find({ _id: chatId, msgType: 'quiz' }).exec();
+  }
 
   async create(msg: messageData): Promise<Chat> {
     const chat = new Chat();
