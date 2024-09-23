@@ -11,6 +11,7 @@ import {
 import { Redirect, router, useLocalSearchParams } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
+import SourceCard from "../../components/E1_SourceCard";
 
 const ChatScreen = () => {
   const [guildName, setGuildName] = useState("");
@@ -123,6 +124,22 @@ const ChatScreen = () => {
           renderItem={({ item, index }) => {
             if (item === null) {
               return null;
+            }
+            if (item.type === "Source") {
+              const fav = user?.favorite_sources?.includes(item?.source._id)
+                ? true
+                : false;
+              console.log(item);
+              return (
+                <SourceCard
+                  id={item?.source._id}
+                  title={item?.source.title}
+                  author={item?.source.ownerId?.username}
+                  tags={item?.source.tags}
+                  rating={item?.source.avg_rating_score}
+                  isFavorite={fav}
+                />
+              );
             }
             item.isCurrentUser = item.sender == user.username;
             return (
