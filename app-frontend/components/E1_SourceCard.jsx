@@ -13,7 +13,7 @@ import { unfavoriteSource } from "../services/SourceService";
 import { useGlobalContext } from "../context/GlobalProvider";
 const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const [isLiked, setIsLiked] = useState(isFavorite);
-  const {user} = useGlobalContext();
+  const { user } = useGlobalContext();
   const toggleHeart = async () => {
     if (!isLiked) {
       const data = await favoriteSource(id, user._id);
@@ -40,7 +40,7 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
         </View>
 
         <View style={styles.contentContainer}>
-        <Text style={[fonts.EngBold18, styles.titleText]}>
+          <Text style={[fonts.EngBold18, styles.titleText]}>
             {title?.length > 18 ? `${title?.slice(0, 18)}...` : title}
           </Text>
           <Text style={[fonts.EngMedium12, styles.authorText]}>
@@ -73,7 +73,14 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
               style={styles.heartIcon}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push({ pathname: "/ArchiveSystem/SharePage", params: { shareid: id } })}>
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: "/ArchiveSystem/SharePage",
+                params: { shareid: id, type: "Source" },
+              })
+            }
+          >
             <FontAwesome
               name="share"
               size={30}

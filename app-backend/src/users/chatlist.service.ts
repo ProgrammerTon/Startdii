@@ -62,6 +62,16 @@ export class ChatListService {
       .exec();
   }
 
+  async findChatList(chatId: ObjectId, ownerId: ObjectId) {
+    return await this.chatListModel
+      .findOne({
+        chatroom: chatId,
+        ownerId: ownerId,
+      })
+      .populate('userId', 'username')
+      .exec();
+  }
+
   async findAll() {
     return this.userModel.find().exec();
   }
