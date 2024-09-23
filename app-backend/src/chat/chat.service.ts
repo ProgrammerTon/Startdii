@@ -37,8 +37,34 @@ export class ChatService {
       chat.chatId,
       savedChat._id,
     );
-    console.log(newUpdate);
-    return savedChat;
+    let transformChat: any = savedChat;
+    if (msg.type == messageType.source) {
+      transformChat = this.chatModel
+        .findById(savedChat._id)
+        .populate('userId', 'username')
+        .populate({
+          path: 'sourceId',
+          select: 'title tags avg_rating_score createdAt',
+          populate: {
+            path: 'ownerId',
+            select: 'username',
+          },
+        });
+    }
+    if (msg.type == messageType.quiz) {
+      transformChat = await this.chatModel
+        .findById(savedChat._id)
+        .populate('userId', 'username')
+        .populate({
+          path: 'quizId',
+          select: 'title tags avg_rating_score createdAt',
+          populate: {
+            path: 'ownerId',
+            select: 'username',
+          },
+        });
+    }
+    return transformChat;
   }
 
   async findAll() {
@@ -60,7 +86,7 @@ export class ChatService {
       .populate('userId', 'username')
       .populate({
         path: 'sourceId',
-        select: 'title tags avg_rating_score',
+        select: 'title tags avg_rating_score createdAt',
         populate: {
           path: 'ownerId',
           select: 'username',
@@ -68,7 +94,7 @@ export class ChatService {
       })
       .populate({
         path: 'quizId',
-        select: 'title tags avg_rating_score',
+        select: 'title tags avg_rating_score createdAt',
         populate: {
           path: 'ownerId',
           select: 'username',
@@ -102,6 +128,40 @@ export class ChatService {
       }
     });
     return transformMessages;
+  }
+
+  async findAllSource(chatId: ObjectId): Promise<Chat[] | null> {
+    const messages = await this.chatModel
+      .find({ msgType: messageType.source, chatId: chatId })
+      .sort({ createdAt: -1 })
+      .populate('userId', 'username')
+      .populate({
+        path: 'sourceId',
+        select: 'title tags avg_rating_score createdAt',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .exec();
+    return messages;
+  }
+
+  async findAllQuiz(chatId: ObjectId): Promise<Chat[] | null> {
+    const messages = await this.chatModel
+      .find({ msgType: messageType.quiz, chatId: chatId })
+      .sort({ createdAt: -1 })
+      .populate('userId', 'username')
+      .populate({
+        path: 'quizId',
+        select: 'title tags avg_rating_score createdAt',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .exec();
+    return messages;
   }
 }
 

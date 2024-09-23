@@ -32,10 +32,27 @@ const GlobalProvider = ({ children }) => {
     setMessages((prevMessages) => [...prevMessages, ...chat]);
   };
 
-  const sendMessage = ({ room, text, sender, type, time }) => {
+  const sendMessage = ({
+    room,
+    text,
+    sender,
+    type,
+    time,
+    sourceId,
+    quizId,
+  }) => {
+    //type can be "Text" "Source" "Quiz"
     socket.emit(
       "newMessage",
-      JSON.stringify({ rooms: room, text, sender, type, time })
+      JSON.stringify({
+        rooms: room,
+        text,
+        sender,
+        type,
+        time,
+        sourceId,
+        quizId,
+      })
     );
   };
 
