@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
 import SourceCard from "../components/E1_SourceCard.jsx";
 import QuizCard from "../components/F1_QuizCard.jsx";
@@ -14,42 +14,44 @@ import Feather from "@expo/vector-icons/Feather";
 import { getSource } from "../services/SourceService";
 import { useGlobalContext } from "../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import colors from "../constants/color.js";
 import fonts from "../constants/font.js";
 import { getQuizInventory } from "../services/UserService";
 import { getSourceInventory } from "../services/UserService";
 import ToggleNoteQuiz from "./ToggleNoteQuiz.jsx";
 const Inventory = () => {
-  const {user} = useGlobalContext();
+  const { user } = useGlobalContext();
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] = useState(false);
+  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] =
+    useState(false);
   const [isSearchNote, setIsSearchNote] = useState(true);
   const [refreshing, setRefreshing] = useState(true);
-  
+
   const fetchData = async () => {
     setLoading(true);
-    if(isSearchNote){
+    if (isSearchNote) {
       const sources = await getSourceInventory(user._id);
-      setData(sources);
-    }
-    else{
+      setData(sources ? sources.reverse() : []);
+    } else {
       const quizes = await getQuizInventory(user._id);
-      setData(quizes);
+      setData(quizes ? quizes.reverse() : []);
     }
     setLoading(false);
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isSearchNote]);
 
-  useEffect(()=>{
-    fetchData();
-  }, [isSearchNote])
-  
   const openAddToggleNoteQuizVisible = () => {
     setAddToggleNoteQuizVisible(true);
   };
@@ -73,11 +75,10 @@ const Inventory = () => {
     }
   };
 
-
   return (
     <View style={styles.container}>
       <TouchableOpacity>
-      <TouchableOpacity
+        <TouchableOpacity
           onPress={openAddToggleNoteQuizVisible}
           style={{ marginRight: 10 }}
         >

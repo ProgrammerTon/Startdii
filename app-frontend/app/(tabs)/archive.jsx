@@ -89,7 +89,7 @@ const ArchiveMainPage = () => {
       if (isSearchNote) {
         if (ActiveFilter === "Favorite") {
           const fav_sources = await getFavoriteSource(user._id);
-          setData(fav_sources.favorite_sources);
+          setData(fav_sources.favorite_sources.reverse());
         } else {
           const sources = await getSource(
             of,
@@ -114,7 +114,7 @@ const ArchiveMainPage = () => {
       } else {
         if (ActiveFilter === "Favorite") {
           const fav_quizzes = await getFavoriteQuiz(user._id);
-          setData(fav_quizzes.favorite_quizzes);
+          setData(fav_quizzes.favorite_quizzes.reverse());
         } else {
           const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
 
