@@ -89,9 +89,20 @@ export class UsersController {
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('chatlist')
-  findChatList(@Request() req) {
+  getChatList(@Request() req) {
     const ownerId = new Types.ObjectId(req.user.id);
     return this.chatListService.findAllChatList(ownerId);
+  }
+
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('chatlist/:chatId')
+  findChatList(
+    @Request() req,
+    @Param('chatId', ParseObjectIdPipe) chatId: ObjectId,
+  ) {
+    const ownerId = new Types.ObjectId(req.user.id);
+    return this.chatListService.findChatList(chatId, ownerId);
   }
 
   @Get(':username')
