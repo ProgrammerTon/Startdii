@@ -69,6 +69,8 @@ export class UsersService {
   }
 
   async findAll() {
+    const user = await this.userModel.findById(new Types.ObjectId('66cf16772bd720377e20a4bd')).exec();
+    console.log(user);
     return this.userModel.find().exec();
   }
 

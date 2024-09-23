@@ -120,6 +120,7 @@ export class SourcesService {
 
   async delete(id: ObjectId): Promise<void> {
     await this.removeSourceFromTags(id);
+    await this.removeSourceFromUsers(id);
     await this.sourceModel.findByIdAndDelete(id).exec();
   }
 
@@ -150,6 +151,14 @@ export class SourcesService {
       );
       tag.save();
     }
+  }
+
+  async removeSourceFromUsers(id: ObjectId) {
+    id = new Types.ObjectId(id);
+    await this.userModel
+    .updateMany({ favorite_sources: id }, { $pull: { favorite_sources: id }}).exec();
+    await this.userModel
+    .updateMany({ sources: id }, { $pull: { sources: id }}).exec();
   }
 
   async findById(id: ObjectId): Promise<Source | null> {

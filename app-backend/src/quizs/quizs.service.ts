@@ -3,7 +3,7 @@ import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Quiz, QuizDocument, Status } from './entities/quiz.entity';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { plainToInstance } from 'class-transformer';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
 import { ObjectId } from 'mongodb';
@@ -139,6 +139,7 @@ export class QuizsService {
           quiz.questions[i].correct += Number(res[i]);
         else quiz.questions[i].correct = Number(res[i]);
       }
+      id = new Types.ObjectId(id);
       user.quiz_history.push({ id: id, results: res, answers: ans });
     }
     await this.quizModel
@@ -211,6 +212,7 @@ export class QuizsService {
 
   async remove(id: ObjectId) {
     await this.removeQuizFromTags(id);
+    await this.removeQuizFromUsers(id);
     await this.quizModel.findByIdAndDelete(id);
   }
 
@@ -274,6 +276,19 @@ export class QuizsService {
       tag.quizs = tag.quizs.filter((element) => String(element) !== String(id));
       tag.save();
     }
+  }
+
+  async removeQuizFromUsers(id: ObjectId) {
+    id = new Types.ObjectId(id);
+    await this.userModel
+    .updateMany({ favorite_quizzes: id }, { $pull: { favorite_quizzes: id }}).exec();
+    await this.userModel
+    .updateMany({ quizzes: id }, { $pull: { quizzes: id }}).exec();
+    await this.userModel
+    .updateMany({ 'quiz_history.id': id }, { $pull: { quiz_history: { id: id } }}).exec();
+    let sid = id.toString();
+    await this.userModel
+    .updateMany({ 'quiz_history.id': sid }, { $pull: { quiz_history: { id: sid } }}).exec();
   }
 
   async findByOffsetWithTitle(
