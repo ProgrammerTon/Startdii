@@ -1,5 +1,16 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, RefreshControl, TouchableOpacity, Dimensions, ScrollView, Modal, Alert } from 'react-native';
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  RefreshControl,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
+  Modal,
+  Alert,
+} from "react-native";
 import { Redirect, router } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import Menu from "./FriendGuildMenu";
@@ -7,7 +18,8 @@ import FriendGuildList from "./FriendGuildList";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
 import { guildList } from "../../services/GuildService";
-const { width, height } = Dimensions.get('window');
+import { getChatList } from "../../services/ChatListService";
+const { width, height } = Dimensions.get("window");
 
 export default function SharePage() {
   const [activeMenu, setActiveMenu] = useState("Friends");
@@ -17,90 +29,108 @@ export default function SharePage() {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [comfirmShare, setConfirmShare] = useState(false);
 
-  const loadGuildsData = [
-    {
-      id: 1,
-      title: "เรารู้เขารู้เรา",
-    },
-    {
-      id: 2,
-      title: "แต่เขาแกล้งรู้เรา",
-    },
-  ]
+  // const guildsData = [
+  //   {
+  //     id: 1,
+  //     title: "เรารู้เขารู้เรา",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "แต่เขาแกล้งรู้เรา",
+  //   },
+  // ];
+  const [guildsData, setGuildsData] = useState([]);
+  const [friendsData, setFriendsData] = useState([]);
 
-  const loadFriendsData = [
-    {
-      id: 1,
-      title: "Mr.BOB",
-    },
-    {
-      id: 2,
-      title: "Juaz Juazzz",
-    },
-    {
-      id: 3,
-      title: "tonkung",
-    },
-    {
-      id: 4,
-      title: "Happy Frog"
-    },
-    {
-      id: 5,
-      title: "Silent Whisper"
-    },
-    {
-      id: 6,
-      title: "Golden Eagle"
-    },
-    {
-      id: 7,
-      title: "Crimson Tide"
-    },
-    {
-      id: 8,
-      title: "Blue Phoenix"
-    },
-    {
-      id: 9,
-      title: "Cosmic Dancer"
-    },
-    {
-      id: 10,
-      title: "Shadow Blade"
-    },
-    {
-      id: 11,
-      title: "Doom Bringer"
-    },
-    {
-      id: 12,
-      title: "Radiant Star"
-    },
-    {
-      id: 13,
-      title: "Nebula Knight"
-    },
-    {
-      id: 14,
-      title: "Thunder Strike"
-    },
-    {
-      id: 15,
-      title: "Iron Fist"
-    }
-  ]
+  // const loadFriendsData = [
+  //   {
+  //     id: 1,
+  //     title: "Mr.BOB",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Juaz Juazzz",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "tonkung",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Happy Frog"
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Silent Whisper"
+  //   },
+  //   {
+  //     id: 6,
+  //     title: "Golden Eagle"
+  //   },
+  //   {
+  //     id: 7,
+  //     title: "Crimson Tide"
+  //   },
+  //   {
+  //     id: 8,
+  //     title: "Blue Phoenix"
+  //   },
+  //   {
+  //     id: 9,
+  //     title: "Cosmic Dancer"
+  //   },
+  //   {
+  //     id: 10,
+  //     title: "Shadow Blade"
+  //   },
+  //   {
+  //     id: 11,
+  //     title: "Doom Bringer"
+  //   },
+  //   {
+  //     id: 12,
+  //     title: "Radiant Star"
+  //   },
+  //   {
+  //     id: 13,
+  //     title: "Nebula Knight"
+  //   },
+  //   {
+  //     id: 14,
+  //     title: "Thunder Strike"
+  //   },
+  //   {
+  //     id: 15,
+  //     title: "Iron Fist"
+  //   }
+  // ]
 
-  const menuData = [
-    { name: 'Friends' } , { name: 'Guilds' }
-  ]
+  const menuData = [{ name: "Friends" }, { name: "Guilds" }];
+
+  const loadUserData = async () => {
+    const chatList = await getChatList();
+    const filteredData = chatList.map((chat, ind) => ({
+      id: chat.chatroom,
+      title: chat.userId.username,
+    }));
+    setFriendsData(filteredData);
+  };
+
+  const loadGuildsData = async () => {
+    const guilds = await guildList();
+    const formattedGuilds = guilds.map((guild) => ({
+      id: guild._id,
+      title: guild.name,
+    }));
+    setGuildsData(formattedGuilds);
+  };
 
   const renderContent = () => {
     switch (activeMenu) {
       case "Friends":
         return (
           <ScrollView>
-            {loadFriendsData.map((item, index) => {
+            {friendsData.map((item, index) => {
               return (
                 <FriendGuildList
                   key={index}
@@ -115,7 +145,7 @@ export default function SharePage() {
       case "Guilds":
         return (
           <ScrollView>
-            {loadGuildsData.map((item, index) => {
+            {guildsData.map((item, index) => {
               return (
                 <FriendGuildList
                   key={index}
@@ -130,7 +160,7 @@ export default function SharePage() {
       default:
         return (
           <ScrollView>
-            {loadFriendsData.map((item, index) => {
+            {friendsData.map((item, index) => {
               return (
                 <FriendGuildList
                   key={index}
@@ -161,9 +191,7 @@ export default function SharePage() {
   const handleGuildSelect = (index) => {
     // Allow multiple selections
     if (selectedGuilds.includes(index)) {
-      const newSelectedGuilds = selectedGuilds.filter(
-        (item) => item !== index
-      );
+      const newSelectedGuilds = selectedGuilds.filter((item) => item !== index);
       setSelectedGuilds(newSelectedGuilds); // Unselect if the same index is pressed
     } else {
       const newSelectedGuilds = [...selectedGuilds, index].sort(); // Sort the array after adding the new index
@@ -173,13 +201,19 @@ export default function SharePage() {
 
   const handleShare = () => {
     if (selectedGuilds.length === 0 && selectedFriends.length === 0) {
-      setConfirmShare(false)
+      setConfirmShare(false);
       Alert.alert("Select at least 1 friend or guild!!");
+    } else {
+      console.log(selectedFriends, selectedGuilds);
     }
-    else {
-      console.log(selectedFriends, selectedGuilds)
-    }
-  }
+  };
+
+  useEffect(() => {
+    setRefreshing(true);
+    loadUserData();
+    loadGuildsData();
+    setRefreshing(false);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -193,15 +227,19 @@ export default function SharePage() {
         <Text style={styles.title}>Share with</Text>
       </View>
       <View style={styles.selection}>
-        <Menu menuData={menuData} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+        <Menu
+          menuData={menuData}
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+        />
       </View>
-      <View style={styles.content}>
-        {renderContent()}
-      </View>
+      <View style={styles.content}>{renderContent()}</View>
       <View>
         <TouchableOpacity
           style={styles.shareButton}
-          onPress={() => {console.log(selectedFriends, selectedGuilds), setConfirmShare(true)}}
+          onPress={() => {
+            console.log(selectedFriends, selectedGuilds), setConfirmShare(true);
+          }}
         >
           <Text style={{ fontSize: 16, color: "#fff" }}> Share </Text>
         </TouchableOpacity>
@@ -231,9 +269,10 @@ export default function SharePage() {
                   Cancel{" "}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.confirmShareButton}
-                onPress={() => handleShare()}>
+                onPress={() => handleShare()}
+              >
                 <Text
                   style={{ fontSize: 16, fontWeight: "bold", color: "#fff" }}
                 >
@@ -247,7 +286,7 @@ export default function SharePage() {
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -275,7 +314,7 @@ const styles = StyleSheet.create({
   },
   selection: {
     marginVertical: 20,
-    width: width*0.7,
+    width: width * 0.7,
     alignSelf: "center",
   },
   selectionText: {
