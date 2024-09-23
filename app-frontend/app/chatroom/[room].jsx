@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
+  ActivityIndicator,
   View,
   TextInput,
   TouchableOpacity,
@@ -11,6 +12,7 @@ import {
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { router, useLocalSearchParams } from "expo-router";
 import { fetchChat } from "../../services/ChatService";
+import { findChatList } from "../../services/ChatListService";
 
 const ChatView = ({ message, index, name }) => {
   return (
@@ -31,6 +33,7 @@ const ChatRoom = () => {
   const { room } = useLocalSearchParams();
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
+  const [userTitle, setUserTitle] = useState("");
   const [offset, setOffset] = useState(1);
   const [loading, setLoading] = useState(false);
   const {
@@ -53,6 +56,7 @@ const ChatRoom = () => {
     console.log("Join Room", room);
     joinRoom(room);
     fetchChat();
+    fetchChatInfo();
     return () => {
       leaveRoom(room);
       clearMessage();
@@ -63,6 +67,13 @@ const ChatRoom = () => {
     setLoading(true);
     fetchMessage(room, offset);
     setOffset(offset + 1);
+    setLoading(false);
+  };
+
+  const fetchChatInfo = async () => {
+    setLoading(true);
+    const data = await findChatList(room);
+    setUserTitle(data.userId.username);
     setLoading(false);
   };
 
@@ -83,7 +94,7 @@ const ChatRoom = () => {
         <TouchableOpacity>
           <Text style={styles.backButton}>{"<"}</Text>
         </TouchableOpacity>
-        <Text style={styles.headerText}>Tonkung</Text>
+        <Text style={styles.headerText}>{userTitle}</Text>
         <TouchableOpacity onPress={() => router.push("/chatsystem/H3_user")}>
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
