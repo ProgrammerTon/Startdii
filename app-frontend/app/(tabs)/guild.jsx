@@ -27,15 +27,6 @@ const GuildPage = () => {
   const { isLogged } = useGlobalContext();
   const { setGuildId } = useGuildContext();
 
-  useEffect(() => {
-    if (!isLogged) {
-      router.replace("/sign-in");
-    } else {
-      loadGuildsData();
-      setRefreshing(false);
-    }
-  }, []);
-
   useFocusEffect(
     useCallback(() => {
       if (!isLogged) {

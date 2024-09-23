@@ -11,16 +11,17 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import { Redirect, router , useLocalSearchParams} from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import Menu from "./FriendGuildMenu";
 import FriendGuildList from "./FriendGuildList";
 import { getChatList } from "../../services/ChatListService";
 import { guildList } from "../../services/GuildService";
+import { useGlobalContext } from "../../context/GlobalProvider";
 const { width, height } = Dimensions.get("window");
 
 export default function SharePage() {
-  const { shareid } = useLocalSearchParams();
+  const { shareid, type } = useLocalSearchParams();
   const [activeMenu, setActiveMenu] = useState("Friends");
   const [guilds, setGuilds] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -28,6 +29,7 @@ export default function SharePage() {
   const [selectedGuilds, setSelectedGuilds] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [comfirmShare, setConfirmShare] = useState(false);
+  const { user, sendMessage } = useGlobalContext();
 
   // const guildsData = [
   //   {
@@ -178,7 +180,9 @@ export default function SharePage() {
   const handleFriendSelect = (index) => {
     // Allow multiple selections
     if (selectedFriends.includes(index)) {
-      const newSelectedFriends = selectedFriends.filter(item => item !== index);
+      const newSelectedFriends = selectedFriends.filter(
+        (item) => item !== index
+      );
       setSelectedFriends(newSelectedFriends);
     } else {
       setSelectedFriends([...selectedFriends, index].sort());
@@ -202,9 +206,25 @@ export default function SharePage() {
     } else {
       console.log(
         selectedFriends.map((index) => friendsData[index].id),
-        selectedGuilds.map((index) => guildsData[index].id),
+        selectedGuilds.map((index) => guildsData[index].id)
       );
-      console.log(shareid);
+      const data = {
+        sender: user.username,
+        type,
+        time: new Date().toLocaleTimeString().slice(0, 5),
+      };
+      if (type === "Quiz") {
+        data.quizId = shareid;
+      }
+      if (type === "Source") {
+        data.sourceId = shareid;
+      }
+      selectedFriends.map((index) => {
+        sendMessage({ room: friendsData[index].id, ...data });
+      });
+      selectedGuilds.map((index) => {
+        sendMessage({ room: guildsData[index].id, ...data });
+      });
     }
   };
 
@@ -255,9 +275,7 @@ export default function SharePage() {
                 style={styles.cancelShareButton}
                 onPress={() => setConfirmShare(false)}
               >
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                  Cancel
-                </Text>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.confirmShareButton}
