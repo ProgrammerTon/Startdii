@@ -42,7 +42,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('newMessage')
   async handleMessage(client: Socket, payload: any) {
     const data = JSON.parse(payload);
-    if (payload.type == messageType.text) {
+    if (data.type == messageType.text) {
       this.server.to(data.rooms).emit('message', payload);
       await this.chatService.create(data);
       return;

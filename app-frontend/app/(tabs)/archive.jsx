@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,7 +17,7 @@ import { getFavoriteSource, getSource } from "../../services/SourceService";
 import { getFavoriteQuiz, getQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid.jsx";
 import colors from "../../constants/color.js";
 
@@ -89,7 +89,7 @@ const ArchiveMainPage = () => {
       if (isSearchNote) {
         if (ActiveFilter === "Favorite") {
           const fav_sources = await getFavoriteSource(user._id);
-          setData(fav_sources.favorite_sources);
+          setData(fav_sources.favorite_sources.reverse());
         } else {
           const sources = await getSource(
             of,
@@ -114,7 +114,7 @@ const ArchiveMainPage = () => {
       } else {
         if (ActiveFilter === "Favorite") {
           const fav_quizzes = await getFavoriteQuiz(user._id);
-          setData(fav_quizzes.favorite_quizzes);
+          setData(fav_quizzes.favorite_quizzes.reverse());
         } else {
           const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
 
@@ -164,15 +164,17 @@ const ArchiveMainPage = () => {
   }, [filterDirection]);
 
   // Initial fetch when component loads and handle login redirection
-  useEffect(() => {
-    if (!isLogged) {
-      router.replace("/sign-in");
-    } else {
-      setRefreshing(true);
-      fetchData(); // Initial data fetch
-      setRefreshing(false);
-    }
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (!isLogged) {
+        router.replace("/sign-in");
+      } else {
+        setRefreshing(true);
+        fetchData(); // Initial data fetch
+        setRefreshing(false);
+      }
+    }, [])
+  );
 
   const ToggleFilterChange = (filter) => {
     if (ActiveFilter === filter) {

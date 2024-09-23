@@ -30,6 +30,9 @@ const UserFinderPage = () => {
   }, []);
 
   const onSubmit = async () => {
+    if (searchUsername.trim() === "") {
+      return null;
+    }
     const user = await getUserByUsername(searchUsername);
     if (!user) {
       Alert.alert("Not Found User");
