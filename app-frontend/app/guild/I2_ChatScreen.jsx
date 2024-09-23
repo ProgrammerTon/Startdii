@@ -11,8 +11,8 @@ import {
 import { Redirect, router } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
-import QuizCard from "../../components/F1_QuizCard";
 import SourceCard from "../../components/E1_SourceCard";
+import QuizCard from "../../components/F1_QuizCard";
 
 const ChatScreen = () => {
   const [guildName, setGuildName] = useState("");
@@ -33,6 +33,8 @@ const ChatScreen = () => {
     clearMessage,
   } = useGlobalContext();
 
+  //console.log("Data I got:", messages);
+  
   useEffect(() => {
     if (room) {
       joinRoom(room);
@@ -110,6 +112,7 @@ const ChatScreen = () => {
   //   },
   // ]);
 
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -123,47 +126,68 @@ const ChatScreen = () => {
       </View>
       {user ? (
         <FlatList
-        data={messages}
-        renderItem={({ item, index }) => {
-          if (item.type === "Shared Component" && item.componentData) {
-            const { componentProps, type } = item.componentData;
-      
-            return (
-              <View key={index}>
-                {type === "source" ? (
-                  <SourceCard {...componentProps} /> 
-                ) : (
-                  <QuizCard {...componentProps} /> 
-                )}
-              </View>
-            );
-          }
-      
-          item.isCurrentUser = item.sender === user.username;
-          return (
-            <View
-              key={item.id}
-              style={[
-                styles.messageWrapper,
-                item.isCurrentUser ? styles.currentUser : styles.otherUser,
-              ]}
-            >
-              {!item.isCurrentUser && (
-                <Text style={styles.messageSender}>{item.sender}</Text>
-              )}
-              <View style={styles.messageBubble}>
-                <Text style={styles.messageText}>{item.text}</Text>
-              </View>
-              <Text style={styles.messageTime}>{item.time}</Text>
-            </View>
-          );
-        }}
-        keyExtractor={(item, index) => `${item.sender}-${index}`}
-        inverted // This makes the list scroll from bottom to top
-        onEndReached={fetchChat}
-        onEndReachedThreshold={0.1} // Adjust as needed
-        ListFooterComponent={loading && <ActivityIndicator />}
-      />
+          data={messages}
+          renderItem={({ item, index }) => {
+            if (item === null) {
+              return null;
+            }
+            item.isCurrentUser = item.sender == user.username;
+            if (type="Source") {
+              const fav = user?.favorite_sources?.includes(item?._id)
+                ? true
+                : false;
+              return (
+                <SourceCard
+                  id={item?._id}
+                  title={item?.title}
+                  author={item?.ownerId?.username}
+                  tags={item?.tags}
+                  rating={item?.avg_rating_score}
+                  isFavorite={fav}
+                />
+              );
+            }
+            else if (type="Quiz") {
+              const fav = user?.favorite_quizzes?.includes(item?._id)
+                ? true
+                : false;
+              return (
+                <QuizCard
+                  id={item?._id}
+                  title={item?.title}
+                  author={item?.ownerId?.username}
+                  tags={item?.tags}
+                  rating={item?.avg_rating_score}
+                  isFavorite={fav}
+                />
+              );
+            }
+            else{
+              return (
+                <View
+                  key={item.id}
+                  style={[
+                    styles.messageWrapper,
+                    item.isCurrentUser ? styles.currentUser : styles.otherUser,
+                  ]}
+                >
+                  {!item.isCurrentUser && (
+                    <Text style={styles.messageSender}>{item.sender}</Text>
+                  )}
+                  <View style={styles.messageBubble}>
+                    <Text style={styles.messageText}>{item.text}</Text>
+                  </View>
+                  <Text style={styles.messageTime}>{item.time}</Text>
+                </View>
+              );
+            }
+          }}
+          keyExtractor={(item, index) => `${index}`}
+          inverted // This makes the list scroll from bottom to top
+          onEndReached={fetchChat}
+          onEndReachedThreshold={0.1} // Adjust as needed
+          ListFooterComponent={loading && <ActivityIndicator />}
+        />
       ) : null}
 
       <View style={styles.inputContainer}>
