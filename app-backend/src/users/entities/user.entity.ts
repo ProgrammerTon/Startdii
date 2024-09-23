@@ -44,6 +44,12 @@ export class User {
   @Prop({ name: 'quizzes', ref: 'Quiz' })
   quizzes: ObjectId[];
 
+  @Prop({ name: 'character', default: 'Char1' })
+  character: string;
+
+  @Prop({ name: 'characterColor', default: '#FCA3E3' })
+  characterColor: string;
+
   @Prop({ name: 'favorite_quizzes', ref: 'Quiz' })
   favorite_quizzes: ObjectId[] = [];
 

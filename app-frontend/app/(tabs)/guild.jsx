@@ -27,16 +27,14 @@ const GuildPage = () => {
   const { isLogged } = useGlobalContext();
   const { setGuildId } = useGuildContext();
 
-  useFocusEffect(
-    useCallback(() => {
-      if (!isLogged) {
-        router.replace("/sign-in");
-      } else {
-        loadGuildsData();
-        setRefreshing(false);
-      }
-    }, [])
-  );
+  useEffect(() => {
+    if (!isLogged) {
+      router.replace("/sign-in");
+    } else {
+      loadGuildsData();
+      setRefreshing(false);
+    }
+  }, []);
 
   const loadGuildsData = async () => {
     const guilds = await guildList();
@@ -107,7 +105,7 @@ const GuildPage = () => {
             guild={item}
             onPress={() => {
               setGuildId(item.id);
-              router.push("/guild/I2_ChatScreen");
+              router.push(`/guild/${item.id}`);
             }}
           />
         )}
