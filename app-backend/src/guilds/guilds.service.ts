@@ -45,6 +45,18 @@ export class GuildsService {
     return this.guildModel.find({ memberIdList: { $in: [memberId] } }).exec();
   }
 
+  async findGuildByMemberIdAndName(
+    memberId: ObjectId,
+    guildName: string,
+  ): Promise<Guild[]> {
+    return this.guildModel
+      .find({
+        memberIdList: { $in: [memberId] },
+        $regex: new RegExp(guildName, 'i'),
+      })
+      .exec();
+  }
+
   async findGuildById(id: ObjectId): Promise<any> {
     const data = await this.guildModel
       .findById({ _id: id })
