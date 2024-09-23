@@ -27,7 +27,7 @@ const ChatView = ({ message, index, name }) => {
   );
 };
 
-const ArchiveMainPage = () => {
+const ChatRoom = () => {
   const { room } = useLocalSearchParams();
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
@@ -83,7 +83,7 @@ const ArchiveMainPage = () => {
         <TouchableOpacity>
           <Text style={styles.backButton}>{"<"}</Text>
         </TouchableOpacity>
-        <Text style={styles.headerText}>{user.username}</Text>
+        <Text style={styles.headerText}>Tonkung</Text>
         <TouchableOpacity onPress={() => router.push("/chatsystem/H3_user")}>
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
@@ -114,7 +114,7 @@ const ArchiveMainPage = () => {
   );
 };
 
-export default ArchiveMainPage;
+export default ChatRoom;
 
 const styles = StyleSheet.create({
   container: {

@@ -17,7 +17,6 @@ import Menu from "./FriendGuildMenu";
 import FriendGuildList from "./FriendGuildList";
 import { getChatList } from "../../services/ChatListService";
 import { guildList } from "../../services/GuildService";
-import { getChatList } from "../../services/ChatListService";
 const { width, height } = Dimensions.get("window");
 
 export default function SharePage() {
@@ -200,7 +199,10 @@ export default function SharePage() {
       setConfirmShare(false);
       Alert.alert("Select at least 1 friend or guild!!");
     } else {
-      console.log(selectedFriends, selectedGuilds);
+      console.log(
+        selectedFriends.map((index) => friendsData[index].id),
+        selectedGuilds.map((index) => guildsData[index].id)
+      );
     }
   };
 
