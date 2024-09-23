@@ -8,9 +8,12 @@ import images from "../constants/images";
 import colors from "../constants/color";
 import fonts from "../constants/font";
 import SharePage from "../app/ArchiveSystem/SharePage";
+import { favoriteSource } from "../services/SourceService";
+import { unfavoriteSource } from "../services/SourceService";
+import { useGlobalContext } from "../context/GlobalProvider";
 const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const [isLiked, setIsLiked] = useState(isFavorite);
-
+  const {user} = useGlobalContext();
   const toggleHeart = async () => {
     if (!isLiked) {
       const data = await favoriteSource(id, user._id);
@@ -147,6 +150,5 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     marginVertical: 5,
-    color: colors.gray_button,
   },
 });

@@ -17,7 +17,7 @@ import { router } from "expo-router";
 import colors from "../constants/color.js";
 import fonts from "../constants/font.js";
 
-const Inventory = () => {
+const History = () => {
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ const Inventory = () => {
   );
 };
 
-export default Inventory;
+export default History;
 
 const styles = StyleSheet.create({
   container: {

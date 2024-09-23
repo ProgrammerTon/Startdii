@@ -11,7 +11,7 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import { Redirect, router } from "expo-router";
+import { Redirect, router , useLocalSearchParams} from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import Menu from "./FriendGuildMenu";
 import FriendGuildList from "./FriendGuildList";
@@ -20,6 +20,7 @@ import { guildList } from "../../services/GuildService";
 const { width, height } = Dimensions.get("window");
 
 export default function SharePage() {
+  const { shareid } = useLocalSearchParams();
   const [activeMenu, setActiveMenu] = useState("Friends");
   const [guilds, setGuilds] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -201,8 +202,9 @@ export default function SharePage() {
     } else {
       console.log(
         selectedFriends.map((index) => friendsData[index].id),
-        selectedGuilds.map((index) => guildsData[index].id)
+        selectedGuilds.map((index) => guildsData[index].id),
       );
+      console.log(shareid);
     }
   };
 
@@ -236,7 +238,7 @@ export default function SharePage() {
         <TouchableOpacity
           style={styles.shareButton}
           onPress={() => {
-            console.log(selectedFriends, selectedGuilds), setConfirmShare(true);
+            setConfirmShare(true);
           }}
         >
           <Text style={{ fontSize: 16, color: "#fff" }}> Share </Text>

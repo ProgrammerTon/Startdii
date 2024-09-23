@@ -16,6 +16,8 @@ import { ActivityIndicator } from "react-native";
 import { router } from "expo-router";
 import colors from "../constants/color.js";
 import fonts from "../constants/font.js";
+import { getQuizInventory } from "../services/UserService";
+import { getSourceInventory } from "../services/UserService";
 
 const Inventory = () => {
   const [data, setData] = useState([]);
