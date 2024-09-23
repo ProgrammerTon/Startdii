@@ -8,6 +8,7 @@ import {
 import { Socket, Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { ChatService } from './chat.service';
+import { messageType } from './entities/chat.entity';
 
 @WebSocketGateway(3002, { cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -41,7 +42,31 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('newMessage')
   async handleMessage(client: Socket, payload: any) {
     const data = JSON.parse(payload);
-    this.server.to(data.rooms).emit('message', payload);
-    await this.chatService.create(data);
+    if (payload.type == messageType.text) {
+      this.server.to(data.rooms).emit('message', payload);
+      await this.chatService.create(data);
+      return;
+    } else {
+      const newMessage: any = await this.chatService.create(data);
+      console.log('Hello', newMessage);
+      const formattedChat = {
+        source: {
+          _id: newMessage.sourceId._id.toString(),
+          ownerId: {
+            _id: newMessage.sourceId.ownerId._id.toString(),
+            username: newMessage.sourceId.ownerId.username,
+          },
+          title: newMessage.sourceId.title,
+          tags: newMessage.sourceId.tags,
+          avg_rating_score: newMessage.sourceId.avg_rating_score,
+        },
+        sender: newMessage.userId.username,
+        type: newMessage.msgType,
+        time: data.time,
+      };
+      console.log('Nah', formattedChat);
+      this.server.to(data.rooms).emit('message', formattedChat);
+      return;
+    }
   }
 }

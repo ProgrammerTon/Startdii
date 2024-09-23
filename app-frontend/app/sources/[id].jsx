@@ -27,6 +27,7 @@ import { Image } from "expo-image";
 import { baseUrl } from "@/constants/const";
 import { getUserRatingSource } from "../../services/SourceService";
 import TestReportNote from "../reportsystem/ReportNote";
+import { router } from "expo-router";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -202,10 +203,12 @@ const SourceDetailPage = () => {
             <FontAwesome name="download" size={24} color="#0E68D9" />
             <Text style={styles.buttonText}>Download</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          {/*
+          <TouchableOpacity style={styles.button} onPress={() => router.push("/ArchiveSystem/SharePage")}>
             <FontAwesome name="share" size={24} color="#0E68D9" />
             <Text style={styles.buttonText}>Share</Text>
           </TouchableOpacity>
+          */}
         </View>
 
         <RatingBlock

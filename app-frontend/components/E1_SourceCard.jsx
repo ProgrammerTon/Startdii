@@ -7,12 +7,13 @@ import { FontAwesome } from "@expo/vector-icons";
 import images from "../constants/images";
 import colors from "../constants/color";
 import fonts from "../constants/font";
-
-const SourceCard = ({ id, title, author, tags, isFavorite }) => {
-  const rating = 4;
-
+import SharePage from "../app/ArchiveSystem/SharePage";
+import { favoriteSource } from "../services/SourceService";
+import { unfavoriteSource } from "../services/SourceService";
+import { useGlobalContext } from "../context/GlobalProvider";
+const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const [isLiked, setIsLiked] = useState(isFavorite);
-
+  const {user} = useGlobalContext();
   const toggleHeart = async () => {
     if (!isLiked) {
       const data = await favoriteSource(id, user._id);
@@ -39,14 +40,16 @@ const SourceCard = ({ id, title, author, tags, isFavorite }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={[fonts.EngBold18, styles.titleText]}>{title}</Text>
+        <Text style={[fonts.EngBold18, styles.titleText]}>
+            {title?.length > 18 ? `${title?.slice(0, 18)}...` : title}
+          </Text>
           <Text style={[fonts.EngMedium12, styles.authorText]}>
             By {author}
           </Text>
           <TagList
             tags={tags
-              .slice(0, 3)
-              .map((tag) => (tag.length > 8 ? `${tag.slice(0, 8)}...` : tag))}
+              .slice(0, 2)
+              .map((tag) => (tag.length > 4 ? `${tag.slice(0, 4)}...` : tag))}
             title={title}
             id={id}
           />
@@ -70,7 +73,7 @@ const SourceCard = ({ id, title, author, tags, isFavorite }) => {
               style={styles.heartIcon}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push("/ArchiveSystem/SharePage")}>
             <FontAwesome
               name="share"
               size={30}
@@ -149,6 +152,5 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     marginVertical: 5,
-    color: colors.gray_button,
   },
 });

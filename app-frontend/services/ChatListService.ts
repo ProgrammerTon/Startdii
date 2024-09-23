@@ -39,3 +39,19 @@ export async function getChatList() {
   }
   return data;
 }
+
+export async function findChatList(chatId:string) {
+  const token = await getCurrentToken();
+  const res = await fetch(`${baseUrl}/users/chatlist/${chatId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data: any = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return data;
+}
