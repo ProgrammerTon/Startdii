@@ -25,14 +25,18 @@ import {
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { Image } from "expo-image";
 import { baseUrl } from "@/constants/const";
+import { getUserRatingSource } from "../../services/SourceService";
+import TestReportNote from "../reportsystem/ReportNote";
+import { router } from "expo-router";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
   const [source, setSource] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useGlobalContext();
+  const [ratingScore, setRatingScore] = useState(0);
 
-  const fecthSource = async (id) => {
+  const fetchSource = async (id) => {
     const data = await findSource(id);
     const dateStr = data.updatedAt;
     const date = new Date(dateStr);
@@ -72,8 +76,9 @@ const SourceDetailPage = () => {
 
   useEffect(() => {
     setRefreshing(true);
-    fecthSource(id);
+    fetchSource(id);
     fetchComments(id);
+    fetchRating();
     setRefreshing(false);
   }, []);
 
@@ -107,7 +112,13 @@ const SourceDetailPage = () => {
 
   const handleRating = async (sc) => {
     const data = await ratingSource(id, user._id, sc);
+    setRatingScore(sc);
     console.log(data);
+  };
+
+  const fetchRating = async () => {
+    const data = await getUserRatingSource(user._id, id);
+    setRatingScore(data);
   };
 
   const fetchComments = async () => {
@@ -123,7 +134,8 @@ const SourceDetailPage = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fecthSource(id);
+    await fetchSource(id);
+    await fetchRating();
     await fetchComments(id);
     setRefreshing(false);
   };
@@ -153,8 +165,12 @@ const SourceDetailPage = () => {
         }
       >
         {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>{source?.title}</Text>
+        <View style={styles.headerWrapper}>
+            <Text style={styles.headerStyle}>{source?.title}</Text>
+            <TestReportNote
+              sourceId={id} // Pass the sourceId to the report window
+              onPress={() => console.log('Report Button Pressed')}
+            />
         </View>
 
         {/* Description and Info */}
@@ -187,17 +203,19 @@ const SourceDetailPage = () => {
             <FontAwesome name="download" size={24} color="#0E68D9" />
             <Text style={styles.buttonText}>Download</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          {/*
+          <TouchableOpacity style={styles.button} onPress={() => router.push("/ArchiveSystem/SharePage")}>
             <FontAwesome name="share" size={24} color="#0E68D9" />
             <Text style={styles.buttonText}>Share</Text>
           </TouchableOpacity>
+          */}
         </View>
 
         <RatingBlock
           ScoreRating={Math.round(source?.score)}
           numComment={source?.count}
         />
-        <RatingBar onRatingChange={handleRating} />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
 
         {/* CommentBar with input */}
         <CommentBar
@@ -285,5 +303,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#0E68D9",
     marginTop: 5,
+  },
+  headerWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#FEDD3A",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    position: "relative",
+    justifyContent: "center",
+  },
+  headerStyle: {
+    fontSize: 24,
+    fontWeight: "bold"
   },
 });

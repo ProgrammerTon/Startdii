@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, FlatList, RefreshControl } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { getCurrentToken } from "../utils/asyncstroage";
 import { getQuizHistory } from "../services/UserService";
 import { useGlobalContext } from "../context/GlobalProvider";
 import QuizCard from "../components/F1_QuizCard";
+import { useFocusEffect } from "expo-router";
 
 const Quiz_History_Page = () => {
   const [data, setData] = useState(null);
@@ -13,7 +14,7 @@ const Quiz_History_Page = () => {
     const token = await getCurrentToken();
     const data = await getQuizHistory(token);
     console.log("User Quiz History", data);
-    setData(data);
+    setData(data ? data.reverse() : []);
   };
 
   const handleRefresh = async () => {
@@ -22,9 +23,11 @@ const Quiz_History_Page = () => {
     setRefreshing(false);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   return (
     <FlatList

@@ -7,6 +7,8 @@ import TagList from "./TagList";
 import { FontAwesome } from "@expo/vector-icons";
 import { favoriteQuiz, unfavoriteQuiz } from "../services/QuizService";
 import { useGlobalContext } from "../context/GlobalProvider";
+import colors from "../constants/color";
+import fonts from "../constants/font";
 
 const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
   const { user } = useGlobalContext();
@@ -37,18 +39,24 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
           <Text style={styles.timestamp}>1 day ago</Text>
         </View>
         <View style={styles.contentContainer}>
-          <Text style={styles.titleText}>
+          <Text style={[fonts.EngBold18, styles.titleText]}>
             {title?.length > 18 ? `${title?.slice(0, 18)}...` : title}
           </Text>
           <Text style={styles.authorText}>By {author}</Text>
-          <TagList tags={tags} title={title} />
+          <TagList
+            tags={tags
+              .slice(0, 3)
+              .map((tag) => (tag.length > 8 ? `${tag.slice(0, 8)}...` : tag))}
+            title={title}
+            id={id}
+          />
           <View style={styles.ratingContainer}>
             {[...Array(5)].map((_, index) => (
               <FontAwesome
                 key={index}
                 name={index < rating ? "star" : "star-o"}
-                size={16}
-                color="#FEDD3A"
+                size={20}
+                color={colors.yellow}
               />
             ))}
           </View>
@@ -58,15 +66,22 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
             <FontAwesome
               name={isLiked ? "heart" : "heart-o"}
               size={30}
-              color={isLiked ? "red" : "gray"}
+              color={isLiked ? colors.red : colors.gray_button}
               style={styles.heartIcon}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: "/ArchiveSystem/SharePage",
+                params: { shareid: id, type: "Quiz" },
+              })
+            }
+          >
             <FontAwesome
               name="share"
               size={30}
-              color="gray"
+              color={colors.gray_font}
               style={styles.icon}
             />
           </TouchableOpacity>
@@ -80,36 +95,37 @@ export default QuizCard;
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: "white",
+    backgroundColor: colors.white,
     width: "100%",
-    height: 120,
-    marginTop: 13,
+    height: 140,
+    marginTop: 15,
     flexDirection: "row",
     borderRadius: 10,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
     elevation: 5,
   },
   imageContainer: {
-    width: 75,
+    width: 90,
     height: "100%",
-    backgroundColor: "#FEDD3A",
+    backgroundColor: colors.green,
     justifyContent: "center",
     alignItems: "center",
   },
   quizImage: {
-    width: 50,
-    height: 50,
+    width: 110,
+    height: 110,
+    right: 3,
+    top: 15,
   },
   timestamp: {
     position: "absolute",
     bottom: 8,
-    left: 8,
     fontSize: 12,
-    color: "#888888",
+    color: colors.gray_font,
   },
   contentContainer: {
     flex: 1,
@@ -117,25 +133,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   titleText: {
-    fontSize: 18,
-    fontWeight: "bold",
+    color: colors.black,
+    marginVertical: 2,
   },
   authorText: {
-    fontSize: 14,
-    color: "gray",
-    marginBottom: 5,
+    color: colors.gray_font,
+    marginBottom: 6,
   },
   ratingContainer: {
     flexDirection: "row",
-    marginTop: 5,
+    marginTop: 7,
+    gap: 4,
   },
   iconContainer: {
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
   },
-  icon: {
+  shareIcon: {
+    marginVertical: 5,
+    color: colors.gray_font,
+  },
+  heartIcon: {
     marginVertical: 5,
   },
 });

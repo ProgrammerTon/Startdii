@@ -42,4 +42,24 @@ export class ChatController {
     const offset = query.offset;
     return this.chatService.findChatRoomByOffset(offset, chatId);
   }
+
+  @Get(':chatId/source')
+  findSourceChat(
+    @Query() query: { offset: number },
+    @Param('chatId', ParseObjectIdPipe) chatId: ObjectId,
+  ) {
+    if (!query.offset) return this.chatService.findAllSource(chatId);
+    const offset = query.offset;
+    return this.chatService.findChatRoomByOffset(offset, chatId);
+  }
+
+  @Get(':chatId/quiz')
+  findQuizChat(
+    @Query() query: { offset: number },
+    @Param('chatId', ParseObjectIdPipe) chatId: ObjectId,
+  ) {
+    if (!query.offset) return this.chatService.findAllQuiz(chatId);
+    const offset = query.offset;
+    return this.chatService.findChatRoomByOffset(offset, chatId);
+  }
 }

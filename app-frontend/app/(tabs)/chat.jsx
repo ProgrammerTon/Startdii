@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,11 +10,10 @@ import {
   RefreshControl,
 } from "react-native";
 import Componentchatuser from "../chatsystem/Componentchatuser";
-import { router } from "expo-router";
+import { router, useFocusEffect ,useLocalSearchParams} from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { getChatList } from "../../services/ChatListService";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
-
 // Get screen width for responsive design
 const { width } = Dimensions.get("window");
 
@@ -23,14 +22,16 @@ const ChatH1 = () => {
   const [refreshing, setRefreshing] = useState(true);
   const { user, isLogged } = useGlobalContext();
 
-  useEffect(() => {
-    if (!isLogged) {
-      router.replace("/sign-in");
-    } else {
-      loadUserData();
-      setRefreshing(false);
-    }
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (!isLogged) {
+        router.replace("/sign-in");
+      } else {
+        loadUserData();
+        setRefreshing(false);
+      }
+    }, [])
+  );
 
   const loadUserData = async () => {
     setRefreshing(true);

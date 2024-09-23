@@ -1,5 +1,5 @@
 // GuildPage.js
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,10 +8,11 @@ import {
   FlatList,
   RefreshControl,
   SafeAreaView,
-  Dimensions
+  TouchableHighlight,
+  Dimensions,
 } from "react-native";
 import GuildButton from "../guild/GuildButton";
-import { Redirect, router } from "expo-router";
+import { Redirect, router, useFocusEffect } from "expo-router";
 import CreateJoinGuild from "../guild/GuildCreateOrJoin";
 import { guildList } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
@@ -26,14 +27,16 @@ const GuildPage = () => {
   const { isLogged } = useGlobalContext();
   const { setGuildId } = useGuildContext();
 
-  useEffect(() => {
-    if (!isLogged) {
-      router.replace("/sign-in");
-    } else {
-      loadGuildsData();
-      setRefreshing(false);
-    }
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (!isLogged) {
+        router.replace("/sign-in");
+      } else {
+        loadGuildsData();
+        setRefreshing(false);
+      }
+    }, [])
+  );
 
   const loadGuildsData = async () => {
     const guilds = await guildList();
@@ -90,6 +93,12 @@ const GuildPage = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Guild</Text>
       </View>
+      <TouchableHighlight
+        onPress={() => router.push("/dev")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Dev</Text>
+      </TouchableHighlight>
       <FlatList
         data={guilds}
         renderItem={({ item, index }) => (

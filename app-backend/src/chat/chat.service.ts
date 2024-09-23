@@ -43,12 +43,40 @@ export class ChatService {
     chat.userId = user._id;
     const createdChat = new this.chatModel(chat);
     const savedChat = await createdChat.save();
-    const newUpdate = await this.chatListService.updateChatList(
-      chat.chatId,
-      savedChat._id,
-    );
-    console.log(newUpdate);
-    return savedChat;
+    if (msg.type === messageType.text) {
+      const newUpdate = await this.chatListService.updateChatList(
+        chat.chatId,
+        savedChat._id,
+      );
+    }
+    let transformChat: any = savedChat;
+    if (msg.type == messageType.source) {
+      transformChat = this.chatModel
+        .findById(savedChat._id)
+        .populate('userId', 'username')
+        .populate({
+          path: 'sourceId',
+          select: 'title tags avg_rating_score createdAt',
+          populate: {
+            path: 'ownerId',
+            select: 'username',
+          },
+        });
+    }
+    if (msg.type == messageType.quiz) {
+      transformChat = await this.chatModel
+        .findById(savedChat._id)
+        .populate('userId', 'username')
+        .populate({
+          path: 'quizId',
+          select: 'title tags avg_rating_score createdAt',
+          populate: {
+            path: 'ownerId',
+            select: 'username',
+          },
+        });
+    }
+    return transformChat;
   }
 
   async findAll() {
@@ -68,17 +96,84 @@ export class ChatService {
       .skip(offset)
       .limit(size)
       .populate('userId', 'username')
+      .populate({
+        path: 'sourceId',
+        select: 'title tags avg_rating_score createdAt',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .populate({
+        path: 'quizId',
+        select: 'title tags avg_rating_score createdAt',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
       .exec();
-    const transformMessages = (messages) => {
-      return messages.map((msg) => ({
-        text: msg.message,
-        sender: msg.userId.username,
-        type: 'Text', // Assuming all messages are of type "Text"
-        time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
-      }));
-    };
-    const formattedMessages = transformMessages(messages);
-    return formattedMessages;
+    const transformMessages: any = messages.map((msg: any) => {
+      if (msg.msgType === messageType.text) {
+        return {
+          text: msg.message,
+          sender: msg.userId.username,
+          type: msg.msgType,
+          time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
+        };
+      }
+      if (msg.msgType === messageType.source) {
+        return {
+          source: msg.sourceId,
+          sender: msg.userId.username,
+          type: msg.msgType,
+          time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
+        };
+      }
+      if (msg.msgType === messageType.quiz) {
+        return {
+          quiz: msg.quizId,
+          sender: msg.userId.username,
+          type: msg.msgType,
+          time: new Date(msg.createdAt).toLocaleTimeString().slice(0, 5), // Formats the time as HH:MM
+        };
+      }
+    });
+    return transformMessages;
+  }
+
+  async findAllSource(chatId: ObjectId): Promise<Chat[] | null> {
+    const messages = await this.chatModel
+      .find({ msgType: messageType.source, chatId: chatId })
+      .sort({ createdAt: -1 })
+      .populate('userId', 'username')
+      .populate({
+        path: 'sourceId',
+        select: 'title tags avg_rating_score createdAt',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .exec();
+    return messages;
+  }
+
+  async findAllQuiz(chatId: ObjectId): Promise<Chat[] | null> {
+    const messages = await this.chatModel
+      .find({ msgType: messageType.quiz, chatId: chatId })
+      .sort({ createdAt: -1 })
+      .populate('userId', 'username')
+      .populate({
+        path: 'quizId',
+        select: 'title tags avg_rating_score createdAt',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .exec();
+    return messages;
   }
 }
 

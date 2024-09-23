@@ -11,6 +11,8 @@ import {
 import { Redirect, router } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
+import QuizCard from "../../components/F1_QuizCard";
+import SourceCard from "../../components/E1_SourceCard";
 
 const ChatScreen = () => {
   const [guildName, setGuildName] = useState("");
@@ -121,33 +123,47 @@ const ChatScreen = () => {
       </View>
       {user ? (
         <FlatList
-          data={messages}
-          renderItem={({ item, index }) => {
-            item.isCurrentUser = item.sender == user.username;
+        data={messages}
+        renderItem={({ item, index }) => {
+          if (item.type === "Shared Component" && item.componentData) {
+            const { componentProps, type } = item.componentData;
+      
             return (
-              <View
-                key={item.id}
-                style={[
-                  styles.messageWrapper,
-                  item.isCurrentUser ? styles.currentUser : styles.otherUser,
-                ]}
-              >
-                {!item.isCurrentUser && (
-                  <Text style={styles.messageSender}>{item.sender}</Text>
+              <View key={index}>
+                {type === "source" ? (
+                  <SourceCard {...componentProps} /> 
+                ) : (
+                  <QuizCard {...componentProps} /> 
                 )}
-                <View style={styles.messageBubble}>
-                  <Text style={styles.messageText}>{item.text}</Text>
-                </View>
-                <Text style={styles.messageTime}>{item.time}</Text>
               </View>
             );
-          }}
-          keyExtractor={(item, index) => `${item.sender}-${index}`}
-          inverted // This makes the list scroll from bottom to top
-          onEndReached={fetchChat}
-          onEndReachedThreshold={0.1} // Adjust as needed
-          ListFooterComponent={loading && <ActivityIndicator />}
-        />
+          }
+      
+          item.isCurrentUser = item.sender === user.username;
+          return (
+            <View
+              key={item.id}
+              style={[
+                styles.messageWrapper,
+                item.isCurrentUser ? styles.currentUser : styles.otherUser,
+              ]}
+            >
+              {!item.isCurrentUser && (
+                <Text style={styles.messageSender}>{item.sender}</Text>
+              )}
+              <View style={styles.messageBubble}>
+                <Text style={styles.messageText}>{item.text}</Text>
+              </View>
+              <Text style={styles.messageTime}>{item.time}</Text>
+            </View>
+          );
+        }}
+        keyExtractor={(item, index) => `${item.sender}-${index}`}
+        inverted // This makes the list scroll from bottom to top
+        onEndReached={fetchChat}
+        onEndReachedThreshold={0.1} // Adjust as needed
+        ListFooterComponent={loading && <ActivityIndicator />}
+      />
       ) : null}
 
       <View style={styles.inputContainer}>

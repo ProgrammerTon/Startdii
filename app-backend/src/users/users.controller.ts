@@ -6,6 +6,7 @@ import {
   Request,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -70,22 +71,38 @@ export class UsersController {
     return quizs;
   }
 
-
-
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('guild')
-  findGuildByMemberId(@Request() req) {
+  findGuildByMemberId(@Request() req, @Query() query: { title: string }) {
     const memberId = new Types.ObjectId(req.user.id);
-    return this.guildsService.findGuildByMemberId(memberId);
+    if (!query.title) {
+      return this.guildsService.findGuildByMemberId(memberId);
+    } else {
+      return this.guildsService.findGuildByMemberIdAndName(
+        memberId,
+        query.title,
+      );
+    }
   }
 
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('chatlist')
-  findChatList(@Request() req) {
+  getChatList(@Request() req) {
     const ownerId = new Types.ObjectId(req.user.id);
     return this.chatListService.findAllChatList(ownerId);
+  }
+
+  @Roles(Role.Customer)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('chatlist/:chatId')
+  findChatList(
+    @Request() req,
+    @Param('chatId', ParseObjectIdPipe) chatId: ObjectId,
+  ) {
+    const ownerId = new Types.ObjectId(req.user.id);
+    return this.chatListService.findChatList(chatId, ownerId);
   }
 
   @Get(':username')
@@ -98,13 +115,31 @@ export class UsersController {
   }
 
   @Get(':ownerId/sources')
-  getSources(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
-    return this.usersService.getSources(id);
+  getSources(
+    @Param('ownerId', ParseObjectIdPipe) id: ObjectId,
+    @Query()
+    query: {
+      title: string | null;
+    },
+  ) {
+    if (!query.title) {
+      query.title = '';
+    }
+    return this.usersService.getSources(id, query.title);
   }
 
   @Get(':ownerId/quizs')
-  getQuizzes(@Param('ownerId', ParseObjectIdPipe) id: ObjectId) {
-    return this.usersService.getQuizzes(id);
+  getQuizzes(
+    @Param('ownerId', ParseObjectIdPipe) id: ObjectId,
+    @Query()
+    query: {
+      title: string | null;
+    },
+  ) {
+    if (!query.title) {
+      query.title = '';
+    }
+    return this.usersService.getQuizzes(id, query.title);
   }
 
   @Patch('favorite_sources/add/:userId/:sourceId')
@@ -150,15 +185,19 @@ export class UsersController {
   }
 
   @Get(':userId/rating/source/:sourceId')
-  getSourceRating(@Param('userId', ParseObjectIdPipe) userId: ObjectId
-, @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId) {
+  getSourceRating(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('sourceId', ParseObjectIdPipe) sourceId: ObjectId,
+  ) {
     return this.usersService.getSourceRating(userId, sourceId);
   }
 
   @Get(':userId/rating/quiz/:quizId')
-  getQuizRating(@Param('userId', ParseObjectIdPipe) userId: ObjectId
-, @Param('quizId', ParseObjectIdPipe) quizId: ObjectId) {
-  return this.usersService.getQuizRating(userId, quizId);
+  getQuizRating(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Param('quizId', ParseObjectIdPipe) quizId: ObjectId,
+  ) {
+    return this.usersService.getQuizRating(userId, quizId);
   }
 
   // @Patch(':id')

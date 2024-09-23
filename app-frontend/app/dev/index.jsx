@@ -48,10 +48,10 @@ const DevPage = () => {
         <Text className="text-lg">D2_QuizMaker</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/chatsystem/H1_user")}
+        onPress={() => router.push("/chatsystem/H3_user")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">Chat 2</Text>
+        <Text className="text-lg">ChatSearch</Text>
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => router.push("/guild/I1_GuildPage")}
@@ -90,10 +90,10 @@ const DevPage = () => {
         <Text className="text-lg">PieChart</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/quizzes/F7_quizstatistic")}
+        onPress={() => router.push("/reportsystem/ReportTest")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">QuizStatistic</Text>
+        <Text className="text-lg">TestReport</Text>
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => router.push("/upload/upload")}
@@ -108,10 +108,16 @@ const DevPage = () => {
         <Text className="text-lg">Profile</Text>
       </TouchableHighlight>
       <TouchableHighlight
-        onPress={() => router.push("/quiz_history_page")}
+        onPress={() => router.push("/dev/test_refresh")}
         className="bg-green-600 p-2 rounded-xl"
       >
-        <Text className="text-lg">Quiz History</Text>
+        <Text className="text-lg">Refresh Page</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/ArchiveSystem/SharePage")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Share Page</Text>
       </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </ScrollView>

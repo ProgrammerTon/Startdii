@@ -30,7 +30,7 @@ import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
 import DressButton from "../../components/DressButton";
 import Frame from "../../components/Frame";
-import History from "../quiz_history_page";
+import QuizHistory from "../../components/QuizHistory";
 
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
@@ -81,7 +81,7 @@ export default function ProfileTest() {
       case "Inventory":
         return <Inventory />;
       case "History":
-        return <History />;
+        return <QuizHistory />;
       default:
         return <WeeklyGoals />;
     }

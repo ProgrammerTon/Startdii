@@ -134,20 +134,40 @@ export class UsersService {
     // return transformedUser;
   }
 
-  async getSources(ownerId: ObjectId) {
-    return await this.userModel
+  async getSources(ownerId: ObjectId, searchTitle: string) {
+    const { sources }: any = await this.userModel
       .findById(ownerId)
       .select('sources')
-      .populate('sources')
+      .populate('sources', '-rating -filename -originalname')
       .exec();
+    if (searchTitle !== '') {
+      const regex = new RegExp(searchTitle, 'i');
+      const result = sources.filter((item) => regex.test(item.title));
+      return result;
+    }
+    return sources;
+    // return await this.userModel
+    //   .findById(ownerId)
+    //   .select('sources')
+    //   .populate('sources', '-rating -filename -originalname')
+    //   .exec();
   }
 
-  async getQuizzes(ownerId: ObjectId) {
-    return await this.userModel
+  async getQuizzes(ownerId: ObjectId, searchTitle: string) {
+    const { quizzes }: any = await this.userModel
       .findById(ownerId)
       .select('quizzes')
-      .populate('quizzes')
+      .populate(
+        'quizzes',
+        '-rating -players -total_score -playing_scores -questions',
+      )
       .exec();
+    if (searchTitle !== '') {
+      const regex = new RegExp(searchTitle, 'i');
+      const result = quizzes.filter((item) => regex.test(item.title));
+      return result;
+    }
+    return quizzes;
   }
 
   async getFavoriteSources(userId: ObjectId) {
@@ -166,15 +186,19 @@ export class UsersService {
       .exec();
   }
 
-  async getSourceRating(userId: ObjectId,oid: ObjectId) {
+  async getSourceRating(userId: ObjectId, oid: ObjectId) {
     let obj = await this.sourceModel.findById(oid);
-    obj.rating = obj.rating.filter(rating => rating.raterId.toString() === userId.toString());
+    obj.rating = obj.rating.filter(
+      (rating) => rating.raterId.toString() === userId.toString(),
+    );
     return obj.rating.length > 0 ? obj.rating[0].score : 0;
   }
 
-  async getQuizRating(userId: ObjectId,oid: ObjectId) {
+  async getQuizRating(userId: ObjectId, oid: ObjectId) {
     let obj = await this.quizModel.findById(oid);
-    obj.rating = obj.rating.filter(rating => rating.raterId.toString() === userId.toString());
+    obj.rating = obj.rating.filter(
+      (rating) => rating.raterId.toString() === userId.toString(),
+    );
     return obj.rating.length > 0 ? obj.rating[0].score : 0;
   }
 

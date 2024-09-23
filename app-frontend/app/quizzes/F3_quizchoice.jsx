@@ -10,7 +10,7 @@ import {
 import { React, useState, useEffect } from "react";
 import QuizChoice from "../../components/QuizChoice";
 import AntDesign from "@expo/vector-icons/AntDesign";
-
+import { router } from "expo-router";
 const { width, height } = Dimensions.get("window");
 
 export default function QuizChoices({
@@ -122,12 +122,13 @@ export default function QuizChoices({
                   Cancel{" "}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.leaveQuizButton}>
+              <TouchableOpacity style={styles.leaveQuizButton} onPress={() => router.back()}>
                 <Text
                   style={{ fontSize: 16, fontWeight: "bold", color: "#fff" }}
                 >
                   {" "}
                   Leave{" "}
+                  
                 </Text>
               </TouchableOpacity>
             </View>

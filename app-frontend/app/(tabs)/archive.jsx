@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,8 +17,9 @@ import { getFavoriteSource, getSource } from "../../services/SourceService";
 import { getFavoriteQuiz, getQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { ActivityIndicator } from "react-native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid.jsx";
+import colors from "../../constants/color.js";
 
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Latest");
@@ -29,10 +30,9 @@ const ArchiveMainPage = () => {
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
   const [refreshing, setRefreshing] = useState(true);
-  const { isLogged } = useGlobalContext();
   const [searchField, setSearchField] = useState("");
   const [isSearchNote, setIsSearchNote] = useState(true);
-  const { user } = useGlobalContext();
+  const { user, isLogged } = useGlobalContext();
 
   const handleToggleSearch = (e) => {
     if (e && !isSearchNote) {
@@ -89,7 +89,7 @@ const ArchiveMainPage = () => {
       if (isSearchNote) {
         if (ActiveFilter === "Favorite") {
           const fav_sources = await getFavoriteSource(user._id);
-          setData(fav_sources.favorite_sources);
+          setData(fav_sources.favorite_sources.reverse());
         } else {
           const sources = await getSource(
             of,
@@ -114,7 +114,7 @@ const ArchiveMainPage = () => {
       } else {
         if (ActiveFilter === "Favorite") {
           const fav_quizzes = await getFavoriteQuiz(user._id);
-          setData(fav_quizzes.favorite_quizzes);
+          setData(fav_quizzes.favorite_quizzes.reverse());
         } else {
           const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
 
@@ -164,15 +164,17 @@ const ArchiveMainPage = () => {
   }, [filterDirection]);
 
   // Initial fetch when component loads and handle login redirection
-  useEffect(() => {
-    if (!isLogged) {
-      router.replace("/sign-in");
-    } else {
-      setRefreshing(true);
-      fetchData(); // Initial data fetch
-      setRefreshing(false);
-    }
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (!isLogged) {
+        router.replace("/sign-in");
+      } else {
+        setRefreshing(true);
+        fetchData(); // Initial data fetch
+        setRefreshing(false);
+      }
+    }, [])
+  );
 
   const ToggleFilterChange = (filter) => {
     if (ActiveFilter === filter) {
@@ -220,7 +222,7 @@ const ArchiveMainPage = () => {
           onPress={openAddToggleNoteQuizVisible}
           style={{ marginRight: 10 }}
         >
-          <Feather name="menu" size={24} color="black" />
+          <Feather name="menu" size={24} color={colors.black} />
         </TouchableOpacity>
         <ToggleNoteQuiz
           visible={AddToggleNoteQuizVisible}
@@ -326,9 +328,10 @@ export default ArchiveMainPage;
 const styles = StyleSheet.create({
   container: {
     flex: 2,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: colors.gray_bg,
     padding: 20,
     paddingTop: 50,
+    // alignItems: "center",
   },
   headerContainer: {
     flexDirection: "row",
@@ -342,7 +345,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   filterButton: {
-    backgroundColor: "#3367d6",
+    backgroundColor: colors.blue,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
@@ -351,7 +354,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inactiveFilterButton: {
-    backgroundColor: "#cccccc",
+    backgroundColor: colors.gray_button,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
@@ -360,14 +363,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   filterText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 12,
+  },
+  listContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  flatList: {
+    width: "100%",
   },
   emptyContainer: {
     flex: 1,
   },
   floatingButton: {
-    backgroundColor: "#FF6347",
+    backgroundColor: colors.red,
     borderRadius: 30,
     width: 60,
     height: 60,
@@ -376,23 +387,23 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 100,
     right: 20,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
     shadowRadius: 4,
+    elevation: 5,
     zIndex: 1000,
   },
   toggleButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#ef6d11",
+    backgroundColor: colors.black,
     justifyContent: "center",
     alignItems: "center",
   },
   floatingButtonText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 32,
     fontWeight: "bold",
   },
