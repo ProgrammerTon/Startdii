@@ -11,6 +11,8 @@ import {
 import { Redirect, router, useLocalSearchParams } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
+import SourceCard from "../../components/E1_SourceCard";
+import QuizCard from "../../components/F1_QuizCard";
 
 const ChatScreen = () => {
   const [guildName, setGuildName] = useState("");
@@ -123,6 +125,38 @@ const ChatScreen = () => {
           renderItem={({ item, index }) => {
             if (item === null) {
               return null;
+            }
+            if (item.type === "Source") {
+              const fav = user?.favorite_sources?.includes(item?.source._id)
+                ? true
+                : false;
+              console.log(item);
+              return (
+                <SourceCard
+                  id={item?.source._id}
+                  title={item?.source.title}
+                  author={item?.source.ownerId?.username}
+                  tags={item?.source.tags}
+                  rating={item?.source.avg_rating_score}
+                  isFavorite={fav}
+                />
+              );
+            }
+            if (item.type === "Quiz") {
+              const fav = user?.favorite_quizzes?.includes(item?.quiz._id)
+                ? true
+                : false;
+              console.log(item);
+              return (
+                <QuizCard
+                  id={item?.quiz._id}
+                  title={item?.quiz.title}
+                  author={item?.quiz.ownerId?.username}
+                  tags={item?.quiz.tags}
+                  rating={item?.quiz.avg_rating_score}
+                  isFavorite={fav}
+                />
+              );
             }
             item.isCurrentUser = item.sender == user.username;
             return (

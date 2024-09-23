@@ -48,8 +48,8 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
           </Text>
           <TagList
             tags={tags
-              .slice(0, 2)
-              .map((tag) => (tag.length > 4 ? `${tag.slice(0, 4)}...` : tag))}
+              ?.slice(0, 2)
+              .map((tag) => (tag?.length > 4 ? `${tag?.slice(0, 4)}...` : tag))}
             title={title}
             id={id}
           />
