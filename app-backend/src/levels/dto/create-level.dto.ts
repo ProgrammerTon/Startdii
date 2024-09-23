@@ -1,4 +1,4 @@
-import { IsAlpha, IsNotEmpty } from 'class-validator';
+import { IsAlpha, IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 
@@ -8,15 +8,15 @@ export class CreateLevelDto {
   ownerId: ObjectId;
 
   @ApiProperty()
-  @IsNotEmpty()
-  level: number;
+  @IsOptional()
+  level?: number;
 
   @ApiProperty()
-  @IsNotEmpty()
-  current_exp: number;
+  @IsOptional()
+  current_exp?: number;
 
   @ApiProperty()
-  @IsNotEmpty()
-  required_exp: number;
+  @IsOptional()
+  required_exp?: number;
 
 }

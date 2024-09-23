@@ -29,13 +29,10 @@ export class LevelsService {
   }
 
   async findUserLevel(userId: ObjectId) {
-    const user_lvl = await this.levelModel.findById(userId).exec();
+    const user_lvl = await this.levelModel.findOne({ ownerId: userId }).exec();
     if(user_lvl === null) {
       const createLevelDto: CreateLevelDto = {
-        ownerId: userId,
-        level: 0,
-        current_exp: 0,
-        required_exp: 25,
+        ownerId: userId
       };
       const new_user_lvl = this.create(createLevelDto);
       return new_user_lvl
@@ -48,27 +45,26 @@ export class LevelsService {
   // --------------------------- Update ---------------------------
 
   async addExp(userId: ObjectId, exp: number) {
-    const user_lvl = await this.findUserLevel(userId);
-    var old_exp = user_lvl.current_exp;
-    var new_exp = old_exp + exp;
-    user_lvl.current_exp = new_exp;
-    const updated_user_lvl = await this.levelUpCheck(user_lvl);
-    return await this.levelModel
-    .findByIdAndUpdate(userId, updated_user_lvl)
-    .exec();
+    var user_lvl = await this.findUserLevel(userId);
+    console.log(user_lvl,exp);
+    user_lvl.current_exp += Number(exp);
+    console.log(user_lvl);
+    user_lvl = await this.levelUpCheck(user_lvl);
+    //console.log(user_lvl);
+    return user_lvl;
   }
 
   // --------------------------- Misc. ---------------------------
 
-  async levelUpCheck(user_lvl: any) {
-    var req_exp: number = user_lvl.required_exp;
-    var cur_exp: number = user_lvl.current_exp;
+  async levelUpCheck(user_lvl) {
+    const maxLevel: number = 50;
     const multiplier: number = 1.1;
-    if(cur_exp >= req_exp) {
+    while (user_lvl.current_exp >= user_lvl.required_exp && user_lvl.level < maxLevel) {
+      user_lvl.current_exp -= user_lvl.required_exp;
       user_lvl.level += 1;
-      user_lvl.cur_exp = cur_exp - req_exp;
-      user_lvl.req_exp *= multiplier;
+      user_lvl.required_exp *= multiplier;
     }
+    //console.log(user_lvl);
     return user_lvl.save();
   }
   

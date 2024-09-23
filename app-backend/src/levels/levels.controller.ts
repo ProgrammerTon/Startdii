@@ -21,6 +21,11 @@ export class LevelsController {
     constructor(
       private readonly levelsService: LevelsService,
     ) {}
+
+    @Post(':userId')
+    create(@Param('userId') userId: ObjectId){
+      return this.levelsService.create({ownerId: userId})
+    }
   
     @Get()
     findAll() {

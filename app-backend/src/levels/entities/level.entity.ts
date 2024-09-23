@@ -28,4 +28,4 @@ export class Level {
   //rating_exp_cap: number = ;
 }
 
-export const UserSchema = SchemaFactory.createForClass(Level);
+export const LevelSchema = SchemaFactory.createForClass(Level);
