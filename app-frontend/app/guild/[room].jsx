@@ -8,16 +8,14 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
-import { Redirect, router } from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
-import SourceCard from "../../components/E1_SourceCard";
-import QuizCard from "../../components/F1_QuizCard";
 
 const ChatScreen = () => {
   const [guildName, setGuildName] = useState("");
   const { guild } = useGuildContext();
-  const [room, setRoom] = useState("");
+  const { room } = useLocalSearchParams();
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [offset, setOffset] = useState(1);
@@ -33,18 +31,14 @@ const ChatScreen = () => {
     clearMessage,
   } = useGlobalContext();
 
-  //console.log("Data I got:", messages);
-  
   useEffect(() => {
-    if (room) {
-      joinRoom(room);
-      fetchChat();
-      return () => {
-        leaveRoom(room);
-        clearMessage();
-      };
-    }
-  }, [room]);
+    joinRoom(room);
+    fetchChat();
+    return () => {
+      leaveRoom(room);
+      clearMessage();
+    };
+  }, []);
 
   useEffect(() => {
     if (!isLogged) {
@@ -52,13 +46,13 @@ const ChatScreen = () => {
     } else if (user && guild) {
       setName(user.username || "");
       setGuildName(guild.name || "Test_guild");
-      setRoom(guild._id || "");
     }
   }, [user, guild, isLogged]);
 
   const fetchChat = () => {
     setLoading(true);
     fetchMessage(room, offset);
+    console.log(room, offset);
     setOffset(offset + 1);
     setLoading(false);
   };
@@ -74,11 +68,6 @@ const ChatScreen = () => {
       setMessage("");
     }
   };
-
-  useEffect(() => {
-    setOffset(1);
-    clearMessage();
-  }, []);
   // const [messages, setMessages] = useState([
   //   {
   //     id: 1,
@@ -117,7 +106,6 @@ const ChatScreen = () => {
   //   },
   // ]);
 
-  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -129,7 +117,7 @@ const ChatScreen = () => {
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
       </View>
-      {user && room ? (
+      {user ? (
         <FlatList
           data={messages}
           renderItem={({ item, index }) => {
@@ -137,55 +125,23 @@ const ChatScreen = () => {
               return null;
             }
             item.isCurrentUser = item.sender == user.username;
-            if (type="Source") {
-              const fav = user?.favorite_sources?.includes(item?._id)
-                ? true
-                : false;
-              return (
-                <SourceCard
-                  id={item?._id}
-                  title={item?.title}
-                  author={item?.ownerId?.username}
-                  tags={item?.tags}
-                  rating={item?.avg_rating_score}
-                  isFavorite={fav}
-                />
-              );
-            }
-            else if (type="Quiz") {
-              const fav = user?.favorite_quizzes?.includes(item?._id)
-                ? true
-                : false;
-              return (
-                <QuizCard
-                  id={item?._id}
-                  title={item?.title}
-                  author={item?.ownerId?.username}
-                  tags={item?.tags}
-                  rating={item?.avg_rating_score}
-                  isFavorite={fav}
-                />
-              );
-            }
-            else{
-              return (
-                <View
-                  key={item.id}
-                  style={[
-                    styles.messageWrapper,
-                    item.isCurrentUser ? styles.currentUser : styles.otherUser,
-                  ]}
-                >
-                  {!item.isCurrentUser && (
-                    <Text style={styles.messageSender}>{item.sender}</Text>
-                  )}
-                  <View style={styles.messageBubble}>
-                    <Text style={styles.messageText}>{item.text}</Text>
-                  </View>
-                  <Text style={styles.messageTime}>{item.time}</Text>
+            return (
+              <View
+                key={item.id}
+                style={[
+                  styles.messageWrapper,
+                  item.isCurrentUser ? styles.currentUser : styles.otherUser,
+                ]}
+              >
+                {!item.isCurrentUser && (
+                  <Text style={styles.messageSender}>{item.sender}</Text>
+                )}
+                <View style={styles.messageBubble}>
+                  <Text style={styles.messageText}>{item.text}</Text>
                 </View>
-              );
-            }
+                <Text style={styles.messageTime}>{item.time}</Text>
+              </View>
+            );
           }}
           keyExtractor={(item, index) => `${index}`}
           inverted // This makes the list scroll from bottom to top
