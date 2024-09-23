@@ -45,8 +45,8 @@ const QuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
           <Text style={styles.authorText}>By {author}</Text>
           <TagList
             tags={tags
-              .slice(0, 3)
-              .map((tag) => (tag.length > 8 ? `${tag.slice(0, 8)}...` : tag))}
+              ?.slice(0, 3)
+              .map((tag) => (tag?.length > 8 ? `${tag?.slice(0, 8)}...` : tag))}
             title={title}
             id={id}
           />

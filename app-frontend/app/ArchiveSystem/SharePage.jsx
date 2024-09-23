@@ -219,7 +219,6 @@ export default function SharePage() {
       if (type === "Source") {
         data.sourceId = shareid;
       }
-      console.log("Data to be sent:", data);
       selectedFriends.map((index) => {
         sendMessage({ room: friendsData[index].id, ...data });
       });

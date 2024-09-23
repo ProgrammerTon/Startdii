@@ -137,7 +137,8 @@ const ChatScreen = () => {
               return null;
             }
             item.isCurrentUser = item.sender == user.username;
-            if (type="Source") {
+            console.log(data);
+            if (item.type === "Source") {
               const fav = user?.favorite_sources?.includes(item?._id)
                 ? true
                 : false;
@@ -152,7 +153,7 @@ const ChatScreen = () => {
                 />
               );
             }
-            else if (type="Quiz") {
+            else if (item.type === "Quiz") {
               const fav = user?.favorite_quizzes?.includes(item?._id)
                 ? true
                 : false;
