@@ -104,7 +104,7 @@ const ChatRoom = () => {
         renderItem={({ item, index }) => (
           <ChatView index={index} message={item} name={name} />
         )}
-        keyExtractor={(item, index) => `${item.sender}-${index}`}
+        keyExtractor={(item, index) => `${item?.sender}-${index}`}
         inverted // This makes the list scroll from bottom to top
         onEndReached={fetchChat}
         onEndReachedThreshold={0.1} // Adjust as needed

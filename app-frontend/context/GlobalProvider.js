@@ -25,11 +25,13 @@ const GlobalProvider = ({ children }) => {
   };
 
   const fetchMessage = async (room, offset) => {
-    const chat = await fetchChat(room, offset);
-    if (!chat) {
-      return;
+    if (room) {
+      const chat = await fetchChat(room, offset);
+      if (!chat) {
+        return;
+      }
+      setMessages((prevMessages) => [...prevMessages, ...chat]);
     }
-    setMessages((prevMessages) => [...prevMessages, ...chat]);
   };
 
   const sendMessage = ({

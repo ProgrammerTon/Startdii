@@ -8,14 +8,14 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
-import { Redirect, router } from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
 
 const ChatScreen = () => {
   const [guildName, setGuildName] = useState("");
   const { guild } = useGuildContext();
-  const [room, setRoom] = useState("");
+  const { room } = useLocalSearchParams();
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [offset, setOffset] = useState(1);
@@ -32,15 +32,13 @@ const ChatScreen = () => {
   } = useGlobalContext();
 
   useEffect(() => {
-    if (room) {
-      joinRoom(room);
-      fetchChat();
-      return () => {
-        leaveRoom(room);
-        clearMessage();
-      };
-    }
-  }, [room]);
+    joinRoom(room);
+    fetchChat();
+    return () => {
+      leaveRoom(room);
+      clearMessage();
+    };
+  }, []);
 
   useEffect(() => {
     if (!isLogged) {
@@ -48,13 +46,13 @@ const ChatScreen = () => {
     } else if (user && guild) {
       setName(user.username || "");
       setGuildName(guild.name || "Test_guild");
-      setRoom(guild._id || "");
     }
   }, [user, guild, isLogged]);
 
   const fetchChat = () => {
     setLoading(true);
     fetchMessage(room, offset);
+    console.log(room, offset);
     setOffset(offset + 1);
     setLoading(false);
   };
@@ -70,11 +68,6 @@ const ChatScreen = () => {
       setMessage("");
     }
   };
-
-  useEffect(() => {
-    setOffset(1);
-    clearMessage();
-  }, []);
   // const [messages, setMessages] = useState([
   //   {
   //     id: 1,
@@ -124,10 +117,13 @@ const ChatScreen = () => {
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
       </View>
-      {user && room ? (
+      {user ? (
         <FlatList
           data={messages}
           renderItem={({ item, index }) => {
+            if (item === null) {
+              return null;
+            }
             item.isCurrentUser = item.sender == user.username;
             return (
               <View
@@ -147,7 +143,7 @@ const ChatScreen = () => {
               </View>
             );
           }}
-          keyExtractor={(item, index) => `${item.sender}-${index}`}
+          keyExtractor={(item, index) => `${index}`}
           inverted // This makes the list scroll from bottom to top
           onEndReached={fetchChat}
           onEndReachedThreshold={0.1} // Adjust as needed
