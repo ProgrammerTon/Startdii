@@ -8,7 +8,7 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native";
-import SourceCard from "../components/E1_SourceCard.jsx";
+import InvenSourceCard from "../app/NoteInventorySystem/E1_InvenSourceCard.jsx";
 import QuizCard from "../components/F1_QuizCard.jsx";
 import Feather from "@expo/vector-icons/Feather";
 import { getSource } from "../services/SourceService";
@@ -98,7 +98,7 @@ const Inventory = () => {
               ? true
               : false;
             return (
-              <SourceCard
+              <InvenSourceCard
                 id={item?._id}
                 title={item?.title}
                 author={item?.ownerId?.username}
