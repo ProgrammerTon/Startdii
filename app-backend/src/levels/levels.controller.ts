@@ -22,9 +22,14 @@ export class LevelsController {
       private readonly levelsService: LevelsService,
     ) {}
   
-    //@Get()
-    //findAll() {
-    //  return this.levelsService.findAll();
-    //}
+    @Get()
+    findAll() {
+      return this.levelsService.findAll();
+    }
+
+    @Patch(':userId/:expToAdd')
+    addExp(@Param('userId') userId: ObjectId, @Param('expToAdd') expToAdd: number) {
+      return this.levelsService.addExp(userId, expToAdd);
+    }
   
 }
