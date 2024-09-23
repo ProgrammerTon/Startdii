@@ -29,7 +29,6 @@ import {
 import { useQuestionContext } from "../../context/QuestionProvider";
 import { getUserRatingQuiz } from "../../services/QuizService";
 import TestReport from "../reportsystem/ReportTest";
-import { router } from "expo-router";
 
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();

@@ -73,7 +73,7 @@ const SourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
               style={styles.heartIcon}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/ArchiveSystem/SharePage")}>
+          <TouchableOpacity onPress={() => router.push({ pathname: "/ArchiveSystem/SharePage", params: { shareid: id } })}>
             <FontAwesome
               name="share"
               size={30}
