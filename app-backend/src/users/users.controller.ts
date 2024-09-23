@@ -74,9 +74,16 @@ export class UsersController {
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('guild')
-  findGuildByMemberId(@Request() req) {
+  findGuildByMemberId(@Request() req, @Query() query: { title: string }) {
     const memberId = new Types.ObjectId(req.user.id);
-    return this.guildsService.findGuildByMemberId(memberId);
+    if (!query.title) {
+      return this.guildsService.findGuildByMemberId(memberId);
+    } else {
+      return this.guildsService.findGuildByMemberIdAndName(
+        memberId,
+        query.title,
+      );
+    }
   }
 
   @Roles(Role.Customer)

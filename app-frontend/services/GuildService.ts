@@ -3,12 +3,15 @@ import { getCurrentToken } from "@/utils/asyncstroage";
 import { Alert } from "react-native";
 
 type GuildRequest = {
-  name: string, 
-  description: string, 
-  cover: number,
+  name: string;
+  description: string;
+  cover: number;
 };
 
-export async function createGuild(userId: string, data: GuildRequest): Promise<any | null> {
+export async function createGuild(
+  userId: string,
+  data: GuildRequest
+): Promise<any | null> {
   const res = await fetch(`${baseUrl}/guilds/${userId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -192,6 +195,27 @@ export async function leavePerson(
     return;
   } else {
     Alert.alert("Kick!!");
+  }
+}
+
+export async function searchGuild(title: string) {
+  const token = await getCurrentToken();
+  const res = await fetch(`${baseUrl}/users/guild?title=${title}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) {
+    return null;
+  }
+  try {
+    const data: any = await res.json();
+    console.log("Guild Find", data);
+    return data;
+  } catch (error) {
+    return null;
   }
 }
 

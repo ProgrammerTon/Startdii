@@ -1,13 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView, Modal, Alert } from 'react-native';
-import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  RefreshControl,
+  TouchableOpacity,
+  Dimensions,
+  ScrollView,
+  Modal,
+  Alert,
+} from "react-native";
+import { Redirect, router } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 import Menu from "./FriendGuildMenu";
 import FriendGuildList from "./FriendGuildList";
 import { getChatList } from "../../services/ChatListService";
 import { guildList } from "../../services/GuildService";
-
-const { width, height } = Dimensions.get('window');
+import { getChatList } from "../../services/ChatListService";
+const { width, height } = Dimensions.get("window");
 
 export default function SharePage() {
   const [activeMenu, setActiveMenu] = useState("Friends");
@@ -18,88 +29,147 @@ export default function SharePage() {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [comfirmShare, setConfirmShare] = useState(false);
 
-  // Fetch friends data
-  const loadFriendsData = async () => {
-    try {
-      const chatList = await getChatList();
-      const filteredData = chatList.map((chat) => ({
-        username: chat.userId.username,
-        url: `/chatroom/${chat.chatroom}`,
-      }));
-      setFriends(filteredData);
-      setRefreshing(false);
-    } catch (error) {
-      console.error("Error loading friends:", error);
-    }
+  // const guildsData = [
+  //   {
+  //     id: 1,
+  //     title: "เรารู้เขารู้เรา",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "แต่เขาแกล้งรู้เรา",
+  //   },
+  // ];
+  const [guildsData, setGuildsData] = useState([]);
+  const [friendsData, setFriendsData] = useState([]);
+
+  // const loadFriendsData = [
+  //   {
+  //     id: 1,
+  //     title: "Mr.BOB",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Juaz Juazzz",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "tonkung",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Happy Frog"
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Silent Whisper"
+  //   },
+  //   {
+  //     id: 6,
+  //     title: "Golden Eagle"
+  //   },
+  //   {
+  //     id: 7,
+  //     title: "Crimson Tide"
+  //   },
+  //   {
+  //     id: 8,
+  //     title: "Blue Phoenix"
+  //   },
+  //   {
+  //     id: 9,
+  //     title: "Cosmic Dancer"
+  //   },
+  //   {
+  //     id: 10,
+  //     title: "Shadow Blade"
+  //   },
+  //   {
+  //     id: 11,
+  //     title: "Doom Bringer"
+  //   },
+  //   {
+  //     id: 12,
+  //     title: "Radiant Star"
+  //   },
+  //   {
+  //     id: 13,
+  //     title: "Nebula Knight"
+  //   },
+  //   {
+  //     id: 14,
+  //     title: "Thunder Strike"
+  //   },
+  //   {
+  //     id: 15,
+  //     title: "Iron Fist"
+  //   }
+  // ]
+
+  const menuData = [{ name: "Friends" }, { name: "Guilds" }];
+
+  const loadUserData = async () => {
+    const chatList = await getChatList();
+    const filteredData = chatList.map((chat, ind) => ({
+      id: chat.chatroom,
+      title: chat.userId.username,
+    }));
+    setFriendsData(filteredData);
   };
 
-  // Fetch guilds data
   const loadGuildsData = async () => {
-    try {
-      const guildsData = await guildList();
-      const formattedGuilds = guildsData.map((guild) => ({
-        id: guild._id,
-        color: "#FF6347",
-        badgeColor: "#2ecc71",
-        title: guild.name,
-        description: guild.description + ".",
-        members: guild.memberIdList.length,
-      }));
-      setGuilds(formattedGuilds);
-      setRefreshing(false);
-    } catch (error) {
-      console.error("Error loading guilds:", error);
-    }
+    const guilds = await guildList();
+    const formattedGuilds = guilds.map((guild) => ({
+      id: guild._id,
+      title: guild.name,
+    }));
+    setGuildsData(formattedGuilds);
   };
-
-  useEffect(() => {
-    loadFriendsData();
-    loadGuildsData();
-  }, []);
-
-  const menuData = [
-    { name: 'Friends' }, { name: 'Guilds' }
-  ];
 
   const renderContent = () => {
     switch (activeMenu) {
       case "Friends":
         return (
           <ScrollView>
-            {friends.map((item, index) => (
-              <FriendGuildList
-                key={index}
-                content={item}
-                isSelected={selectedFriends.includes(index)}
-                onPress={() => handleFriendSelect(index)}
-              />
-            ))}
+            {friendsData.map((item, index) => {
+              return (
+                <FriendGuildList
+                  key={index}
+                  content={item}
+                  isSelected={selectedFriends.includes(index)}
+                  onPress={() => handleFriendSelect(index)}
+                />
+              );
+            })}
           </ScrollView>
         );
       case "Guilds":
         return (
           <ScrollView>
-            {guilds.map((item, index) => (
-              <FriendGuildList
-                key={index}
-                content={item}
-                isSelected={selectedGuilds.includes(index)}
-                onPress={() => handleGuildSelect(index)}
-              />
-            ))}
+            {guildsData.map((item, index) => {
+              return (
+                <FriendGuildList
+                  key={index}
+                  content={item}
+                  isSelected={selectedGuilds.includes(index)}
+                  onPress={() => handleGuildSelect(index)}
+                />
+              );
+            })}
           </ScrollView>
         );
       default:
         return (
           <ScrollView>
-            {friends.map((item, index) => (
-              <FriendGuildList
-                key={index}
-                content={item}
-                isSelected={selectedFriends.includes(index)}
-                onPress={() => handleFriendSelect(index)}
-              />
-            ))}
+            {friendsData.map((item, index) => {
+              return (
+                <FriendGuildList
+                  key={index}
+                  content={item}
+                  isSelected={selectedFriends.includes(index)}
+                  onPress={() => handleFriendSelect(index)}
+                />
+              );
+            })}
           </ScrollView>
         );
     }
@@ -118,8 +188,8 @@ export default function SharePage() {
   const handleGuildSelect = (index) => {
     // Allow multiple selections
     if (selectedGuilds.includes(index)) {
-      const newSelectedGuilds = selectedGuilds.filter(item => item !== index);
-      setSelectedGuilds(newSelectedGuilds);
+      const newSelectedGuilds = selectedGuilds.filter((item) => item !== index);
+      setSelectedGuilds(newSelectedGuilds); // Unselect if the same index is pressed
     } else {
       setSelectedGuilds([...selectedGuilds, index].sort());
     }
@@ -130,9 +200,16 @@ export default function SharePage() {
       setConfirmShare(false);
       Alert.alert("Select at least 1 friend or guild!!");
     } else {
-      console.log("Sharing with friends:", selectedFriends, "guilds:", selectedGuilds);
+      console.log(selectedFriends, selectedGuilds);
     }
   };
+
+  useEffect(() => {
+    setRefreshing(true);
+    loadUserData();
+    loadGuildsData();
+    setRefreshing(false);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -146,15 +223,19 @@ export default function SharePage() {
         <Text style={styles.title}>Share with</Text>
       </View>
       <View style={styles.selection}>
-        <Menu menuData={menuData} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+        <Menu
+          menuData={menuData}
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+        />
       </View>
-      <View style={styles.content}>
-        {renderContent()}
-      </View>
+      <View style={styles.content}>{renderContent()}</View>
       <View>
         <TouchableOpacity
           style={styles.shareButton}
-          onPress={() => setConfirmShare(true)}
+          onPress={() => {
+            console.log(selectedFriends, selectedGuilds), setConfirmShare(true);
+          }}
         >
           <Text style={{ fontSize: 16, color: "#fff" }}> Share </Text>
         </TouchableOpacity>
@@ -176,10 +257,13 @@ export default function SharePage() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.confirmShareButton}
-                onPress={handleShare}
+                onPress={() => handleShare()}
               >
-                <Text style={{ fontSize: 16, fontWeight: "bold", color: "#fff" }}>
-                  Share
+                <Text
+                  style={{ fontSize: 16, fontWeight: "bold", color: "#fff" }}
+                >
+                  {" "}
+                  Share{" "}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -207,9 +291,23 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 5,
   },
-  title: { fontSize: 24, fontWeight: "bold", textAlign: "center" },
-  selection: { marginVertical: 20, width: width * 0.7, alignSelf: "center" },
-  content: { flex: 1, paddingHorizontal: 20 },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  selection: {
+    marginVertical: 20,
+    width: width * 0.7,
+    alignSelf: "center",
+  },
+  selectionText: {
+    textAlign: "center",
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
   shareButton: {
     paddingHorizontal: width * 0.05,
     paddingVertical: 10,
