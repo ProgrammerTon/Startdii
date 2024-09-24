@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Chat, ChatDocument, messageType } from './entities/chat.entity';
-import { Quiz } from 'src/quizs/entities/quiz.entity';
-import { Source } from 'src/sources/entities/source.entity';
 import { UsersService } from 'src/users/users.service';
 import { ObjectId } from 'mongodb';
 import { ChatListService } from 'src/users/chatlist.service';
