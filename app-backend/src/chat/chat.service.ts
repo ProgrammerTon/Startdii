@@ -133,38 +133,353 @@ export class ChatService {
   }
 
   async findAllSource(chatId: ObjectId): Promise<Chat[] | null> {
-    const messages = await this.chatModel
-      .find({ msgType: messageType.source, chatId: chatId })
-      .sort({ createdAt: -1 })
-      .populate('userId', 'username')
-      .populate({
-        path: 'sourceId',
-        select: 'title tags avg_rating_score createdAt',
-        populate: {
-          path: 'ownerId',
-          select: 'username',
+    const messages = await this.chatModel.aggregate([
+      {
+        $match: {
+          msgType: messageType.source,
+          chatId: chatId,
         },
-      })
-      .exec();
+      },
+      {
+        $sort: { createdAt: 1 },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'userId',
+        },
+      },
+      {
+        $unwind: '$userId',
+      },
+      {
+        $lookup: {
+          from: 'sources',
+          localField: 'sourceId',
+          foreignField: '_id',
+          as: 'sourceId',
+        },
+      },
+      {
+        $unwind: '$sourceId',
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'sourceId.ownerId',
+          foreignField: '_id',
+          as: 'sourceId.ownerId',
+        },
+      },
+      {
+        $unwind: '$sourceId.ownerId',
+      },
+      {
+        $group: {
+          _id: '$sourceId._id',
+          chatId: { $last: '$chatId' },
+          msgType: { $last: '$msgType' },
+          sourceId: { $last: '$sourceId' },
+          userId: { $last: '$userId' },
+          createdAt: { $last: '$createdAt' },
+          updatedAt: { $last: '$updatedAt' },
+          __v: { $last: '$__v' },       
+        },
+      },
+      {
+        $project: {
+          'chatId': 1,
+          'msgType': 1,
+          'sourceId._id': 1,
+          'sourceId.ownerId._id': 1,
+          'sourceId.ownerId.username': 1,
+          'sourceId.title': 1,
+          'sourceId.tags': 1,
+          'sourceId.avg_rating_score': 1,
+          'sourceId.createdAt': 1,
+          'userId._id': 1,
+          'userId.username': 1,
+          'createdAt': 1,
+          'updatedAt': 1,
+          '__v': 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+    ]).exec();
+  
+    return messages;
+  }
+
+  async findSourceByOffset(offset: number, chatId: ObjectId): Promise<Chat[] | null> {
+    const size = 10;
+    offset--;
+    offset *= size;
+    const messages = await this.chatModel.aggregate([
+      {
+        $match: {
+          msgType: messageType.source,
+          chatId: chatId,
+        },
+      },
+      {
+        $sort: { createdAt: 1 },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'userId',
+        },
+      },
+      {
+        $unwind: '$userId',
+      },
+      {
+        $lookup: {
+          from: 'sources',
+          localField: 'sourceId',
+          foreignField: '_id',
+          as: 'sourceId',
+        },
+      },
+      {
+        $unwind: '$sourceId',
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'sourceId.ownerId',
+          foreignField: '_id',
+          as: 'sourceId.ownerId',
+        },
+      },
+      {
+        $unwind: '$sourceId.ownerId',
+      },
+      {
+        $group: {
+          _id: '$sourceId._id',
+          chatId: { $last: '$chatId' },
+          msgType: { $last: '$msgType' },
+          sourceId: { $last: '$sourceId' },
+          userId: { $last: '$userId' },
+          createdAt: { $last: '$createdAt' },
+          updatedAt: { $last: '$updatedAt' },
+          __v: { $last: '$__v' },       
+        },
+      },
+      {
+        $project: {
+          'chatId': 1,
+          'msgType': 1,
+          'sourceId._id': 1,
+          'sourceId.ownerId._id': 1,
+          'sourceId.ownerId.username': 1,
+          'sourceId.title': 1,
+          'sourceId.tags': 1,
+          'sourceId.avg_rating_score': 1,
+          'sourceId.createdAt': 1,
+          'userId._id': 1,
+          'userId.username': 1,
+          'createdAt': 1,
+          'updatedAt': 1,
+          '__v': 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $skip: offset,
+      },
+      {
+        $limit: size,
+      },
+    ]).exec();
+  
     return messages;
   }
 
   async findAllQuiz(chatId: ObjectId): Promise<Chat[] | null> {
-    const messages = await this.chatModel
-      .find({ msgType: messageType.quiz, chatId: chatId })
-      .sort({ createdAt: -1 })
-      .populate('userId', 'username')
-      .populate({
-        path: 'quizId',
-        select: 'title tags avg_rating_score createdAt',
-        populate: {
-          path: 'ownerId',
-          select: 'username',
+    const messages = await this.chatModel.aggregate([
+      {
+        $match: {
+          msgType: messageType.quiz,
+          chatId: chatId,
         },
-      })
-      .exec();
+      },
+      {
+        $sort: { createdAt: 1 },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'userId',
+        },
+      },
+      {
+        $unwind: '$userId',
+      },
+      {
+        $lookup: {
+          from: 'quizzes',
+          localField: 'quizId',
+          foreignField: '_id',
+          as: 'quizId',
+        },
+      },
+      {
+        $unwind: '$quizId',
+      },
+
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'quizId.ownerId',
+          foreignField: '_id',
+          as: 'quizId.ownerId',
+        },
+      },
+      {
+        $unwind: '$quizId.ownerId',
+      },
+      {
+        $group: {
+          _id: '$quizId._id',
+          chatId: { $last: '$chatId' },
+          msgType: { $last: '$msgType' },
+          quizId: { $last: '$quizId' },
+          userId: { $last: '$userId' },
+          createdAt: { $last: '$createdAt' },
+          updatedAt: { $last: '$updatedAt' },
+          __v: { $last: '$__v' },       
+        },
+      },
+      {
+        $project: {
+          'chatId': 1,
+          'msgType': 1,
+          'quizId._id': 1,
+          'quizId.ownerId._id': 1,
+          'quizId.ownerId.username': 1,
+          'quizId.title': 1,
+          'quizId.tags': 1,
+          'quizId.avg_rating_score': 1,
+          'quizId.createdAt': 1,
+          'userId._id': 1,
+          'userId.username': 1,
+          'createdAt': 1,
+          'updatedAt': 1,
+          '__v': 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+    ]).exec();
+  
     return messages;
   }
+
+  async findQuizByOffset(offset: number, chatId: ObjectId): Promise<Chat[] | null> {
+    const size = 10;
+    offset--;
+    offset *= size;
+    const messages = await this.chatModel.aggregate([
+      {
+        $match: {
+          msgType: messageType.quiz,
+          chatId: chatId,
+        },
+      },
+      {
+        $sort: { createdAt: 1 },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'userId',
+        },
+      },
+      {
+        $unwind: '$userId',
+      },
+      {
+        $lookup: {
+          from: 'quizzes',
+          localField: 'quizId',
+          foreignField: '_id',
+          as: 'quizId',
+        },
+      },
+      {
+        $unwind: '$quizId',
+      },
+
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'quizId.ownerId',
+          foreignField: '_id',
+          as: 'quizId.ownerId',
+        },
+      },
+      {
+        $unwind: '$quizId.ownerId',
+      },
+      {
+        $group: {
+          _id: '$quizId._id',
+          chatId: { $last: '$chatId' },
+          msgType: { $last: '$msgType' },
+          quizId: { $last: '$quizId' },
+          userId: { $last: '$userId' },
+          createdAt: { $last: '$createdAt' },
+          updatedAt: { $last: '$updatedAt' },
+          __v: { $last: '$__v' },       
+        },
+      },
+      {
+        $project: {
+          'chatId': 1,
+          'msgType': 1,
+          'quizId._id': 1,
+          'quizId.ownerId._id': 1,
+          'quizId.ownerId.username': 1,
+          'quizId.title': 1,
+          'quizId.tags': 1,
+          'quizId.avg_rating_score': 1,
+          'quizId.createdAt': 1,
+          'userId._id': 1,
+          'userId.username': 1,
+          'createdAt': 1,
+          'updatedAt': 1,
+          '__v': 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $skip: offset,
+      },
+      {
+        $limit: size,
+      },
+    ]).exec();
+  
+    return messages;
+  }
+
 }
 
 type messageData = {
