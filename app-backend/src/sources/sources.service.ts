@@ -160,15 +160,16 @@ export class SourcesService {
   async removeSourceFromUsers(id: ObjectId) {
     id = new Types.ObjectId(id);
     await this.userModel
-    .updateMany({ favorite_sources: id }, { $pull: { favorite_sources: id }}).exec();
+      .updateMany({ favorite_sources: id }, { $pull: { favorite_sources: id } })
+      .exec();
     await this.userModel
-    .updateMany({ sources: id }, { $pull: { sources: id }}).exec();
+      .updateMany({ sources: id }, { $pull: { sources: id } })
+      .exec();
   }
 
   async deleteChatWithSourceId(id: ObjectId) {
-    let sid = id.toString();
-    await this.chatModel
-    .deleteMany({ sourceId: sid }).exec();
+    id = new Types.ObjectId(id);
+    await this.chatModel.deleteMany({ sourceId: id }).exec();
   }
 
   async findById(id: ObjectId): Promise<Source | null> {

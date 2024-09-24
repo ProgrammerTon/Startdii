@@ -23,10 +23,10 @@ export class ChatService {
       chat.message = msg.text;
     }
     if (msg.type == messageType.source) {
-      chat.sourceId = msg.sourceId;
+      chat.sourceId = new Types.ObjectId(msg.sourceId);
     }
     if (msg.type == messageType.quiz) {
-      chat.quizId = msg.quizId;
+      chat.quizId = new Types.ObjectId(msg.quizId);
     }
     const user: any = await this.userService.findByExactUsername(msg.sender);
     chat.msgType = msg.type;
