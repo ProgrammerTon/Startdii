@@ -13,7 +13,8 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { router, useLocalSearchParams } from "expo-router";
 import { fetchChat } from "../../services/ChatService";
 import { findChatList } from "../../services/ChatListService";
-
+import SourceCard from "../../components/E1_SourceCard";
+import QuizCard from "../../components/F1_QuizCard";
 const ChatView = ({ message, index, name }) => {
   return (
     <View
@@ -101,15 +102,58 @@ const ChatRoom = () => {
       </View>
       <FlatList
         data={messages}
-        renderItem={({ item, index }) => (
-          <ChatView index={index} message={item} name={name} />
-        )}
-        keyExtractor={(item, index) => `${item.sender}-${index}`}
+        renderItem={({ item, index }) => {
+          if (item === null) {
+            return null;
+          }
+
+          // Handle "Source" type
+          if (item.type === "Source") {
+            const fav = user?.favorite_sources?.includes(item?.source._id)
+              ? true
+              : false;
+            return (
+              <SourceCard
+                id={item?.source._id}
+                title={item?.source.title}
+                author={item?.source.ownerId?.username}
+                tags={item?.source.tags}
+                rating={item?.source.avg_rating_score}
+                isFavorite={fav}
+              />
+            );
+          }
+
+          // Handle "Quiz" type
+          if (item.type === "Quiz") {
+            const fav = user?.favorite_quizzes?.includes(item?.quiz._id)
+              ? true
+              : false;
+            return (
+              <QuizCard
+                id={item?.quiz._id}
+                title={item?.quiz.title}
+                author={item?.quiz.ownerId?.username}
+                tags={item?.quiz.tags}
+                rating={item?.quiz.avg_rating_score}
+                isFavorite={fav}
+              />
+            );
+          }
+
+          // Default case for regular chat messages
+          const isCurrentUser = item.sender === name;
+          return (
+            <ChatView index={index} message={item} name={name} />
+          );
+        }}
+        keyExtractor={(item, index) => `${item?.sender}-${index}`}
         inverted // This makes the list scroll from bottom to top
         onEndReached={fetchChat}
         onEndReachedThreshold={0.1} // Adjust as needed
         ListFooterComponent={loading && <ActivityIndicator />}
       />
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}

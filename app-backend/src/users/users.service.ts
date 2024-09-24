@@ -9,6 +9,7 @@ import { Source, SourceDocument } from 'src/sources/entities/source.entity';
 import { ObjectId } from 'mongodb';
 import { Types } from 'mongoose';
 import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
+import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
 
 @Injectable()
 export class UsersService {
@@ -69,6 +70,8 @@ export class UsersService {
   }
 
   async findAll() {
+    const user = await this.userModel.findById(new Types.ObjectId('66cf16772bd720377e20a4bd')).exec();
+    console.log(user);
     return this.userModel.find().exec();
   }
 
