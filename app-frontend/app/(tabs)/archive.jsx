@@ -169,9 +169,7 @@ const ArchiveMainPage = () => {
       if (!isLogged) {
         router.replace("/sign-in");
       } else {
-        setRefreshing(true);
-        fetchData(); // Initial data fetch
-        setRefreshing(false);
+        handleRefresh();
       }
     }, [])
   );
