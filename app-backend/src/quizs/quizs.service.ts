@@ -29,6 +29,7 @@ export class QuizsService {
     const quiz = plainToInstance(Quiz, createQuizDto);
     const owner = await this.userModel.findById(quiz.ownerId).exec();
     quiz.published = Status.private;
+    quiz.ownerId = new Types.ObjectId(quiz.ownerId);
     const createdQuiz = new this.quizModel(quiz);
     await createdQuiz.save();
     this.addQuizFromTags(createdQuiz._id as ObjectId);
