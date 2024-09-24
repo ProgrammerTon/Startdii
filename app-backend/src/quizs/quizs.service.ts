@@ -142,7 +142,7 @@ export class QuizsService {
           quiz.questions[i].correct += Number(res[i]);
         else quiz.questions[i].correct = Number(res[i]);
       }
-      
+
       user.quiz_history.push({ id: id, results: res, answers: ans });
     }
     await this.quizModel
@@ -285,20 +285,29 @@ export class QuizsService {
   async removeQuizFromUsers(id: ObjectId) {
     id = new Types.ObjectId(id);
     await this.userModel
-    .updateMany({ favorite_quizzes: id }, { $pull: { favorite_quizzes: id }}).exec();
+      .updateMany({ favorite_quizzes: id }, { $pull: { favorite_quizzes: id } })
+      .exec();
     await this.userModel
-    .updateMany({ quizzes: id }, { $pull: { quizzes: id }}).exec();
+      .updateMany({ quizzes: id }, { $pull: { quizzes: id } })
+      .exec();
     await this.userModel
-    .updateMany({ 'quiz_history.id': id }, { $pull: { quiz_history: { id: id } }}).exec();
+      .updateMany(
+        { 'quiz_history.id': id },
+        { $pull: { quiz_history: { id: id } } },
+      )
+      .exec();
     let sid = id.toString();
     await this.userModel
-    .updateMany({ 'quiz_history.id': sid }, { $pull: { quiz_history: { id: sid } }}).exec();
+      .updateMany(
+        { 'quiz_history.id': sid },
+        { $pull: { quiz_history: { id: sid } } },
+      )
+      .exec();
   }
 
   async deleteChatWithQuizId(id: ObjectId) {
-    let sid = id.toString();
-    await this.chatModel
-    .deleteMany({ quizId: sid }).exec();
+    id = new Types.ObjectId(id);
+    await this.chatModel.deleteMany({ quizId: id }).exec();
   }
 
   async findByOffsetWithTitle(
