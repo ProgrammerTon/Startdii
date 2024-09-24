@@ -22,7 +22,7 @@ export class ChatController {
   findAll() {
     return this.chatService.findAll();
   }
-
+  
   @Get(':chatId')
   findRecentChatOffset(
     @Query() query: { offset: number },
@@ -40,7 +40,7 @@ export class ChatController {
   ) {
     if (!query.offset) return this.chatService.findAllSource(chatId);
     const offset = query.offset;
-    return this.chatService.findChatRoomByOffset(offset, chatId);
+    return this.chatService.findSourceByOffset(offset, chatId);
   }
 
   @Get(':chatId/quiz')
@@ -50,6 +50,6 @@ export class ChatController {
   ) {
     if (!query.offset) return this.chatService.findAllQuiz(chatId);
     const offset = query.offset;
-    return this.chatService.findChatRoomByOffset(offset, chatId);
+    return this.chatService.findQuizByOffset(offset, chatId);
   }
 }
