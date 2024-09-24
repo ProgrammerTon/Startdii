@@ -18,14 +18,6 @@ export class ChatService {
     private userService: UsersService,
   ) {}
 
-  async getNotes(chatId: ObjectId): Promise<any> {
-    return this.chatModel.find({ _id: chatId, msgType: 'note' }).exec();
-  }
-
-  async getQuizzes(chatId: ObjectId): Promise<any> {
-    return this.chatModel.find({ _id: chatId, msgType: 'quiz' }).exec();
-  }
-
   async create(msg: messageData): Promise<Chat> {
     const chat = new Chat();
     chat.chatId = new Types.ObjectId(msg.rooms as string);
@@ -33,10 +25,10 @@ export class ChatService {
       chat.message = msg.text;
     }
     if (msg.type == messageType.source) {
-      chat.sourceId = msg.sourceId;
+      chat.sourceId = new Types.ObjectId(msg.sourceId);
     }
     if (msg.type == messageType.quiz) {
-      chat.quizId = msg.quizId;
+      chat.quizId = new Types.ObjectId(msg.quizId);
     }
     const user: any = await this.userService.findByExactUsername(msg.sender);
     chat.msgType = msg.type;
@@ -159,6 +151,28 @@ export class ChatService {
     return messages;
   }
 
+  async findSourceByOffsett(offset: number, chatId: ObjectId): Promise<Chat[] | null> {
+    const size = 10;
+    offset--;
+    offset *= size;
+    const messages = await this.chatModel
+      .find({ msgType: messageType.source, chatId: chatId })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(size)
+      .populate('userId', 'username')
+      .populate({
+        path: 'sourceId',
+        select: 'title tags avg_rating_score createdAt',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .exec();
+    return messages;
+  }
+
   async findAllQuiz(chatId: ObjectId): Promise<Chat[] | null> {
     const messages = await this.chatModel
       .find({ msgType: messageType.quiz, chatId: chatId })
@@ -175,6 +189,138 @@ export class ChatService {
       .exec();
     return messages;
   }
+
+  async findQuizByOffset(offset: number, chatId: ObjectId): Promise<Chat[] | null> {
+    const size = 10;
+    offset--;
+    offset *= size;
+    const messages = await this.chatModel
+      .find({ msgType: messageType.quiz, chatId: chatId })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(size)
+      .populate('userId', 'username')
+      .populate({
+        path: 'sourceId',
+        select: 'title tags avg_rating_score createdAt',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
+      .exec();
+    return messages;
+  }
+
+  async findSourceByOffset(offset: number, chatId: ObjectId): Promise<Chat[] | null> {
+    const size = 10;
+    offset--;
+    offset *= size;
+  
+    const messages = await this.chatModel.aggregate([
+      {
+        // Match the filters as before
+        $match: {
+          msgType: messageType.source,
+          chatId: chatId,
+        },
+      },
+      {
+        // Sort the documents
+        $sort: { createdAt: -1 },
+      },
+      // {
+      //   // Group by sourceId._id to ensure uniqueness
+      //   $group: {
+      //     _id: '$sourceId',
+      //     doc: { $first: '$$ROOT' },  // Keep the first document for each unique _id
+      //   },
+      // },
+      {
+        // Skip and limit for pagination
+        $skip: offset,
+      },
+      {
+        $limit: size,
+      },
+      // {
+      //   // Replace root to get back the original document structure
+      //   $replaceRoot: { newRoot: '$doc' },
+      // },
+      {
+        // Populate userId and sourceId fields
+        $lookup: {
+          from: 'users',  // Assuming 'users' is the collection name for userId
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'userId',
+          pipeline: [
+            {
+              $project: {
+                userId: 1,
+                username: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$userId',
+      },
+      {
+        $lookup: {
+          from: 'sources',  // Assuming 'sources' is the collection name for sourceId
+          localField: 'sourceId',
+          foreignField: '_id',
+          as: 'sourceId',
+          // pipeline: [
+          //   {
+          //     $project: {
+          //       sourceId: 1,
+          //     },
+          //   },
+          // ],
+        },
+      },
+      {
+        $unwind: '$sourceId',
+      },
+      // {
+      //   $lookup: {
+      //     from: 'users',  // Populate sourceId.ownerId
+      //     localField: 'sourceId.ownerId',
+      //     foreignField: '_id',
+      //     as: 'sourceId.ownerId',
+      //   },
+      // },
+      // {
+      //   $unwind: '$sourceId.ownerId',
+      // },
+      // {
+      //   // Project only the necessary fields (optional)
+      //   $project: {
+      //     userId: 1,
+      //     'sourceId.title': 1,
+      //     'sourceId.tags': 1,
+      //     'sourceId.avg_rating_score': 1,
+      //     'sourceId.createdAt': 1,
+      //     'sourceId.ownerId.username': 1,
+      //     createdAt: 1,
+      //     updatedAt: 1,
+      //   },
+      // },
+      // {
+      //   $group: {
+      //     _id: '$sourceId',
+      //     source: { $last: '$source' },
+      //     user: { $last: '$user' },
+      //   },
+      // },
+    ]).exec();
+  
+    return messages;
+  }
+
 }
 
 type messageData = {
