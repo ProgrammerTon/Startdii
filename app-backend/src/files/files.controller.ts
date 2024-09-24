@@ -8,6 +8,7 @@ import {
   Res,
   NotFoundException,
   Response,
+  BadRequestException,
   StreamableFile,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -24,7 +25,7 @@ export class FilesController {
   @UseInterceptors(
     FilesInterceptor('files', 1, {
       storage: diskStorage({
-        destination: './uploads', // Save files to the 'uploads' folder
+        destination: './uploads',
         filename: (req, file, callback) => {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -33,6 +34,21 @@ export class FilesController {
           callback(null, filename);
         },
       }),
+      limits: { fileSize: 10 * 1024 * 1024 },
+      fileFilter(req, file, callback) {
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          callback(null, true);
+        } else {
+          callback(
+            new BadRequestException(
+              'Invalid file type. Only JPEG, PNG, and PDF are allowed.',
+            ),
+            false,
+          );
+        }
+      },
     }),
   )
   uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
