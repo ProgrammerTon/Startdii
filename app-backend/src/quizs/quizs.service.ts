@@ -8,6 +8,7 @@ import { plainToInstance } from 'class-transformer';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
 import { ObjectId } from 'mongodb';
 import { User, UserDocument } from 'src/users/entities/user.entity';
+import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
 
 @Injectable()
 export class QuizsService {
@@ -18,6 +19,8 @@ export class QuizsService {
     private tagModel: Model<TagDocument>,
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
+    @InjectModel(Chat.name)
+    private chatModel: Model<ChatDocument>,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -139,7 +142,7 @@ export class QuizsService {
           quiz.questions[i].correct += Number(res[i]);
         else quiz.questions[i].correct = Number(res[i]);
       }
-      id = new Types.ObjectId(id);
+      
       user.quiz_history.push({ id: id, results: res, answers: ans });
     }
     await this.quizModel
@@ -213,6 +216,7 @@ export class QuizsService {
   async remove(id: ObjectId) {
     await this.removeQuizFromTags(id);
     await this.removeQuizFromUsers(id);
+    await this.deleteChatWithQuizId(id);
     await this.quizModel.findByIdAndDelete(id);
   }
 
@@ -289,6 +293,12 @@ export class QuizsService {
     let sid = id.toString();
     await this.userModel
     .updateMany({ 'quiz_history.id': sid }, { $pull: { quiz_history: { id: sid } }}).exec();
+  }
+
+  async deleteChatWithQuizId(id: ObjectId) {
+    let sid = id.toString();
+    await this.chatModel
+    .deleteMany({ quizId: sid }).exec();
   }
 
   async findByOffsetWithTitle(

@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
 import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 import { User, UserDocument } from 'src/users/entities/user.entity';
+import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
 
 @Injectable()
 export class SourcesService {
@@ -19,6 +20,8 @@ export class SourcesService {
     private tagModel: Model<TagDocument>,
     @InjectModel(User.name)
     private userModel: Model<UserDocument>,
+    @InjectModel(Chat.name)
+    private chatModel: Model<ChatDocument>,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -121,6 +124,7 @@ export class SourcesService {
   async delete(id: ObjectId): Promise<void> {
     await this.removeSourceFromTags(id);
     await this.removeSourceFromUsers(id);
+    await this.deleteChatWithSourceId(id);
     await this.sourceModel.findByIdAndDelete(id).exec();
   }
 
@@ -159,6 +163,12 @@ export class SourcesService {
     .updateMany({ favorite_sources: id }, { $pull: { favorite_sources: id }}).exec();
     await this.userModel
     .updateMany({ sources: id }, { $pull: { sources: id }}).exec();
+  }
+
+  async deleteChatWithSourceId(id: ObjectId) {
+    let sid = id.toString();
+    await this.chatModel
+    .deleteMany({ sourceId: sid }).exec();
   }
 
   async findById(id: ObjectId): Promise<Source | null> {

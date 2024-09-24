@@ -9,6 +9,7 @@ import { Source, SourceDocument } from 'src/sources/entities/source.entity';
 import { ObjectId } from 'mongodb';
 import { Types } from 'mongoose';
 import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
+import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
 
 @Injectable()
 export class UsersService {
