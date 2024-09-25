@@ -44,7 +44,10 @@ const Inventory = () => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchData();
+      setIsSearchNote(true);
+      if (user) {
+        fetchData();
+      }
     }, [])
   );
 
@@ -61,18 +64,10 @@ const Inventory = () => {
   };
 
   const handleToggleSearch = (e) => {
-    if (e && !isSearchNote) {
-      setRefreshing(true);
-      setIsSearchNote(e);
-      setData([]);
-      setRefreshing(false);
-    }
-    if (!e && isSearchNote) {
-      setRefreshing(true);
-      setIsSearchNote(e);
-      setData([]);
-      setRefreshing(false);
-    }
+    setRefreshing(true);
+    setIsSearchNote(e);
+    fetchData();
+    setRefreshing(false);
   };
 
   return (

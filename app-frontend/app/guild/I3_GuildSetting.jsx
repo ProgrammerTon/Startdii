@@ -100,15 +100,30 @@ const GuildSettingPage = () => {
 
       {/* Note and Quiz Buttons */}
       <View style={styles.noteQuizContainer}>
-        <TouchableOpacity style={styles.noteButton} onPress={() => router.push("/guild/I6_NoteGuild")}>
+        <TouchableOpacity
+          style={styles.noteButton}
+          onPress={() =>
+            router.push({
+              pathname: "/guild/I6_NoteGuild",
+              params: { room: guild._id },
+            })
+          }
+        >
           <Text style={styles.noteQuizText}>Note</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.quizButton} onPress={() => router.push("/guild/I7_QuizGuild")}>
+        <TouchableOpacity
+          style={styles.quizButton}
+          onPress={() =>
+            router.push({
+              pathname: "/guild/I7_QuizGuild",
+              params: { room: guild._id },
+            })
+          }
+        >
           <Text style={styles.noteQuizText}>Quiz</Text>
         </TouchableOpacity>
       </View>
-
     </View>
   );
 };

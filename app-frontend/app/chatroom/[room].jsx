@@ -96,7 +96,14 @@ const ChatRoom = () => {
           <Text style={styles.backButton}>{"<"}</Text>
         </TouchableOpacity>
         <Text style={styles.headerText}>{userTitle}</Text>
-        <TouchableOpacity onPress={() => router.push("/chatsystem/H3_user")}>
+        <TouchableOpacity
+          onPress={() =>
+            router.push({
+              pathname: "/chatsystem/H3_user",
+              params: { room: room, name: userTitle },
+            })
+          }
+        >
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
       </View>
@@ -143,9 +150,7 @@ const ChatRoom = () => {
 
           // Default case for regular chat messages
           const isCurrentUser = item.sender === name;
-          return (
-            <ChatView index={index} message={item} name={name} />
-          );
+          return <ChatView index={index} message={item} name={name} />;
         }}
         keyExtractor={(item, index) => `${item?.sender}-${index}`}
         inverted // This makes the list scroll from bottom to top

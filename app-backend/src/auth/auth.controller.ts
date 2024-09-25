@@ -13,4 +13,9 @@ export class AuthController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
+
+  @Post('forgotPassword')
+  async forgotPassword(@Request() req) {
+    return this.authService.userForgotPassword('Popo@gmail.com');
+  }
 }
