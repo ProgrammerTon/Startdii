@@ -14,7 +14,6 @@ type SourceRequest = {
 };
 
 type UpdatedSourceRequest = {
-  title: string;
   description?: string;
   content?: string;
   published?: boolean;
