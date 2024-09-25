@@ -10,6 +10,7 @@ import { ObjectId } from 'mongodb';
 import { Types } from 'mongoose';
 import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -247,6 +248,21 @@ export class UsersService {
     return await this.userModel
       .findByIdAndUpdate(id, user, { new: true })
       .exec();
+  }
+
+  // --------------------------- Update ---------------------------
+  async update(id: ObjectId, updateUserDto: UpdateUserDto) {
+    console.log(id, updateUserDto);
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(
+        id,
+        { $set: updateUserDto },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+
+    // Return the updated document, or null if not found
+    return updatedUser;
   }
 
   // --------------------------- Misc. ---------------------------
