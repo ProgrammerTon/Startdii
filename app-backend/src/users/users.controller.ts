@@ -22,6 +22,7 @@ import { ChatListService } from './chatlist.service';
 import { Types } from 'mongoose';
 import { CreateChatDto } from './dto/create-chatlist.dto';
 import { GuildsService } from 'src/guilds/guilds.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('User')
 @Controller('users')
@@ -31,6 +32,14 @@ export class UsersController {
     private readonly chatListService: ChatListService,
     private readonly guildsService: GuildsService,
   ) {}
+
+  @Patch(':userId')
+  updateUser(
+    @Param('userId', ParseObjectIdPipe) userId: ObjectId,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(userId, updateUserDto);
+  }
 
   @Post('register')
   register(@Body() createUserDto: CreateUserDto) {
