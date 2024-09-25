@@ -131,13 +131,15 @@ export class SourcesService {
   async addSourceFromTags(id: ObjectId) {
     const source = await this.sourceModel.findById(id).exec();
     let tag;
-    for (let i = 0; i < source.tags.length; i++) {
-      tag = await this.tagModel.findOne({ name: source.tags[i] }).exec();
-      if (!tag) {
-        tag = await this.tagModel.create({ name: source.tags[i] });
+    if (source?.tags?.length) {
+      for (let i = 0; i < source.tags.length; i++) {
+        tag = await this.tagModel.findOne({ name: source.tags[i] }).exec();
+        if (!tag) {
+          tag = await this.tagModel.create({ name: source.tags[i] });
+        }
+        tag.sources.push(id);
+        tag.save();
       }
-      tag.sources.push(id);
-      tag.save();
     }
   }
 
@@ -145,15 +147,17 @@ export class SourcesService {
     // Find the document by ID and apply the updates
     const source = await this.sourceModel.findById(id).exec();
     let tag;
-    for (let i = 0; i < source.tags.length; i++) {
-      tag = await this.tagModel.findOne({ name: source.tags[i] }).exec();
-      if (!tag) {
-        tag = await this.tagModel.create({ name: source.tags[i] });
+    if (source?.tags?.length) {
+      for (let i = 0; i < source.tags.length; i++) {
+        tag = await this.tagModel.findOne({ name: source.tags[i] }).exec();
+        if (!tag) {
+          tag = await this.tagModel.create({ name: source.tags[i] });
+        }
+        tag.sources = tag.sources.filter(
+          (element) => String(element) !== String(id),
+        );
+        tag.save();
       }
-      tag.sources = tag.sources.filter(
-        (element) => String(element) !== String(id),
-      );
-      tag.save();
     }
   }
 
