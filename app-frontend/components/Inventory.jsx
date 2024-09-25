@@ -25,18 +25,19 @@ const Inventory = () => {
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] =
-    useState(false);
+  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] = useState(false);
   const [isSearchNote, setIsSearchNote] = useState(true);
   const [refreshing, setRefreshing] = useState(true);
 
   const fetchData = async () => {
+    console.log("Hello", user._id);
     setLoading(true);
     if (isSearchNote) {
       const sources = await getSourceInventory(user._id);
       setData(sources ? sources.reverse() : []);
     } else {
       const quizes = await getQuizInventory(user._id);
+      console.log("My Quiz", quizes);
       setData(quizes ? quizes.reverse() : []);
     }
     setLoading(false);
@@ -44,8 +45,10 @@ const Inventory = () => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchData();
-    }, [])
+      if (user) {
+        fetchData();
+      }
+    }, [user, isSearchNote]) 
   );
 
   useEffect(() => {
@@ -61,18 +64,10 @@ const Inventory = () => {
   };
 
   const handleToggleSearch = (e) => {
-    if (e && !isSearchNote) {
-      setRefreshing(true);
-      setIsSearchNote(e);
-      setData([]);
-      setRefreshing(false);
-    }
-    if (!e && isSearchNote) {
-      setRefreshing(true);
-      setIsSearchNote(e);
-      setData([]);
-      setRefreshing(false);
-    }
+    setRefreshing(true);
+    setIsSearchNote(e);
+    fetchData();
+    setRefreshing(false);
   };
 
   return (

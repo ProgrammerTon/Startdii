@@ -13,6 +13,14 @@ type SourceRequest = {
   originalname: string;
 };
 
+type UpdatedSourceRequest = {
+  title: string;
+  description?: string;
+  content?: string;
+  published?: boolean;
+  tags?: string[];
+}
+
 export async function createSource(data: SourceRequest): Promise<any | null> {
   const res = await fetch(`${baseUrl}/sources`, {
     method: "POST",
@@ -178,3 +186,18 @@ export async function deleteSource(sourceId: string): Promise<boolean> {
     return false; 
   }
 }
+
+export async function updateSource(id: string, data: UpdatedSourceRequest): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/sources/${id}`, {
+    method: "PATCH",  
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    console.error("Failed to update source:", await res.text());
+    return null;
+  }
+  return await res.json();
+}
+

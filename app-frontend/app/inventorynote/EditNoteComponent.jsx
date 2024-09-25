@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
+import { router } from 'expo-router';
 const EditNoteComponent = ({sourceId}) => {
 
   return (
     <>
       <TouchableOpacity style={styles.reportButton} 
-        onPress={() => console.log(`Edit Pressed ${sourceId}`)}
-        
-        >
+        onPress={() => { 
+          console.log(`Edit Pressed ${sourceId}`); 
+          router.push(`/inventorynote/C1_EditNotePage?sourceId=${sourceId}`); 
+        }}>
         <AntDesign name="edit" size={24} color="black" />
       </TouchableOpacity>
     </>

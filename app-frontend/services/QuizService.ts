@@ -249,7 +249,7 @@ export async function getUserRatingQuiz(
 }
 
 export async function deleteQuiz(quizId: string): Promise<boolean> {
-  const res = await fetch(`${baseUrl}/quiz/${quizId}`, {
+  const res = await fetch(`${baseUrl}/quizs/${quizId}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
   });
