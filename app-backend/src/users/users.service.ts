@@ -67,7 +67,9 @@ export class UsersService {
   }
 
   async findAll() {
-    const user = await this.userModel.findById(new Types.ObjectId('66cf16772bd720377e20a4bd')).exec();
+    const user = await this.userModel
+      .findById(new Types.ObjectId('66cf16772bd720377e20a4bd'))
+      .exec();
     console.log(user);
     return this.userModel.find().exec();
   }
@@ -102,7 +104,6 @@ export class UsersService {
         quiz: entry.id, // Renamed field
         results: entry.results,
       }));
-
       return {
         ...user.toObject(),
         quiz_history: x, // Use the transformed data

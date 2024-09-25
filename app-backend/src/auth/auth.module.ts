@@ -8,10 +8,12 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { RolesGuard } from './roles/role.guard';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [
     UsersModule,
+    EmailModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], // Import ConfigModule
