@@ -7,7 +7,6 @@ import { plainToInstance } from 'class-transformer';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Tag, TagDocument } from 'src/tags/entities/tag.entity';
-import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 import { User, UserDocument } from 'src/users/entities/user.entity';
 import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
 
@@ -208,7 +207,9 @@ export class SourcesService {
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const sources = await this.sourceModel
       .find()
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -description -content -filename -originalname -rating -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
@@ -228,7 +229,9 @@ export class SourcesService {
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const sources = await this.sourceModel
       .find({ $text: { $search: title } })
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -description -content -filename -originalname -rating -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
@@ -259,7 +262,9 @@ export class SourcesService {
     const skip = (offset - 1) * size;
     return this.sourceModel
       .find({ $text: { $search: keyword } })
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -description -content -filename -originalname -rating -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
@@ -282,7 +287,9 @@ export class SourcesService {
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -description -content -filename -originalname -rating -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
@@ -307,7 +314,9 @@ export class SourcesService {
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -description -content -filename -originalname -rating -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
