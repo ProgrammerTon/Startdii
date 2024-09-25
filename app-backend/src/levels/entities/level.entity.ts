@@ -5,11 +5,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export type LevelDocument = Level & Document;
 
 export enum UserTitle {
-  Beginner,
+/*   Beginner,
   Intermediate,
   Advance,
   Expert,
-  Philosopher,
+  Philosopher, */
   
 }
 
