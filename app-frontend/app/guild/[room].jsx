@@ -130,7 +130,6 @@ const ChatScreen = () => {
               const fav = user?.favorite_sources?.includes(item?.source._id)
                 ? true
                 : false;
-              console.log(item);
               return (
                 <SourceCard
                   id={item?.source._id}
@@ -146,7 +145,6 @@ const ChatScreen = () => {
               const fav = user?.favorite_quizzes?.includes(item?.quiz._id)
                 ? true
                 : false;
-              console.log(item);
               return (
                 <QuizCard
                   id={item?.quiz._id}
