@@ -19,7 +19,7 @@ import { Image } from "expo-image";
 import { uploadFile } from "../../services/MyFileService";
 import { findSource,updateSource } from "../../services/SourceService";
 import { useLocalSearchParams } from "expo-router";
-
+import { router } from "expo-router";
 const EditNotePage = () => {
   const { sourceId } = useLocalSearchParams();
   const [name, setName] = useState("");
@@ -84,6 +84,8 @@ const EditNotePage = () => {
       const res = await updateSource(sourceId, updatedData); 
       if (res) {
         ShowUploadComplete();
+        router.back();
+        router.back();
       } else {
         Alert.alert("Update failed.");
       }

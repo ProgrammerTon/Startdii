@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-const EditNoteComponent = ({quizId}) => {
+const EditQuizComponent = ({quizId}) => {
 
   return (
     <>
@@ -16,7 +16,7 @@ const EditNoteComponent = ({quizId}) => {
   );
 };
 
-export default EditNoteComponent;
+export default EditQuizComponent;
 
 const styles = StyleSheet.create({
   reportButton: {
