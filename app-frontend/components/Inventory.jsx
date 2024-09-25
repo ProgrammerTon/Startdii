@@ -9,7 +9,7 @@ import {
   RefreshControl,
 } from "react-native";
 import InvenSourceCard from "../app/inventorynote/E1_InvenSourceCard.jsx";
-import QuizCard from "../components/F1_QuizCard.jsx";
+import InvenQuizCard from "../app/inventoryquiz/F1_InvenQuizCard.jsx";
 import Feather from "@expo/vector-icons/Feather";
 import { getSource } from "../services/SourceService";
 import { useGlobalContext } from "../context/GlobalProvider.js";
@@ -112,7 +112,7 @@ const Inventory = () => {
               ? true
               : false;
             return (
-              <QuizCard
+              <InvenQuizCard
                 id={item?._id}
                 title={item?.title}
                 author={item?.ownerId?.username}

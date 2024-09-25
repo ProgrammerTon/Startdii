@@ -166,14 +166,15 @@ export async function getUserRatingSource(
   return result;
 }
 
-export async function deleteSource(sourceId: string): Promise<any[] | null> {
+export async function deleteSource(sourceId: string): Promise<boolean> {
   const res = await fetch(`${baseUrl}/sources/${sourceId}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
   });
-  const result: any[] = await res.json();
-  if (!res.ok) {
-    return null;
+  if (res.ok) {
+    return true; 
+  } else {
+    console.error("Failed to delete:", await res.text());
+    return false; 
   }
-  return result;
 }
