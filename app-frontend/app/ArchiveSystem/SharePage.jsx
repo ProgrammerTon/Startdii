@@ -225,6 +225,8 @@ export default function SharePage() {
       selectedGuilds.map((index) => {
         sendMessage({ room: guildsData[index].id, ...data });
       });
+      setConfirmShare(false);
+      router.back();
     }
   };
 
