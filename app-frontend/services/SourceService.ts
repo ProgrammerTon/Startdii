@@ -13,6 +13,13 @@ type SourceRequest = {
   originalname: string;
 };
 
+type UpdatedSourceRequest = {
+  description?: string;
+  content?: string;
+  published?: boolean;
+  tags?: string[];
+}
+
 export async function createSource(data: SourceRequest): Promise<any | null> {
   const res = await fetch(`${baseUrl}/sources`, {
     method: "POST",
@@ -165,3 +172,31 @@ export async function getUserRatingSource(
   }
   return result;
 }
+
+export async function deleteSource(sourceId: string): Promise<boolean> {
+  const res = await fetch(`${baseUrl}/sources/${sourceId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (res.ok) {
+    return true; 
+  } else {
+    console.error("Failed to delete:", await res.text());
+    return false; 
+  }
+}
+
+export async function updateSource(id: string, data: UpdatedSourceRequest): Promise<any | null> {
+  const res = await fetch(`${baseUrl}/sources/${id}`, {
+    method: "PATCH",  
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    console.error("Failed to update source:", await res.text());
+    return null;
+  }
+  return await res.json();
+}
+

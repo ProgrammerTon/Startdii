@@ -247,3 +247,16 @@ export async function getUserRatingQuiz(
   }
   return result;
 }
+
+export async function deleteQuiz(quizId: string): Promise<boolean> {
+  const res = await fetch(`${baseUrl}/quizs/${quizId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (res.ok) {
+    return true; 
+  } else {
+    console.error("Failed to delete:", await res.text());
+    return false; 
+  }
+}

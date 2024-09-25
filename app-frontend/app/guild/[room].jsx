@@ -131,14 +131,27 @@ const ChatScreen = () => {
                 ? true
                 : false;
               return (
-                <SourceCard
-                  id={item?.source._id}
-                  title={item?.source.title}
-                  author={item?.source.ownerId?.username}
-                  tags={item?.source.tags}
-                  rating={item?.source.avg_rating_score}
-                  isFavorite={fav}
-                />
+                <View>
+                  <SourceCard
+                    id={item?.source._id}
+                    title={item?.source.title}
+                    author={item?.source.ownerId?.username}
+                    tags={item?.source.tags}
+                    rating={item?.source.avg_rating_score}
+                    isFavorite={fav}
+                  />
+                  <View
+                    style={[
+                      styles.messageWrapper,
+                      item.isCurrentUser ? styles.currentUser : styles.otherUser,
+                    ]}
+                  >
+                    {!item.isCurrentUser && (
+                      <Text style={styles.messageSender}>{item.sender}</Text>
+                    )}
+                    <Text style={styles.messageTime}>{item.time}</Text>
+                  </View>
+                </View>
               );
             }
             if (item.type === "Quiz") {
@@ -146,14 +159,27 @@ const ChatScreen = () => {
                 ? true
                 : false;
               return (
-                <QuizCard
-                  id={item?.quiz._id}
-                  title={item?.quiz.title}
-                  author={item?.quiz.ownerId?.username}
-                  tags={item?.quiz.tags}
-                  rating={item?.quiz.avg_rating_score}
-                  isFavorite={fav}
-                />
+                <View>
+                  <QuizCard
+                    id={item?.quiz._id}
+                    title={item?.quiz.title}
+                    author={item?.quiz.ownerId?.username}
+                    tags={item?.quiz.tags}
+                    rating={item?.quiz.avg_rating_score}
+                    isFavorite={fav}
+                  />
+                  <View
+                    style={[
+                      styles.messageWrapper,
+                      item.isCurrentUser ? styles.currentUser : styles.otherUser,
+                    ]}
+                  >
+                    {!item.isCurrentUser && (
+                      <Text style={styles.messageSender}>{item.sender}</Text>
+                    )}
+                    <Text style={styles.messageTime}>{item.time}</Text>
+                  </View>
+                </View>
               );
             }
             item.isCurrentUser = item.sender == user.username;

@@ -13,9 +13,8 @@ import { EmailService } from './email.service';
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
-  @Post()
-  testSendEmail() {
-    // return this.emailService.sendEmail(targetMail, content);
-    return;
-  }
+  // @Post()
+  // testSendEmail() {
+  //   return this.emailService.sendEmail(targetMail, content);
+  // }
 }

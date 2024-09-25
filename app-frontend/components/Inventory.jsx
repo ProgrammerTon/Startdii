@@ -8,8 +8,8 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native";
-import SourceCard from "../components/E1_SourceCard.jsx";
-import QuizCard from "../components/F1_QuizCard.jsx";
+import InvenSourceCard from "../app/inventorynote/E1_InvenSourceCard.jsx";
+import InvenQuizCard from "../app/inventoryquiz/F1_InvenQuizCard.jsx";
 import Feather from "@expo/vector-icons/Feather";
 import { getSource } from "../services/SourceService";
 import { useGlobalContext } from "../context/GlobalProvider.js";
@@ -31,12 +31,14 @@ const Inventory = () => {
   const [refreshing, setRefreshing] = useState(true);
 
   const fetchData = async () => {
+    console.log("Hello", user._id);
     setLoading(true);
     if (isSearchNote) {
       const sources = await getSourceInventory(user._id);
       setData(sources ? sources.reverse() : []);
     } else {
       const quizes = await getQuizInventory(user._id);
+      console.log("My Quiz", quizes);
       setData(quizes ? quizes.reverse() : []);
     }
     setLoading(false);
@@ -44,11 +46,10 @@ const Inventory = () => {
 
   useFocusEffect(
     useCallback(() => {
-      setIsSearchNote(true);
       if (user) {
         fetchData();
       }
-    }, [])
+    }, [user, isSearchNote])
   );
 
   useEffect(() => {
@@ -93,7 +94,7 @@ const Inventory = () => {
               ? true
               : false;
             return (
-              <SourceCard
+              <InvenSourceCard
                 id={item?._id}
                 title={item?.title}
                 author={item?.ownerId?.username}
@@ -107,7 +108,7 @@ const Inventory = () => {
               ? true
               : false;
             return (
-              <QuizCard
+              <InvenQuizCard
                 id={item?._id}
                 title={item?.title}
                 author={item?.ownerId?.username}
