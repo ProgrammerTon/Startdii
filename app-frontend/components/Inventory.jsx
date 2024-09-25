@@ -8,7 +8,7 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native";
-import InvenSourceCard from "../app/NoteInventorySystem/E1_InvenSourceCard.jsx";
+import InvenSourceCard from "../app/inventorynote/E1_InvenSourceCard.jsx";
 import QuizCard from "../components/F1_QuizCard.jsx";
 import Feather from "@expo/vector-icons/Feather";
 import { getSource } from "../services/SourceService";

@@ -30,7 +30,7 @@ const InvenSourceCard = ({ id, title, author, tags, rating, isFavorite }) => {
   };
 
   return (
-    <TouchableOpacity onPress={() => router.push(`/NoteInventorySystem/${id}`)}>
+    <TouchableOpacity onPress={() => router.push(`/inventorynote/${id}`)}>
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
           <Image

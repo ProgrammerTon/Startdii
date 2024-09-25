@@ -29,7 +29,7 @@ import { getUserRatingSource } from "../../services/SourceService";
 import TestReportNote from "../reportsystem/ReportNote";
 import { router } from "expo-router";
 import EditNoteComponent from "./EditNoteComponent";
-
+import DeleteNoteComponent from "./DeleteNoteComponent";
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
   const [source, setSource] = useState(null);
@@ -169,8 +169,12 @@ const SourceDetailPage = () => {
         <View style={styles.headerWrapper}>
             <Text style={styles.headerStyle}>{source?.title}</Text>
             <EditNoteComponent
-              //sourceId={id} // Pass the sourceId to the report window
+              sourceId={id} // Pass the sourceId to the report window
               onPress={() => console.log('Edit Pressed')}
+            />
+            <DeleteNoteComponent
+              sourceId={id} // Pass the sourceId to the report window
+              onPress={() => console.log('Delete Pressed')}
             />
         </View>
 
