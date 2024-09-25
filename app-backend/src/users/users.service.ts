@@ -139,7 +139,10 @@ export class UsersService {
     const { sources }: any = await this.userModel
       .findById(ownerId)
       .select('sources')
-      .populate('sources', '-rating -filename -originalname')
+      .populate(
+        'sources',
+        '-updatedAt -description -content -filename -originalname -rating -rating_count',
+      )
       .exec();
     if (searchTitle !== '') {
       const regex = new RegExp(searchTitle, 'i');
@@ -160,7 +163,7 @@ export class UsersService {
       .select('quizzes')
       .populate(
         'quizzes',
-        '-rating -players -total_score -playing_scores -questions',
+        '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
       )
       .exec();
     if (searchTitle !== '') {
