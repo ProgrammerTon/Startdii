@@ -28,7 +28,7 @@ import { baseUrl } from "@/constants/const";
 import { getUserRatingSource } from "../../services/SourceService";
 import TestReportNote from "../reportsystem/ReportNote";
 import { router } from "expo-router";
-import EditNoteComponent from "../../components/EditNoteComponent";
+import EditNoteComponent from "./EditNoteComponent";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();

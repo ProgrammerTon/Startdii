@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   reportButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "red",
+    backgroundColor: "white",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
