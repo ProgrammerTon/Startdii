@@ -23,12 +23,12 @@ export class ProgressionsController {
         private readonly progressionsService: ProgressionsService,
     ) {}
 
-    @Cron()
+/*     @Cron()
     @Post(':userId')
     create(@Body() createProgressionDto: CreateProgressionDto, 
            @Param('userId') userId: ObjectId) {
         return this.progressionsService.create(createProgressionDto, userId);
-    }
+    } */
   
     @Get()
     findAll() {

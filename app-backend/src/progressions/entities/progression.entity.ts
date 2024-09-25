@@ -15,9 +15,6 @@ export class Progression {
   @Prop({ type: ObjectId, required: true, name: 'goalId', ref: 'Goal' })
   goalId: ObjectId;
 
-  @Prop({ name: 'objective_count', ref: 'Goal'})
-  objective_count: number;
-
   @Prop({ name: 'current_progress'})
   current_progress: number = 0;
 

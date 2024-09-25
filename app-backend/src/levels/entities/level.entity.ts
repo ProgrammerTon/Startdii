@@ -31,7 +31,7 @@ export class Level {
   required_exp: number = 25;
 
   @Prop({ name: 'user_title' })
-  user_title: UserTitle[];
+  user_title: UserTitle;
 
   //@Prop({ name: 'rating_exp'})
   //rating_exp: number = 0;

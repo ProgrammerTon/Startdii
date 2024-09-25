@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ObjectId } from 'mongodb';
 
@@ -12,9 +12,7 @@ export class CreateProgressionDto {
   goalId: ObjectId;
 
   @ApiProperty()
-  objective_count: number;
-
-  @ApiProperty()
+  @IsInt()
   current_progress: number;
 
 }
