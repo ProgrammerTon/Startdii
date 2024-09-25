@@ -96,7 +96,7 @@ export class GuildsController {
   }
 
   @Patch(':id/vice-leader/:viceLeaderId')
-  updateMember(
+  updateViceLeader(
     @Param('id', ParseObjectIdPipe) id: ObjectId,
     @Param('viceLeaderId', ParseObjectIdPipe) viceLeaderId: ObjectId,
     @Query() query: { option: string },
@@ -110,7 +110,7 @@ export class GuildsController {
   }
 
   @Patch(':id/member/:memberId')
-  updateViceLeader(
+  updateMember(
     @Param('id', ParseObjectIdPipe) id: ObjectId,
     @Param('memberId', ParseObjectIdPipe) memberId: ObjectId,
     @Query() query: { option: string },
