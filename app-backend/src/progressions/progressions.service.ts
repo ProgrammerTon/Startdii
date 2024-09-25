@@ -70,8 +70,6 @@ export class ProgressionsService {
             selected_hard_goals.push(hard_goals[sel]);
         }
     }
-    console.log('hard', selected_hard_goals);
-    console.log('easy', selected_easy_goals);
   }
   
 }
