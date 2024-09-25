@@ -124,6 +124,12 @@ export class GuildsService {
 
   async updateLeader(id: ObjectId, leaderId: ObjectId): Promise<Guild> {
     const guild = await this.guildModel.findById({ _id: id });
+
+    // if leader is the only member of guild
+    if (guild.memberIdList.length <= 1) {
+      return this.remove(id);
+    }
+
     const oldLeaderId = guild.leaderId;
 
     // update member status of ex-leader
