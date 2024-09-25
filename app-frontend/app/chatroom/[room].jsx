@@ -21,6 +21,7 @@ import QuizCard from "../../components/F1_QuizCard";
 const { width, height } = Dimensions.get("window");
 const ChatView = ({ message, index, name }) => {
   const isCurrentUser = message.sender === name;
+  const formattedTime = message.time.endsWith(':') ? message.time.slice(0, -1) : message.time;
   return (
     <View
       style={[
@@ -39,7 +40,7 @@ const ChatView = ({ message, index, name }) => {
         <Text style={styles.messageText}>{message.text}</Text>
       </View>
       <View style={{backgroundColor: "#fff"}}>
-        <Text style={styles.messageTime}>{message.time.slice(0, -1)}</Text>
+        <Text style={styles.messageTime}>{formattedTime}</Text>
       </View>
     </View>
   );
@@ -131,6 +132,7 @@ const ChatRoom = () => {
 
             // Handle "Source" type
             if (item.type === "Source") {
+              const formattedTime = item.time.endsWith(':') ? item.time.slice(0, -1) : item.time;
               const fav = user?.favorite_sources?.includes(item?.source._id)
                 ? true
                 : false;
@@ -144,12 +146,16 @@ const ChatRoom = () => {
                     rating={item?.source.avg_rating_score}
                     isFavorite={fav}
                   />
+                  <View style={{backgroundColor: "#fff"}}>
+                    <Text style={styles.messageTime}>{formattedTime}</Text>
+                  </View>
                 </View>
               );
             }
 
             // Handle "Quiz" type
             if (item.type === "Quiz") {
+              const formattedTime = item.time.endsWith(':') ? item.time.slice(0, -1) : item.time;
               const fav = user?.favorite_quizzes?.includes(item?.quiz._id)
                 ? true
                 : false;
@@ -164,7 +170,7 @@ const ChatRoom = () => {
                     isFavorite={fav}
                   />
                   <View style={{backgroundColor: "#fff"}}>
-                    <Text style={styles.messageTime}>{item.time}</Text>
+                    <Text style={styles.messageTime}>{formattedTime}</Text>
                   </View>
                 </View>
               );
@@ -242,7 +248,7 @@ const styles = StyleSheet.create({
   },
   messageTime: {
     fontSize: 12,
-    color: "#555",
+    color: "#888",
     alignSelf: "flex-end",
   },
   inputContainer: {
@@ -258,7 +264,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 30,
     paddingVertical: 10,
     paddingHorizontal: 15,
     fontSize: 16,
