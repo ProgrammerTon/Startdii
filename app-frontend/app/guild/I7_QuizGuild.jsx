@@ -80,7 +80,7 @@ const QuizGuildPage = () => {
             />
           );
         }}
-        keyExtractor={(item, ind) => ind}
+        keyExtractor={(item, ind) => item.quizId._id}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
