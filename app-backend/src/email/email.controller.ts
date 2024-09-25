@@ -15,10 +15,7 @@ export class EmailController {
 
   @Post()
   testSendEmail() {
-    return this.emailService.sendEmail(
-      'popole159za@gmail.com',
-      'Hello From startdii',
-    );
     // return this.emailService.sendEmail(targetMail, content);
+    return;
   }
 }
