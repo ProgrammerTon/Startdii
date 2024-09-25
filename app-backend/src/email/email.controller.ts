@@ -13,8 +13,12 @@ import { EmailService } from './email.service';
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
-  // @Post()
-  // testSendEmail() {
-  //   return this.emailService.sendEmail(targetMail, content);
-  // }
+  @Post()
+  testSendEmail() {
+    return this.emailService.sendEmail(
+      'popole159za@gmail.com',
+      'Hello From startdii',
+    );
+    // return this.emailService.sendEmail(targetMail, content);
+  }
 }

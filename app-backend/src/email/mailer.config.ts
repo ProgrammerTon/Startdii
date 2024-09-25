@@ -1,11 +1,12 @@
 import { MailerOptions } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 
-export const mailerConfig: MailerOptions = {
+export const mailerConfig = (configService: ConfigService): MailerOptions => ({
   transport: {
-    service: 'Gmail',
+    service: configService.get<string>('MAILER_TRANSPORT_SERVICE'),
     auth: {
-      user: 'popole159za@gmail.com',
-      pass: 'sfwj zwap njey vhku',
+      user: configService.get<string>('MAILER_AUTH_USER'),
+      pass: configService.get<string>('MAILER_AUTH_PASS'),
     },
   },
-};
+});
