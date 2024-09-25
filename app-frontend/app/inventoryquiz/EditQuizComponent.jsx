@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-const DeleteNoteComponent = ({sourceId}) => {
+const EditNoteComponent = ({quizId}) => {
 
   return (
     <>
       <TouchableOpacity style={styles.reportButton} 
-        onPress={() => console.log(`Delete Pressed ${sourceId}`)}
+        onPress={() => console.log(`Edit Pressed ${quizId}`)}
+        
         >
-        <Ionicons name="trash-bin" size={24} color="black" />
+        <AntDesign name="edit" size={24} color="black" />
       </TouchableOpacity>
     </>
   );
 };
 
-export default DeleteNoteComponent;
+export default EditNoteComponent;
 
 const styles = StyleSheet.create({
   reportButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "red",
+    backgroundColor: "white",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const DeleteNoteComponent = ({sourceId}) => {
+const DeleteQuizComponent = ({quizId}) => {
 
   return (
     <>
       <TouchableOpacity style={styles.reportButton} 
-        onPress={() => console.log(`Delete Pressed ${sourceId}`)}
+        onPress={() => console.log(`Delete Pressed ${quizId}`)}
         >
         <Ionicons name="trash-bin" size={24} color="black" />
       </TouchableOpacity>
@@ -15,7 +15,7 @@ const DeleteNoteComponent = ({sourceId}) => {
   );
 };
 
-export default DeleteNoteComponent;
+export default DeleteQuizComponent;
 
 const styles = StyleSheet.create({
   reportButton: {

@@ -170,11 +170,9 @@ const SourceDetailPage = () => {
             <Text style={styles.headerStyle}>{source?.title}</Text>
             <EditNoteComponent
               sourceId={id} // Pass the sourceId to the report window
-              onPress={() => console.log('Edit Pressed')}
             />
             <DeleteNoteComponent
               sourceId={id} // Pass the sourceId to the report window
-              onPress={() => console.log('Delete Pressed')}
             />
         </View>
 

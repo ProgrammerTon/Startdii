@@ -6,7 +6,10 @@ const EditNoteComponent = ({sourceId}) => {
 
   return (
     <>
-      <TouchableOpacity style={styles.reportButton} >
+      <TouchableOpacity style={styles.reportButton} 
+        onPress={() => console.log(`Edit Pressed ${sourceId}`)}
+        
+        >
         <AntDesign name="edit" size={24} color="black" />
       </TouchableOpacity>
     </>

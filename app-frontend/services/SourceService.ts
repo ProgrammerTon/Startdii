@@ -165,3 +165,15 @@ export async function getUserRatingSource(
   }
   return result;
 }
+
+export async function deleteSource(sourceId: string): Promise<any[] | null> {
+  const res = await fetch(`${baseUrl}/sources/${sourceId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  const result: any[] = await res.json();
+  if (!res.ok) {
+    return null;
+  }
+  return result;
+}
