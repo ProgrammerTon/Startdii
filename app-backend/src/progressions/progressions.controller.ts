@@ -7,7 +7,6 @@ import {
     Param,
     Patch,
 } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
 import { ObjectId } from 'mongodb';
 import { ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe } from 'src/common/pipes';
