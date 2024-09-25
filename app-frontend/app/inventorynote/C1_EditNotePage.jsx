@@ -50,6 +50,8 @@ const EditNotePage = () => {
 
   const CloseUploadComplete = () => {
     setAddUploadWindowVisible(false);
+    router.back();
+    router.back();
   };
 
   const ShowErrorEmptyFieldWindow = () => {
@@ -73,6 +75,13 @@ const EditNotePage = () => {
     if (isPublishing) return;
     setIsPublishing(true);
   
+    // Check if all the required fields are not null or empty
+    if (!name || !description || !content || !tag) {
+      Alert.alert("Error", "Please fill in all the fields.");
+      setIsPublishing(false);
+      return;
+    }
+  
     const updatedData = {
       ...(name && { title: name }),
       ...(description && { description }),
@@ -84,8 +93,6 @@ const EditNotePage = () => {
       const res = await updateSource(sourceId, updatedData); 
       if (res) {
         ShowUploadComplete();
-        router.back();
-        router.back();
       } else {
         Alert.alert("Update failed.");
       }
@@ -97,8 +104,6 @@ const EditNotePage = () => {
     }
   };
   
-  
-
   //---File Upload---//
   const [selectedDocuments, setSelectedDocuments] = useState([]);
 
