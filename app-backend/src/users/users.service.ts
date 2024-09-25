@@ -47,22 +47,19 @@ export class UsersService {
 
   async getQuizHistory(userId: string) {
     const userfind = new Types.ObjectId(userId);
-    const user = await this.findById(userfind);
-    const quizIds = user.quiz_history.map((q) => q.id);
-    const quizzes = await this.quizModel
-      .find({
-        _id: { $in: quizIds },
+    const user = await this.userModel
+      .findById(userfind)
+      .populate({
+        path: 'quiz_history.id',
+        select: 'title tags avg_rating_score createdAt ownerId',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
       })
-      .populate('ownerId', 'username');
-    const populatedQuizHistory = user.quiz_history.map((quizEntry) => {
-      const quiz = quizzes.find((quiz: any) => quiz._id.equals(quizEntry.id));
-      const { questions, players, ...restQuiz } = quiz.toObject();
-      return {
-        ...quizEntry,
-        quiz: restQuiz,
-      };
-    });
-    return populatedQuizHistory;
+      .exec();
+    const quizzes = user.quiz_history.map((quizEntry) => quizEntry.id[0]);
+    return quizzes;
   }
 
   async findById(userId: ObjectId) {
