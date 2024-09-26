@@ -6,12 +6,17 @@ import { ObjectId } from 'mongodb';
 import { Types } from 'mongoose';
 import { Level, LevelDocument } from './entities/level.entity';
 import { CreateLevelDto } from './dto/create-level.dto';
+import { Cron } from '@nestjs/schedule';
+import { UsersService } from 'src/users/users.service';
+import { User, UserDocument } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class LevelsService {
   constructor(
     @InjectModel(Level.name)
     private levelModel: Model<LevelDocument>,
+    @InjectModel(User.name)
+    private userModel: Model<UserDocument>,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -46,12 +51,47 @@ export class LevelsService {
 
   async addExp(userId: ObjectId, exp: number) {
     var user_lvl = await this.findUserLevel(userId);
-    console.log(user_lvl,exp);
     user_lvl.current_exp += Number(exp);
-    console.log(user_lvl);
     user_lvl = await this.levelUpCheck(user_lvl);
     //console.log(user_lvl);
     return user_lvl;
+  }
+
+  @Cron('59 23 * * 0')
+  async updateWeeklyRatingExp() {
+    const weekly_rating_exp_cap: number = 150;
+		const users = await this.userModel.find({}).populate('sources').populate('quizzes').exec();
+		for (let i = 0; i < users.length; i++) {
+      const current_user: any = users[i];
+			const user_lvl: any = await this.findUserLevel(current_user._id);
+      const user_sources = current_user.sources;
+      const user_quizzes = current_user.quizzes;
+      var total_rating_exp = 0;
+      for (let j = 0; j < user_sources.length; j++) {
+        const current_source = user_sources[j];
+        if (!current_source.avg_rating_score || !current_source.rating_count) {
+          total_rating_exp += 0;
+        }
+        else {
+          total_rating_exp += current_source.avg_rating_score * current_source.rating_count;
+        }
+      }
+      for (let j = 0; j < user_quizzes.length; j++) {
+        const current_quiz = user_quizzes[j];
+        if (!current_quiz.avg_rating_score || !current_quiz.rating_count) {
+          total_rating_exp += 0;
+        }
+        else {
+          total_rating_exp += current_quiz.avg_rating_score * current_quiz.rating_count;
+        }
+      }
+      if (total_rating_exp > weekly_rating_exp_cap) {
+        total_rating_exp = weekly_rating_exp_cap;
+      }
+      user_lvl.current_rating_exp = total_rating_exp;
+      await this.addExp(current_user._id, total_rating_exp);
+      await this.levelModel.findByIdAndUpdate(user_lvl._id, {current_rating_exp: total_rating_exp});
+    }
   }
 
   // --------------------------- Misc. ---------------------------

@@ -33,8 +33,12 @@ export class LevelsController {
     }
 
     @Patch(':userId/:expToAdd')
-    addExp(@Param('userId') userId: ObjectId, @Param('expToAdd') expToAdd: number) {
+    addExp(@Param('userId', ParseObjectIdPipe) userId: ObjectId, @Param('expToAdd') expToAdd: number) {
       return this.levelsService.addExp(userId, expToAdd);
     }
-  
+    
+    @Patch('reset_weekly_rating_exp')
+    resetWeeklyRatingExp() {
+      return this.levelsService.updateWeeklyRatingExp();
+    }
 }

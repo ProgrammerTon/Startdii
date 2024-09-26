@@ -32,4 +32,9 @@ export class ProgressionsController {
     updateProgress(@Param('userId', ParseObjectIdPipe) userId: ObjectId, @Param('goalType') goalType: GoalType) {
         return this.progressionsService.updateProgress(userId, goalType);
     }
+
+    @Patch('reset_weekly_goal')
+    resetWeeklyGoal() {
+        return this.progressionsService.updateWeeklyGoal();
+    }
 }

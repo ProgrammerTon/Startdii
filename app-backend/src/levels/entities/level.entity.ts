@@ -33,11 +33,9 @@ export class Level {
   @Prop({ name: 'user_title' })
   user_title: UserTitle;
 
-  //@Prop({ name: 'rating_exp'})
-  //rating_exp: number = 0;
+  @Prop({ name: 'current_rating_exp' })
+  current_rating_exp: number = 0;
 
-  //@Prop({ name: 'rating_exp_cap'})
-  //rating_exp_cap: number = ;
 }
 
 export const LevelSchema = SchemaFactory.createForClass(Level);
