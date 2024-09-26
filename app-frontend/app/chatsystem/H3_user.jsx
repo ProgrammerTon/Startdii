@@ -9,12 +9,24 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
+import React from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get("window");
 const ChatSearch = () => {
   const { room, name } = useLocalSearchParams();
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() =>  router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color="#007bff" />
+        </TouchableOpacity>
         <Text style={styles.headerText}>{name}</Text>
       </View>
 
@@ -66,22 +78,28 @@ export default ChatSearch;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    backgroundColor: '#fff',
   },
   header: {
+    height: height * 0.1,
+    width: width,
+    backgroundColor: "#007bff",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#007bff",
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    justifyContent: "flex-start",
+    justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
-    color: "white",
-    fontSize: 18,
+    fontSize: 24,
+    color: "#fff",
     fontWeight: "bold",
   },
   searchBarContainer: {
@@ -90,8 +108,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 30,
+    marginHorizontal: 20,
     marginVertical: 20,
+    borderRadius: 30,
   },
   searchIcon: {
     marginRight: 10,
@@ -102,24 +121,26 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   button: {
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    flexDirection: 'column',
+    alignSelf: "center",
+    alignItems: 'center',
+    height: height * 0.1,
+    width: width * 0.9,
+    backgroundColor: '#fff',
     borderRadius: 20,
     paddingVertical: 20,
     paddingHorizontal: 15,
-    marginVertical: 10,
-    shadowColor: "#000",
+    marginVertical: 20,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowRadius: 3,
+    elevation: 5,
   },
   buttonText: {
     fontSize: 30,
-    color: "#000",
-    fontWeight: "bold",
-    marginLeft: 20,
+    color: '#000',
+    fontWeight: 'bold',
   },
   icon: {
     width: 50,
