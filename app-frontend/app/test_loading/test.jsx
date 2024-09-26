@@ -8,11 +8,8 @@ export default function Test() {
   return (
     <SafeAreaView>
       <Text>Hellooo</Text>
-      {/* <Loading/> */}
+      <Loading/>
       <Text>Hellooo</Text>
-      <View style={styles.container}>
-        <SourceCard />
-      </View>
     </SafeAreaView>
   );
 }
