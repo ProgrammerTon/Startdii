@@ -10,6 +10,7 @@ import { ObjectId } from 'mongodb';
 import { Types } from 'mongoose';
 import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -47,22 +48,19 @@ export class UsersService {
 
   async getQuizHistory(userId: string) {
     const userfind = new Types.ObjectId(userId);
-    const user = await this.findById(userfind);
-    const quizIds = user.quiz_history.map((q) => q.id);
-    const quizzes = await this.quizModel
-      .find({
-        _id: { $in: quizIds },
+    const user = await this.userModel
+      .findById(userfind)
+      .populate({
+        path: 'quiz_history.id',
+        select: 'title tags avg_rating_score createdAt ownerId',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
       })
-      .populate('ownerId', 'username');
-    const populatedQuizHistory = user.quiz_history.map((quizEntry) => {
-      const quiz = quizzes.find((quiz: any) => quiz._id.equals(quizEntry.id));
-      const { questions, players, ...restQuiz } = quiz.toObject();
-      return {
-        ...quizEntry,
-        quiz: restQuiz,
-      };
-    });
-    return populatedQuizHistory;
+      .exec();
+    const quizzes = user.quiz_history.map((quizEntry) => quizEntry.id[0]);
+    return quizzes;
   }
 
   async findById(userId: ObjectId) {
@@ -70,7 +68,9 @@ export class UsersService {
   }
 
   async findAll() {
-    const user = await this.userModel.findById(new Types.ObjectId('66cf16772bd720377e20a4bd')).exec();
+    const user = await this.userModel
+      .findById(new Types.ObjectId('66cf16772bd720377e20a4bd'))
+      .exec();
     console.log(user);
     return this.userModel.find().exec();
   }
@@ -105,7 +105,6 @@ export class UsersService {
         quiz: entry.id, // Renamed field
         results: entry.results,
       }));
-
       return {
         ...user.toObject(),
         quiz_history: x, // Use the transformed data
@@ -141,7 +140,10 @@ export class UsersService {
     const { sources }: any = await this.userModel
       .findById(ownerId)
       .select('sources')
-      .populate('sources', '-rating -filename -originalname')
+      .populate(
+        'sources',
+        '-updatedAt -description -content -filename -originalname -rating -rating_count',
+      )
       .exec();
     if (searchTitle !== '') {
       const regex = new RegExp(searchTitle, 'i');
@@ -162,7 +164,7 @@ export class UsersService {
       .select('quizzes')
       .populate(
         'quizzes',
-        '-rating -players -total_score -playing_scores -questions',
+        '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
       )
       .exec();
     if (searchTitle !== '') {
@@ -246,6 +248,21 @@ export class UsersService {
     return await this.userModel
       .findByIdAndUpdate(id, user, { new: true })
       .exec();
+  }
+
+  // --------------------------- Update ---------------------------
+  async update(id: ObjectId, updateUserDto: UpdateUserDto) {
+    console.log(id, updateUserDto);
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(
+        id,
+        { $set: updateUserDto },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+
+    // Return the updated document, or null if not found
+    return updatedUser;
   }
 
   // --------------------------- Misc. ---------------------------

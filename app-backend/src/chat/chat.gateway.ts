@@ -65,7 +65,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         time: data.time,
       };
       console.log('Nah', formattedChat);
-      this.server.to(data.rooms).emit('message', formattedChat);
+      this.server.to(data.rooms).emit('message', JSON.stringify(formattedChat));
       return;
     }
   }

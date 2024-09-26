@@ -15,7 +15,7 @@ export const CharacterProvider = ({ children }) => {
       setSelectedChar(user.character);
       setSelectedColor(user.characterColor);
     }
-  }, []);
+  }, [user]);
 
   return (
     <CharacterContext.Provider

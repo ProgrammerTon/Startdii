@@ -37,7 +37,7 @@ import DevPage from "../dev/index";
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
   const { selectedChar, selectedColor } = useCharContext();
-  const { isLogged } = useGlobalContext();
+  const { isLogged, user } = useGlobalContext();
 
   const getCharacterComponent = React.useMemo(() => {
     switch (selectedChar) {
@@ -106,7 +106,9 @@ export default function ProfileTest() {
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
         <TouchableOpacity style={styles.usernameContainer}>
-          <Text style={[fonts.EngBold22, styles.username]}>Juaz Juazzz</Text>
+          <Text style={[fonts.EngBold22, styles.username]}>
+            {user?.username}
+          </Text>
           <View style={styles.pencilContainer}>
             <PencilIcon />
           </View>
