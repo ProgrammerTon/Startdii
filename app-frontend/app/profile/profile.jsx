@@ -30,11 +30,24 @@ import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
 import DressButton from "../../components/DressButton";
 import Frame from "../../components/Frame";
-import QuizHistory from "../../components/QuizHistory";
+import History from "../quiz_history_page";
+import HNone from "../../components/hat/hat_none";
+import HBanana from "../../components/hat/hat_banana";
+import HCap from "../../components/hat/hat_cap";
+import HCowboy from "../../components/hat/hat_cowboy";
+import HCrown from "../../components/hat/hat_crown";
+import HDeer from "../../components/hat/hat_deer";
+import HFlower from "../../components/hat/hat_flower";
+import HMagic from "../../components/hat/hat_magic";
+import HPlant from "../../components/hat/hat_plant";
+import HPlaster from "../../components/hat/hat_plaster";
+import HShark from "../../components/hat/hat_shark";
+import HXmas from "../../components/hat/hat_xmas";
 
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
-  const { selectedChar, selectedColor } = useCharContext();
+  const { selectedChar, selectedColor, selectedHat, setSelectedHat } =
+    useCharContext();
 
   const getCharacterComponent = React.useMemo(() => {
     switch (selectedChar) {
@@ -55,6 +68,33 @@ export default function ProfileTest() {
     }
   }, [selectedChar, selectedColor]);
 
+  const getHatComponent = React.useMemo(() => {
+    switch (selectedHat) {
+      case "HBanana":
+        return <HBanana />;
+      case "HCap":
+        return <HCap />;
+      case "HCowboy":
+        return <HCowboy />;
+      case "HCrown":
+        return <HCrown />;
+      case "HDeer":
+        return <HDeer />;
+      case "HFlower":
+        return <HFlower />;
+      case "HMagic":
+        return <HMagic />;
+      case "HPlant":
+        return <HPlant />;
+      case "HPlaster":
+        return <HPlaster />;
+      case "HShark":
+        return <HShark />;
+      case "HXmas":
+        return <HXmas />;
+    }
+  }, [selectedHat, setSelectedHat]);
+
   const renderHeader = () => (
     <>
       <View style={styles.levelContainer}>
@@ -63,7 +103,15 @@ export default function ProfileTest() {
       <View style={styles.dressButton}>
         <DressButton />
       </View>
-      <View style={styles.charContainer}>{getCharacterComponent}</View>
+      <View style={styles.charContainer}>
+        {getCharacterComponent}
+        {/* {getHatComponent && (
+          <View style={styles.hatContainer}>
+            {getHatComponent}
+          </View>
+        )} */}
+        <View style={styles.hatContainer}>{getHatComponent}</View>
+      </View>
       <View style={styles.frameContainer}>
         <Frame />
         <View style={styles.textContainer}>
@@ -165,6 +213,13 @@ const styles = {
     justifyContent: "center",
     marginVertical: "-10%",
     marginTop: "-10%",
+    // top: "18%",
+  },
+  hatContainer: {
+    position: "absolute",
+    height: "56%",
+    width: "56%",
+    top: "-4%",
   },
   image: {
     width: "100%",
