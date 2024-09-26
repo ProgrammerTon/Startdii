@@ -18,7 +18,7 @@ type UpdatedSourceRequest = {
   content?: string;
   published?: boolean;
   tags?: string[];
-}
+};
 
 export async function createSource(data: SourceRequest): Promise<any | null> {
   const res = await fetch(`${baseUrl}/sources`, {
@@ -179,16 +179,19 @@ export async function deleteSource(sourceId: string): Promise<boolean> {
     headers: { "Content-Type": "application/json" },
   });
   if (res.ok) {
-    return true; 
+    return true;
   } else {
     console.error("Failed to delete:", await res.text());
-    return false; 
+    return false;
   }
 }
 
-export async function updateSource(id: string, data: UpdatedSourceRequest): Promise<any | null> {
+export async function updateSource(
+  id: string,
+  data: UpdatedSourceRequest
+): Promise<any | null> {
   const res = await fetch(`${baseUrl}/sources/${id}`, {
-    method: "PATCH",  
+    method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
@@ -199,4 +202,3 @@ export async function updateSource(id: string, data: UpdatedSourceRequest): Prom
   }
   return await res.json();
 }
-
