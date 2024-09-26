@@ -8,9 +8,6 @@ const SourceInventory = () => {
   
   return (
     <View style={styles.container}>
-        <TouchableOpacity onPress={() => router.push("/J1_NoteInventory")}>
-            <SourceCard />
-        </TouchableOpacity>
         
     </View>
   );

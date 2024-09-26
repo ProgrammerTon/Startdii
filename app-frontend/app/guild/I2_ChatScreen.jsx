@@ -130,21 +130,34 @@ const ChatScreen = () => {
         <FlatList
         data={messages}
         renderItem={({ item, index }) => {
+          item.isCurrentUser = item.sender === user.username;
+      
           if (item.type === "Shared Component" && item.componentData) {
             const { componentProps, type } = item.componentData;
       
             return (
-              <View key={index}>
-                {type === "source" ? (
-                  <SourceCard {...componentProps} /> 
-                ) : (
-                  <QuizCard {...componentProps} /> 
-                )}
+              <View key={index} style={styles.sharedComponentWrapper}>
+                {/* Row for time and sender */}
+                <View style={styles.timeSenderRow}>
+                  <Text style={styles.messageTime}>{item.time}</Text>
+                  {!item.isCurrentUser && (
+                    <Text style={styles.messageSender}>{item.sender}</Text>
+                  )}
+                </View>
+      
+                {/* Shared component (either source or quiz) */}
+                <View>
+                  {type === "source" ? (
+                    <SourceCard {...componentProps} />
+                  ) : (
+                    <QuizCard {...componentProps} />
+                  )}
+                </View>
               </View>
             );
           }
       
-          item.isCurrentUser = item.sender === user.username;
+          // Existing code for regular text messages
           return (
             <View
               key={item.id}
@@ -153,22 +166,28 @@ const ChatScreen = () => {
                 item.isCurrentUser ? styles.currentUser : styles.otherUser,
               ]}
             >
-              {!item.isCurrentUser && (
-                <Text style={styles.messageSender}>{item.sender}</Text>
-              )}
+              {/* Row for time and sender */}
+              <View style={styles.timeSenderRow}>
+                <Text style={styles.messageTime}>{item.time}</Text>
+                {!item.isCurrentUser && (
+                  <Text style={styles.messageSender}>{item.sender}</Text>
+                )}
+              </View>
+      
               <View style={styles.messageBubble}>
                 <Text style={styles.messageText}>{item.text}</Text>
               </View>
-              <Text style={styles.messageTime}>{item.time}</Text>
             </View>
           );
         }}
         keyExtractor={(item, index) => `${item.sender}-${index}`}
-        inverted // This makes the list scroll from bottom to top
+        inverted
         onEndReached={fetchChat}
-        onEndReachedThreshold={0.1} // Adjust as needed
+        onEndReachedThreshold={0.1}
         ListFooterComponent={loading && <ActivityIndicator />}
       />
+      
+      
       ) : null}
 
       <View style={styles.inputContainer}>
@@ -234,6 +253,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     maxWidth: "80%",
     backgroundColor: "white",
+    marginLeft: 5,
   },
   messageText: {
     fontSize: 16,
@@ -242,8 +262,7 @@ const styles = StyleSheet.create({
   messageTime: {
     fontSize: 10,
     color: "#aaa",
-    marginTop: 2,
-    alignSelf: "flex-end",
+    marginRight: 5,
   },
   currentUser: {
     alignSelf: "flex-end",
@@ -275,5 +294,13 @@ const styles = StyleSheet.create({
   sendButtonText: {
     fontSize: 18,
     color: "#fca6cc",
+  },
+  sharedComponentWrapper: {
+    marginBottom: 10,
+    alignSelf: "flex-start",
+  },
+  timeSenderRow: {
+    flexDirection: 'row', // Align time and sender in a row
+    alignItems: 'center', // Vertically center items
   },
 });

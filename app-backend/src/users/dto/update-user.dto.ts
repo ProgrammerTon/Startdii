@@ -25,4 +25,8 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsOptional()
   characterColor?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  characterHat?: string;
 }
