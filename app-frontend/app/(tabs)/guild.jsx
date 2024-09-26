@@ -90,24 +90,26 @@ const GuildPage = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Guild</Text>
       </View>
-      <FlatList
-        data={guilds}
-        renderItem={({ item, index }) => (
-          <GuildButton
-            key={item.id}
-            guild={item}
-            onPress={() => {
-              setGuildId(item.id);
-              router.push("/guild/I2_ChatScreen");
-            }}
-          />
-        )}
-        keyExtractor={(item) => `${item.id}`}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={loadGuildsData} />
-        }
-        contentContainerStyle={{ paddingBottom: 200 }}
-      />
+      <View style={styles.guildContainer}>
+        <FlatList
+          data={guilds}
+          renderItem={({ item, index }) => (
+            <GuildButton
+              key={item.id}
+              guild={item}
+              onPress={() => {
+                setGuildId(item.id);
+                router.push("/guild/I2_ChatScreen");
+              }}
+            />
+          )}
+          keyExtractor={(item) => `${item.id}`}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={loadGuildsData} />
+          }
+          contentContainerStyle={{ paddingBottom: 200 }}
+        />
+      </View>
       <TouchableOpacity
         style={styles.floatingButton}
         onPress={openguildCreateJoinWindow}
@@ -128,21 +130,24 @@ export default GuildPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.gray_bg,
     paddingTop: 35,
   },
+  guildContainer: {
+    padding: 20,
+  },
   header: {
-    backgroundColor: "#FFB6C1",
+    backgroundColor: colors.pink,
     padding: 20,
     alignItems: "center",
   },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#000",
+    color: colors.black,
   },
   floatingButton: {
-    backgroundColor: "#000000",
+    backgroundColor: colors.black,
     borderRadius: 30,
     width: 60,
     height: 60,
@@ -151,14 +156,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 120,
     right: 20,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
     shadowRadius: 4,
+    elevation: 5,
   },
   floatingButtonText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 24,
     fontWeight: "bold",
   },
