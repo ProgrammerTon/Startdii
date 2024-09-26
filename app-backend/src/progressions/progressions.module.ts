@@ -10,6 +10,7 @@ import { Goal, GoalSchema } from 'src/goals/entity/goal.entitiy';
 import { User, UserSchema } from 'src/users/entities/user.entity';
 import { GoalsModule } from 'src/goals/goal.module';
 import { UsersModule } from 'src/users/users.module';
+import { LevelsModule } from 'src/levels/levels.module';
 @Module({
     imports: [
       MongooseModule.forFeature([
@@ -19,6 +20,7 @@ import { UsersModule } from 'src/users/users.module';
       ]),
       GoalsModule,
       UsersModule,
+      LevelsModule,
     ],
     controllers: [ProgressionsController],
     providers: [ProgressionsService],

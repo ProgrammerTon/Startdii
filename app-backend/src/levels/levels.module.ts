@@ -12,5 +12,6 @@ import { Level, LevelSchema } from './entities/level.entity';
     ],
     controllers: [LevelsController],
     providers: [LevelsService],
+    exports: [LevelsService],
   })
   export class LevelsModule {}

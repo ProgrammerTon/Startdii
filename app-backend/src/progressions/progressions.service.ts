@@ -8,8 +8,9 @@ import { Progression, ProgressionDocument } from './entities/progression.entity'
 import { CreateProgressionDto } from './dto/create-progression.dto';
 import { GoalsService } from 'src/goals/goals.service';
 import { UsersService } from 'src/users/users.service';
-import { Goal } from 'src/goals/entity/goal.entitiy';
+import { Goal, GoalType } from 'src/goals/entity/goal.entitiy';
 import { Cron } from '@nestjs/schedule';
+import { LevelsService } from 'src/levels/levels.service';
 
 @Injectable()
 export class ProgressionsService {
@@ -18,6 +19,7 @@ export class ProgressionsService {
     private progressionModel: Model<ProgressionDocument>,
     private readonly goalsService: GoalsService,
 		private readonly usersService: UsersService,
+		private readonly levelsService: LevelsService,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -54,7 +56,41 @@ export class ProgressionsService {
 				await this.create(createProgressionDto, users[i]._id as ObjectId, selected_hard_goals[j]._id as ObjectId);
 			}
 		}
-  }
+  }	
+
+  async updateProgress(userId: ObjectId, goalType: GoalType) {
+		const total_goal_count = 3;
+		var current_goal_count = 0;
+		const complete_all_goal_xp = 45;
+		const user_progresses : any = await this.progressionModel.find({ userId: userId }).populate('goalId').exec();
+		for (let i = 0; i <  user_progresses.length; i++) {
+			const current_progress_id: ObjectId = user_progresses[i]._id;
+			if (user_progresses[i].goalId.type === goalType && user_progresses[i].current_progress < user_progresses[i].goalId.objective_count) {
+				await this.progressionModel.findByIdAndUpdate(current_progress_id, { $inc: { current_progress : 1 }}).exec();
+				current_goal_count += await this.checkGoalCompletion(current_progress_id);
+			}
+		}
+		if (current_goal_count === total_goal_count) {
+			await this.levelsService.addExp(userId, complete_all_goal_xp);
+		}
+		//console.log(user_progresses);
+	}
+	
+	async checkGoalCompletion(progressionId: ObjectId) {
+		const progression: any = await this.progressionModel.findById(progressionId).populate('goalId').exec();
+		var expToAdd: number = 0;
+		if (progression.current_progress === progression.goalId.objective_count) {
+			if(progression.goalId.difficulty === 'hard') {
+				expToAdd = 50;
+			}
+			else if (progression.goalId.difficulty === 'easy') {
+				expToAdd = 20;
+			}
+			await this.levelsService.addExp(progression.userId, expToAdd);
+			return 1;
+		}
+		return 0;
+	}
 
   // --------------------------- Misc. ---------------------------
 
