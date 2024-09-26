@@ -30,7 +30,6 @@ import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
 import DressButton from "../../components/DressButton";
 import Frame from "../../components/Frame";
-import History from "../quiz_history_page";
 import HNone from "../../components/hat/hat_none";
 import HBanana from "../../components/hat/hat_banana";
 import HCap from "../../components/hat/hat_cap";
