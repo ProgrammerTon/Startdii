@@ -6,10 +6,11 @@ export const useCharContext = () => useContext(CharacterContext);
 
 export const CharacterProvider = ({ children }) => {
     const [selectedChar, setSelectedChar] = useState('Char1');
-    const [selectedColor, setSelectedColor] = useState(colors.pink);
+    const [selectedColor, setSelectedColor] = useState(colors.green);
+    const [selectedHat, setSelectedHat] = useState('HNone');
 
     return (
-        <CharacterContext.Provider value={{ selectedChar, setSelectedChar, selectedColor, setSelectedColor }}>
+        <CharacterContext.Provider value={{ selectedChar, setSelectedChar, selectedColor, setSelectedColor, selectedHat, setSelectedHat }}>
             {children}
         </CharacterContext.Provider>
     );
