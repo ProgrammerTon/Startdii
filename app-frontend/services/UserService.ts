@@ -144,14 +144,15 @@ export async function getQuizInventory(userId: string) {
 export async function updateCostume(
   userId: string,
   character: string,
-  characterColor: string
+  characterColor: string,
+  characterHat: string
 ) {
   const res = await fetch(`${baseUrl}/users/${userId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ character, characterColor }),
+    body: JSON.stringify({ character, characterColor, characterHat }),
   });
   if (res.status === 404) {
     console.log("User not found (404).");

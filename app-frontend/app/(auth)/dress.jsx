@@ -250,14 +250,20 @@ export default function DressTest() {
 
   const handleUpdateChar = async (char) => {
     setSelectedChar(char);
-    await updateCostume(user._id, char, selectedColor);
-    console.log(user._id, char, selectedColor);
+    await updateCostume(user._id, char, selectedColor, selectedHat);
+    console.log(user._id, char, selectedColor, selectedHat);
   };
 
   const handleUpdateColor = async (color) => {
     setSelectedColor(color);
-    await updateCostume(user._id, selectedChar, color);
-    console.log(user._id, selectedChar, color);
+    await updateCostume(user._id, selectedChar, color, selectedHat);
+    console.log(user._id, selectedChar, color, selectedHat);
+  };
+
+  const handleUpdateHat = async (hat) => {
+    setSelectedHat(hat);
+    await updateCostume(user._id, selectedChar, selectedColor, hat);
+    console.log(user._id, selectedChar, selectedColor, hat);
   };
 
   const getCharacterComponent = (char) => {
@@ -345,7 +351,7 @@ export default function DressTest() {
             {() => <ColourDetails onColorSelect={handleUpdateColor} />}
           </Tab.Screen>
           <Tab.Screen name="Hat">
-            {() => <HatDetails onHatSelect={setSelectedHat} />}
+            {() => <HatDetails onHatSelect={handleUpdateHat} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>

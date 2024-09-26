@@ -15,6 +15,7 @@ export const CharacterProvider = ({ children }) => {
     if (user) {
       setSelectedChar(user.character);
       setSelectedColor(user.characterColor);
+      setSelectedHat(user?.characterHat ? user.characterHat : "HNone");
     }
   }, [user]);
 
