@@ -12,5 +12,6 @@ import { Goal, GoalSchema } from './entity/goal.entitiy';
     ],
     controllers: [GoalsController],
     providers: [GoalsService],
+    exports: [GoalsService],
   })
   export class GoalsModule {}
