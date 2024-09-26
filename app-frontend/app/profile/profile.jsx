@@ -104,11 +104,14 @@ export default function ProfileTest() {
       </View>
       <View style={styles.charContainer}>
         {getCharacterComponent}
-        {getHatComponent && (
+        {/* {getHatComponent && (
           <View style={styles.hatContainer}>
             {getHatComponent}
           </View>
-        )}
+        )} */}
+        <View style={styles.hatContainer}>
+          {getHatComponent}
+        </View>
       </View>
       <View style={styles.frameContainer}>
         <Frame />
@@ -211,13 +214,14 @@ const styles = {
     justifyContent: "center",
     marginVertical: "-10%",
     marginTop: "-10%",
-    top: "18%",
+    // top: "18%",
   },
   hatContainer: {
+    position: "absolute",
     height: "56%",
     width: "56%",
-    top: "-104%",
-},
+    top: "-4%",
+  },
   image: {
     width: "100%",
     height: "100%",
