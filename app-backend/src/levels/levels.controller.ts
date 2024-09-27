@@ -32,9 +32,18 @@ export class LevelsController {
       return this.levelsService.findAll();
     }
 
+    @Get(':userId')
+    findUserLevel(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
+      return this.levelsService.findUserLevel(userId);
+    }
+
     @Patch(':userId/:expToAdd')
-    addExp(@Param('userId') userId: ObjectId, @Param('expToAdd') expToAdd: number) {
+    addExp(@Param('userId', ParseObjectIdPipe) userId: ObjectId, @Param('expToAdd') expToAdd: number) {
       return this.levelsService.addExp(userId, expToAdd);
     }
-  
+    
+    @Patch('reset_weekly_rating_exp')
+    resetWeeklyRatingExp() {
+      return this.levelsService.updateWeeklyRatingExp();
+    }
 }

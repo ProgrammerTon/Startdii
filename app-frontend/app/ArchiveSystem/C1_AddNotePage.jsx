@@ -17,6 +17,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import * as DocumentPicker from "expo-document-picker";
 import { Image } from "expo-image";
 import { uploadFile } from "../../services/MyFileService";
+import { addUserExp, addGoalProgress } from "../../services/LevelService";
 
 const AddNotePage = () => {
   const [name, setName] = useState("");
@@ -88,6 +89,8 @@ const AddNotePage = () => {
         setIsPublishing(false); // Reset state if failed
         return;
       }
+      addUserExp(user._id, 80);
+      addGoalProgress(user._id, 'post_source')
       ShowUploadComplete();
       resetFields();
       setIsPublishing(false); // Reset state after successful submission

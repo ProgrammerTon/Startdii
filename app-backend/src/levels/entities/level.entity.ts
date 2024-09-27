@@ -5,11 +5,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export type LevelDocument = Level & Document;
 
 export enum UserTitle {
-  Beginner,
+/*   Beginner,
   Intermediate,
   Advance,
   Expert,
-  Philosopher,
+  Philosopher, */
   
 }
 
@@ -31,13 +31,11 @@ export class Level {
   required_exp: number = 25;
 
   @Prop({ name: 'user_title' })
-  user_title: UserTitle[];
+  user_title: UserTitle;
 
-  //@Prop({ name: 'rating_exp'})
-  //rating_exp: number = 0;
+  @Prop({ name: 'current_rating_exp' })
+  current_rating_exp: number = 0;
 
-  //@Prop({ name: 'rating_exp_cap'})
-  //rating_exp_cap: number = ;
 }
 
 export const LevelSchema = SchemaFactory.createForClass(Level);

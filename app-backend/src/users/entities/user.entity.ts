@@ -50,6 +50,9 @@ export class User {
   @Prop({ name: 'characterColor', default: '#FCA3E3' })
   characterColor: string;
 
+  @Prop({ name: 'characterHat', default: 'HNone' })
+  characterHat: string;
+
   @Prop({ name: 'code' })
   code: string;
 

@@ -140,10 +140,15 @@ export class UsersService {
     const { sources }: any = await this.userModel
       .findById(ownerId)
       .select('sources')
-      .populate(
-        'sources',
-        '-updatedAt -description -content -filename -originalname -rating -rating_count',
-      )
+      .populate({
+        path: 'sources',
+        select:
+          '-updatedAt -description -content -filename -originalname -rating -rating_count',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
       .exec();
     if (searchTitle !== '') {
       const regex = new RegExp(searchTitle, 'i');
@@ -162,10 +167,15 @@ export class UsersService {
     const { quizzes }: any = await this.userModel
       .findById(ownerId)
       .select('quizzes')
-      .populate(
-        'quizzes',
-        '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
-      )
+      .populate({
+        path: 'quizzes',
+        select:
+          '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
       .exec();
     if (searchTitle !== '') {
       const regex = new RegExp(searchTitle, 'i');
