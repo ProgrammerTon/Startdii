@@ -27,7 +27,7 @@ export class ProgressionsService {
   async create(createProgressionDto: CreateProgressionDto, userId: ObjectId, goalId: ObjectId): Promise<Progression> {
     const progression = plainToInstance(Progression, createProgressionDto);
     progression.userId = userId;
-		progression.goalId = goalId;
+	progression.goalId = goalId;
     const createdProgression = new this.progressionModel(progression);
     return createdProgression.save();
   } 
@@ -36,6 +36,11 @@ export class ProgressionsService {
 
   async findAll() {
     return this.progressionModel.find().exec();
+  }
+
+  async findUserGoal(userId: ObjectId) {
+    const user_goal = await this.progressionModel.find({ userId: userId }).populate('goalId').exec();
+    return user_goal;
   }
 
   // --------------------------- Update ---------------------------

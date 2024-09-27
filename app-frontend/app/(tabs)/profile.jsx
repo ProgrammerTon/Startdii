@@ -14,6 +14,7 @@ import AuthService from "../../services/AuthService";
 import { router } from "expo-router";
 import { useCharContext, CharacterContext } from "../profile/charcontext";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { getUserLevel } from "../../services/LevelService"
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
 import SignoutButton from "../../components/SignoutButton";
@@ -51,6 +52,18 @@ export default function ProfileTest() {
   const { selectedChar, selectedColor, selectedHat, setSelectedHat } =
     useCharContext();
   const { isLogged, user } = useGlobalContext();
+  const [ userLevel, setUserLevel ] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      loadUserLevel();
+    }
+  }, [user]);
+  
+  const loadUserLevel = async () => {
+    const user_lvl = await getUserLevel(user._id);
+    setUserLevel(user_lvl);
+  };
 
   const getCharacterComponent = React.useMemo(() => {
     switch (selectedChar) {
@@ -101,7 +114,7 @@ export default function ProfileTest() {
   const renderHeader = () => (
     <>
       <View style={styles.levelContainer}>
-        <Level level="1" percent="50%" />
+        <Level level={(userLevel?.level)? userLevel.level : 0} percent={`${userLevel?.current_exp / userLevel?.required_exp * 100}%`}/>
       </View>
       <View style={styles.dressButton}>
         <DressButton />

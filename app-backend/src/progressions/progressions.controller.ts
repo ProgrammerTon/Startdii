@@ -27,6 +27,11 @@ export class ProgressionsController {
     findAll() {
         return this.progressionsService.findAll();
     }
+
+    @Get(':userId')
+    findUserGoal(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
+      return this.progressionsService.findUserGoal(userId);
+    }
     
     @Patch(':userId/:goalType')
     updateProgress(@Param('userId', ParseObjectIdPipe) userId: ObjectId, @Param('goalType') goalType: GoalType) {
