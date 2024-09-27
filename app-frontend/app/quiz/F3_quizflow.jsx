@@ -10,6 +10,7 @@ import QuizStatistics from "./F7_quizstatistic";
 import { BackHandler } from "react-native";
 import { router } from "expo-router";
 import { useCallback } from "react";
+import { addUserExp, addGoalProgress } from "../../services/LevelService";
 
 const QuizFlow = () => {
   const { questions, quizId, quizFinished, setQuizFinished } =
@@ -74,7 +75,20 @@ const QuizFlow = () => {
     if (currentQuestion < quizData.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      const isdoit = user.quiz_history.some((entry) => entry.id === quizId); // check if do more than once
       setQuizFinished(true);
+      if (!isdoit) {
+        const accuracy = score / quizData.length;
+        let expFromQuiz = 0;
+        if (accuracy >= 0.5) {
+          expFromQuiz = 10;
+        }
+        else {
+          expFromQuiz = 5;
+        }
+        addUserExp(user._id,  expFromQuiz);
+        addGoalProgress(user._id, 'do_quiz')
+      }
       setUserState("Summary");
     }
     console.log(updatedAnswers);

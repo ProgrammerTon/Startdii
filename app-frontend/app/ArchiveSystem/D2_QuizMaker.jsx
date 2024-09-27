@@ -16,6 +16,8 @@ import { useQuizContext } from "../../context/QuizProvider";
 import { createQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { router, useRouter } from "expo-router";
+import { addUserExp, addGoalProgress } from "../../services/LevelService";
+
 const { width } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
@@ -119,6 +121,8 @@ const QuizMakerPage = () => {
 
       if (data) {
         Alert.alert("Create Success");
+        addUserExp(user._id, 20);
+        addGoalProgress(user._id, 'post_quiz')
         // Navigate back after success
         router.back();
         router.back();
