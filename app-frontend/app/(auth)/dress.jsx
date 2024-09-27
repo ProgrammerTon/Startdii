@@ -7,13 +7,6 @@ import {
     Dimensions,
     StyleSheet,
     TouchableOpacity,
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
 } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import fonts from "../../constants/font";
