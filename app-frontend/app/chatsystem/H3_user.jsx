@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import Entypo from "@expo/vector-icons/Entypo";
 const { width, height } = Dimensions.get("window");
 const ChatSearch = () => {
+  const { room, name } = useLocalSearchParams();
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -20,7 +21,12 @@ const ChatSearch = () => {
 
       {/* Search Bar */}
       <View style={styles.searchBarContainer}>
-        <Ionicons name="search" size={20} color="green" style={styles.searchIcon} />
+        <Ionicons
+          name="search"
+          size={20}
+          color="green"
+          style={styles.searchIcon}
+        />
         <TextInput
           style={styles.searchInput}
           placeholder="Search in conversation"
@@ -28,12 +34,28 @@ const ChatSearch = () => {
       </View>
 
       {/* Note Button */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push("/chatsystem/H4_NoteUser")}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          router.push({
+            pathname: "/chatsystem/H4_NoteUser",
+            params: { room: room },
+          })
+        }
+      >
         <Text style={styles.buttonText}>Note</Text>
       </TouchableOpacity>
 
       {/* Quiz Button */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push("/chatsystem/H5_QuizUser")}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          router.push({
+            pathname: "/chatsystem/H5_QuizUser",
+            params: { room: room },
+          })
+        }
+      >
         <Text style={styles.buttonText}>Quiz</Text>
       </TouchableOpacity>
     </View>
@@ -70,9 +92,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   searchBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f2f2f2',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f2f2f2",
     paddingVertical: 10,
     paddingHorizontal: 15,
     marginHorizontal: 20,
@@ -85,7 +107,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#000',
+    color: "#000",
   },
   button: {
     flexDirection: 'column',

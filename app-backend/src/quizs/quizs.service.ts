@@ -54,7 +54,9 @@ export class QuizsService {
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const quizs = await this.quizModel
       .find()
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
@@ -322,7 +324,9 @@ export class QuizsService {
     const sortValue = sortOrder === 'asc' ? 1 : -1;
     const quizzes = await this.quizModel
       .find({ $text: { $search: title } })
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
@@ -361,7 +365,9 @@ export class QuizsService {
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)
@@ -386,7 +392,9 @@ export class QuizsService {
           tags: { $elemMatch: { $regex: new RegExp(tag, 'i') } },
         })),
       })
-      .select('-updatedAt')
+      .select(
+        '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
+      )
       .sort({ [sortField]: sortValue })
       .skip(skip)
       .limit(size)

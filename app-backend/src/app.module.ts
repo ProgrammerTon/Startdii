@@ -17,6 +17,8 @@ import { ChatModule } from './chat/chat.module';
 import { ReportsModule } from './reports/reports.module';
 import { LevelsModule } from './levels/levels.module';
 import { GoalsModule } from './goals/goal.module';
+import { ProgressionsModule } from './progressions/progressions.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -44,6 +46,8 @@ import { GoalsModule } from './goals/goal.module';
     ReportsModule,
     LevelsModule,
     GoalsModule,
+    ProgressionsModule,
+    EmailModule,
   ],
   controllers: [AppController, FilesController],
   providers: [AppService, ChatGateway],

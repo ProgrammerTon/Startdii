@@ -140,3 +140,30 @@ export async function getQuizInventory(userId: string) {
   const data: any = await res.json();
   return data;
 }
+
+export async function updateCostume(
+  userId: string,
+  character: string,
+  characterColor: string,
+  characterHat: string
+) {
+  const res = await fetch(`${baseUrl}/users/${userId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ character, characterColor, characterHat }),
+  });
+  if (res.status === 404) {
+    console.log("User not found (404).");
+    return null; // or return a specific message or throw an error
+  }
+
+  if (!res.ok) {
+    console.error("Fetch error:", res.status, res.statusText);
+    return null;
+  }
+
+  const data: any = await res.json();
+  return data;
+}

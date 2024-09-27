@@ -10,6 +10,7 @@ import { ObjectId } from 'mongodb';
 import { Types } from 'mongoose';
 import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -67,7 +68,9 @@ export class UsersService {
   }
 
   async findAll() {
-    const user = await this.userModel.findById(new Types.ObjectId('66cf16772bd720377e20a4bd')).exec();
+    const user = await this.userModel
+      .findById(new Types.ObjectId('66cf16772bd720377e20a4bd'))
+      .exec();
     console.log(user);
     return this.userModel.find().exec();
   }
@@ -102,7 +105,6 @@ export class UsersService {
         quiz: entry.id, // Renamed field
         results: entry.results,
       }));
-
       return {
         ...user.toObject(),
         quiz_history: x, // Use the transformed data
@@ -138,7 +140,15 @@ export class UsersService {
     const { sources }: any = await this.userModel
       .findById(ownerId)
       .select('sources')
-      .populate('sources', '-rating -filename -originalname')
+      .populate({
+        path: 'sources',
+        select:
+          '-updatedAt -description -content -filename -originalname -rating -rating_count',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
       .exec();
     if (searchTitle !== '') {
       const regex = new RegExp(searchTitle, 'i');
@@ -157,10 +167,15 @@ export class UsersService {
     const { quizzes }: any = await this.userModel
       .findById(ownerId)
       .select('quizzes')
-      .populate(
-        'quizzes',
-        '-rating -players -total_score -playing_scores -questions',
-      )
+      .populate({
+        path: 'quizzes',
+        select:
+          '-updatedAt -questions -rating -playing_scores -players -description -total_score -rating_count',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
       .exec();
     if (searchTitle !== '') {
       const regex = new RegExp(searchTitle, 'i');
@@ -243,6 +258,21 @@ export class UsersService {
     return await this.userModel
       .findByIdAndUpdate(id, user, { new: true })
       .exec();
+  }
+
+  // --------------------------- Update ---------------------------
+  async update(id: ObjectId, updateUserDto: UpdateUserDto) {
+    console.log(id, updateUserDto);
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(
+        id,
+        { $set: updateUserDto },
+        { new: true, useFindAndModify: false }, // Return the updated document
+      )
+      .exec();
+
+    // Return the updated document, or null if not found
+    return updatedUser;
   }
 
   // --------------------------- Misc. ---------------------------

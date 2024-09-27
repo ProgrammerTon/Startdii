@@ -34,16 +34,14 @@ const Quiz_History_Page = () => {
       data={data}
       scrollEnabled={false}
       renderItem={({ item }) => {
-        const fav = user?.favorite_quizzes?.includes(item?.quiz?._id)
-          ? true
-          : false;
+        const fav = user?.favorite_quizzes?.includes(item?._id) ? true : false;
         return (
           <QuizCard
-            id={item?.quiz?._id}
-            title={item?.quiz?.title}
-            author={item?.quiz?.ownerId?.username}
-            tags={item?.quiz?.tags}
-            rating={item?.quiz?.avg_rating_score}
+            id={item?._id}
+            title={item?.title}
+            author={item?.ownerId?.username}
+            tags={item?.tags}
+            rating={item?.avg_rating_score}
             isFavorite={fav}
           />
         );

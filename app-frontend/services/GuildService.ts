@@ -109,8 +109,22 @@ export async function kickMember(guildId: string, userId: string) {
   }
 }
 
-export async function leaveAdmin(userId: string) {
-  //
+export async function leaveAdmin(guildId: string, userId: string) {
+  const res = await fetch(`${baseUrl}/guilds/${guildId}/leader/${userId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!res.ok) {
+    return null;
+  }
+  try {
+    const data: any = await res.json();
+    return data;
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function kickViceLeader(guildId: string, userId: string) {
