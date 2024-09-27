@@ -170,28 +170,55 @@ export async function joinGuildByCode(inviteCode: string) {
   }
 }
 
+export async function promoteToAdmin(guildId: string, newAdminId: string) {
+  const res = await fetch(`${baseUrl}/guilds/${guildId}/leader/${newAdminId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    return null;
+  }
+  try {
+    const data: any = await res.json();
+    return data;
+  } catch (error) {
+    return null;
+  }
+}
+
 export async function leavePerson(
   userId: string,
   members: any[],
   guildId: string
 ) {
   const userleave = members.find((user) => user._id === userId);
+
+  if (members.length === 1 && userleave.isAdmin) {
+    const res = await fetch(`${baseUrl}/guilds/${guildId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    
+    if (res.ok) {
+      Alert.alert("Guild has been deleted.");
+      return;
+    } else {
+      Alert.alert("Failed to delete the guild.");
+      return;
+    }
+  }
+
   let data;
   if (userleave.isAdmin) {
-    Alert.alert("Admin Cant Leave Right now");
+    Alert.alert("Admin must promote another member to admin before leaving.");
     return;
-    data = await kickViceLeader(guildId, userId);
-    if (!data) {
-      Alert.alert("Kick Failed");
-      return;
-    }
-    data = await kickViceLeader(guildId, userId);
-    if (!data) {
-      Alert.alert("Kick Failed");
-      return;
-    }
-    data = await kickMember(guildId, userId);
   }
+
   if (userleave.isViceAdmin) {
     data = await kickViceLeader(guildId, userId);
     if (!data) {
@@ -200,17 +227,20 @@ export async function leavePerson(
     }
     data = await kickMember(guildId, userId);
   }
+
   if (!userleave.isAdmin && !userleave.isViceAdmin) {
     data = await kickMember(guildId, userId);
   }
+
   console.log(data);
   if (!data) {
-    Alert.alert("Kick Failed");
+    Alert.alert("Failed to Left the Guild");
     return;
   } else {
-    Alert.alert("Kick!!");
+    Alert.alert("You Left the Guild");
   }
 }
+
 
 export async function searchGuild(title: string) {
   const token = await getCurrentToken();
