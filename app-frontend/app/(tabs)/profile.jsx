@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
+  Dimension,
   Alert,
   FlatList,
 } from "react-native";
@@ -46,6 +47,7 @@ import HPlaster from "../../components/hat/hat_plaster";
 import HShark from "../../components/hat/hat_shark";
 import HXmas from "../../components/hat/hat_xmas";
 
+const { width, height } = Dimensions.get("window");
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
   const { selectedChar, selectedColor, selectedHat, setSelectedHat } =
@@ -172,17 +174,18 @@ export default function ProfileTest() {
 
 const styles = {
   bg: {
-    height: "100%",
+    height: height * 0.9,
     backgroundColor: colors.gray_bg,
   },
   toptab: {
     backgroundColor: colors.pink,
     textAlign: "center",
-    height: "10.625%",
+    height: height * 0.10625,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.1,
+    marginTop: height * 0.025,
     position: "relative",
   },
   usernameContainer: {
@@ -210,6 +213,7 @@ const styles = {
   },
   levelContainer: {
     alignItems: "center",
+    alignSelf: "center",
     left: "3%",
   },
   charContainer: {
