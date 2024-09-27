@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 16,
   },
   ratingText: {
     fontSize: width * 0.04,

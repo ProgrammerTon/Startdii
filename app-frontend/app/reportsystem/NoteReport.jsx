@@ -17,7 +17,7 @@ const { width, height } = Dimensions.get("window");
 const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
   const reasons = [
     "Incorrect Information",
-    "ohoh",
+    "Malicious Content",
     "Inappropriate Content",
     "Plagiarism",
   ];
@@ -27,7 +27,7 @@ const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
   if (visible) {
     slideAnimation.setValue(startPosition); 
     Animated.timing(slideAnimation, {
-      toValue: height*0.11,
+      toValue: height * 0.03,
       duration: 400,
       useNativeDriver: true,
     }).start();

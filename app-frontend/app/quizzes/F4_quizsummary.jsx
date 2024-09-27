@@ -115,7 +115,7 @@ const QuizSummaryPage = ({
       </View>
 
       <ScrollView
-        style={styles.container}
+        style={styles.containerBottom}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -179,8 +179,10 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#04B36E",
+    height: height * 0.1,
     padding: height * 0.02,
     alignItems: "center",
+    justifyContent: "center",
   },
   headerText: {
     fontSize: 24,

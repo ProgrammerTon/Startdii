@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     marginTop : 15,
     flexDirection: 'row',
     // justifyContent: "space-between",
+    paddingHorizontal: 16,
     marginBottom: 5,
   },
   ScoreRating: {
