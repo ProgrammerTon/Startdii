@@ -14,7 +14,7 @@ export default function WeeklyGoals() {
         <View style={styles.container}>
             <GoalProcess
                 title={'ทำครบ 3 Quiz'}
-                percent={'33%'} />
+                percent={'0%'} />
             <GoalProcess
                 title={'ทำครบ 3 Quiz'}
                 percent={'33%'} />
