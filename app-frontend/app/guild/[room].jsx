@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
   FlatList,
 } from "react-native";
@@ -13,6 +14,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
 import SourceCard from "../../components/E1_SourceCard";
 import QuizCard from "../../components/F1_QuizCard";
+const { width, height } = Dimensions.get("window");
 
 const ChatScreen = () => {
   const [guildName, setGuildName] = useState("");
@@ -119,6 +121,7 @@ const ChatScreen = () => {
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.chatLog}>
       {user ? (
         <FlatList
           data={messages}
@@ -132,6 +135,16 @@ const ChatScreen = () => {
                 : false;
               return (
                 <View>
+                  <View
+                    style={[
+                      styles.messageWrapper,
+                      item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                    ]}
+                  >
+                    {!item.isCurrentUser && (
+                      <Text style={styles.messageSender}>{item.sender}</Text>
+                    )}
+                  </View>
                   <SourceCard
                     id={item?.source._id}
                     title={item?.source.title}
@@ -141,14 +154,11 @@ const ChatScreen = () => {
                     isFavorite={fav}
                   />
                   <View
-                    style={[
-                      styles.messageWrapper,
-                      item.isCurrentUser ? styles.currentUser : styles.otherUser,
-                    ]}
+                  style={[
+                    styles.messageWrapper,
+                    item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                  ]}
                   >
-                    {!item.isCurrentUser && (
-                      <Text style={styles.messageSender}>{item.sender}</Text>
-                    )}
                     <Text style={styles.messageTime}>{item.time}</Text>
                   </View>
                 </View>
@@ -160,6 +170,16 @@ const ChatScreen = () => {
                 : false;
               return (
                 <View>
+                  <View
+                    style={[
+                      styles.messageWrapper,
+                      item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                    ]}
+                  >
+                    {!item.isCurrentUser && (
+                      <Text style={styles.messageSender}>{item.sender}</Text>
+                    )}
+                  </View>
                   <QuizCard
                     id={item?.quiz._id}
                     title={item?.quiz.title}
@@ -169,14 +189,11 @@ const ChatScreen = () => {
                     isFavorite={fav}
                   />
                   <View
-                    style={[
-                      styles.messageWrapper,
-                      item.isCurrentUser ? styles.currentUser : styles.otherUser,
-                    ]}
+                  style={[
+                    styles.messageWrapper,
+                    item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                  ]}
                   >
-                    {!item.isCurrentUser && (
-                      <Text style={styles.messageSender}>{item.sender}</Text>
-                    )}
                     <Text style={styles.messageTime}>{item.time}</Text>
                   </View>
                 </View>
@@ -185,10 +202,9 @@ const ChatScreen = () => {
             item.isCurrentUser = item.sender == user.username;
             return (
               <View
-                key={item.id}
                 style={[
                   styles.messageWrapper,
-                  item.isCurrentUser ? styles.currentUser : styles.otherUser,
+                  item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
                 ]}
               >
                 {!item.isCurrentUser && (
@@ -208,6 +224,7 @@ const ChatScreen = () => {
           ListFooterComponent={loading && <ActivityIndicator />}
         />
       ) : null}
+      </View>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -253,24 +270,27 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "#000",
   },
-  chatContainer: {
+  chatLog: {
     flex: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    padding: 10,
   },
   messageWrapper: {
-    marginBottom: 10,
+    marginVertical: 5,
+    maxWidth: width * 0.7,
+  },
+  userWrapper: {
+    alignSelf: "flex-start",
+  },
+  receiverWrapper: {
+    alignSelf: "flex-end",
   },
   messageSender: {
     fontSize: 12,
     color: "#666",
-    marginBottom: 2,
   },
   messageBubble: {
-    borderRadius: 40,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    maxWidth: "80%",
+    padding: 10,
+    borderRadius: 10,
     backgroundColor: "white",
   },
   messageText: {
@@ -281,7 +301,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#aaa",
     marginTop: 2,
-    alignSelf: "flex-end",
   },
   currentUser: {
     alignSelf: "flex-end",
