@@ -6,7 +6,7 @@ import { useGlobalContext } from "../context/GlobalProvider";
 import QuizCard from "../components/F1_QuizCard";
 import { useFocusEffect } from "expo-router";
 
-const Quiz_History_Page = () => {
+const Quiz_History_Page = ({ id }) => {
   const [data, setData] = useState(null);
   const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
@@ -35,6 +35,11 @@ const Quiz_History_Page = () => {
       scrollEnabled={false}
       renderItem={({ item }) => {
         const fav = user?.favorite_quizzes?.includes(item?._id) ? true : false;
+        const datenow = new Date();
+        const createdAt = new Date(item?.createdAt);
+        const diffTime = Math.abs(datenow - createdAt);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const result = diffDays < 1 ? 1 : diffDays;
         return (
           <QuizCard
             id={item?._id}
@@ -43,6 +48,7 @@ const Quiz_History_Page = () => {
             tags={item?.tags}
             rating={item?.avg_rating_score}
             isFavorite={fav}
+            date={result}
           />
         );
       }}

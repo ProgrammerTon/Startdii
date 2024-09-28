@@ -11,12 +11,10 @@ import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import { ScrollView } from "react-native";
 import AuthService from "../../services/AuthService";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useCharContext, CharacterContext } from "../profile/charcontext";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { getUserLevel } from "../../services/LevelService";
 import fonts from "../../constants/font";
-import colors from "../../constants/color";
 import SignoutButton from "../../components/SignoutButton";
 import PencilIcon from "../../components/PencilIcon";
 import Level from "../../components/Level";
@@ -29,7 +27,6 @@ import Char6 from "../../components/charactor/Charactor06";
 import Menu from "../../components/menu";
 import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
-import DressButton from "../../components/DressButton";
 import Frame from "../../components/Frame";
 import QuizHistory from "../../components/QuizHistory";
 import { useGlobalContext } from "../../context/GlobalProvider";
@@ -46,24 +43,19 @@ import HPlant from "../../components/hat/hat_plant";
 import HPlaster from "../../components/hat/hat_plaster";
 import HShark from "../../components/hat/hat_shark";
 import HXmas from "../../components/hat/hat_xmas";
+import colors from "../../constants/color";
+import { getOtherProfile } from "../../services/UserService";
 
 export default function ProfileTest() {
+  const { id } = useLocalSearchParams();
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
-  const { selectedChar, selectedColor, selectedHat, setSelectedHat } =
-    useCharContext();
-  const { isLogged, user } = useGlobalContext();
-  const [userLevel, setUserLevel] = useState(null);
+  const [selectedChar, setSelectedChar] = useState("Char1");
+  const [selectedColor, setSelectedColor] = useState(colors.green);
+  const [selectedHat, setSelectedHat] = useState("HNone");
+  const [user, setUser] = useState(null);
+  const { isLogged } = useGlobalContext();
 
-  useEffect(() => {
-    if (user) {
-      loadUserLevel();
-    }
-  }, [user]);
-
-  const loadUserLevel = async () => {
-    const user_lvl = await getUserLevel(user._id);
-    setUserLevel(user_lvl);
-  };
+  useEffect(() => {}, []);
 
   const getCharacterComponent = React.useMemo(() => {
     switch (selectedChar) {
@@ -114,16 +106,9 @@ export default function ProfileTest() {
   const renderHeader = () => (
     <>
       <View style={styles.levelContainer}>
-        <Level
-          level={userLevel?.level ? userLevel.level : 0}
-          percent={`${
-            (userLevel?.current_exp / userLevel?.required_exp) * 100
-          }%`}
-        />
+        <Level level="1" percent="50%" />
       </View>
-      <View style={styles.dressButton}>
-        <DressButton />
-      </View>
+
       <View style={styles.charContainer}>
         {getCharacterComponent}
         <View style={styles.hatContainer}>{getHatComponent}</View>
@@ -141,13 +126,13 @@ export default function ProfileTest() {
   const renderContent = () => {
     switch (activeMenu) {
       case "Weekly Goals":
-        return <WeeklyGoals id={user._id} />;
+        return <WeeklyGoals id={id} />;
       case "Inventory":
-        return <Inventory id={user._id} />;
+        return <Inventory id={id} />;
       case "History":
-        return <QuizHistory id={user._id} />;
+        return <QuizHistory id={id} />;
       default:
-        return <WeeklyGoals id={user._id} />;
+        return <WeeklyGoals id={id} />;
     }
   };
 
@@ -157,9 +142,23 @@ export default function ProfileTest() {
     { id: "3", name: "History" },
   ];
 
+  const fetchProfile = async () => {
+    const data = await getOtherProfile(id);
+    if (!data) {
+      Alert.alert("User Not Found");
+    }
+    console.log("Other User Data", data);
+    setUser(data);
+    setSelectedChar(data.character);
+    setSelectedColor(data.characterColor);
+    setSelectedHat(data.characterHat);
+  };
+
   useEffect(() => {
     if (!isLogged) {
       router.replace("/sign-in");
+    } else {
+      fetchProfile();
     }
   }, []);
 
@@ -248,11 +247,6 @@ const styles = {
     width: "100%",
     height: "100%",
     resizeMode: "contain",
-  },
-  dressButton: {
-    width: "90%",
-    alignItems: "flex-end",
-    zIndex: 1,
   },
   frameContainer: {
     width: "100%",
