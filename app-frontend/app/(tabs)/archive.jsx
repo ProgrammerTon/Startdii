@@ -130,6 +130,7 @@ const ArchiveMainPage = () => {
         }
       }
     }
+    console.log(data);
   };
 
   const extractTitleAndTags = (input) => {
@@ -278,6 +279,11 @@ const ArchiveMainPage = () => {
             const fav = user?.favorite_sources?.includes(item?._id)
               ? true
               : false;
+            const datenow = new Date();
+            const createdAt = new Date(item?.createdAt);
+            const diffTime = Math.abs(datenow - createdAt);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const result = diffDays < 1 ? 1 : diffDays;
             return (
               <SourceCard
                 id={item?._id}
@@ -286,12 +292,18 @@ const ArchiveMainPage = () => {
                 tags={item?.tags}
                 rating={item?.avg_rating_score}
                 isFavorite={fav}
+                date={result}
               />
             );
           } else {
             const fav = user?.favorite_quizzes?.includes(item?._id)
               ? true
               : false;
+            const datenow = new Date();
+            const createdAt = new Date(item?.createdAt);
+            const diffTime = Math.abs(datenow - createdAt);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const result = diffDays < 1 ? 1 : diffDays;
             return (
               <QuizCard
                 id={item?._id}
@@ -300,6 +312,7 @@ const ArchiveMainPage = () => {
                 tags={item?.tags}
                 rating={item?.avg_rating_score}
                 isFavorite={fav}
+                date={result}
               />
             );
           }
