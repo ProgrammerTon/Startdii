@@ -13,10 +13,10 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
 import SourceCard from "../../components/E1_SourceCard";
 import QuizCard from "../../components/F1_QuizCard";
+import { guildDetail } from "../../services/GuildService";
 
 const ChatScreen = () => {
-  const [guildName, setGuildName] = useState("");
-  const { guild } = useGuildContext();
+  const { guild, setGuild } = useGuildContext();
   const { room } = useLocalSearchParams();
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
@@ -33,9 +33,16 @@ const ChatScreen = () => {
     clearMessage,
   } = useGlobalContext();
 
+  const fetchGuild = async () => {
+    const data = await guildDetail(room);
+    console.log("Guild Data", data);
+    setGuild(data);
+  };
+
   useEffect(() => {
     joinRoom(room);
     fetchChat();
+    fetchGuild();
     return () => {
       leaveRoom(room);
       clearMessage();
@@ -45,9 +52,9 @@ const ChatScreen = () => {
   useEffect(() => {
     if (!isLogged) {
       router.replace("/sign-in");
-    } else if (user && guild) {
+    } else if (user) {
+      console.log("Hello Guild");
       setName(user.username || "");
-      setGuildName(guild.name || "Test_guild");
     }
   }, [user, guild, isLogged]);
 
@@ -62,51 +69,14 @@ const ChatScreen = () => {
   const handleSendMessage = () => {
     if (message.trim() && room) {
       const text = message;
-      const time = new Date().toLocaleTimeString().slice(0, 5);
+      const time = new Date().toISOString();
       const type = "Text";
       const sender = name;
-      const userName = user.username;
       sendMessage({ room, text, sender, type, time });
+      console.log("Sended", { room, text, sender, type, time });
       setMessage("");
     }
   };
-  // const [messages, setMessages] = useState([
-  //   {
-  //     id: 1,
-  //     text: "สวัสดีครับท่านสมาชิกชมรม",
-  //     time: "12:48",
-  //     sender: "Juaz Juazzz",
-  //     isCurrentUser: false,
-  //   },
-  //   {
-  //     id: 2,
-  //     text: "สวัสดีครับท่านประธาน",
-  //     time: "12:48",
-  //     sender: "Me",
-  //     isCurrentUser: true,
-  //   },
-  //   {
-  //     id: 3,
-  //     text: "รู้เขารู้เรา",
-  //     time: "12:49",
-  //     sender: "Mr.BOB",
-  //     isCurrentUser: false,
-  //   },
-  //   {
-  //     id: 4,
-  //     text: "รบร้อยครั้ง",
-  //     time: "12:50",
-  //     sender: "PunInwZa007",
-  //     isCurrentUser: false,
-  //   },
-  //   {
-  //     id: 5,
-  //     text: "แพ้ร้อยครั้ง",
-  //     time: "12:51",
-  //     sender: "Me",
-  //     isCurrentUser: true,
-  //   },
-  // ]);
 
   return (
     <View style={styles.container}>
@@ -114,7 +84,7 @@ const ChatScreen = () => {
         <TouchableOpacity>
           <Text style={styles.backButton}>{"<"}</Text>
         </TouchableOpacity>
-        <Text style={styles.headerText}>{guildName}</Text>
+        <Text style={styles.headerText}>{guild?.name}</Text>
         <TouchableOpacity onPress={() => router.push("/guild/I3_GuildSetting")}>
           <Text style={styles.menuButton}>≡</Text>
         </TouchableOpacity>
@@ -143,7 +113,9 @@ const ChatScreen = () => {
                   <View
                     style={[
                       styles.messageWrapper,
-                      item.isCurrentUser ? styles.currentUser : styles.otherUser,
+                      item.isCurrentUser
+                        ? styles.currentUser
+                        : styles.otherUser,
                     ]}
                   >
                     {!item.isCurrentUser && (
@@ -171,7 +143,9 @@ const ChatScreen = () => {
                   <View
                     style={[
                       styles.messageWrapper,
-                      item.isCurrentUser ? styles.currentUser : styles.otherUser,
+                      item.isCurrentUser
+                        ? styles.currentUser
+                        : styles.otherUser,
                     ]}
                   >
                     {!item.isCurrentUser && (

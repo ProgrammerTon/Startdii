@@ -15,6 +15,7 @@ import {
   kickMember,
   kickPerson,
   kickViceLeader,
+  promoteAdmin,
   promoteViceLeader,
 } from "../../services/GuildService";
 
@@ -56,12 +57,23 @@ const MemberScreen = () => {
       Alert.alert("You Cant Promote Admin");
       return;
     }
-    const data = await promoteViceLeader(guild._id, userId, "add");
-    if (!data) {
-      Alert.alert("Promote Failed");
-      return;
+    if (userpro.isViceAdmin) {
+      console.log('test');
+      const data = await promoteAdmin(guild._id, userId, "add");
+      if (!data) {
+        Alert.alert("Promote Failed");
+        return;
+      } else {
+        Alert.alert("Promote!");
+      }       
     } else {
-      Alert.alert("Promote!");
+      const data = await promoteViceLeader(guild._id, userId, "add");
+      if (!data) {
+        Alert.alert("Promote Failed");
+        return;
+      } else {
+        Alert.alert("Promote!");
+      }      
     }
     await loadGuild();
   };
