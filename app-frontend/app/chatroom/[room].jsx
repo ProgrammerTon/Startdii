@@ -15,13 +15,15 @@ import { router, useLocalSearchParams } from "expo-router";
 import { fetchChat } from "../../services/ChatService";
 import { findChatList } from "../../services/ChatListService";
 import Entypo from "@expo/vector-icons/Entypo";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 import SourceCard from "../../components/E1_SourceCard";
 import QuizCard from "../../components/F1_QuizCard";
 const { width, height } = Dimensions.get("window");
 const ChatView = ({ message, index, name }) => {
   const isCurrentUser = message.sender === name;
-  const formattedTime = message.time.endsWith(':') ? message.time.slice(0, -1) : message.time;
+  const formattedTime = message.time.endsWith(":")
+    ? message.time.slice(0, -1)
+    : message.time;
   return (
     <View
       style={[
@@ -32,14 +34,12 @@ const ChatView = ({ message, index, name }) => {
       <View
         style={[
           styles.messageContainer,
-          isCurrentUser
-            ? styles.receiverMessage
-            : styles.userMessage,
+          isCurrentUser ? styles.receiverMessage : styles.userMessage,
         ]}
       >
         <Text style={styles.messageText}>{message.text}</Text>
       </View>
-      <View style={{backgroundColor: "#fff"}}>
+      <View style={{ backgroundColor: "#fff" }}>
         <Text style={styles.messageTime}>{formattedTime}</Text>
       </View>
     </View>
@@ -80,13 +80,12 @@ const ChatRoom = () => {
     };
   }, []);
 
-  const fetchChat = async () => { 
+  const fetchChat = async () => {
     setLoading(true);
-    await fetchMessage(room, offset); 
+    await fetchMessage(room, offset);
     setOffset(offset + 1);
     setLoading(false);
   };
-  
 
   const fetchChatInfo = async () => {
     setLoading(true);
@@ -97,7 +96,7 @@ const ChatRoom = () => {
 
   const handleSendMessage = () => {
     if (message && room) {
-      const time = new Date().toLocaleTimeString().slice(0, 5);
+      const time = new Date().toISOString();
       const type = "Text";
       const sender = name;
       const text = message;
@@ -128,7 +127,7 @@ const ChatRoom = () => {
           <Entypo name="menu" size={30} color="white" />
         </TouchableOpacity>
       </View>
-  
+
       <View style={styles.chatLog}>
         <FlatList
           data={messages}
@@ -136,10 +135,12 @@ const ChatRoom = () => {
             if (item === null) {
               return null;
             }
-  
+
             // Handle "Source" type
             if (item.type === "Source") {
-              const formattedTime = item.time.endsWith(':') ? item.time.slice(0, -1) : item.time;
+              const formattedTime = item.time.endsWith(":")
+                ? item.time.slice(0, -1)
+                : item.time;
               const fav = user?.favorite_sources?.includes(item?.source._id)
                 ? true
                 : false;
@@ -159,10 +160,12 @@ const ChatRoom = () => {
                 </View>
               );
             }
-  
+
             // Handle "Quiz" type
             if (item.type === "Quiz") {
-              const formattedTime = item.time.endsWith(':') ? item.time.slice(0, -1) : item.time;
+              const formattedTime = item.time.endsWith(":")
+                ? item.time.slice(0, -1)
+                : item.time;
               const fav = user?.favorite_quizzes?.includes(item?.quiz._id)
                 ? true
                 : false;
@@ -182,7 +185,7 @@ const ChatRoom = () => {
                 </View>
               );
             }
-  
+
             // Default case for regular chat messages
             const isCurrentUser = item.sender === name;
             return <ChatView index={index} message={item} name={name} />;
@@ -194,7 +197,7 @@ const ChatRoom = () => {
           ListFooterComponent={loading && <ActivityIndicator />}
         />
       </View>
-  
+
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.textInput}
@@ -207,8 +210,8 @@ const ChatRoom = () => {
         </TouchableOpacity>
       </View>
     </View>
-  );  
-}
+  );
+};
 export default ChatRoom;
 
 const styles = StyleSheet.create({
