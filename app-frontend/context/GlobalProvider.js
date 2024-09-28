@@ -26,11 +26,17 @@ const GlobalProvider = ({ children }) => {
 
   const fetchMessage = async (room, offset) => {
     if (room) {
-      const chat = await fetchChat(room, offset);
-      if (!chat) {
+      const chats = await fetchChat(room, offset);
+      if (!chats) {
         return;
       }
-      setMessages((prevMessages) => [...prevMessages, ...chat]);
+      chats.forEach((chat) => {
+        chat.time = new Date(chat.time).toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      });
+      setMessages((prevMessages) => [...prevMessages, ...chats]);
     }
   };
 
@@ -78,8 +84,15 @@ const GlobalProvider = ({ children }) => {
 
     const handleNewMessage = async (message) => {
       try {
-        console.log(message);
         const newMessage = JSON.parse(message); // Synchronously parse the JSON string
+        newMessage.time = new Date(newMessage.time).toLocaleTimeString(
+          "en-GB",
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+          }
+        );
+        console.log("New", newMessage);
         setMessages((prevMessages) => [newMessage, ...prevMessages]); // Add the new message to state
       } catch (error) {
         console.error("Failed to parse message:", error);

@@ -49,32 +49,6 @@ const GuildPage = () => {
     setRefreshing(false);
     setGuilds(formattedGuilds);
   };
-  // [
-  //   {
-  //     id: 1,
-  //     color: "#FF6347",
-  //     badgeColor: "#2ecc71",
-  //     title: "เรารู้เขารู้เรา",
-  //     description: "เรารู้เขา เรารู้ว่าคนชื่นชอบ...",
-  //     members: 12,
-  //   },
-  //   {
-  //     id: 2,
-  //     color: "#4682B4",
-  //     badgeColor: "#FF69B4",
-  //     title: "แต่เขาแกล้งรู้เรา",
-  //     description: "เรารู้เขา เรารู้ว่าคนชื่นชอบ...",
-  //     members: 12,
-  //   },
-  //   {
-  //     id: 3,
-  //     color: "#FFB6C1",
-  //     badgeColor: "#FF4500",
-  //     title: "อะไรอ่ะ",
-  //     description: "เรารู้เขา เรารู้ว่าคนชื่นชอบ...",
-  //     members: 12,
-  //   },
-  // ];
 
   const [guildCreateJoinWindow, setguildCreateJoinWindow] = useState(false);
 
