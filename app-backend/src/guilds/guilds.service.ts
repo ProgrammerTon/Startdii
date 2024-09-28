@@ -122,24 +122,28 @@ export class GuildsService {
       .exec();
   }
 
-  async updateLeader(id: ObjectId, leaderId: ObjectId): Promise<Guild> {
+  async updateLeader(id: ObjectId, leaderId: ObjectId, option: string): Promise<Guild> {
     const guild = await this.guildModel.findById({ _id: id });
+    
+    const oldLeaderId = guild.leaderId;
+    if (option === 'remove') {
 
-    // if leader is the only member of guild
-    if (guild.memberIdList.length <= 1) {
-      return this.remove(id);
+      // if leader is the only member of guild, delete the guild
+      if (guild.memberIdList.length <= 1) {
+        return this.remove(id);
+      }
+
+      // update member status of ex-leader
+      const memberIdList = (await this.removeMember(id, oldLeaderId)).memberIdList;
+      guild.memberIdList = memberIdList;
+
+    } else {
+      const viceLeaderIdList = (await this.addViceLeader(id, oldLeaderId)).viceLeaderIdList;
+      guild.viceLeaderIdList = viceLeaderIdList;
     }
 
-    const oldLeaderId = guild.leaderId;
-
-    // update member status of ex-leader
-    const memberIdList = (await this.removeMember(id, oldLeaderId))
-      .memberIdList;
-    guild.memberIdList = memberIdList;
-
     // update vice leader status of new leader, if vice leader is promoted
-    const viceLeaderIdList = (await this.removeViceLeader(id, leaderId))
-      .viceLeaderIdList;
+    const viceLeaderIdList = (await this.removeViceLeader(id, leaderId)).viceLeaderIdList;
     guild.viceLeaderIdList = viceLeaderIdList;
 
     guild.leaderId = leaderId;

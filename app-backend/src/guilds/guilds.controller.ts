@@ -91,8 +91,9 @@ export class GuildsController {
   updateLeader(
     @Param('id', ParseObjectIdPipe) id: ObjectId,
     @Param('leaderId', ParseObjectIdPipe) leaderId: ObjectId,
+    @Query() query: { option: string },
   ) {
-    return this.guildsService.updateLeader(id, leaderId);
+    return this.guildsService.updateLeader(id, leaderId, query.option);
   }
 
   @Patch(':id/vice-leader/:viceLeaderId')
