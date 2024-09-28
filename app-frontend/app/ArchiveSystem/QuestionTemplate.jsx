@@ -46,19 +46,17 @@ const QuestionTemplate = ({ question, setQuestions }) => {
     if (choices == 2) {
       const newChoices = type === "increase" ? choices + 1 : choices;
       setChoices(newChoices);
-    }
-    else if (choices == 6) {
-      const newChoices = type === "increase" ? choices : choices-1;
+    } else if (choices == 6) {
+      const newChoices = type === "increase" ? choices : choices - 1;
       setChoices(newChoices);
-    }
-    else if (choices >= 3 && choices <= 5) {
-    const newChoices = type === "increase" ? choices + 1 : choices - 1;
-    setChoices(newChoices);
+    } else if (choices >= 3 && choices <= 5) {
+      const newChoices = type === "increase" ? choices + 1 : choices - 1;
+      setChoices(newChoices);
     }
   };
 
   const handleChange = (text) => {
-    const numericValue = text.replace(/[^0-9]/g, "");
+    const numericValue = text;
     setValue(numericValue);
   };
 
