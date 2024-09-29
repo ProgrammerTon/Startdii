@@ -157,49 +157,46 @@ const QuizSummaryPage = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Finished</Text>
       </View>
-
-      <ScrollView style={styles.containerBottom}>
         {/* Score and progress bar container */}
-        <View style={styles.scoreProgressContainer}>
-          <Text style={styles.scoreText}>
-            {score} / {questions?.length}
-          </Text>
-          <ScoreProgress percent={(score / questions?.length) * 100} />
-        </View>
+      <View style={styles.scoreProgressContainer}>
+        <Text style={styles.scoreText}>
+          {score} / {questions?.length}
+        </Text>
+        <ScoreProgress percent={(score / questions?.length) * 100} />
+      </View>
 
-        <StatButton
-          handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
+      <StatButton
+        handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
+      />
+      {userAnswers?.length && eachQuestionAnswers?.length ? (
+        <AnswerButton
+          eachQuestionAnswers={eachQuestionAnswers}
+          userAnswers={userAnswers}
+          quizData={questions}
         />
-        {userAnswers?.length && eachQuestionAnswers?.length ? (
-          <AnswerButton
-            eachQuestionAnswers={eachQuestionAnswers}
-            userAnswers={userAnswers}
-            quizData={questions}
-          />
-        ) : null}
-        <RatingBlock
-          ScoreRating={Math.round(quiz?.averageScore)}
-          numComment={quiz?.count}
-        />
-        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      ) : null}
+      <RatingBlock
+        ScoreRating={Math.round(quiz?.averageScore)}
+        numComment={quiz?.count}
+      />
+      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
 
-        {/* CommentBar with input */}
-        <CommentBar
-          value={commentInput}
-          handleChangeText={setCommentInput}
-          onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
-        />
+      {/* CommentBar with input */}
+      <CommentBar
+        value={commentInput}
+        handleChangeText={setCommentInput}
+        onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
+      />
 
-        {/* Render all comments */}
-        {comments.map((comment, index) => (
-          <CommentBox
-            key={index}
-            username={comment.username}
-            date={comment.date}
-            comment={comment.comment}
-          />
-        ))}
-      </ScrollView>
+      {/* Render all comments */}
+      {comments.map((comment, index) => (
+        <CommentBox
+          key={index}
+          username={comment.username}
+          date={comment.date}
+          comment={comment.comment}
+        />
+      ))}
     </ScrollView>
   );
 };
@@ -209,12 +206,7 @@ export default QuizSummaryPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-  },
-  containerBottom: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
+    backgroundColor: "#F8F8F8",
   },
   header: {
     backgroundColor: "#04B36E",
@@ -230,7 +222,7 @@ const styles = StyleSheet.create({
   },
   scoreProgressContainer: {
     alignItems: "center", // Center contents horizontally
-    marginBottom: 20,
+    marginVertical: 20,
   },
   scoreText: {
     fontSize: 40,
