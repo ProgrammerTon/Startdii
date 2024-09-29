@@ -6,14 +6,25 @@ import fonts from '../../constants/font';
 import images from '../../constants/images';
 
 const GuildButton = ({ guild, onPress }) => {
-  const noti = 1;
+  const getImage = () => {
+    switch (guild.cover) {
+      case 1:
+        return images.guildcover1;
+      case 2:
+        return images.guildcover2;
+      case 3:
+        return images.guildcover3;
+      default:
+        return images.guildcover1;
+    }
+  };
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
           <Image
             style={styles.guildImage}
-            source={images.guildcover1}
+            source={getImage()}
             contentFit="contain"
           />
         </View>
@@ -63,7 +74,6 @@ const styles = StyleSheet.create({
   guildImage: {
     width: 130,
     height: 130,
-    // right: 5,
   },
   contentContainer: {
     flex: 1,
