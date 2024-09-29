@@ -20,15 +20,18 @@ export default function WeeklyGoals({ id }) {
 
   return (
     <View style={styles.container}>
-      {userGoal?.map((goal, index) => (
-        <GoalProcess
-          key={index}
-          title={goal.goalId.title}
-          percent={`${
-            goal.current_progress * goal.goalId.objective_count * 100
-          }%`}
-        />
-      ))}
+      {userGoal?.map((goal, index) => {
+        console.log(goal.current_progress * goal.goalId.objective_count * 100);
+        return (
+          <GoalProcess
+            key={index}
+            title={goal.goalId.title}
+            percent={`${
+              goal.current_progress * goal.goalId.objective_count * 100
+            }%`}
+          />
+        );
+      })}
     </View>
   );
 }
