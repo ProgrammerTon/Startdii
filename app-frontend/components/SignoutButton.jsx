@@ -7,6 +7,7 @@ import SignUp from "../app/(auth)/sign-in";
 import { useGlobalContext } from "../context/GlobalProvider";
 import { logoutUser } from "../utils/asyncstroage";
 import { router } from "expo-router";
+import RecheckBox from "./RecheckBox";
 
 const SignoutButton = ({ onPress, style, navigation }) => {
   const { setUser, setIsLogged } = useGlobalContext();
@@ -22,15 +23,34 @@ const SignoutButton = ({ onPress, style, navigation }) => {
       Alert.alert(error.messsage);
     }
   };
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
-    <TouchableOpacity
-      style={[styles.button, style]}
-      onPress={() => handleLogout()}
-    >
-      <View>
+    <View>
+      <TouchableOpacity
+        style={[styles.button, style]}
+        onPress={openModal}
+      >
         <SignoutIcon />
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+
+      <RecheckBox
+        visible={modalVisible}
+        onClose={closeModal}
+        onYesPress={handleLogout}
+        title="Do you want to Sign out ?"
+        yes="Sign out"
+        no="Cancel" />
+    </View>
   );
 };
 
