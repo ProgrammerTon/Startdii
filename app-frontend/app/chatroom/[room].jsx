@@ -39,7 +39,12 @@ const ChatView = ({ message, index, name }) => {
       >
         <Text style={styles.messageText}>{message.text}</Text>
       </View>
-      <View style={{ backgroundColor: "#fff" }}>
+      <View
+        style={[
+          isCurrentUser ? styles.receiverMessage : styles.userMessage,
+          { backgroundColor: "#fff" },
+        ]}
+      >
         <Text style={styles.messageTime}>{formattedTime}</Text>
       </View>
     </View>
@@ -154,7 +159,14 @@ const ChatRoom = () => {
                     rating={item?.source.avg_rating_score}
                     isFavorite={fav}
                   />
-                  <View style={{ backgroundColor: "#fff" }}>
+                  <View
+                    style={[
+                      isCurrentUser
+                        ? styles.receiverMessage
+                        : styles.userMessage,
+                      { backgroundColor: "#fff" },
+                    ]}
+                  >
                     <Text style={styles.messageTime}>{formattedTime}</Text>
                   </View>
                 </View>
@@ -179,7 +191,14 @@ const ChatRoom = () => {
                     rating={item?.quiz.avg_rating_score}
                     isFavorite={fav}
                   />
-                  <View style={{ backgroundColor: "#fff" }}>
+                  <View
+                    style={[
+                      isCurrentUser
+                        ? styles.receiverMessage
+                        : styles.userMessage,
+                      { backgroundColor: "#fff" },
+                    ]}
+                  >
                     <Text style={styles.messageTime}>{formattedTime}</Text>
                   </View>
                 </View>
@@ -246,9 +265,11 @@ const styles = StyleSheet.create({
   },
   userMessage: {
     backgroundColor: "#f0f0f0",
+    alignSelf: "flex-start",
   },
   receiverMessage: {
     backgroundColor: "#e1ffc7",
+    alignSelf: "flex-end",
   },
   messageText: {
     fontSize: 16,

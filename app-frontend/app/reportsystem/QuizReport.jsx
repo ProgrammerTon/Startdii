@@ -28,7 +28,7 @@ const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
   if (visible) {
     slideAnimation.setValue(startPosition);
     Animated.timing(slideAnimation, {
-      toValue: height * 0.11,
+      toValue: height * 0.03,
       duration: 400,
       useNativeDriver: true,
     }).start();

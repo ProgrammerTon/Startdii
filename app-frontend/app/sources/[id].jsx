@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
   RefreshControl,
   TextInput,
@@ -28,6 +29,7 @@ import { baseUrl } from "@/constants/const";
 import { getUserRatingSource } from "../../services/SourceService";
 import TestReportNote from "../reportsystem/ReportNote";
 import { router } from "expo-router";
+const { width, height } = Dimensions.get("window");
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -308,11 +310,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    height: height * 0.1,
     backgroundColor: "#FEDD3A",
     paddingVertical: 15,
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.1,
     position: "relative",
-    justifyContent: "center",
+    justifyContent: "center", 
   },
   headerStyle: {
     fontSize: 24,

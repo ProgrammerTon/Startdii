@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
   RefreshControl,
   TextInput,
@@ -29,6 +30,7 @@ import {
 import { useQuestionContext } from "../../context/QuestionProvider";
 import { getUserRatingQuiz } from "../../services/QuizService";
 import TestReport from "../reportsystem/ReportTest";
+const { width, height } = Dimensions.get("window");
 
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();
@@ -204,7 +206,6 @@ export default SumQuizPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: "#F8F8F8",
   },
   headerStyle: {
@@ -214,24 +215,28 @@ const styles = StyleSheet.create({
   tagsContainer: {
     flexDirection: "row",
     marginVertical: 10,
+    paddingHorizontal: 16,
   },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 10,
+    paddingHorizontal: 16,
   },
   headerQs: {
     fontSize: 18,
     fontWeight: "bold",
     marginVertical: 10,
+    paddingHorizontal: 16,
   },
   headerWrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    height: height * 0.1,
     backgroundColor: "#04B36E",
     paddingVertical: 15,
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.1,
     position: "relative",
     justifyContent: "center",
   },
