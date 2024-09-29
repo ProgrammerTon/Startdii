@@ -12,6 +12,8 @@ import {
 import { Redirect, router, useLocalSearchParams } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { useGuildContext } from "../../context/GuildProvider";
+import Entypo from "@expo/vector-icons/Entypo";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import SourceCard from "../../components/E1_SourceCard";
 import QuizCard from "../../components/F1_QuizCard";
 const { width, height } = Dimensions.get("window");
@@ -113,12 +115,18 @@ const ChatScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
-          <Text style={styles.backButton}>{"<"}</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color="#fca6cc" />
         </TouchableOpacity>
         <Text style={styles.headerText}>{guildName}</Text>
-        <TouchableOpacity onPress={() => router.push("/guild/I3_GuildSetting")}>
-          <Text style={styles.menuButton}>≡</Text>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => router.push("/guild/I3_GuildSetting")}
+        >
+          <Entypo name="menu" size={30} color="white" />
         </TouchableOpacity>
       </View>
       <View style={styles.chatLog}>
@@ -129,6 +137,7 @@ const ChatScreen = () => {
             if (item === null) {
               return null;
             }
+            const isCurrentUser = item.sender === "";
             if (item.type === "Source") {
               const fav = user?.favorite_sources?.includes(item?.source._id)
                 ? true
@@ -138,10 +147,10 @@ const ChatScreen = () => {
                   <View
                     style={[
                       styles.messageWrapper,
-                      item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                      isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
                     ]}
                   >
-                    {!item.isCurrentUser && (
+                    {!isCurrentUser && (
                       <Text style={styles.messageSender}>{item.sender}</Text>
                     )}
                   </View>
@@ -156,7 +165,7 @@ const ChatScreen = () => {
                   <View
                   style={[
                     styles.messageWrapper,
-                    item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                    isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
                   ]}
                   >
                     <Text style={styles.messageTime}>{item.time}</Text>
@@ -173,10 +182,10 @@ const ChatScreen = () => {
                   <View
                     style={[
                       styles.messageWrapper,
-                      item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                      isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
                     ]}
                   >
-                    {!item.isCurrentUser && (
+                    {!isCurrentUser && (
                       <Text style={styles.messageSender}>{item.sender}</Text>
                     )}
                   </View>
@@ -191,7 +200,7 @@ const ChatScreen = () => {
                   <View
                   style={[
                     styles.messageWrapper,
-                    item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                    isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
                   ]}
                   >
                     <Text style={styles.messageTime}>{item.time}</Text>
@@ -199,15 +208,14 @@ const ChatScreen = () => {
                 </View>
               );
             }
-            item.isCurrentUser = item.sender == user.username;
             return (
               <View
                 style={[
                   styles.messageWrapper,
-                  item.isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                  isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
                 ]}
               >
-                {!item.isCurrentUser && (
+                {!isCurrentUser && (
                   <Text style={styles.messageSender}>{item.sender}</Text>
                 )}
                 <View style={styles.messageBubble}>
@@ -224,6 +232,7 @@ const ChatScreen = () => {
           ListFooterComponent={loading && <ActivityIndicator />}
         />
       ) : null}
+      
       </View>
 
       <View style={styles.inputContainer}>
@@ -234,7 +243,7 @@ const ChatScreen = () => {
           placeholder="message"
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-          <Text style={styles.sendButtonText}>➤</Text>
+          <Ionicons name="send" size={24} color="#fca6cc" />
         </TouchableOpacity>
       </View>
     </View>
@@ -250,25 +259,32 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   header: {
-    backgroundColor: "#fca6cc",
+    height: height * 0.1,
+    width: width,
     paddingVertical: 10,
     paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    backgroundColor: "#fca6cc",
   },
   backButton: {
-    fontSize: 24,
-    color: "#000",
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 20,
     color: "#000",
     fontWeight: "bold",
   },
   menuButton: {
-    fontSize: 24,
-    color: "#000",
+    position: "absolute",
+    right: width * 0.05,
+    borderRadius: 20,
+    padding: 5,
   },
   chatLog: {
     flex: 1,
