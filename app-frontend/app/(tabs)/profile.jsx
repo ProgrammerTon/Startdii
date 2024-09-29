@@ -7,6 +7,7 @@ import {
   Dimension,
   Alert,
   FlatList,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect } from "react";
 import { useState, useContext } from "react";
@@ -47,20 +48,32 @@ import HPlant from "../../components/hat/hat_plant";
 import HPlaster from "../../components/hat/hat_plaster";
 import HShark from "../../components/hat/hat_shark";
 import HXmas from "../../components/hat/hat_xmas";
+import { getUser } from "../../services/UserService";
+import { getCurrentToken } from "../../utils/asyncstroage";
 
 const { width, height } = Dimensions.get("window");
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
   const { selectedChar, selectedColor, selectedHat, setSelectedHat } =
     useCharContext();
-  const { isLogged, user } = useGlobalContext();
+  const { isLogged, user, setUser } = useGlobalContext();
   const [userLevel, setUserLevel] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    if (user) {
+      setRefreshing(true);
+      const token = await getCurrentToken();
+      const newUser = await getUser(token);
+      setUser(newUser);
+      await loadUserLevel();
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    if (user) {
-      loadUserLevel();
-    }
-  }, [user]);
+    handleRefresh();
+  }, []);
 
   const loadUserLevel = async () => {
     const user_lvl = await getUserLevel(user?._id);
@@ -166,7 +179,12 @@ export default function ProfileTest() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.bg}>
+    <ScrollView
+      style={styles.bg}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+    >
       <View style={styles.toptab}>
         <TouchableOpacity style={styles.usernameContainer}>
           <Text style={[fonts.EngBold22, styles.username]}>
@@ -185,8 +203,9 @@ export default function ProfileTest() {
         data={[{}]} // Ensuring there is data to render the header.
         renderItem={() => renderContent()}
         keyExtractor={(item, index) => index.toString()}
+        scrollEnabled={false}
       />
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 
