@@ -10,6 +10,15 @@ import { TagsModule } from './tags/tags.module';
 import { SourcesModule } from './sources/sources.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { CommentsModule } from './comments/comments.module';
+import { QuizsModule } from './quizs/quizs.module';
+import { FilesController } from './files/files.controller';
+import { GuildsModule } from './guilds/guilds.module';
+import { ChatModule } from './chat/chat.module';
+import { ReportsModule } from './reports/reports.module';
+import { LevelsModule } from './levels/levels.module';
+import { GoalsModule } from './goals/goal.module';
+import { ProgressionsModule } from './progressions/progressions.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -31,8 +40,16 @@ import { CommentsModule } from './comments/comments.module';
     TagsModule,
     SourcesModule,
     CommentsModule,
+    QuizsModule,
+    GuildsModule,
+    ChatModule,
+    ReportsModule,
+    LevelsModule,
+    GoalsModule,
+    ProgressionsModule,
+    EmailModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, FilesController],
   providers: [AppService, ChatGateway],
 })
 export class AppModule {}
