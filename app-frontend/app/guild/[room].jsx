@@ -144,12 +144,7 @@ const ChatScreen = () => {
                 : false;
               return (
                 <View>
-                  <View
-                    style={[
-                      styles.messageWrapper,
-                      isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
-                    ]}
-                  >
+                  <View style={[isCurrentUser ? styles.receiverWrapper : styles.userWrapper]}>
                     {!isCurrentUser && (
                       <Text style={styles.messageSender}>{item.sender}</Text>
                     )}
@@ -179,12 +174,7 @@ const ChatScreen = () => {
                 : false;
               return (
                 <View>
-                  <View
-                    style={[
-                      styles.messageWrapper,
-                      isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
-                    ]}
-                  >
+                  <View style={[isCurrentUser ? styles.receiverWrapper : styles.userWrapper]}>
                     {!isCurrentUser && (
                       <Text style={styles.messageSender}>{item.sender}</Text>
                     )}
@@ -221,7 +211,14 @@ const ChatScreen = () => {
                 <View style={styles.messageBubble}>
                   <Text style={styles.messageText}>{item.text}</Text>
                 </View>
-                <Text style={styles.messageTime}>{item.time}</Text>
+                <View
+                style={[
+                  styles.messageWrapper,
+                  isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
+                ]}
+                >
+                  <Text Text style={styles.messageTime}>{item.time}</Text>
+                </View>
               </View>
             );
           }}
@@ -289,6 +286,10 @@ const styles = StyleSheet.create({
   chatLog: {
     flex: 1,
     padding: 10,
+  },
+  senderWrapper: {
+    marginVertical: 5,
+    maxWidth: width * 0.7,
   },
   messageWrapper: {
     marginVertical: 5,
