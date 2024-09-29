@@ -30,6 +30,8 @@ import HPlant from "../../components/hat/hat_plant";
 import HPlaster from "../../components/hat/hat_plaster";
 import HShark from "../../components/hat/hat_shark";
 import HXmas from "../../components/hat/hat_xmas";
+import HAfro from "../../components/hat/hat_afro";
+import HJuaz from "../../components/hat/hat_juaz";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { updateCostume } from "../../services/UserService";
 
@@ -229,6 +231,21 @@ function HatDetails({ onHatSelect }) {
             <HXmas />
           </TouchableOpacity>
         </View>
+
+        <View style={styles.rowcontainer}>
+          <TouchableOpacity
+            style={styles.eachcontainer}
+            onPress={() => onHatSelect("HAfro")}
+          >
+            <HAfro />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.eachcontainer}
+            onPress={() => onHatSelect("HJuaz")}
+          >
+            <HJuaz />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -309,6 +326,10 @@ export default function DressTest() {
         return <HShark />;
       case "HXmas":
         return <HXmas />;
+      case "HAfro":
+        return <HAfro />;
+      case "HJuaz":
+        return <HJuaz />;
     }
   };
 
