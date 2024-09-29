@@ -61,7 +61,7 @@ export default function ProfileTest() {
   }, [user]);
 
   const loadUserLevel = async () => {
-    const user_lvl = await getUserLevel(user._id);
+    const user_lvl = await getUserLevel(user?._id);
     setUserLevel(user_lvl);
   };
 
@@ -141,13 +141,13 @@ export default function ProfileTest() {
   const renderContent = () => {
     switch (activeMenu) {
       case "Weekly Goals":
-        return <WeeklyGoals id={user._id} />;
+        return <WeeklyGoals id={user?._id} />;
       case "Inventory":
-        return <Inventory id={user._id} />;
+        return <Inventory id={user?._id} />;
       case "History":
-        return <QuizHistory id={user._id} />;
+        return <QuizHistory id={user?._id} />;
       default:
-        return <WeeklyGoals id={user._id} />;
+        return <WeeklyGoals id={user?._id} />;
     }
   };
 
