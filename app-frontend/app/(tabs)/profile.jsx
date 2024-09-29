@@ -174,7 +174,7 @@ export default function ProfileTest() {
 
 const styles = {
   bg: {
-    height: height * 0.9,
+    height: height * 0.89,
     backgroundColor: colors.gray_bg,
   },
   toptab: {
