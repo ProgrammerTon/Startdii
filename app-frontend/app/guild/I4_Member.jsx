@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   Alert,
+  RefreshControl,
 } from "react-native";
 import MemberItem from "./MemberItem"; // Import the new component
 import { useGuildContext } from "../../context/GuildProvider";
@@ -17,6 +18,7 @@ import {
   kickViceLeader,
   promoteAdmin,
   promoteViceLeader,
+  guildDetail,
 } from "../../services/GuildService";
 
 const MemberScreen = () => {
@@ -28,8 +30,9 @@ const MemberScreen = () => {
   //   { id: 5, name: "fortune", isAdmin: false, isViceAdmin: false },
   // ];
   const [members, setMembers] = useState([]);
-  const { guild, loadGuild } = useGuildContext();
+  const { guild, loadGuild, setGuild } = useGuildContext();
   const { user } = useGlobalContext();
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     const transformdata = guild.memberIdList.map((item, index) => ({
       _id: item._id,
@@ -58,14 +61,14 @@ const MemberScreen = () => {
       return;
     }
     if (userpro.isViceAdmin) {
-      console.log('test');
+      console.log("test");
       const data = await promoteAdmin(guild._id, userId, "add");
       if (!data) {
         Alert.alert("Promote Failed");
         return;
       } else {
         Alert.alert("Promote!");
-      }       
+      }
     } else {
       const data = await promoteViceLeader(guild._id, userId, "add");
       if (!data) {
@@ -73,9 +76,15 @@ const MemberScreen = () => {
         return;
       } else {
         Alert.alert("Promote!");
-      }      
+      }
     }
     await loadGuild();
+  };
+
+  const fetchGuild = async () => {
+    const data = await guildDetail(guild._id);
+    console.log("Guild Data", data);
+    setGuild(data);
   };
 
   const handleKickMember = async (userId) => {
@@ -115,7 +124,12 @@ const MemberScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={fetchGuild} />
+      }
+    >
       <View style={styles.header}>
         <TouchableOpacity>
           <Text style={styles.backButton}>{"<"}</Text>
@@ -137,9 +151,10 @@ const MemberScreen = () => {
             />
           )}
           keyExtractor={(item) => `${item.id}`}
+          scrollEnabled={false}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
