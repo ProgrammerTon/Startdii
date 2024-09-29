@@ -24,7 +24,7 @@ import Char3 from "../../components/charactor/Charactor03";
 import Char4 from "../../components/charactor/Charactor04";
 import Char5 from "../../components/charactor/Charactor05";
 import Char6 from "../../components/charactor/Charactor06";
-import Menu from "../../components/menu";
+import OtherUserMenu from "../../components/Menuotheruser";
 import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
 import Frame from "../../components/Frame";
@@ -45,15 +45,28 @@ import HShark from "../../components/hat/hat_shark";
 import HXmas from "../../components/hat/hat_xmas";
 import colors from "../../constants/color";
 import { getOtherProfile } from "../../services/UserService";
+import { getUserLevel } from "../../services/LevelService";
 
 export default function ProfileTest() {
   const { id } = useLocalSearchParams();
-  const [activeMenu, setActiveMenu] = useState("Weekly Goals");
+  const [activeMenu, setActiveMenu] = useState("Inventory");
   const [selectedChar, setSelectedChar] = useState("Char1");
   const [selectedColor, setSelectedColor] = useState(colors.green);
   const [selectedHat, setSelectedHat] = useState("HNone");
   const [user, setUser] = useState(null);
   const { isLogged } = useGlobalContext();
+  const [userLevel, setUserLevel] = useState(null);
+
+  useEffect(() => {
+    if (id) {
+      loadUserLevel();
+    }
+  }, [id]);
+
+  const loadUserLevel = async () => {
+    const user_lvl = await getUserLevel(id);
+    setUserLevel(user_lvl);
+  };
 
   useEffect(() => {}, []);
 
@@ -106,7 +119,12 @@ export default function ProfileTest() {
   const renderHeader = () => (
     <>
       <View style={styles.levelContainer}>
-        <Level level="1" percent="50%" />
+        <Level
+          level={userLevel?.level ? userLevel.level : 0}
+          percent={`${
+            (userLevel?.current_exp / userLevel?.required_exp) * 100
+          }%`}
+        />
       </View>
 
       <View style={styles.charContainer}>
@@ -119,20 +137,14 @@ export default function ProfileTest() {
           <Text style={[fonts.EngMedium22, styles.text]}>Beginner</Text>
         </View>
       </View>
-      <Menu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+      <OtherUserMenu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
     </>
   );
 
   const renderContent = () => {
     switch (activeMenu) {
-      case "Weekly Goals":
-        return <WeeklyGoals id={id} />;
       case "Inventory":
         return <Inventory id={id} />;
-      case "History":
-        return <QuizHistory id={id} />;
-      default:
-        return <WeeklyGoals id={id} />;
     }
   };
 
@@ -169,13 +181,7 @@ export default function ProfileTest() {
           <Text style={[fonts.EngBold22, styles.username]}>
             {user?.username}
           </Text>
-          <View style={styles.pencilContainer}>
-            <PencilIcon />
-          </View>
         </TouchableOpacity>
-        <View style={styles.signoutContainer}>
-          <SignoutButton onPress={() => {}} />
-        </View>
       </View>
       <FlatList
         ListHeaderComponent={renderHeader}

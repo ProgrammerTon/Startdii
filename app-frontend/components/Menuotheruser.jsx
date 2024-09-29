@@ -4,7 +4,7 @@ import colors from "../constants/color";
 import fonts from "../constants/font";
 import { menuData } from "../constants/menuData";
 
-export default function Menu({ activeMenu, setActiveMenu }) {
+export default function OtherUserMenu({ activeMenu, setActiveMenu }) {
   const [textWidth, setTextWidth] = useState({});
 
   const handleTextLayout = (index, event) => {
@@ -14,7 +14,7 @@ export default function Menu({ activeMenu, setActiveMenu }) {
 
   return (
     <View style={styles.menuContainer}>
-      {menuData.map((menu, index) => {
+      {[{ name: "Inventory" }].map((menu, index) => {
         let isActive = menu.name === activeMenu;
         let activeButtonClass = isActive
           ? [fonts.EngSemiBold16, styles.selected]
