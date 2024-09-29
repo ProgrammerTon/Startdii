@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Modal, Pressable,TouchableOpacity, TextInput } from 'react-native';
-import { createGuild } from '../../services/GuildService';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
+import { createGuild } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { Alert } from "react-native";
 
-const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
+const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData }) => {
   const { user } = useGlobalContext();
   const [guildFormat, setGuildFormat] = useState({
     name: "",
@@ -15,11 +23,11 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
   const [isPublishing, setIsPublishing] = useState(false);
 
   const create = async () => {
-    if (isPublishing) return; 
-    setIsPublishing(true); 
+    if (isPublishing) return;
+    setIsPublishing(true);
     if (guildFormat.name === "") {
       Alert.alert("Error", "Please fill in all fields");
-      setIsPublishing(false); 
+      setIsPublishing(false);
     } else {
       try {
         const data = await createGuild(user._id, guildFormat);
@@ -62,19 +70,22 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
             style={styles.createContainer}
             value={guildFormat.description}
             onSubmitEditing={onSubmit}
-            onChangeText={(e) => setGuildFormat({ ...guildFormat, description: e })}
+            onChangeText={(e) =>
+              setGuildFormat({ ...guildFormat, description: e })
+            }
           />
           <Text style={styles.codeText}>Guild Cover </Text>
-          <View style={styles.coverContainer}>
-
-          </View>
+          <View style={styles.coverContainer}></View>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.copyButton}
-              onPress={() => { create(); onClose(); }}
+              onPress={() => {
+                create();
+                onClose();
+              }}
             >
               <Text style={styles.copyButtonText}>Create</Text>
             </TouchableOpacity>
@@ -88,80 +99,80 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: '#ffffff',
+    width: "80%",
+    backgroundColor: "#ffffff",
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
     marginBottom: 10,
   },
   codeText: {
     fontSize: 32,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
     marginRight: 10,
   },
   cancelButtonText: {
-    color: '#000000',
+    color: "#000000",
     fontSize: 16,
   },
   copyButton: {
     flex: 1,
-    backgroundColor: '#4285F4',
+    backgroundColor: "#4285F4",
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 5,
   },
   copyButtonText: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 16,
   },
   codeText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   createContainer: {
     flexDirection: "row",
     backgroundColor: "#f4ede4",
     borderRadius: 15,
-    paddingHorizontal: '50%',
-    paddingVertical: '3%',
-    paddingHorizontal: 15, 
-    paddingVertical: 10,  
+    paddingHorizontal: "50%",
+    paddingVertical: "3%",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     marginBottom: 15,
-    width: '100%',  
+    width: "100%",
   },
   coverContainer: {
-    width: '30%',
-    height: '30%',
-    backgroundColor: '#000000',
+    width: "30%",
+    height: "30%",
+    backgroundColor: "#000000",
     borderRadius: 10,
     padding: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 15,
-  }
+  },
 });
 
 export default GuildCreateWindow;
