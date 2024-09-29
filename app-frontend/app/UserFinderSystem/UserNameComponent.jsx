@@ -1,14 +1,19 @@
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 const UserNameComponent = ({ id, username, onPress }) => {
   return (
-    <View key={id} style={styles.container}>
+    <TouchableOpacity
+      key={id}
+      style={styles.container}
+      onPress={() => router.push(`profile/${id}`)}
+    >
       <Text style={styles.username}>{username}</Text>
       <TouchableOpacity style={styles.button} onPress={() => onPress(id)}>
         <Text style={styles.buttonText}>Add User</Text>
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
