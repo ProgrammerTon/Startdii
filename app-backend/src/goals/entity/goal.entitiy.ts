@@ -26,6 +26,9 @@ export class Goal {
 
   @Prop({ name: 'objective_count' })
   objective_count: number;
+
+  @Prop({ name: 'is_weekly_quest' })
+  is_weekly_quest: boolean = false;
 }
 
 export const GoalSchema = SchemaFactory.createForClass(Goal);

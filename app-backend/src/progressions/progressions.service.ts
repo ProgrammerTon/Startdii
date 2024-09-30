@@ -8,18 +8,23 @@ import { Progression, ProgressionDocument } from './entities/progression.entity'
 import { CreateProgressionDto } from './dto/create-progression.dto';
 import { GoalsService } from 'src/goals/goals.service';
 import { UsersService } from 'src/users/users.service';
-import { Goal, GoalType } from 'src/goals/entity/goal.entitiy';
+import { Goal, GoalDocument, GoalType } from 'src/goals/entity/goal.entitiy';
 import { Cron } from '@nestjs/schedule';
 import { LevelsService } from 'src/levels/levels.service';
+import { User, UserDocument } from 'src/users/entities/user.entity';
+
 
 @Injectable()
 export class ProgressionsService {
   constructor(
     @InjectModel(Progression.name)
     private progressionModel: Model<ProgressionDocument>,
+	@InjectModel(User.name)
+    private userModel: Model<UserDocument>,
+	@InjectModel(Goal.name)
+    private goalModel: Model<GoalDocument>,
     private readonly goalsService: GoalsService,
-		private readonly usersService: UsersService,
-		private readonly levelsService: LevelsService,
+	private readonly levelsService: LevelsService,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -30,7 +35,19 @@ export class ProgressionsService {
 	progression.goalId = goalId;
     const createdProgression = new this.progressionModel(progression);
     return createdProgression.save();
-  } 
+  }
+
+  async createGoalForNewUser(userId: ObjectId) {
+	const goals = await this.goalModel.find({});
+	for (let i = 0; i < goals.length; i++) {
+		if(goals[i].is_weekly_quest === true) {
+			const createProgressionDto = {
+				current_progress: 0,
+			};
+			await this.create(createProgressionDto, userId as ObjectId, goals[i]._id as ObjectId);
+		}
+	}
+  }
 
   // --------------------------- Get ---------------------------
 
@@ -48,7 +65,7 @@ export class ProgressionsService {
   @Cron('59 23 * * 0')
   async updateWeeklyGoal() {
 		const {selected_easy_goals, selected_hard_goals} = await this.randomWeeklyGoal();
-		const users = await this.usersService.findAll();
+		const users = await this.userModel.find({});
 		this.progressionModel.deleteMany({}).exec();
 		for (let i = 0; i < users.length; i++) {
 			const createProgressionDto = {
@@ -113,7 +130,8 @@ export class ProgressionsService {
 			}
 			else if (goals[i].difficulty === 'easy') {
 				easy_goals.push(goals[i]);
-			} 
+			}
+			await this.goalModel.findByIdAndUpdate(goals[i]._id, {is_weekly_quest: false}).exec(); 
 		}
 		const easy_count = 2;
 		const hard_count = 1;
@@ -128,6 +146,7 @@ export class ProgressionsService {
 			if (!easy_goals_number.includes(sel)) {
 				easy_goals_number.push(sel);
 				selected_easy_goals.push(easy_goals[sel-1]);
+				await this.goalModel.findByIdAndUpdate(easy_goals[sel-1]._id, {is_weekly_quest: true}).exec();
 			}
 		}
 		while (selected_hard_goals.length < hard_count) {
@@ -135,6 +154,7 @@ export class ProgressionsService {
 			if (!hard_goals_number.includes(sel)) {
 				hard_goals_number.push(sel);
 				selected_hard_goals.push(hard_goals[sel-1]);
+				await this.goalModel.findByIdAndUpdate(hard_goals[sel-1]._id, {is_weekly_quest: true}).exec();
 			}
 		}
 		return {selected_easy_goals, selected_hard_goals};
