@@ -59,6 +59,14 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData }) => {
     setGuildFormat({ ...guildFormat, cover: coverNumber }); // Update guild format
   };
 
+  const handleNameChange = (e) => {
+    if (e.length > 25) {
+      Alert.alert("Error", "You cannot use more than 25 characters for the guild name");
+    } else {
+      setGuildFormat({ ...guildFormat, name: e });
+    }
+  };
+  
   return (
     <Modal
       animationType="slide"
@@ -73,7 +81,7 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData }) => {
             style={styles.createContainer}
             value={guildFormat.name}
             onSubmitEditing={onSubmit}
-            onChangeText={(e) => setGuildFormat({ ...guildFormat, name: e })}
+            onChangeText={handleNameChange}
           />
           <Text style={[fonts.EngBold18, styles.codeText]}>Description</Text>
           <TextInput

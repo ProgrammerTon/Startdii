@@ -30,9 +30,9 @@ const GuildButton = ({ guild, onPress }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={[fonts.EngBold18, styles.titleText]}>{guild.title}</Text>
+          <Text style={[fonts.EngBold18, styles.titleText]}>{guild.title.length > 15 ? guild.title.slice(0, 15) + '...' : guild.title}</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
-            {guild.description}
+            {guild.description.length > 20 ? guild.description.slice(0, 20) + '...' : guild.description}
           </Text>
           <View style={styles.memberContainer}>
             <Text style={[fonts.EngMedium14, styles.members]}>
