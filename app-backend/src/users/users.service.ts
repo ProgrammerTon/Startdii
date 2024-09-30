@@ -137,7 +137,9 @@ export class UsersService {
   }
 
   async getOtherProfile(userId: ObjectId) {
-    const user = await this.userModel.findById(userId).select('-password');
+    const user = await this.userModel
+      .findById(userId)
+      .select('-password -favorite_sources -quiz_history -favorite_quizzes');
     return user;
   }
 

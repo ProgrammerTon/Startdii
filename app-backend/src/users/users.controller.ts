@@ -58,7 +58,6 @@ export class UsersController {
 
   @Get('profile/:userId')
   getOtherProfile(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
-    console.log(userId);
     return this.usersService.getOtherProfile(userId);
   }
 
