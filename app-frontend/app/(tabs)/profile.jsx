@@ -132,7 +132,7 @@ export default function ProfileTest() {
         <Level
           level={userLevel?.level ? userLevel.level : 0}
           percent={`${
-            (userLevel?.current_exp / userLevel?.required_exp) * 100
+            ((userLevel?.current_exp / userLevel?.required_exp) < 1) ? (userLevel?.current_exp / userLevel?.required_exp) * 100 : 100
           }%`}
         />
       </View>
