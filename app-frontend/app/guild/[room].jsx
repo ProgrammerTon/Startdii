@@ -57,10 +57,9 @@ const ChatScreen = () => {
     if (!isLogged) {
       router.replace("/sign-in");
     } else if (user) {
-      console.log("Hello Guild");
-      setName(user.username || "");
+      setName(user.username);
     }
-  }, [user, guild, isLogged]);
+  }, [user, isLogged]);
 
   const fetchChat = () => {
     setLoading(true);
@@ -107,7 +106,7 @@ const ChatScreen = () => {
               if (item === null) {
                 return null;
               }
-              const isCurrentUser = item.sender === "";
+              const isCurrentUser = item.sender === name;
               if (item.type === "Source") {
                 const fav = user?.favorite_sources?.includes(item?.source._id)
                   ? true

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User, Role, UserDocument } from './entities/user.entity';
 import { plainToInstance } from 'class-transformer';
@@ -11,6 +11,7 @@ import { Types } from 'mongoose';
 import { Quiz, QuizDocument } from 'src/quizs/entities/quiz.entity';
 import { Chat, ChatDocument } from 'src/chat/entities/chat.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ProgressionsService } from 'src/progressions/progressions.service';
 
 @Injectable()
 export class UsersService {
@@ -21,6 +22,7 @@ export class UsersService {
     private sourceModel: Model<SourceDocument>,
     @InjectModel(Quiz.name)
     private quizModel: Model<QuizDocument>,
+    private progressionsService: ProgressionsService,
   ) {}
 
   // --------------------------- Create ---------------------------
@@ -30,6 +32,7 @@ export class UsersService {
     user.roles = [Role.Customer];
     user.password = await this.hashPassword(user.password);
     const createdUser = new this.userModel(user);
+    await this.progressionsService.createGoalForNewUser(createdUser._id as ObjectId);
     return createdUser.save();
   }
 
@@ -137,7 +140,9 @@ export class UsersService {
   }
 
   async getOtherProfile(userId: ObjectId) {
-    const user = await this.userModel.findById(userId).select('-password');
+    const user = await this.userModel
+      .findById(userId)
+      .select('-password -favorite_sources -quiz_history -favorite_quizzes');
     return user;
   }
 

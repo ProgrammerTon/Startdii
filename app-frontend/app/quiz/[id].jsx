@@ -47,6 +47,13 @@ const SumQuizPage = () => {
   const [commentInput, setCommentInput] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
+  function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
   // Function to handle submitting a new comment
   const handleSubmitComment = async () => {
     if (commentInput.trim() === "") return; // Prevent empty comments
@@ -54,7 +61,7 @@ const SumQuizPage = () => {
     // Create a new comment object
     const newComment = {
       username: user.username, // Replace with dynamic username if available
-      date: new Date().toLocaleDateString(),
+      date: formatDate(new Date()),
       comment: commentInput,
     };
 
@@ -108,7 +115,7 @@ const SumQuizPage = () => {
     const data = await getCommentsQuiz(id);
     const newComment = data.map((com) => ({
       username: com.parentComment.username, // Replace with dynamic username if available
-      date: new Date(com.parentComment.updatedAt).toLocaleDateString(),
+      date: formatDate(new Date(com.parentComment.updatedAt)),
       comment: com.parentComment.content,
     }));
     const reversedComments = newComment.reverse();

@@ -89,6 +89,13 @@ const SourceDetailPage = () => {
   // State for the input value in the CommentBar
   const [commentInput, setCommentInput] = useState("");
 
+  function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
   // Function to handle submitting a new comment
   const handleSubmitComment = async () => {
     if (commentInput.trim() === "") return; // Prevent empty comments
@@ -96,7 +103,7 @@ const SourceDetailPage = () => {
     // Create a new comment object
     const newComment = {
       username: user.username, // Replace with dynamic username if available
-      date: new Date().toLocaleDateString(),
+      date: formatDate(new Date()),
       comment: commentInput,
     };
 
@@ -127,7 +134,7 @@ const SourceDetailPage = () => {
     const data = await getCommentsSource(id);
     const newComment = data.map((com) => ({
       username: com.parentComment.username, // Replace with dynamic username if available
-      date: new Date(com.parentComment.updatedAt).toLocaleDateString(),
+      date: formatDate(new Date(com.parentComment.updatedAt)),
       comment: com.parentComment.content,
     }));
     const reversedComments = newComment.reverse();
@@ -168,11 +175,11 @@ const SourceDetailPage = () => {
       >
         {/* Header */}
         <View style={styles.headerWrapper}>
-            <Text style={styles.headerStyle}>{source?.title}</Text>
-            <TestReportNote
-              sourceId={id} // Pass the sourceId to the report window
-              onPress={() => console.log('Report Button Pressed')}
-            />
+          <Text style={styles.headerStyle}>{source?.title}</Text>
+          <TestReportNote
+            sourceId={id} // Pass the sourceId to the report window
+            onPress={() => console.log("Report Button Pressed")}
+          />
         </View>
 
         {/* Description and Info */}
@@ -315,10 +322,10 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: width * 0.1,
     position: "relative",
-    justifyContent: "center", 
+    justifyContent: "center",
   },
   headerStyle: {
     fontSize: 24,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 });

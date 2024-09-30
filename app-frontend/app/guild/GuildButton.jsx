@@ -1,29 +1,38 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
-import colors from '../../constants/color';
-import fonts from '../../constants/font';
-import images from '../../constants/images';
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+import images from "../../constants/images";
 
 const GuildButton = ({ guild, onPress }) => {
-  const noti = 1;
+  const getImage = () => {
+    switch (guild.cover) {
+      case 1:
+        return images.guildcover1;
+      case 2:
+        return images.guildcover2;
+      case 3:
+        return images.guildcover3;
+      default:
+        return images.guildcover1;
+    }
+  };
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
           <Image
             style={styles.guildImage}
-            source={images.guildcover1}
+            source={getImage()}
             contentFit="contain"
           />
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={[fonts.EngBold18, styles.titleText]}>
-            {guild.title}
-          </Text>
+          <Text style={[fonts.EngBold18, styles.titleText]}>{guild.title.length > 15 ? guild.title.slice(0, 15) + '...' : guild.title}</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
-            {guild.description}
+            {guild.description.length > 20 ? guild.description.slice(0, 20) + '...' : guild.description}
           </Text>
           <View style={styles.memberContainer}>
             <Text style={[fonts.EngMedium14, styles.members]}>
@@ -31,7 +40,6 @@ const GuildButton = ({ guild, onPress }) => {
             </Text>
           </View>
         </View>
-
       </View>
     </TouchableOpacity>
   );
@@ -63,7 +71,6 @@ const styles = StyleSheet.create({
   guildImage: {
     width: 130,
     height: 130,
-    // right: 5,
   },
   contentContainer: {
     flex: 1,
@@ -78,9 +85,9 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   memberContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingHorizontal: '2%',
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingHorizontal: "2%",
   },
   members: {
     color: colors.black,
