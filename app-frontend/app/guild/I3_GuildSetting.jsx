@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image , ScrollView} from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
 import ChatSearchBar from "../../components/ChatSearchBar";
@@ -10,6 +10,9 @@ import { leavePerson } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import NoteGuildPage from "./I6_NoteGuild";
 import QuizGuildPage from "./I7_QuizGuild";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+import images from "../../constants/images";
 
 const GuildSettingPage = () => {
   const guildName = "Test_guild";
@@ -50,6 +53,7 @@ const GuildSettingPage = () => {
   };
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
@@ -123,8 +127,22 @@ const GuildSettingPage = () => {
         >
           <Text style={styles.noteQuizText}>Quiz</Text>
         </TouchableOpacity>
+        
+        <View style={styles.guildDescriptionContainer}>
+          <Text style={styles.guildDescriptionHeader}>Guild Name</Text>
+          <Text style={[fonts.EngMedium14, styles.description]}>
+            {guild.name}
+          </Text>
+        </View>
+        <View style={styles.guildDescriptionContainer}>
+          <Text style={styles.guildDescriptionHeader}>Guild Description</Text>
+          <Text style={[fonts.EngMedium14, styles.description]}>
+            {guild.description}
+          </Text>
+        </View>
       </View>
     </View>
+    </ScrollView>
   );
 };
 
@@ -204,5 +222,33 @@ const styles = StyleSheet.create({
     color: "black",
     marginTop: 5,
     fontWeight: "bold",
+  },
+  description: {
+    marginVertical: 6,
+  },
+  guildDescriptionContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 10,
+    marginTop: 30,
+    alignItems: "center",
+  },
+  guildDescriptionHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  description: {
+    fontSize: 14,
+    textAlign: "center",
+    color: "gray",
+  },
+  footer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    justifyContent: "center",
   },
 });
