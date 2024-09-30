@@ -33,7 +33,7 @@ export default function WeeklyGoals() {
                 <GoalProcess
                     key={index}
                     title={goal.goalId.title}
-                    percent={`${goal.current_progress * goal.goalId.objective_count * 100}%`}
+                    percent={`${goal.current_progress / goal.goalId.objective_count * 100}%`}
                 />
             ))}
         </View>
