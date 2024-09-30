@@ -146,7 +146,7 @@ export default function ProfileTest() {
       <View style={styles.frameContainer}>
         <Frame />
         <View style={styles.textContainer}>
-          <Text style={[fonts.EngMedium22, styles.text]}>Beginner</Text>
+          <Text style={[fonts.EngMedium22, styles.text]}>{userLevel?.user_title}</Text>
         </View>
       </View>
       <Menu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
