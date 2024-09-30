@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TouchableOpacity, StyleSheet, Text } from "react-native";
 import Entypo from "@expo/vector-icons/Entypo";
 import ReportQuizWindow from "./QuizReport";
+import colors from "../../constants/color";
 
 const TestReport = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -17,7 +18,7 @@ const TestReport = () => {
   return (
     <>
       <TouchableOpacity style={styles.reportButton} onPress={openModal}>
-        <Entypo name="warning" size={16} color="white" />
+        <Entypo name="warning" size={18} color={colors.white} />
       </TouchableOpacity>
 
       <ReportQuizWindow
@@ -37,17 +38,12 @@ export default TestReport;
 
 const styles = StyleSheet.create({
   reportButton: {
-    flexDirection: "row",
+    height: 40,
+    width: 40,
     alignItems: "center",
-    backgroundColor: "red",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
+    justifyContent: "center",
+    backgroundColor: colors.red,
+    borderRadius: 50,
     marginLeft: 10,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 14,
-    marginLeft: 5,
   },
 });

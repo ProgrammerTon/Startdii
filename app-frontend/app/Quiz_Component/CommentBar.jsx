@@ -6,6 +6,8 @@ import {
   View,
   Text
 } from "react-native";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const CommentBar = ({ value, handleChangeText, onSubmit }) => {
   return (
@@ -13,7 +15,7 @@ const CommentBar = ({ value, handleChangeText, onSubmit }) => {
       <TextInput
         style={styles.commentInput}
         placeholder="Add a comment..."
-        placeholderTextColor="#c4c4c4"
+        placeholderTextColor={colors.gray_button}
         value={value}
         onChangeText={handleChangeText}
         multiline
@@ -21,7 +23,7 @@ const CommentBar = ({ value, handleChangeText, onSubmit }) => {
       />
       
       <TouchableOpacity onPress={onSubmit} style={styles.submitButton}>
-        <Text style={styles.submitText}>Submit</Text>
+        <Text style={[fonts.EngMedium12, styles.submitText]}>Submit</Text>
       </TouchableOpacity>
       
       {value.length > 0 && (
@@ -36,12 +38,17 @@ const CommentBar = ({ value, handleChangeText, onSubmit }) => {
 const styles = StyleSheet.create({
   commentContainer: {
     flexDirection: "row",
-    backgroundColor: "#ffffff",
-    borderRadius: 25,
+    backgroundColor: colors.white,
+    borderRadius: 50,
     paddingHorizontal: 15,
-    paddingVertical: 10,
-    marginBottom: 20,
+    paddingVertical: 6,
+    marginBottom: 15,
     alignItems: "center",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   commentInput: {
     flex: 1,
@@ -50,18 +57,18 @@ const styles = StyleSheet.create({
     minHeight: 40,
   },
   submitButton: {
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 20,
+    backgroundColor: colors.blue,
+    padding: 9,
+    paddingHorizontal: 12,
+    borderRadius: 50,
     marginLeft: 10,
   },
   submitText: {
-    color: '#fff',
-    fontSize: 16,
+    color: colors.white,
   },
   clearButton: {
     fontSize: 16,
-    color: "#c4c4c4",
+    color: colors.red,
     marginLeft: 10,
   },
 });
