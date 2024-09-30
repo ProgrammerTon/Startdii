@@ -56,7 +56,7 @@ const Quiz_History_Page = ({ id }) => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
       }
-      contentContainerStyle={{ paddingBottom: 110 }}
+      contentContainerStyle={{ paddingBottom: 210 }}
     />
   );
 };
