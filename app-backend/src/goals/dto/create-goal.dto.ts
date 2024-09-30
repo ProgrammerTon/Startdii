@@ -21,4 +21,8 @@ export class CreateGoalDto {
   @IsInt()
   objective_count: number;
 
+  @ApiProperty()
+  @IsNotEmpty()
+  is_weekly_quest: boolean;
+
 }

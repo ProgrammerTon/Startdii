@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { ProgressionsService } from './progressions.service';
@@ -19,10 +19,10 @@ import { LevelsModule } from 'src/levels/levels.module';
         { name: User.name, schema: UserSchema },
       ]),
       GoalsModule,
-      UsersModule,
       LevelsModule,
     ],
     controllers: [ProgressionsController],
     providers: [ProgressionsService],
+    exports: [ProgressionsService],
   })
   export class ProgressionsModule {}

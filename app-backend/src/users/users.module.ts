@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User, UserSchema } from './entities/user.entity';
 import { UsersController } from './users.controller';
@@ -8,6 +8,7 @@ import { ChatList, ChatListSchema } from './entities/chatlist.entity';
 import { ChatListService } from './chatlist.service';
 import { GuildsModule } from 'src/guilds/guilds.module';
 import { Quiz, QuizSchema } from 'src/quizs/entities/quiz.entity';
+import { ProgressionsModule } from 'src/progressions/progressions.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -17,6 +18,7 @@ import { Quiz, QuizSchema } from 'src/quizs/entities/quiz.entity';
       { name: Quiz.name, schema: QuizSchema },
     ]),
     GuildsModule,
+    ProgressionsModule,
   ],
   providers: [UsersService, ChatListService],
   exports: [UsersService, ChatListService],
