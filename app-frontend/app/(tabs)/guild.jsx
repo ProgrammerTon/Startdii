@@ -40,8 +40,7 @@ const GuildPage = () => {
     const guilds = await guildList();
     const formattedGuilds = guilds.map((guild) => ({
       id: guild._id,
-      color: "#FF6347",
-      badgeColor: "#2ecc71",
+      cover: guild.cover,
       title: guild.name,
       description: guild.description + ".",
       members: guild.memberIdList.length,
@@ -74,16 +73,18 @@ const GuildPage = () => {
       <View style={styles.guildContainer}>
         <FlatList
           data={guilds}
-          renderItem={({ item, index }) => (
-            <GuildButton
-              key={item.id}
-              guild={item}
-              onPress={() => {
-                setGuildId(item.id);
-                router.push(`/guild/${item.id}`);
-              }}
-            />
-          )}
+          renderItem={({ item, index }) => {
+            return (
+              <GuildButton
+                key={item.id}
+                guild={item}
+                onPress={() => {
+                  setGuildId(item.id);
+                  router.push(`/guild/${item.id}`);
+                }}
+              />
+            );
+          }}
           keyExtractor={(item) => `${item.id}`}
           refreshControl={
             <RefreshControl

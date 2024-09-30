@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
-import colors from '../../constants/color';
-import fonts from '../../constants/font';
-import images from '../../constants/images';
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+import images from "../../constants/images";
 
 const GuildButton = ({ guild, onPress }) => {
   const getImage = () => {
@@ -30,9 +30,7 @@ const GuildButton = ({ guild, onPress }) => {
         </View>
 
         <View style={styles.contentContainer}>
-          <Text style={[fonts.EngBold18, styles.titleText]}>
-            {guild.title}
-          </Text>
+          <Text style={[fonts.EngBold18, styles.titleText]}>{guild.title}</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
             {guild.description}
           </Text>
@@ -42,7 +40,6 @@ const GuildButton = ({ guild, onPress }) => {
             </Text>
           </View>
         </View>
-
       </View>
     </TouchableOpacity>
   );
@@ -88,9 +85,9 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   memberContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingHorizontal: '2%',
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingHorizontal: "2%",
   },
   members: {
     color: colors.black,
