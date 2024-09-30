@@ -122,7 +122,7 @@ export default function ProfileTest() {
         <Level
           level={userLevel?.level ? userLevel.level : 0}
           percent={`${
-            (userLevel?.current_exp / userLevel?.required_exp) * 100
+            ((userLevel?.current_exp / userLevel?.required_exp) < 1) ? (userLevel?.current_exp / userLevel?.required_exp) * 100 : 100
           }%`}
         />
       </View>
@@ -134,7 +134,7 @@ export default function ProfileTest() {
       <View style={styles.frameContainer}>
         <Frame />
         <View style={styles.textContainer}>
-          <Text style={[fonts.EngMedium22, styles.text]}>Beginner</Text>
+          <Text style={[fonts.EngMedium22, styles.text]}>{userLevel?.user_title}</Text>
         </View>
       </View>
       <OtherUserMenu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
