@@ -40,7 +40,9 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 15,
     paddingVertical: 10,
+    marginTop: 10,
     marginBottom: 20,
+    marginHorizontal: 16,
     alignItems: "center",
   },
   commentInput: {

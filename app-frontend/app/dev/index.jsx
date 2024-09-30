@@ -125,6 +125,12 @@ const DevPage = () => {
       >
         <Text className="text-lg">Test Loading</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        onPress={() => router.push("/profile/66cfdd4b05b686656d0cd6ed")}
+        className="bg-green-600 p-2 rounded-xl"
+      >
+        <Text className="text-lg">Other Profile</Text>
+      </TouchableHighlight>
       {isLogged ? <LogoutButton /> : null}
     </ScrollView>
   );

@@ -52,7 +52,6 @@ export async function guildDetail(guildId: string) {
   }
   try {
     const data: any = await res.json();
-    console.log("Guild Detailed :", data);
     return data;
   } catch (error) {
     return null;
@@ -221,7 +220,7 @@ export async function leavePerson(
         "Content-Type": "application/json",
       },
     });
-    
+
     if (res.ok) {
       Alert.alert("Guild has been deleted.");
       return;
@@ -258,7 +257,6 @@ export async function leavePerson(
     Alert.alert("You Left the Guild");
   }
 }
-
 
 export async function searchGuild(title: string) {
   const token = await getCurrentToken();

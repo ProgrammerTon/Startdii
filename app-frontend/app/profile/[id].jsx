@@ -4,21 +4,17 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
-  Dimension,
   Alert,
   FlatList,
-  RefreshControl,
 } from "react-native";
 import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import { ScrollView } from "react-native";
 import AuthService from "../../services/AuthService";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useCharContext, CharacterContext } from "../profile/charcontext";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { getUserLevel } from "../../services/LevelService";
 import fonts from "../../constants/font";
-import colors from "../../constants/color";
 import SignoutButton from "../../components/SignoutButton";
 import PencilIcon from "../../components/PencilIcon";
 import Level from "../../components/Level";
@@ -28,10 +24,9 @@ import Char3 from "../../components/charactor/Charactor03";
 import Char4 from "../../components/charactor/Charactor04";
 import Char5 from "../../components/charactor/Charactor05";
 import Char6 from "../../components/charactor/Charactor06";
-import Menu from "../../components/menu";
+import OtherUserMenu from "../../components/Menuotheruser";
 import WeeklyGoals from "../../components/WeeklyGoal";
 import Inventory from "../../components/Inventory";
-import DressButton from "../../components/DressButton";
 import Frame from "../../components/Frame";
 import QuizHistory from "../../components/QuizHistory";
 import { useGlobalContext } from "../../context/GlobalProvider";
@@ -48,37 +43,32 @@ import HPlant from "../../components/hat/hat_plant";
 import HPlaster from "../../components/hat/hat_plaster";
 import HShark from "../../components/hat/hat_shark";
 import HXmas from "../../components/hat/hat_xmas";
-import { getUser } from "../../services/UserService";
-import { getCurrentToken } from "../../utils/asyncstroage";
+import colors from "../../constants/color";
+import { getOtherProfile } from "../../services/UserService";
+import { getUserLevel } from "../../services/LevelService";
 
-const { width, height } = Dimensions.get("window");
 export default function ProfileTest() {
-  const [activeMenu, setActiveMenu] = useState("Weekly Goals");
-  const { selectedChar, selectedColor, selectedHat, setSelectedHat } =
-    useCharContext();
-  const { isLogged, user, setUser } = useGlobalContext();
+  const { id } = useLocalSearchParams();
+  const [activeMenu, setActiveMenu] = useState("Inventory");
+  const [selectedChar, setSelectedChar] = useState("Char1");
+  const [selectedColor, setSelectedColor] = useState(colors.green);
+  const [selectedHat, setSelectedHat] = useState("HNone");
+  const [user, setUser] = useState(null);
+  const { isLogged } = useGlobalContext();
   const [userLevel, setUserLevel] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const handleRefresh = async () => {
-    if (user) {
-      setRefreshing(true);
-      const token = await getCurrentToken();
-      const newUser = await getUser(token);
-      setUser(newUser);
-      await loadUserLevel();
-      setRefreshing(false);
-    }
-  };
 
   useEffect(() => {
-    handleRefresh();
-  }, []);
+    if (id) {
+      loadUserLevel();
+    }
+  }, [id]);
 
   const loadUserLevel = async () => {
-    const user_lvl = await getUserLevel(user?._id);
+    const user_lvl = await getUserLevel(id);
     setUserLevel(user_lvl);
   };
+
+  useEffect(() => {}, []);
 
   const getCharacterComponent = React.useMemo(() => {
     switch (selectedChar) {
@@ -136,9 +126,7 @@ export default function ProfileTest() {
           }%`}
         />
       </View>
-      <View style={styles.dressButton}>
-        <DressButton />
-      </View>
+
       <View style={styles.charContainer}>
         {getCharacterComponent}
         <View style={styles.hatContainer}>{getHatComponent}</View>
@@ -149,20 +137,14 @@ export default function ProfileTest() {
           <Text style={[fonts.EngMedium22, styles.text]}>Beginner</Text>
         </View>
       </View>
-      <Menu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+      <OtherUserMenu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
     </>
   );
 
   const renderContent = () => {
     switch (activeMenu) {
-      case "Weekly Goals":
-        return <WeeklyGoals id={user?._id} />;
       case "Inventory":
-        return <Inventory id={user?._id} />;
-      case "History":
-        return <QuizHistory id={user?._id} />;
-      default:
-        return <WeeklyGoals id={user?._id} />;
+        return <Inventory id={id} />;
     }
   };
 
@@ -172,57 +154,58 @@ export default function ProfileTest() {
     { id: "3", name: "History" },
   ];
 
+  const fetchProfile = async () => {
+    const data = await getOtherProfile(id);
+    if (!data) {
+      Alert.alert("User Not Found");
+    }
+    console.log("Other User Data", data);
+    setUser(data);
+    setSelectedChar(data.character);
+    setSelectedColor(data.characterColor);
+    setSelectedHat(data.characterHat);
+  };
+
   useEffect(() => {
     if (!isLogged) {
       router.replace("/sign-in");
+    } else {
+      fetchProfile();
     }
   }, []);
 
   return (
-    <ScrollView
-      style={styles.bg}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-    >
+    <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
         <TouchableOpacity style={styles.usernameContainer}>
           <Text style={[fonts.EngBold22, styles.username]}>
             {user?.username}
           </Text>
-          <View style={styles.pencilContainer}>
-            <PencilIcon />
-          </View>
         </TouchableOpacity>
-        <View style={styles.signoutContainer}>
-          <SignoutButton onPress={() => {}} />
-        </View>
       </View>
       <FlatList
         ListHeaderComponent={renderHeader}
         data={[{}]} // Ensuring there is data to render the header.
         renderItem={() => renderContent()}
         keyExtractor={(item, index) => index.toString()}
-        scrollEnabled={false}
       />
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = {
   bg: {
-    height: height * 0.89,
+    height: "100%",
     backgroundColor: colors.gray_bg,
   },
   toptab: {
     backgroundColor: colors.pink,
     textAlign: "center",
-    height: height * 0.10625,
+    height: "10.625%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: width * 0.1,
-    marginTop: height * 0.025,
+    paddingHorizontal: 20,
     position: "relative",
   },
   usernameContainer: {
@@ -250,7 +233,6 @@ const styles = {
   },
   levelContainer: {
     alignItems: "center",
-    alignSelf: "center",
     left: "3%",
   },
   charContainer: {
@@ -271,11 +253,6 @@ const styles = {
     width: "100%",
     height: "100%",
     resizeMode: "contain",
-  },
-  dressButton: {
-    width: "90%",
-    alignItems: "flex-end",
-    zIndex: 1,
   },
   frameContainer: {
     width: "100%",

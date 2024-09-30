@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
@@ -21,7 +21,7 @@ const ChatSearch = () => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() =>  router.back()}
+          onPress={() => router.back()}
         >
           <Entypo name="chevron-left" size={30} color="#007bff" />
         </TouchableOpacity>
@@ -76,7 +76,7 @@ export default ChatSearch;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
     height: height * 0.1,
@@ -119,17 +119,17 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   button: {
-    flexDirection: 'column',
+    flexDirection: "column",
     alignSelf: "center",
-    alignItems: 'center',
+    alignItems: "center",
     height: height * 0.1,
     width: width * 0.9,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 20,
     paddingVertical: 20,
     paddingHorizontal: 15,
     marginVertical: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
@@ -137,8 +137,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 30,
-    color: '#000',
-    fontWeight: 'bold',
+    color: "#000",
+    fontWeight: "bold",
   },
   icon: {
     width: 50,

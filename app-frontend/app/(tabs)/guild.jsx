@@ -40,8 +40,7 @@ const GuildPage = () => {
     const guilds = await guildList();
     const formattedGuilds = guilds.map((guild) => ({
       id: guild._id,
-      color: "#FF6347",
-      badgeColor: "#2ecc71",
+      cover: guild.cover,
       title: guild.name,
       description: guild.description + ".",
       members: guild.memberIdList.length,
@@ -49,32 +48,6 @@ const GuildPage = () => {
     setRefreshing(false);
     setGuilds(formattedGuilds);
   };
-  // [
-  //   {
-  //     id: 1,
-  //     color: "#FF6347",
-  //     badgeColor: "#2ecc71",
-  //     title: "เรารู้เขารู้เรา",
-  //     description: "เรารู้เขา เรารู้ว่าคนชื่นชอบ...",
-  //     members: 12,
-  //   },
-  //   {
-  //     id: 2,
-  //     color: "#4682B4",
-  //     badgeColor: "#FF69B4",
-  //     title: "แต่เขาแกล้งรู้เรา",
-  //     description: "เรารู้เขา เรารู้ว่าคนชื่นชอบ...",
-  //     members: 12,
-  //   },
-  //   {
-  //     id: 3,
-  //     color: "#FFB6C1",
-  //     badgeColor: "#FF4500",
-  //     title: "อะไรอ่ะ",
-  //     description: "เรารู้เขา เรารู้ว่าคนชื่นชอบ...",
-  //     members: 12,
-  //   },
-  // ];
 
   const [guildCreateJoinWindow, setguildCreateJoinWindow] = useState(false);
 
@@ -100,16 +73,18 @@ const GuildPage = () => {
       <View style={styles.guildContainer}>
         <FlatList
           data={guilds}
-          renderItem={({ item, index }) => (
-            <GuildButton
-              key={item.id}
-              guild={item}
-              onPress={() => {
-                setGuildId(item.id);
-                router.push(`/guild/${item.id}`);
-              }}
-            />
-          )}
+          renderItem={({ item, index }) => {
+            return (
+              <GuildButton
+                key={item.id}
+                guild={item}
+                onPress={() => {
+                  setGuildId(item.id);
+                  router.push(`/guild/${item.id}`);
+                }}
+              />
+            );
+          }}
           keyExtractor={(item) => `${item.id}`}
           refreshControl={
             <RefreshControl
@@ -157,15 +132,15 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   floatingButton: {
-    backgroundColor: colors.black,
+    backgroundColor: colors.red,
     borderRadius: 30,
     width: 60,
     height: 60,
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    bottom: 120,
-    right: 20,
+    bottom: 125,
+    right: 30,
     shadowColor: colors.gray_bgblur,
     shadowOffset: [{ width: 0, height: 0 }],
     shadowOpacity: 0.25,
