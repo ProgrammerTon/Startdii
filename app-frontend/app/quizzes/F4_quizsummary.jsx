@@ -109,59 +109,57 @@ const QuizSummaryPage = ({
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={["#9Bd35A", "#689F38"]} // Optional: Customize refresh colors
+        />
+      }
+    >
       <View style={styles.header}>
         <Text style={styles.headerText}>Finished</Text>
       </View>
 
-      <ScrollView
-        style={styles.container}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={["#9Bd35A", "#689F38"]} // Optional: Customize refresh colors
-          />
-        }
-      >
-        {/* Score and progress bar container */}
-        <View style={styles.scoreProgressContainer}>
-          <Text style={styles.scoreText}>
-            {score} / {quizData.length}
-          </Text>
-          <ScoreProgress percent={(score / quizData.length) * 100} />
-        </View>
+      {/* Score and progress bar container */}
+      <View style={styles.scoreProgressContainer}>
+        <Text style={styles.scoreText}>
+          {score} / {quizData.length}
+        </Text>
+        <ScoreProgress percent={(score / quizData.length) * 100} />
+      </View>
 
-        <StatButton handleOnPress={() => handlesetUserState("Statistic")} />
-        <AnswerButton
-          eachQuestionAnswers={eachQuestionAnswers}
-          userAnswers={userAnswers}
-          quizData={quizData}
-        />
-        <RatingBlock
-          ScoreRating={Math.round(quiz?.averageScore)}
-          numComment={quiz?.count}
-        />
-        <RatingBar onRatingChange={handleRating} />
+      <StatButton handleOnPress={() => handlesetUserState("Statistic")} />
+      <AnswerButton
+        eachQuestionAnswers={eachQuestionAnswers}
+        userAnswers={userAnswers}
+        quizData={quizData}
+      />
+      <RatingBlock
+        ScoreRating={Math.round(quiz?.averageScore)}
+        numComment={quiz?.count}
+      />
+      <RatingBar onRatingChange={handleRating} />
 
-        {/* CommentBar with input */}
-        <CommentBar
-          value={commentInput}
-          handleChangeText={setCommentInput}
-          onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
-        />
+      {/* CommentBar with input */}
+      <CommentBar
+        value={commentInput}
+        handleChangeText={setCommentInput}
+        onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
+      />
 
-        {/* Render all comments */}
-        {comments.map((comment, index) => (
-          <CommentBox
-            key={index}
-            username={comment.username}
-            date={comment.date}
-            comment={comment.comment}
-          />
-        ))}
-      </ScrollView>
-    </View>
+      {/* Render all comments */}
+      {comments.map((comment, index) => (
+        <CommentBox
+          key={index}
+          username={comment.username}
+          date={comment.date}
+          comment={comment.comment}
+        />
+      ))}
+    </ScrollView>
   );
 };
 
@@ -170,17 +168,14 @@ export default QuizSummaryPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-  },
-  containerBottom: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
+    backgroundColor: "#F8F8F8",
   },
   header: {
     backgroundColor: "#04B36E",
+    height: height * 0.1,
     padding: height * 0.02,
     alignItems: "center",
+    justifyContent: "center",
   },
   headerText: {
     fontSize: 24,
@@ -189,7 +184,7 @@ const styles = StyleSheet.create({
   },
   scoreProgressContainer: {
     alignItems: "center", // Center contents horizontally
-    marginBottom: 20,
+    marginVertical: 20,
   },
   scoreText: {
     fontSize: 40,

@@ -1,26 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  FlatList,
-  RefreshControl,
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
 import InvenSourceCard from "../app/inventorynote/E1_InvenSourceCard.jsx";
 import InvenQuizCard from "../app/inventoryquiz/F1_InvenQuizCard.jsx";
 import Feather from "@expo/vector-icons/Feather";
-import { getSource } from "../services/SourceService";
 import { useGlobalContext } from "../context/GlobalProvider.js";
-import { ActivityIndicator } from "react-native";
-import { router, useFocusEffect } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import colors from "../constants/color.js";
-import fonts from "../constants/font.js";
 import { getQuizInventory } from "../services/UserService";
 import { getSourceInventory } from "../services/UserService";
 import ToggleNoteQuiz from "./ToggleNoteQuiz.jsx";
-const Inventory = () => {
+
+const Inventory = ({ id }) => {
   const { user } = useGlobalContext();
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
@@ -31,13 +21,13 @@ const Inventory = () => {
   const [refreshing, setRefreshing] = useState(true);
 
   const fetchData = async () => {
-    console.log("Hello", user._id);
+    console.log("Hello", id);
     setLoading(true);
     if (isSearchNote) {
-      const sources = await getSourceInventory(user._id);
+      const sources = await getSourceInventory(id);
       setData(sources ? sources.reverse() : []);
     } else {
-      const quizes = await getQuizInventory(user._id);
+      const quizes = await getQuizInventory(id);
       console.log("My Quiz", quizes);
       setData(quizes ? quizes.reverse() : []);
     }
@@ -46,10 +36,10 @@ const Inventory = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (user) {
+      if (id) {
         fetchData();
       }
-    }, [user, isSearchNote])
+    }, [id, isSearchNote])
   );
 
   useEffect(() => {
@@ -93,6 +83,11 @@ const Inventory = () => {
             const fav = user?.favorite_sources?.includes(item?._id)
               ? true
               : false;
+            const datenow = new Date();
+            const createdAt = new Date(item?.createdAt);
+            const diffTime = Math.abs(datenow - createdAt);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const result = diffDays < 1 ? 1 : diffDays;
             return (
               <InvenSourceCard
                 id={item?._id}
@@ -101,12 +96,18 @@ const Inventory = () => {
                 tags={item?.tags}
                 rating={item?.avg_rating_score}
                 isFavorite={fav}
+                date={result}
               />
             );
           } else {
             const fav = user?.favorite_quizzes?.includes(item?._id)
               ? true
               : false;
+            const datenow = new Date();
+            const createdAt = new Date(item?.createdAt);
+            const diffTime = Math.abs(datenow - createdAt);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const result = diffDays < 1 ? 1 : diffDays;
             return (
               <InvenQuizCard
                 id={item?._id}
@@ -115,6 +116,7 @@ const Inventory = () => {
                 tags={item?.tags}
                 rating={item?.avg_rating_score}
                 isFavorite={fav}
+                date={result}
               />
             );
           }

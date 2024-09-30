@@ -56,6 +56,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('profile/:userId')
+  getOtherProfile(@Param('userId', ParseObjectIdPipe) userId: ObjectId) {
+    return this.usersService.getOtherProfile(userId);
+  }
+
   @Roles(Role.Customer)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('profile')

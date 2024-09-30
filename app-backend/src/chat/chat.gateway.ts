@@ -42,6 +42,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('newMessage')
   async handleMessage(client: Socket, payload: any) {
     const data = JSON.parse(payload);
+    console.log('Original Data', data);
     if (data.type == messageType.text) {
       this.server.to(data.rooms).emit('message', payload);
       await this.chatService.create(data);
@@ -62,7 +63,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         },
         sender: newMessage.userId.username,
         type: newMessage.msgType,
-        time: data.time,
+        time: newMessage.createAt,
       };
       console.log('Nah', formattedChat);
       this.server.to(data.rooms).emit('message', JSON.stringify(formattedChat));

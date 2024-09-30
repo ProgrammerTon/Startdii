@@ -18,13 +18,15 @@ import GuildJoinWindow from "./GuildJoin";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Feather from "@expo/vector-icons/Feather";
 import { joinGuildByCode } from "../../services/GuildService";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 const { width, height } = Dimensions.get('window');
 
 const CreateJoinGuild = ({ visible, onClose, loadData }) => {
   const [createGuild, setCreateGuild] = useState(false);
   const [joinGuild, setJoinGuild] = useState(false);
   const [guildCode, setGuildCode] = useState("");
-  
+
   const handleChangeText = (e) => setGuildCode(e);
 
   const onJoinGuild = async () => {
@@ -64,37 +66,45 @@ const CreateJoinGuild = ({ visible, onClose, loadData }) => {
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <TouchableOpacity
-            style={styles.InteractButton}
-            onPress={openJoinGuildJoinWindow}
-          >
-            <FontAwesome6 name="door-open" size={20} color="#ffffff" />
-          </TouchableOpacity>
-          <GuildJoinWindow
-            visible={joinGuild}
-            onClose={closeJoinGuildWindow}
-            value={guildCode}
-            handleChangeText={handleChangeText}
-            onPress={onJoinGuild}
-          />
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <View style={styles.joinContainer}>
+              <Text style={[fonts.EngBold16, styles.text]}>Join</Text>
+              <TouchableOpacity
+                style={styles.InteractButton}
+                onPress={openJoinGuildJoinWindow}
+              >
+                <FontAwesome6 name="door-open" size={22} color={colors.red} />
+              </TouchableOpacity>
+            </View>
+            <GuildJoinWindow
+              visible={joinGuild}
+              onClose={closeJoinGuildWindow}
+              value={guildCode}
+              handleChangeText={handleChangeText}
+              onPress={onJoinGuild}
+            />
 
-          <TouchableOpacity
-            style={styles.InteractButton}
-            onPress={openCreateGuildWindow}
-          >
-            <Feather name="plus-circle" size={20} color="#ffffff" />
-          </TouchableOpacity>
-          <GuildCreateWindow
-            visible={createGuild}
-            onClose={closeCreateGuildWindow}
-            loadData={loadData}
-          />
+            <View style={styles.joinContainer}>
+            <Text style={[fonts.EngBold16, styles.text]}>Create</Text>
+              <TouchableOpacity
+                style={styles.InteractButton}
+                onPress={openCreateGuildWindow}
+              >
+                <Feather name="plus-circle" size={28} color={colors.red} />
+              </TouchableOpacity>
+            </View>
+            <GuildCreateWindow
+              visible={createGuild}
+              onClose={closeCreateGuildWindow}
+              loadData={loadData}
+            />
 
-          <TouchableOpacity style={styles.InteractButton} onPress={onClose}>
-            <FontAwesome name="close" size={24} color="#ffffff" />
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <FontAwesome name="close" size={30} color={colors.white} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -102,11 +112,15 @@ const CreateJoinGuild = ({ visible, onClose, loadData }) => {
 };
 
 const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(145, 145, 145, 0.5)',
+  },
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    bottom: height * 0.17, 
-    right: width * -0.615, 
+    bottom: height * 0.17,
+    right: width * -0.615,
   },
   modalContent: {
     width: "30%",
@@ -116,17 +130,46 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     margin: 10,
-    bottom: 20,
-    right: -30,
+    bottom: 10,
+    right: -35,
   },
   InteractButton: {
-    backgroundColor: "#000000",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    margin: 5,
+    borderRadius: 30,
+    width: 55,
+    height: 55,
+    backgroundColor: colors.white,
+    margin: 6,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  closeButton: {
+    backgroundColor: colors.red,
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    margin: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  text: {
+    color: colors.red,
+    position: "absolute",
+    zIndex: 1,
+    right: 70,
+  },
+  joinContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

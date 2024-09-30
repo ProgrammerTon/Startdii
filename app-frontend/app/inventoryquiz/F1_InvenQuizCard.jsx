@@ -5,12 +5,20 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import TagList from "../../components/TagList";
 import { FontAwesome } from "@expo/vector-icons";
-import { favoriteQuiz,unfavoriteQuiz } from "../../services/QuizService";
+import { favoriteQuiz, unfavoriteQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 
-const InvenQuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
+const InvenQuizCard = ({
+  id,
+  title,
+  author,
+  tags,
+  rating,
+  isFavorite,
+  date,
+}) => {
   const { user } = useGlobalContext();
   const [isLiked, setIsLiked] = useState(isFavorite);
   //console.log(id);
@@ -36,7 +44,7 @@ const InvenQuizCard = ({ id, title, author, tags, rating, isFavorite }) => {
             contentFit="contain"
             source={images.quizpaper}
           />
-          <Text style={styles.timestamp}>Inventory</Text>
+          <Text style={styles.timestamp}>{date} day ago</Text>
         </View>
         <View style={styles.contentContainer}>
           <Text style={[fonts.EngBold18, styles.titleText]}>

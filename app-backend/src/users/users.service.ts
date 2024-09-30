@@ -136,6 +136,13 @@ export class UsersService {
     // return transformedUser;
   }
 
+  async getOtherProfile(userId: ObjectId) {
+    const user = await this.userModel
+      .findById(userId)
+      .select('-password -favorite_sources -quiz_history -favorite_quizzes');
+    return user;
+  }
+
   async getSources(ownerId: ObjectId, searchTitle: string) {
     const { sources }: any = await this.userModel
       .findById(ownerId)

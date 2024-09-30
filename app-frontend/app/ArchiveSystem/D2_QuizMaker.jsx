@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
@@ -36,8 +36,7 @@ const QuizMakerPage = () => {
   const addNewQuestion = () => {
     if (questions.length <= 99) {
       setQuestions([...questions, { id: Date.now(), templateData: {} }]);
-    }
-    else {
+    } else {
       Alert.alert(`คุณขยันมาก แต่ผมแนะนำไปสร้างแบบทดสอบใหม่ดีกว่าครับ`);
       return;
     }
@@ -85,7 +84,9 @@ const QuizMakerPage = () => {
 
         // Validation: Check if the question text exists
         if (!questionText || questionText.trim() === "") {
-          Alert.alert(`Please fill in the question text for Question ${index + 1}`);
+          Alert.alert(
+            `Please fill in the question text for Question ${index + 1}`
+          );
           throw new Error("Unfilled question text");
         }
 
@@ -94,17 +95,30 @@ const QuizMakerPage = () => {
           throw new Error("Unfilled answer in fill question");
         }
 
-        if (selectedOption === "choice" && (!textInputs || Object.keys(textInputs).length !== choices || Object.values(textInputs).some(input => !input || input.trim() === ""))) {
-          Alert.alert(`Please fill in all choice text inputs for Question ${index + 1}`);
+        if (
+          selectedOption === "choice" &&
+          (!textInputs ||
+            Object.keys(textInputs).length !== choices ||
+            Object.values(textInputs).some(
+              (input) => !input || input.trim() === ""
+            ))
+        ) {
+          Alert.alert(
+            `Please fill in all choice text inputs for Question ${index + 1}`
+          );
           throw new Error("Incomplete choices");
         }
-        
 
         return {
           question: questionText,
           qType: selectedOption,
           choices: selectedOption === "choice" ? Object.values(textInputs) : [],
-          answers: selectedOption === "fill" ? value : activeButtons,
+          answers:
+            selectedOption === "fill"
+              ? isNaN(parseFloat(value))
+                ? value
+                : parseFloat(value)
+              : activeButtons,
         };
       });
 
@@ -154,7 +168,7 @@ const QuizMakerPage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        //ref={listRef} 
+        //ref={listRef}
         data={questions}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}

@@ -8,9 +8,16 @@ const GoalProcess = ({ title, percent, otherStyles }) => {
     <View style={[styles.container, otherStyles]}>
       <Text style={[fonts.ThaiMedium18, styles.title]}>{title}</Text>
       <View style={[styles.inputContainer, otherStyles]}>
-        <View style={[styles.ProcessContainer, { width: percent }]}>
-          <Text style={[fonts.EngBold22, styles.PercentText]}>{percent}</Text>
-        </View>
+        {percent !== "0%" && (
+          <View style={[styles.ProcessContainer, { width: percent }]}>
+            <Text style={[fonts.EngBold22, styles.PercentText]}>{percent}</Text>
+          </View>
+        )}
+        {percent == "0%" && (
+          <View style={styles.Percent0Container}>
+            <Text style={[fonts.EngBold22, styles.PercentText0]}>{percent}</Text>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -54,6 +61,18 @@ const styles = StyleSheet.create({
   PercentText: {
     flex: 1,
     color: colors.white,
+  },
+  Percent0Container: {
+    alignItems: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "90%",
+    padding: "4%",
+  },
+  PercentText0: {
+    flex: 1,
+    color: colors.blue,
   },
 });
 

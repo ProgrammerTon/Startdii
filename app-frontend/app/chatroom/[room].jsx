@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
   FlatList,
 } from "react-native";
@@ -13,19 +14,39 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { router, useLocalSearchParams } from "expo-router";
 import { fetchChat } from "../../services/ChatService";
 import { findChatList } from "../../services/ChatListService";
+import Entypo from "@expo/vector-icons/Entypo";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import SourceCard from "../../components/E1_SourceCard";
 import QuizCard from "../../components/F1_QuizCard";
+const { width, height } = Dimensions.get("window");
 const ChatView = ({ message, index, name }) => {
+  const isCurrentUser = message.sender === name;
+  const formattedTime = message.time.endsWith(":")
+    ? message.time.slice(0, -1)
+    : message.time;
   return (
     <View
-      key={index}
       style={[
-        styles.messageContainer,
-        message.sender === name ? styles.receiverMessage : styles.userMessage,
+        styles.messageWrapper,
+        isCurrentUser ? styles.receiverWrapper : styles.userWrapper,
       ]}
     >
-      <Text style={styles.messageText}>{message.text}</Text>
-      <Text style={styles.messageTime}>{message.time}</Text>
+      <View
+        style={[
+          styles.messageContainer,
+          isCurrentUser ? styles.receiverMessage : styles.userMessage,
+        ]}
+      >
+        <Text style={styles.messageText}>{message.text}</Text>
+      </View>
+      <View
+        style={[
+          isCurrentUser ? styles.receiverMessage : styles.userMessage,
+          { backgroundColor: "#fff" },
+        ]}
+      >
+        <Text style={styles.messageTime}>{formattedTime}</Text>
+      </View>
     </View>
   );
 };
@@ -64,9 +85,9 @@ const ChatRoom = () => {
     };
   }, []);
 
-  const fetchChat = () => {
+  const fetchChat = async () => {
     setLoading(true);
-    fetchMessage(room, offset);
+    await fetchMessage(room, offset);
     setOffset(offset + 1);
     setLoading(false);
   };
@@ -80,7 +101,7 @@ const ChatRoom = () => {
 
   const handleSendMessage = () => {
     if (message && room) {
-      const time = new Date().toLocaleTimeString().slice(0, 5);
+      const time = new Date().toISOString();
       const type = "Text";
       const sender = name;
       const text = message;
@@ -92,11 +113,15 @@ const ChatRoom = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
-          <Text style={styles.backButton}>{"<"}</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color="#007bff" />
         </TouchableOpacity>
         <Text style={styles.headerText}>{userTitle}</Text>
         <TouchableOpacity
+          style={styles.menuButton}
           onPress={() =>
             router.push({
               pathname: "/chatsystem/H3_user",
@@ -104,60 +129,93 @@ const ChatRoom = () => {
             })
           }
         >
-          <Text style={styles.menuButton}>≡</Text>
+          <Entypo name="menu" size={30} color="white" />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={messages}
-        renderItem={({ item, index }) => {
-          if (item === null) {
-            return null;
-          }
 
-          // Handle "Source" type
-          if (item.type === "Source") {
-            const fav = user?.favorite_sources?.includes(item?.source._id)
-              ? true
-              : false;
-            return (
-              <SourceCard
-                id={item?.source._id}
-                title={item?.source.title}
-                author={item?.source.ownerId?.username}
-                tags={item?.source.tags}
-                rating={item?.source.avg_rating_score}
-                isFavorite={fav}
-              />
-            );
-          }
+      <View style={styles.chatLog}>
+        <FlatList
+          data={messages}
+          renderItem={({ item, index }) => {
+            if (item === null) {
+              return null;
+            }
 
-          // Handle "Quiz" type
-          if (item.type === "Quiz") {
-            const fav = user?.favorite_quizzes?.includes(item?.quiz._id)
-              ? true
-              : false;
-            return (
-              <QuizCard
-                id={item?.quiz._id}
-                title={item?.quiz.title}
-                author={item?.quiz.ownerId?.username}
-                tags={item?.quiz.tags}
-                rating={item?.quiz.avg_rating_score}
-                isFavorite={fav}
-              />
-            );
-          }
+            // Handle "Source" type
+            if (item.type === "Source") {
+              const formattedTime = item.time.endsWith(":")
+                ? item.time.slice(0, -1)
+                : item.time;
+              const fav = user?.favorite_sources?.includes(item?.source._id)
+                ? true
+                : false;
+              return (
+                <View style={{ marginBottom: 10 }}>
+                  <SourceCard
+                    id={item?.source._id}
+                    title={item?.source.title}
+                    author={item?.source.ownerId?.username}
+                    tags={item?.source.tags}
+                    rating={item?.source.avg_rating_score}
+                    isFavorite={fav}
+                  />
+                  <View
+                    style={[
+                      isCurrentUser
+                        ? styles.receiverMessage
+                        : styles.userMessage,
+                      { backgroundColor: "#fff" },
+                    ]}
+                  >
+                    <Text style={styles.messageTime}>{formattedTime}</Text>
+                  </View>
+                </View>
+              );
+            }
 
-          // Default case for regular chat messages
-          const isCurrentUser = item.sender === name;
-          return <ChatView index={index} message={item} name={name} />;
-        }}
-        keyExtractor={(item, index) => `${item?.sender}-${index}`}
-        inverted // This makes the list scroll from bottom to top
-        onEndReached={fetchChat}
-        onEndReachedThreshold={0.1} // Adjust as needed
-        ListFooterComponent={loading && <ActivityIndicator />}
-      />
+            // Handle "Quiz" type
+            if (item.type === "Quiz") {
+              const formattedTime = item.time.endsWith(":")
+                ? item.time.slice(0, -1)
+                : item.time;
+              const fav = user?.favorite_quizzes?.includes(item?.quiz._id)
+                ? true
+                : false;
+              return (
+                <View style={{ marginBottom: 10 }}>
+                  <QuizCard
+                    id={item?.quiz._id}
+                    title={item?.quiz.title}
+                    author={item?.quiz.ownerId?.username}
+                    tags={item?.quiz.tags}
+                    rating={item?.quiz.avg_rating_score}
+                    isFavorite={fav}
+                  />
+                  <View
+                    style={[
+                      isCurrentUser
+                        ? styles.receiverMessage
+                        : styles.userMessage,
+                      { backgroundColor: "#fff" },
+                    ]}
+                  >
+                    <Text style={styles.messageTime}>{formattedTime}</Text>
+                  </View>
+                </View>
+              );
+            }
+
+            // Default case for regular chat messages
+            const isCurrentUser = item.sender === name;
+            return <ChatView index={index} message={item} name={name} />;
+          }}
+          keyExtractor={(item, index) => `${item?.sender}-${index}`}
+          inverted // This makes the list scroll from bottom to top
+          onEndReached={fetchChat}
+          onEndReachedThreshold={0.1} // Adjust as needed
+          ListFooterComponent={loading && <ActivityIndicator />}
+        />
+      </View>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -167,59 +225,76 @@ const ChatRoom = () => {
           placeholder="Type a message"
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-          <Text style={styles.sendButtonText}>Send</Text>
+          <Ionicons name="send" size={24} color="white" />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
 export default ChatRoom;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 10,
   },
   chatContainer: {
     flex: 1,
     marginBottom: 10,
   },
-  messageContainer: {
+  chatLog: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  messageWrapper: {
     marginVertical: 5,
-    maxWidth: "70%",
+    maxWidth: width * 0.7,
+  },
+  userWrapper: {
+    alignSelf: "flex-start",
+  },
+  receiverWrapper: {
+    alignSelf: "flex-end",
+  },
+  messageContainer: {
     padding: 10,
     borderRadius: 10,
   },
+  timeContainer: {
+    backgroundColor: "#fff",
+  },
   userMessage: {
-    alignSelf: "flex-start",
     backgroundColor: "#f0f0f0",
+    alignSelf: "flex-start",
   },
   receiverMessage: {
-    alignSelf: "flex-end",
     backgroundColor: "#e1ffc7",
+    alignSelf: "flex-end",
   },
   messageText: {
     fontSize: 16,
   },
   messageTime: {
     fontSize: 12,
-    color: "#555",
+    color: "#888",
     alignSelf: "flex-end",
   },
   inputContainer: {
+    height: height * 0.08,
+    backgroundColor: "#007bff",
     flexDirection: "row",
     alignItems: "center",
   },
   textInput: {
     flex: 1,
+    marginLeft: 10,
+    marginVertical: 3,
+    backgroundColor: "#fff",
     borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 30,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    marginRight: 10,
     fontSize: 16,
   },
   sendButton: {
@@ -233,25 +308,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   header: {
+    height: height * 0.1,
+    width: width,
     backgroundColor: "#007bff",
     paddingVertical: 10,
     paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
   backButton: {
-    fontSize: 24,
-    color: "#000",
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 24,
     color: "#fff",
     fontWeight: "bold",
   },
   menuButton: {
-    fontSize: 24,
-    color: "#000",
+    position: "absolute",
+    right: width * 0.05,
+    borderRadius: 20,
+    padding: 5,
   },
 });
 

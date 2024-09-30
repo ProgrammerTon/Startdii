@@ -80,9 +80,9 @@ export default UserFinderPage;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
+    flex: 1,
     backgroundColor: "#f8f8f8",
     padding: 20,
-    paddingTop: 40,
+    paddingTop: 50,
   },
 });

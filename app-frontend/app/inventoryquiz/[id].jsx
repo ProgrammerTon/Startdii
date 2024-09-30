@@ -32,6 +32,8 @@ import TestReport from "../reportsystem/ReportTest";
 import DeleteQuizComponent from "./DeleteQuizComponent";
 import EditQuizComponent from "./EditQuizComponent";
 import QuizFlow from "../quiz/F3_quizflow";
+import StatButton from "../Quiz_Component/StatButton";
+
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();
   //console.log(`Best ${id}`);
@@ -179,10 +181,12 @@ const SumQuizPage = () => {
         <UsernameBlock username={quiz?.ownerId?.username} />
       </View>
       <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
-      <StartButton handleOnPress={() => router.push("../quiz/F3_quizflow")} />
-      {isDone ? (
-        <SumButton handleOnPress={() => router.push("../quiz/F4_quizsummary")} />
-      ) : null}
+      <StatButton handleOnPress={() => router.push({
+        pathname: '/inventoryquiz/F7_InvenStatistic',
+        params: {
+          quizId: id,  
+        },
+      })} />
       <RatingBlock
         ScoreRating={Math.round(quiz?.avg_rating_score)}
         numComment={quiz?.rating_count}

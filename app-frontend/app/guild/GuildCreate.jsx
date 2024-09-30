@@ -1,10 +1,22 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Modal, Pressable,TouchableOpacity, TextInput } from 'react-native';
-import { createGuild } from '../../services/GuildService';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
+import { createGuild } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { Alert } from "react-native";
+import { Image } from "expo-image";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+import images from "../../constants/images";
 
-const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
+const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData }) => {
   const { user } = useGlobalContext();
   const [guildFormat, setGuildFormat] = useState({
     name: "",
@@ -13,13 +25,14 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
   });
 
   const [isPublishing, setIsPublishing] = useState(false);
+  const [selectedCover, setSelectedCover] = useState(guildFormat.cover);
 
   const create = async () => {
-    if (isPublishing) return; 
-    setIsPublishing(true); 
+    if (isPublishing) return;
+    setIsPublishing(true);
     if (guildFormat.name === "") {
       Alert.alert("Error", "Please fill in all fields");
-      setIsPublishing(false); 
+      setIsPublishing(false);
     } else {
       try {
         const data = await createGuild(user._id, guildFormat);
@@ -41,6 +54,19 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
     }
   };
 
+  const selectCover = (coverNumber) => {
+    setSelectedCover(coverNumber); // Update selected cover
+    setGuildFormat({ ...guildFormat, cover: coverNumber }); // Update guild format
+  };
+
+  const handleNameChange = (e) => {
+    if (e.length > 25) {
+      Alert.alert("Error", "You cannot use more than 25 characters for the guild name");
+    } else {
+      setGuildFormat({ ...guildFormat, name: e });
+    }
+  };
+  
   return (
     <Modal
       animationType="slide"
@@ -50,33 +76,80 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.codeText}>Name </Text>
+          <Text style={[fonts.EngBold18, styles.codeText]}>Name</Text>
           <TextInput
             style={styles.createContainer}
             value={guildFormat.name}
             onSubmitEditing={onSubmit}
-            onChangeText={(e) => setGuildFormat({ ...guildFormat, name: e })}
+            onChangeText={handleNameChange}
           />
-          <Text style={styles.codeText}>Description </Text>
+          <Text style={[fonts.EngBold18, styles.codeText]}>Description</Text>
           <TextInput
             style={styles.createContainer}
             value={guildFormat.description}
             onSubmitEditing={onSubmit}
-            onChangeText={(e) => setGuildFormat({ ...guildFormat, description: e })}
+            onChangeText={(e) =>
+              setGuildFormat({ ...guildFormat, description: e })
+            }
           />
-          <Text style={styles.codeText}>Guild Cover </Text>
+          <Text style={[fonts.EngBold18, styles.codeText]}>Guild Cover</Text>
           <View style={styles.coverContainer}>
-
+            <TouchableOpacity
+              style={[
+                styles.cover,
+                selectedCover === 1 && styles.selectedCover,
+              ]}
+              onPress={() => selectCover(1)}
+            >
+              <Image
+                style={styles.guildImage}
+                source={images.guildcover1}
+                contentFit="contain"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.cover,
+                selectedCover === 2 && styles.selectedCover,
+              ]}
+              onPress={() => selectCover(2)}
+            >
+              <Image
+                style={styles.guildImage}
+                source={images.guildcover2}
+                contentFit="contain"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.cover,
+                selectedCover === 3 && styles.selectedCover,
+              ]}
+              onPress={() => selectCover(3)}
+            >
+              <Image
+                style={styles.guildImage}
+                source={images.guildcover3}
+                contentFit="contain"
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={[fonts.EngMedium16, styles.cancelButtonText]}>
+                Cancel
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.copyButton}
-              onPress={() => { create(); onClose(); }}
+              onPress={() => {
+                create();
+                onClose();
+              }}
             >
-              <Text style={styles.copyButtonText}>Create</Text>
+              <Text style={[fonts.EngMedium16, styles.copyButtonText]}>
+                Create
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -88,80 +161,93 @@ const GuildCreateWindow = ({ visible, onClose, value, onSubmit, loadData}) => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(145, 145, 145, 0.7)",
   },
   modalContainer: {
-    width: '80%',
-    backgroundColor: '#ffffff',
+    width: "80%",
+    backgroundColor: colors.gray_bg,
     borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
+    padding: 30,
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
     marginBottom: 10,
   },
-  codeText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 20,
+    paddingHorizontal: 30,
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#E0E0E0',
-    paddingVertical: 10,
-    alignItems: 'center',
-    borderRadius: 5,
-    marginRight: 10,
+    backgroundColor: colors.gray_button,
+    paddingVertical: 15,
+    alignItems: "center",
+    borderRadius: 50,
   },
   cancelButtonText: {
-    color: '#000000',
-    fontSize: 16,
+    color: colors.black,
   },
   copyButton: {
     flex: 1,
-    backgroundColor: '#4285F4',
-    paddingVertical: 10,
-    alignItems: 'center',
-    borderRadius: 5,
+    backgroundColor: colors.blue,
+    paddingVertical: 15,
+    alignItems: "center",
+    borderRadius: 50,
   },
   copyButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
+    color: colors.white,
   },
   codeText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    color: colors.black,
+    marginBottom: 10,
+    alignSelf: "flex-start",
+    left: 10,
   },
   createContainer: {
     flexDirection: "row",
-    backgroundColor: "#f4ede4",
-    borderRadius: 15,
-    paddingHorizontal: '50%',
-    paddingVertical: '3%',
-    paddingHorizontal: 15, 
-    paddingVertical: 10,  
-    marginBottom: 15,
-    width: '100%',  
+    backgroundColor: colors.white,
+    borderRadius: 50,
+    paddingHorizontal: "50%",
+    paddingVertical: "3%",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginBottom: 20,
+    width: "100%",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   coverContainer: {
-    width: '30%',
-    height: '30%',
-    backgroundColor: '#000000',
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 6,
+    marginBottom: 25,
+  },
+  guildImage: {
+    width: 110,
+    height: 110,
+  },
+  cover: {
+    flex: 1,
+    borderWidth: 2,
+    borderColor: colors.gray_bg,
     borderRadius: 10,
-    padding: 10,
-    alignItems: 'center',
-    marginBottom: 15,
-  }
+    padding: 5,
+    paddingLeft: 7,
+    alignItems: "center",
+  },
+  selectedCover: {
+    borderColor: colors.gray_font,
+  },
 });
 
 export default GuildCreateWindow;
