@@ -26,7 +26,7 @@ export default function WeeklyGoals({ id }) {
             key={index}
             title={goal.goalId.title}
             percent={`${
-              goal.current_progress / goal.goalId.objective_count * 100
+              Math.round(goal.current_progress / goal.goalId.objective_count * 100)
             }%`}
           />
         );
