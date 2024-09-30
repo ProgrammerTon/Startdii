@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
 import { Types } from 'mongoose';
-import { Level, LevelDocument } from './entities/level.entity';
+import { Level, LevelDocument, UserTitle } from './entities/level.entity';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { Cron } from '@nestjs/schedule';
 import { UsersService } from 'src/users/users.service';
@@ -104,7 +104,10 @@ export class LevelsService {
       user_lvl.level += 1;
       user_lvl.required_exp *= multiplier;
     }
-    //console.log(user_lvl);
+    const titles = Object.values(UserTitle);
+    const title_slot = Math.floor(user_lvl.level / 10);
+    user_lvl.user_title = titles[title_slot];
+    //console.log(user_lvl.user_title);
     return user_lvl.save();
   }
   
