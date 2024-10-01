@@ -30,6 +30,9 @@ import { getUserRatingSource } from "../../services/SourceService";
 import TestReportNote from "../reportsystem/ReportNote";
 import { router } from "expo-router";
 const { width, height } = Dimensions.get("window");
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+import BackButton from "../../components/BackButton";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -163,8 +166,21 @@ const SourceDetailPage = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.bg}>
+      {/* Header */}
+      <View style={styles.header}>
+        <BackButton />
+        <Text style={[fonts.EngBold22, styles.headerTitle]}>
+          {source?.title}
+        </Text>
+        <TestReportNote
+          sourceId={id} // Pass the sourceId to the report window
+          onPress={() => console.log("Report Button Pressed")}
+        />
+      </View>
+
       <ScrollView
+        style={styles.container}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -174,25 +190,31 @@ const SourceDetailPage = () => {
         }
       >
         {/* Header */}
-        <View style={styles.headerWrapper}>
+        {/* <View style={styles.headerWrapper}>
           <Text style={styles.headerStyle}>{source?.title}</Text>
           <TestReportNote
             sourceId={id} // Pass the sourceId to the report window
             onPress={() => console.log("Report Button Pressed")}
           />
-        </View>
+        </View> */}
 
         {/* Description and Info */}
         <View style={styles.infoContainer}>
-          <Text style={styles.description}>{source?.description}</Text>
+          <Text style={[fonts.EngRegular16, styles.description]}>
+            {source?.description}
+          </Text>
           {source && <TagList tags={source?.tags} />}
           <View style={styles.dateAuthorContainer}>
-            <Text style={styles.dateText}>{source?.updated_at}</Text>
-            <View style={styles.authorContainer}>
-              <Text style={styles.authorText}>By {source?.ownerName}</Text>
-            </View>
+            <Text style={[fonts.EngRegular12, styles.dateText]}>
+              {source?.updated_at}
+            </Text>
+            <TouchableOpacity style={styles.authorContainer}>
+              <Text style={[fonts.EngMedium12, styles.authorText]}>
+                By {source?.ownerName}
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View>
+          <View style={[fonts.EngRegular16, styles.content]}>
             <Text>{source?.content}</Text>
           </View>
         </View>
@@ -209,8 +231,8 @@ const SourceDetailPage = () => {
         {/* Buttons */}
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.button} onPress={handleDownload}>
-            <FontAwesome name="download" size={24} color="#0E68D9" />
-            <Text style={styles.buttonText}>Download</Text>
+            <FontAwesome name="download" size={38} color={colors.blue} />
+            <Text style={[fonts.EngMedium14, styles.buttonText]}>Download</Text>
           </TouchableOpacity>
           {/*
           <TouchableOpacity style={styles.button} onPress={() => router.push("/ArchiveSystem/SharePage")}>
@@ -220,28 +242,35 @@ const SourceDetailPage = () => {
           */}
         </View>
 
-        <RatingBlock
-          ScoreRating={Math.round(source?.score)}
-          numComment={source?.count}
-        />
-        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+        <View style={styles.ratingContainer}>
+          <RatingBlock
+            ScoreRating={Math.round(source?.score)}
+            numComment={source?.count}
+          />
+          <RatingBar
+            onRatingChange={handleRating}
+            initialRating={ratingScore}
+          />
+        </View>
 
         {/* CommentBar with input */}
-        <CommentBar
-          value={commentInput}
-          handleChangeText={setCommentInput}
-          onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
-        />
-
-        {/* Render all comments */}
-        {comments.map((comment, index) => (
-          <CommentBox
-            key={index}
-            username={comment.username}
-            date={comment.date}
-            comment={comment.comment}
+        <View style={styles.commentContainer}>
+          <CommentBar
+            value={commentInput}
+            handleChangeText={setCommentInput}
+            onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
           />
-        ))}
+
+          {/* Render all comments */}
+          {comments.map((comment, index) => (
+            <CommentBox
+              key={index}
+              username={comment.username}
+              date={comment.date}
+              comment={comment.comment}
+            />
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -250,35 +279,40 @@ const SourceDetailPage = () => {
 export default SourceDetailPage;
 
 const styles = StyleSheet.create({
+  bg: {
+    flex: 1,
+    backgroundColor: colors.gray_bg,
+    height: "100%",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#F8F8F8",
+    // paddingHorizontal: 20,
   },
   header: {
+    backgroundColor: colors.yellow,
+    textAlign: "center",
+    height: "10.625%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FEDD3A",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    justifyContent: "space-between",
+    paddingHorizontal: width * 0.05,
     position: "relative",
-    justifyContent: "center",
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
+    marginLeft: width * 0.13,
+    width: "70%",
+    color: colors.black,
   },
   infoContainer: {
-    backgroundColor: "#F8F8F8",
-    padding: 10,
-    borderRadius: 10,
-    marginVertical: 10,
-    marginHorizontal: 15,
+    marginVertical: 20,
+    marginHorizontal: width * 0.05,
   },
   description: {
-    fontSize: 14,
     marginBottom: 10,
-    color: "black",
+    color: colors.black,
+  },
+  content: {
+    color: colors.black,
   },
   dateAuthorContainer: {
     flexDirection: "row",
@@ -287,45 +321,61 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   dateText: {
-    fontSize: 12,
-    color: "gray",
+    color: colors.gray_font,
   },
   authorContainer: {
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 15,
+    backgroundColor: colors.white,
+    paddingVertical: 6,
+    paddingHorizontal: width * 0.025,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: colors.blue,
   },
   authorText: {
-    fontSize: 12,
-    color: "#0E68D9",
+    color: colors.blue,
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginVertical: 20,
+    marginVertical: 15,
   },
   button: {
+    backgroundColor: colors.white,
     alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 18,
+    paddingHorizontal: width * 0.035,
+    borderRadius: 10,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   buttonText: {
-    fontSize: 12,
-    color: "#0E68D9",
-    marginTop: 5,
+    color: colors.blue,
+    marginTop: 6,
   },
-  headerWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: height * 0.1,
-    backgroundColor: "#FEDD3A",
-    paddingVertical: 15,
-    paddingHorizontal: width * 0.1,
-    position: "relative",
-    justifyContent: "center",
-  },
+  // headerWrapper: {
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  //   alignItems: "center",
+  //   height: height * 0.1,
+  //   backgroundColor: "#FEDD3A",
+  //   paddingVertical: 15,
+  //   paddingHorizontal: width * 0.1,
+  //   position: "relative",
+  //   justifyContent: "center",
+  // },
   headerStyle: {
     fontSize: 24,
     fontWeight: "bold",
+  },
+  commentContainer: {
+    marginTop: 12,
+    marginHorizontal: width * 0.05,
+  },
+  ratingContainer: {
+    marginHorizontal: width * 0.05,
   },
 });

@@ -48,6 +48,8 @@ import HPlant from "../../components/hat/hat_plant";
 import HPlaster from "../../components/hat/hat_plaster";
 import HShark from "../../components/hat/hat_shark";
 import HXmas from "../../components/hat/hat_xmas";
+import HAfro from "../../components/hat/hat_afro";
+import HJuaz from "../../components/hat/hat_juaz";
 import { getUser } from "../../services/UserService";
 import { getCurrentToken } from "../../utils/asyncstroage";
 
@@ -101,6 +103,8 @@ export default function ProfileTest() {
 
   const getHatComponent = React.useMemo(() => {
     switch (selectedHat) {
+      case "HNone":
+        return <HNone />;
       case "HBanana":
         return <HBanana />;
       case "HCap":
@@ -123,6 +127,10 @@ export default function ProfileTest() {
         return <HShark />;
       case "HXmas":
         return <HXmas />;
+      case "HAfro":
+        return <HAfro />;
+      case "HJuaz":
+        return <HJuaz />;
     }
   }, [selectedHat, setSelectedHat]);
 
@@ -132,7 +140,11 @@ export default function ProfileTest() {
         <Level
           level={userLevel?.level ? userLevel.level : 0}
           percent={`${
-            ((userLevel?.current_exp / userLevel?.required_exp) < 1) ? Math.round((userLevel?.current_exp / userLevel?.required_exp) * 100) : 100
+            userLevel?.current_exp / userLevel?.required_exp < 1
+              ? Math.round(
+                  (userLevel?.current_exp / userLevel?.required_exp) * 100
+                )
+              : 100
           }%`}
         />
       </View>
@@ -146,7 +158,9 @@ export default function ProfileTest() {
       <View style={styles.frameContainer}>
         <Frame />
         <View style={styles.textContainer}>
-          <Text style={[fonts.EngMedium22, styles.text]}>{userLevel?.user_title}</Text>
+          <Text style={[fonts.EngMedium22, styles.text]}>
+            {userLevel?.user_title}
+          </Text>
         </View>
       </View>
       <Menu activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
