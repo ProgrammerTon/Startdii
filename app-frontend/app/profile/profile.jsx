@@ -42,6 +42,8 @@ import HPlant from "../../components/hat/hat_plant";
 import HPlaster from "../../components/hat/hat_plaster";
 import HShark from "../../components/hat/hat_shark";
 import HXmas from "../../components/hat/hat_xmas";
+import HAfro from "../../components/hat/hat_afro";
+import HJuaz from "../../components/hat/hat_juaz";
 
 export default function ProfileTest() {
   const [activeMenu, setActiveMenu] = useState("Weekly Goals");
@@ -69,6 +71,8 @@ export default function ProfileTest() {
 
   const getHatComponent = React.useMemo(() => {
     switch (selectedHat) {
+      case "HNone":
+        return <HNone />;
       case "HBanana":
         return <HBanana />;
       case "HCap":
@@ -91,6 +95,10 @@ export default function ProfileTest() {
         return <HShark />;
       case "HXmas":
         return <HXmas />;
+      case "HAfro":
+        return <HAfro />;
+      case "HJuaz":
+        return <HJuaz />;
     }
   }, [selectedHat, setSelectedHat]);
 
