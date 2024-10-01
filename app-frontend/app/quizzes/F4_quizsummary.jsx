@@ -21,7 +21,7 @@ import { getCommentsQuiz } from "../../services/CommentService";
 import StatButton from "../Quiz_Component/StatButton";
 import { createCommentSource } from "../../services/CommentService";
 import { router } from "expo-router";
-import { ratingQuiz } from "../../services/QuizService";
+import { getUserRatingQuiz } from "../../services/QuizService";
 
 const { width, height } = Dimensions.get("window");
 
@@ -38,6 +38,7 @@ const QuizSummaryPage = ({
   const [quiz, setQuiz] = useState(null);
   const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
+  const [ratingScore, setRatingScore] = useState(0);
 
   const handleSubmitComment = async () => {
     if (commentInput.trim() === "") return; // Prevent empty comments
@@ -91,14 +92,20 @@ const QuizSummaryPage = ({
     setComments([...reversedComments]);
   };
 
+  const fetchRating = async () => {
+    const data = await getUserRatingQuiz(user._id, id);
+    setRatingScore(data);
+  };
+
   const onRefresh = async () => {
     await fetchQuiz();
     await fetchComments();
+    await fetchRating();
   };
 
   const handleRating = async (sc) => {
-    const data = await ratingQuiz(id, user._id, sc);
-    console.log(data);
+    await ratingQuiz(id, user._id, sc);
+    setRatingScore(sc);
   };
 
   useEffect(() => {
@@ -137,13 +144,16 @@ const QuizSummaryPage = ({
         userAnswers={userAnswers}
         quizData={quizData}
       />
-      <RatingBlock
-        ScoreRating={Math.round(quiz?.averageScore)}
-        numComment={quiz?.count}
-      />
-      <RatingBar onRatingChange={handleRating} />
+      <View style={styles.ratingContainer}>
+        <RatingBlock
+          ScoreRating={Math.round(quiz?.averageScore)}
+          numComment={quiz?.count}
+        />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore}/>
+      </View>
 
       {/* CommentBar with input */}
+      <View style={styles.commentContainer}>
       <CommentBar
         value={commentInput}
         handleChangeText={setCommentInput}
@@ -151,14 +161,15 @@ const QuizSummaryPage = ({
       />
 
       {/* Render all comments */}
-      {comments.map((comment, index) => (
-        <CommentBox
-          key={index}
-          username={comment.username}
-          date={comment.date}
-          comment={comment.comment}
-        />
-      ))}
+        {comments.map((comment, index) => (
+          <CommentBox
+            key={index}
+            username={comment.username}
+            date={comment.date}
+            comment={comment.comment}
+          />
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -204,5 +215,12 @@ const styles = StyleSheet.create({
   correctText: {
     fontSize: 16,
     color: "green",
+  },
+  commentContainer: {
+    marginTop: 12,
+    marginHorizontal: width * 0.05,
+  },
+  ratingContainer: {
+    marginHorizontal: width * 0.05,
   },
 });

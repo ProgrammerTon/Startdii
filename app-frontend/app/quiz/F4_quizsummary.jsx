@@ -175,28 +175,32 @@ const QuizSummaryPage = () => {
           quizData={questions}
         />
       ) : null}
-      <RatingBlock
-        ScoreRating={Math.round(quiz?.averageScore)}
-        numComment={quiz?.count}
-      />
-      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      <View style={styles.ratingContainer}>
+        <RatingBlock
+          ScoreRating={Math.round(quiz?.averageScore)}
+          numComment={quiz?.count}
+        />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      </View>
 
       {/* CommentBar with input */}
-      <CommentBar
-        value={commentInput}
-        handleChangeText={setCommentInput}
-        onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
-      />
-
-      {/* Render all comments */}
-      {comments.map((comment, index) => (
-        <CommentBox
-          key={index}
-          username={comment.username}
-          date={comment.date}
-          comment={comment.comment}
+      <View style={styles.commentContainer}>
+        <CommentBar
+          value={commentInput}
+          handleChangeText={setCommentInput}
+          onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
         />
-      ))}
+
+        {/* Render all comments */}
+        {comments.map((comment, index) => (
+          <CommentBox
+            key={index}
+            username={comment.username}
+            date={comment.date}
+            comment={comment.comment}
+          />
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -242,5 +246,12 @@ const styles = StyleSheet.create({
   correctText: {
     fontSize: 16,
     color: "green",
+  },
+  commentContainer: {
+    marginTop: 12,
+    marginHorizontal: width * 0.05,
+  },
+  ratingContainer: {
+    marginHorizontal: width * 0.05,
   },
 });
