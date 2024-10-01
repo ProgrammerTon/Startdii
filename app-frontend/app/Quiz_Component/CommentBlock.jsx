@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import colors from '../../constants/color';
+import fonts from '../../constants/font';
 
 const CommentBox = ({ username, date, comment }) => {
   return (
     <View style={styles.commentContainer}>
       <View style={styles.headerContainer}>
-        <Text style={styles.username}>{username}</Text>
-        <Text style={styles.date}>{date}</Text>
+        <Text style={[fonts.EngSemiBold14, styles.username]}>{username}</Text>
+        <Text style={[fonts.EngRegular12, styles.date]}>{date}</Text>
       </View>
-      <Text style={styles.comment}>{comment}</Text>
+      <Text style={[fonts.EngRegular14, styles.comment]}>{comment}</Text>
     </View>
   );
 };
@@ -17,13 +19,18 @@ export default CommentBox;
 
 const styles = StyleSheet.create({
   commentContainer: {
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     padding: 15,
-    marginVertical: 10,
+    marginVertical: 8,
     borderRadius: 10,
     width: '100%',
     maxWidth: Dimensions.get('window').width - 40, // Keeps it responsive
     alignSelf: 'center',
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -31,18 +38,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   username: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#333',
+    color: colors.black,
   },
   date: {
-    fontSize: 14,
-    color: '#999',
+    color: colors.gray_font,
   },
   comment: {
-    fontSize: 14,
-    color: '#555',
-    marginTop: 5,
+    color: colors.black,
     lineHeight: 20,
   },
 });
