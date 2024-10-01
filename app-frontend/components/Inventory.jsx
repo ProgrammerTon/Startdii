@@ -123,6 +123,8 @@ const Inventory = ({ id }) => {
         }}
         keyExtractor={(item, ind) => `${item._id}-${ind}`}
         contentContainerStyle={{ paddingBottom: 110 }}
+        onEndReached={() => fetchData()} // Load more data when the list reaches the end
+        onEndReachedThreshold={0.1} // Adjust as needed
       />
       <View className="my-5"></View>
       {/* <QuizCard /> */}
