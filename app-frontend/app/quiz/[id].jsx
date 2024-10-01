@@ -33,6 +33,7 @@ import TestReport from "../reportsystem/ReportTest";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import BackButton from "../../components/BackButton";
+const { width, height } = Dimensions.get("window");
 
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();
@@ -261,20 +262,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.05,
     position: "relative",
   },
   container: {
     flex: 1,
   },
   headerTitle: {
-    marginLeft: 63,
+    marginLeft: width * 0.13,
     width: "70%",
     color: colors.black,
   },
   infoContainer: {
     marginVertical: 20,
-    marginHorizontal: 20,
+    marginHorizontal: width * 0.05,
   },
   description: {
     marginBottom: 10,
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   authorContainer: {
     backgroundColor: colors.white,
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: width * 0.025,
     borderRadius: 50,
     borderWidth: 2,
     borderColor: colors.blue,
@@ -304,19 +305,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 10,
-    paddingHorizontal: 16,
+    paddingHorizontal: width * 0.04,
   },
   headerQs: {
     color: colors.black,
   },
   commentContainer: {
     marginTop: 12,
-    marginHorizontal: 20,
+    marginHorizontal: width * 0.05,
   },
   ratingContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: width * 0.05,
   },
   qsContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: width * 0.05,
   },
 });

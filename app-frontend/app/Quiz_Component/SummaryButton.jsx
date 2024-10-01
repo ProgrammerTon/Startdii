@@ -1,12 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const { width } = Dimensions.get("window"); // Get screen width for responsive sizing
 
 const SumButton = ({ handleOnPress }) => {
   return (
     <TouchableOpacity style={styles.button} onPress={handleOnPress}>
-      <Text style={styles.buttonText}> SUMMARY</Text>
+      <Text style={[fonts.EngBold22, styles.buttonText]}>SUMMARY</Text>
     </TouchableOpacity>
   );
 };
@@ -15,17 +17,20 @@ export default SumButton;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#2c35ac",
-    paddingVertical: 15,
-    paddingHorizontal: width * 0.3, // Responsive width (30% of screen width)
-    borderRadius: 5,
+    backgroundColor: colors.blue,
+    paddingVertical: 18,
+    paddingHorizontal: width * 0.17, // Responsive width (30% of screen width)
+    borderRadius: 10,
     marginTop: 20,
     alignSelf: "center", // Center button horizontally
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   buttonText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    color: colors.white,
     textAlign: "center",
   },
 });

@@ -190,13 +190,13 @@ const SourceDetailPage = () => {
         }
       >
         {/* Header */}
-        <View style={styles.headerWrapper}>
+        {/* <View style={styles.headerWrapper}>
           <Text style={styles.headerStyle}>{source?.title}</Text>
           <TestReportNote
             sourceId={id} // Pass the sourceId to the report window
             onPress={() => console.log("Report Button Pressed")}
           />
-        </View>
+        </View> */}
 
         {/* Description and Info */}
         <View style={styles.infoContainer}>
@@ -295,17 +295,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingHorizontal: width * 0.05,
     position: "relative",
   },
   headerTitle: {
-    marginLeft: 63,
+    marginLeft: width * 0.13,
     width: "70%",
     color: colors.black,
   },
   infoContainer: {
     marginVertical: 20,
-    marginHorizontal: 20,
+    marginHorizontal: width * 0.05,
   },
   description: {
     marginBottom: 10,
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
   authorContainer: {
     backgroundColor: colors.white,
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: width * 0.025,
     borderRadius: 50,
     borderWidth: 2,
     borderColor: colors.blue,
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 18,
-    paddingHorizontal: 16,
+    paddingHorizontal: width * 0.035,
     borderRadius: 10,
     shadowColor: colors.gray_bgblur,
     shadowOffset: [{ width: 0, height: 0 }],
@@ -356,26 +356,26 @@ const styles = StyleSheet.create({
     color: colors.blue,
     marginTop: 6,
   },
-  headerWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: height * 0.1,
-    backgroundColor: "#FEDD3A",
-    paddingVertical: 15,
-    paddingHorizontal: width * 0.1,
-    position: "relative",
-    justifyContent: "center",
-  },
+  // headerWrapper: {
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  //   alignItems: "center",
+  //   height: height * 0.1,
+  //   backgroundColor: "#FEDD3A",
+  //   paddingVertical: 15,
+  //   paddingHorizontal: width * 0.1,
+  //   position: "relative",
+  //   justifyContent: "center",
+  // },
   headerStyle: {
     fontSize: 24,
     fontWeight: "bold",
   },
   commentContainer: {
     marginTop: 12,
-    marginHorizontal: 20,
+    marginHorizontal: width * 0.05,
   },
   ratingContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: width * 0.05,
   },
 });
