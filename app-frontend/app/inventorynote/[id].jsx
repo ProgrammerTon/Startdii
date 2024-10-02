@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   Linking,
+  Dimensions
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link, useLocalSearchParams } from "expo-router";
@@ -30,6 +31,10 @@ import TestReportNote from "../reportsystem/ReportNote";
 import { router } from "expo-router";
 import EditNoteComponent from "./EditNoteComponent";
 import DeleteNoteComponent from "./DeleteNoteComponent";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+const { width, height } = Dimensions.get("window");
+
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
   const [source, setSource] = useState(null);
@@ -249,30 +254,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8F8F8",
   },
   header: {
+    backgroundColor: colors.yellow,
+    textAlign: "center",
+    height: "10.625%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FEDD3A",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    justifyContent: "space-between",
+    paddingHorizontal: width * 0.05,
     position: "relative",
-    justifyContent: "center",
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
+    marginLeft: width * 0.13,
+    width: "70%",
+    color: colors.black,
   },
   infoContainer: {
-    backgroundColor: "#F8F8F8",
-    padding: 10,
-    borderRadius: 10,
-    marginVertical: 10,
-    marginHorizontal: 15,
+    marginVertical: 20,
+    marginHorizontal: width * 0.05,
   },
   description: {
-    fontSize: 14,
     marginBottom: 10,
-    color: "black",
+    color: colors.black,
   },
   dateAuthorContainer: {
     flexDirection: "row",
@@ -281,31 +283,40 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   dateText: {
-    fontSize: 12,
-    color: "gray",
+    color: colors.gray_font,
   },
   authorContainer: {
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 15,
+    backgroundColor: colors.white,
+    paddingVertical: 6,
+    paddingHorizontal: width * 0.025,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: colors.blue,
   },
   authorText: {
-    fontSize: 12,
-    color: "#0E68D9",
+    color: colors.blue,
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginVertical: 20,
+    marginVertical: 15,
   },
   button: {
+    backgroundColor: colors.white,
     alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 18,
+    paddingHorizontal: width * 0.035,
+    borderRadius: 10,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   buttonText: {
-    fontSize: 12,
-    color: "#0E68D9",
-    marginTop: 5,
+    color: colors.blue,
+    marginTop: 6,
   },
   headerWrapper: {
     flexDirection: "row",
@@ -319,6 +330,13 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     fontSize: 24,
-    fontWeight: "bold"
+    fontWeight: "bold",
+  },
+  commentContainer: {
+    marginTop: 12,
+    marginHorizontal: width * 0.05,
+  },
+  ratingContainer: {
+    marginHorizontal: width * 0.05,
   },
 });
