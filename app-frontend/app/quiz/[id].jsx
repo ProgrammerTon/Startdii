@@ -33,6 +33,7 @@ import TestReport from "../reportsystem/ReportTest";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import BackButton from "../../components/BackButton";
+import Loading from "../test_loading/test";
 const { width, height } = Dimensions.get("window");
 
 const SumQuizPage = () => {
@@ -132,9 +133,7 @@ const SumQuizPage = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchQuiz();
-    await fetchComments();
-    await fetchRating();
+    await Promise.all([fetchQuiz(), fetchComments(), fetchRating()]);
     setRefreshing(false);
   };
 
@@ -143,19 +142,23 @@ const SumQuizPage = () => {
     setRatingScore(sc);
   };
 
-  useEffect(() => {
+  const initPage = async () => {
     setRefreshing(true);
     setQuizId(id);
-    fetchQuiz();
-    fetchComments();
+    await Promise.all([fetchQuiz(), fetchComments(), fetchRating()]);
     const isdoit = user.quiz_history.some((entry) => entry.id === id);
     setIsDone(isdoit);
     setQuizFinished(false);
-    fetchRating();
     setRefreshing(false);
+  };
+
+  useEffect(() => {
+    initPage();
   }, []);
 
-  return (
+  return refreshing ? (
+    <Loading />
+  ) : (
     <View style={styles.bg}>
       <View style={styles.header}>
         <BackButton />

@@ -52,6 +52,9 @@ import HAfro from "../../components/hat/hat_afro";
 import HJuaz from "../../components/hat/hat_juaz";
 import { getUser } from "../../services/UserService";
 import { getCurrentToken } from "../../utils/asyncstroage";
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
+import Loading from "../test_loading/test";
 
 const { width, height } = Dimensions.get("window");
 export default function ProfileTest() {
@@ -64,6 +67,15 @@ export default function ProfileTest() {
 
   const handleRefresh = async () => {
     if (user) {
+      const token = await getCurrentToken();
+      const newUser = await getUser(token);
+      setUser(newUser);
+      await loadUserLevel();
+    }
+  };
+
+  const initPage = async () => {
+    if (user) {
       setRefreshing(true);
       const token = await getCurrentToken();
       const newUser = await getUser(token);
@@ -73,8 +85,18 @@ export default function ProfileTest() {
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      if (!isLogged) {
+        router.replace("/sign-in");
+      } else {
+        handleRefresh();
+      }
+    }, [])
+  );
+
   useEffect(() => {
-    handleRefresh();
+    initPage();
   }, []);
 
   const loadUserLevel = async () => {
@@ -192,7 +214,9 @@ export default function ProfileTest() {
     }
   }, []);
 
-  return (
+  return refreshing ? (
+    <Loading />
+  ) : (
     <ScrollView
       style={styles.bg}
       refreshControl={

@@ -33,6 +33,7 @@ const { width, height } = Dimensions.get("window");
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import BackButton from "../../components/BackButton";
+import Loading from "../test_loading/test";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -79,12 +80,14 @@ const SourceDetailPage = () => {
     console.log(data?.filename);
   };
 
-  useEffect(() => {
+  const initPage = async () => {
     setRefreshing(true);
-    fetchSource(id);
-    fetchComments(id);
-    fetchRating();
+    await Promise.all([fetchSource(id), fetchComments(id), fetchRating()]);
     setRefreshing(false);
+  };
+
+  useEffect(() => {
+    initPage();
   }, []);
 
   // State to hold the list of comments
@@ -165,7 +168,9 @@ const SourceDetailPage = () => {
     }
   };
 
-  return (
+  return refreshing ? (
+    <Loading />
+  ) : (
     <View style={styles.bg}>
       {/* Header */}
       <View style={styles.header}>
