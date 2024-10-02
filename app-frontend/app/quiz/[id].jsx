@@ -140,6 +140,7 @@ const SumQuizPage = () => {
   const handleRating = async (sc) => {
     await ratingQuiz(id, user._id, sc);
     setRatingScore(sc);
+    fetchQuiz(id);
   };
 
   const initPage = async () => {
@@ -196,7 +197,10 @@ const SumQuizPage = () => {
             <Text style={[fonts.EngRegular12, styles.dateText]}>
               {quiz?.date}
             </Text>
-            <TouchableOpacity style={styles.authorContainer}>
+            <TouchableOpacity
+              style={styles.authorContainer}
+              onPress={() => router.push(`profile/${quiz.ownerId._id}`)}
+            >
               <Text style={[fonts.EngMedium12, styles.authorText]}>
                 By {quiz?.ownerId?.username}
               </Text>
