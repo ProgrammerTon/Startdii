@@ -17,6 +17,7 @@ const Level = ({
             </View>
             <View style={[styles.inputContainer, otherStyles]}>
                 <View style={[styles.ProcessContainer, { width: percent }]}>
+                    <Text style={[fonts.EngSemiBold14, styles.percentText]}>{percent}</Text>
                 </View>
             </View>
         </View>
@@ -64,6 +65,9 @@ const styles = StyleSheet.create({
         top: '6%',
         zIndex: 1,
         top: '53%',
+    },
+    percentText: {
+        color: colors.white,
     },
 });
 

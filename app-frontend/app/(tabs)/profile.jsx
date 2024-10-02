@@ -103,8 +103,8 @@ export default function ProfileTest() {
 
   const getHatComponent = React.useMemo(() => {
     switch (selectedHat) {
-      case "HNone":
-        return <HNone />;
+      // case "HNone":
+      //   return <HNone />;
       case "HBanana":
         return <HBanana />;
       case "HCap":
