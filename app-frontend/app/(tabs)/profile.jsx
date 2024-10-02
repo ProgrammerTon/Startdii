@@ -55,6 +55,7 @@ import { getCurrentToken } from "../../utils/asyncstroage";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import Loading from "../test_loading/test";
+import { getUserGoal } from "../../services/LevelService";
 
 const { width, height } = Dimensions.get("window");
 export default function ProfileTest() {
@@ -64,6 +65,7 @@ export default function ProfileTest() {
   const { isLogged, user, setUser } = useGlobalContext();
   const [userLevel, setUserLevel] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [userGoals, setUserGoals] = useState([]);
 
   const handleRefresh = async () => {
     if (user) {
@@ -71,6 +73,8 @@ export default function ProfileTest() {
       const newUser = await getUser(token);
       setUser(newUser);
       await loadUserLevel();
+      const data = await getUserGoal(user._id);
+      setUserGoals(data);
     }
   };
 
@@ -81,6 +85,8 @@ export default function ProfileTest() {
       const newUser = await getUser(token);
       setUser(newUser);
       await loadUserLevel();
+      const data = await getUserGoal(user._id);
+      setUserGoals(data);
       setRefreshing(false);
     }
   };
@@ -192,7 +198,7 @@ export default function ProfileTest() {
   const renderContent = () => {
     switch (activeMenu) {
       case "Weekly Goals":
-        return <WeeklyGoals id={user?._id} />;
+        return <WeeklyGoals userGoal={userGoals} />;
       case "Inventory":
         return <Inventory id={user?._id} />;
       case "History":
