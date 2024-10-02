@@ -48,6 +48,7 @@ import HJuaz from "../../components/hat/hat_juaz";
 import colors from "../../constants/color";
 import { getOtherProfile } from "../../services/UserService";
 import { getUserLevel } from "../../services/LevelService";
+import Loading from "../test_loading/test";
 
 export default function ProfileTest() {
   const { id } = useLocalSearchParams();
@@ -58,6 +59,7 @@ export default function ProfileTest() {
   const [user, setUser] = useState(null);
   const { isLogged } = useGlobalContext();
   const [userLevel, setUserLevel] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -66,11 +68,11 @@ export default function ProfileTest() {
   }, [id]);
 
   const loadUserLevel = async () => {
+    setRefreshing(true);
     const user_lvl = await getUserLevel(id);
     setUserLevel(user_lvl);
+    setRefreshing(false);
   };
-
-  useEffect(() => {}, []);
 
   const getCharacterComponent = React.useMemo(() => {
     switch (selectedChar) {
@@ -93,8 +95,6 @@ export default function ProfileTest() {
 
   const getHatComponent = React.useMemo(() => {
     switch (selectedHat) {
-      case "HNone":
-        return <HNone />;
       case "HBanana":
         return <HBanana />;
       case "HCap":
@@ -169,6 +169,7 @@ export default function ProfileTest() {
   ];
 
   const fetchProfile = async () => {
+    setRefreshing(true);
     const data = await getOtherProfile(id);
     if (!data) {
       Alert.alert("User Not Found");
@@ -178,6 +179,7 @@ export default function ProfileTest() {
     setSelectedChar(data.character);
     setSelectedColor(data.characterColor);
     setSelectedHat(data.characterHat);
+    setRefreshing(false);
   };
 
   useEffect(() => {
@@ -188,7 +190,9 @@ export default function ProfileTest() {
     }
   }, []);
 
-  return (
+  return refreshing ? (
+    <Loading />
+  ) : (
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
         <TouchableOpacity style={styles.usernameContainer}>

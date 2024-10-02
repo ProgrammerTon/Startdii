@@ -33,6 +33,7 @@ const { width, height } = Dimensions.get("window");
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import BackButton from "../../components/BackButton";
+import Loading from "../test_loading/test";
 
 const SourceDetailPage = () => {
   const { id } = useLocalSearchParams();
@@ -57,6 +58,7 @@ const SourceDetailPage = () => {
     setSource({
       title: data.title,
       ownerName: data.ownerId.username,
+      ownerId: data.ownerId._id,
       description: data.description,
       content: data.content,
       tags: data.tags,
@@ -79,12 +81,14 @@ const SourceDetailPage = () => {
     console.log(data?.filename);
   };
 
-  useEffect(() => {
+  const initPage = async () => {
     setRefreshing(true);
-    fetchSource(id);
-    fetchComments(id);
-    fetchRating();
+    await Promise.all([fetchSource(id), fetchComments(id), fetchRating()]);
     setRefreshing(false);
+  };
+
+  useEffect(() => {
+    initPage();
   }, []);
 
   // State to hold the list of comments
@@ -125,6 +129,7 @@ const SourceDetailPage = () => {
   const handleRating = async (sc) => {
     const data = await ratingSource(id, user._id, sc);
     setRatingScore(sc);
+    fetchSource(id);
     console.log(data);
   };
 
@@ -165,7 +170,9 @@ const SourceDetailPage = () => {
     }
   };
 
-  return (
+  return refreshing ? (
+    <Loading />
+  ) : (
     <View style={styles.bg}>
       {/* Header */}
       <View style={styles.header}>
@@ -208,7 +215,10 @@ const SourceDetailPage = () => {
             <Text style={[fonts.EngRegular12, styles.dateText]}>
               {source?.updated_at}
             </Text>
-            <TouchableOpacity style={styles.authorContainer}>
+            <TouchableOpacity
+              style={styles.authorContainer}
+              onPress={() => router.push(`profile/${source.ownerId}`)}
+            >
               <Text style={[fonts.EngMedium12, styles.authorText]}>
                 By {source?.ownerName}
               </Text>

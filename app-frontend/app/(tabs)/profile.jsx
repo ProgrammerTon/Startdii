@@ -52,6 +52,10 @@ import HAfro from "../../components/hat/hat_afro";
 import HJuaz from "../../components/hat/hat_juaz";
 import { getUser } from "../../services/UserService";
 import { getCurrentToken } from "../../utils/asyncstroage";
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
+import Loading from "../test_loading/test";
+import { getUserGoal } from "../../services/LevelService";
 
 const { width, height } = Dimensions.get("window");
 export default function ProfileTest() {
@@ -61,20 +65,44 @@ export default function ProfileTest() {
   const { isLogged, user, setUser } = useGlobalContext();
   const [userLevel, setUserLevel] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [userGoals, setUserGoals] = useState([]);
 
   const handleRefresh = async () => {
+    if (user) {
+      const token = await getCurrentToken();
+      const newUser = await getUser(token);
+      setUser(newUser);
+      await loadUserLevel();
+      const data = await getUserGoal(user._id);
+      setUserGoals(data);
+    }
+  };
+
+  const initPage = async () => {
     if (user) {
       setRefreshing(true);
       const token = await getCurrentToken();
       const newUser = await getUser(token);
       setUser(newUser);
       await loadUserLevel();
+      const data = await getUserGoal(user._id);
+      setUserGoals(data);
       setRefreshing(false);
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      if (!isLogged) {
+        router.replace("/sign-in");
+      } else {
+        handleRefresh();
+      }
+    }, [])
+  );
+
   useEffect(() => {
-    handleRefresh();
+    initPage();
   }, []);
 
   const loadUserLevel = async () => {
@@ -170,7 +198,7 @@ export default function ProfileTest() {
   const renderContent = () => {
     switch (activeMenu) {
       case "Weekly Goals":
-        return <WeeklyGoals id={user?._id} />;
+        return <WeeklyGoals userGoal={userGoals} />;
       case "Inventory":
         return <Inventory id={user?._id} />;
       case "History":
@@ -192,7 +220,9 @@ export default function ProfileTest() {
     }
   }, []);
 
-  return (
+  return refreshing ? (
+    <Loading />
+  ) : (
     <ScrollView
       style={styles.bg}
       refreshControl={
