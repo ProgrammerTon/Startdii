@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from "react-native";
 import Componentchatuser from "../chatsystem/Componentchatuser";
-import { router, useFocusEffect ,useLocalSearchParams} from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { getChatList } from "../../services/ChatListService";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
@@ -19,7 +19,7 @@ const { width } = Dimensions.get("window");
 
 const ChatH1 = () => {
   const [userData, setUserData] = useState([]);
-  const [refreshing, setRefreshing] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const { user, isLogged } = useGlobalContext();
 
   useFocusEffect(
@@ -27,6 +27,7 @@ const ChatH1 = () => {
       if (!isLogged) {
         router.replace("/sign-in");
       } else {
+        setRefreshing(true);
         loadUserData();
         setRefreshing(false);
       }

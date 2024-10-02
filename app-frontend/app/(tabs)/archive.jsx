@@ -164,17 +164,6 @@ const ArchiveMainPage = () => {
     handleRefresh(); // Refresh data when filter changes
   }, [filterDirection]);
 
-  // Initial fetch when component loads and handle login redirection
-  useFocusEffect(
-    useCallback(() => {
-      if (!isLogged) {
-        router.replace("/sign-in");
-      } else {
-        handleRefresh();
-      }
-    }, [])
-  );
-
   const ToggleFilterChange = (filter) => {
     if (ActiveFilter === filter) {
       setFilterDirection((prevDirection) =>

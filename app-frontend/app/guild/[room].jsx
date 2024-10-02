@@ -17,6 +17,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import SourceCard from "../../components/E1_SourceCard";
 import QuizCard from "../../components/F1_QuizCard";
 import { guildDetail } from "../../services/GuildService";
+import Loading from "../test_loading/test";
 const { width, height } = Dimensions.get("window");
 
 const ChatScreen = () => {
@@ -25,7 +26,7 @@ const ChatScreen = () => {
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [offset, setOffset] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const {
     joinRoom,
     leaveRoom,
@@ -43,10 +44,14 @@ const ChatScreen = () => {
     setGuild(data);
   };
 
+  const initPage = async () => {
+    setRefreshing(true);
+    await Promise.all([joinRoom(room), fetchChat(), fetchGuild()]);
+    setRefreshing(false);
+  };
+
   useEffect(() => {
-    joinRoom(room);
-    fetchChat();
-    fetchGuild();
+    initPage();
     return () => {
       leaveRoom(room);
       clearMessage();
@@ -62,11 +67,9 @@ const ChatScreen = () => {
   }, [user, isLogged]);
 
   const fetchChat = () => {
-    setLoading(true);
     fetchMessage(room, offset);
     console.log(room, offset);
     setOffset(offset + 1);
-    setLoading(false);
   };
 
   const handleSendMessage = () => {
@@ -81,7 +84,9 @@ const ChatScreen = () => {
     }
   };
 
-  return (
+  return refreshing ? (
+    <Loading />
+  ) : (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
@@ -215,7 +220,7 @@ const ChatScreen = () => {
             inverted // This makes the list scroll from bottom to top
             onEndReached={fetchChat}
             onEndReachedThreshold={0.1} // Adjust as needed
-            ListFooterComponent={loading && <ActivityIndicator />}
+            ListFooterComponent={refreshing && <ActivityIndicator />}
           />
         ) : null}
       </View>
