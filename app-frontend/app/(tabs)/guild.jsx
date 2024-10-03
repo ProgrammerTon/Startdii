@@ -76,12 +76,13 @@ const GuildPage = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Guild</Text>
       </View>
-      <TouchableHighlight
+      
+      {/* <TouchableHighlight
         onPress={() => router.push("/dev")}
         className="bg-green-600 p-2 rounded-xl"
       >
         <Text className="text-lg">Dev</Text>
-      </TouchableHighlight>
+      </TouchableHighlight> */}
       <View style={styles.guildContainer}>
         <FlatList
           data={guilds}

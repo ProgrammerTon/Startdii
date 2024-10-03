@@ -160,12 +160,15 @@ export default function SignIn() {
               handleChangeText={(e) => setForm({ ...form, password: e })}
               otherStyles="mt-3"
             />
-
+{/*
             <TouchableOpacity style={styles.box} onPress={submit}>
+              
               <Text style={[fonts.EngMedium12, styles.text]}>
                 Forgot Password ?
               </Text>
+
             </TouchableOpacity>
+*/}
           </View>
           <View style={styles.buttonContainer}>
             <Button
@@ -186,12 +189,12 @@ export default function SignIn() {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableHighlight
+        {/* <TouchableHighlight
           onPress={() => router.push("/dev")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">Dev</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
       </ScrollView>
     </SafeAreaView>
   );
