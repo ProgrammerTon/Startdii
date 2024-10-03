@@ -58,6 +58,7 @@ const SourceDetailPage = () => {
     setSource({
       title: data.title,
       ownerName: data.ownerId.username,
+      ownerId: data.ownerId._id,
       description: data.description,
       content: data.content,
       tags: data.tags,
@@ -128,6 +129,7 @@ const SourceDetailPage = () => {
   const handleRating = async (sc) => {
     const data = await ratingSource(id, user._id, sc);
     setRatingScore(sc);
+    fetchSource(id);
     console.log(data);
   };
 
@@ -213,7 +215,10 @@ const SourceDetailPage = () => {
             <Text style={[fonts.EngRegular12, styles.dateText]}>
               {source?.updated_at}
             </Text>
-            <TouchableOpacity style={styles.authorContainer}>
+            <TouchableOpacity
+              style={styles.authorContainer}
+              onPress={() => router.push(`profile/${source.ownerId}`)}
+            >
               <Text style={[fonts.EngMedium12, styles.authorText]}>
                 By {source?.ownerName}
               </Text>

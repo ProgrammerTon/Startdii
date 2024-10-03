@@ -24,8 +24,6 @@ import colors from "../../constants/color.js";
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Latest");
   const [AddWindowVisible, setAddWindowVisible] = useState(false);
-  const [AddToggleNoteQuizVisible, setAddToggleNoteQuizVisible] =
-    useState(false);
   const [filterDirection, setFilterDirection] = useState("↓");
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(1);
@@ -164,6 +162,10 @@ const ArchiveMainPage = () => {
     handleRefresh(); // Refresh data when filter changes
   }, [filterDirection]);
 
+  const toggleOption = () => {
+    setIsSearchNote(!isSearchNote);
+  }
+
   const ToggleFilterChange = (filter) => {
     if (ActiveFilter === filter) {
       setFilterDirection((prevDirection) =>
@@ -175,6 +177,8 @@ const ArchiveMainPage = () => {
     }
   };
 
+  const optionText = isSearchNote ? "Note" : "Quiz";
+    
   const filterText =
     ActiveFilter === "Latest"
       ? `Latest ${filterDirection}`
@@ -188,14 +192,6 @@ const ArchiveMainPage = () => {
     setAddWindowVisible(false);
   };
 
-  const openAddToggleNoteQuizVisible = () => {
-    setAddToggleNoteQuizVisible(true);
-  };
-
-  const closeAddToggleNoteQuizVisible = () => {
-    setAddToggleNoteQuizVisible(false);
-  };
-
   const handleSubmitSearch = () => {
     setRefreshing(true);
     setData([]);
@@ -206,17 +202,6 @@ const ArchiveMainPage = () => {
   return (
     <SafeAreaViewAndroid style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          onPress={openAddToggleNoteQuizVisible}
-          style={{ marginRight: 10 }}
-        >
-          <Feather name="menu" size={24} color={colors.black} />
-        </TouchableOpacity>
-        <ToggleNoteQuiz
-          visible={AddToggleNoteQuizVisible}
-          onClose={closeAddToggleNoteQuizVisible}
-          setValue={(e) => handleToggleSearch(e)}
-        />
         <ArchiveSearchBar
           value={searchField}
           handleChangeText={(e) => setSearchField(e)}
@@ -224,6 +209,15 @@ const ArchiveMainPage = () => {
         />
       </View>
       <View style={styles.filterContainer}>
+      <TouchableOpacity
+          style={
+            isSearchNote ? styles.searchNote : styles.searchQuiz
+          }
+          onPress={() => toggleOption()}
+          //onPress={(e) => handleToggleSearch(e)}
+        >
+          <Text style={styles.optionText}>{optionText}</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={
             ActiveFilter === "Favorite"
@@ -342,25 +336,48 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: 10,
+  },
+  searchNote: {
+    backgroundColor: colors.yellow,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    width: "22%",
+    alignItems: "center",
+  },
+  searchQuiz: {
+    backgroundColor: colors.green,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    width: "22%",
+    alignItems: "center",
   },
   filterButton: {
     backgroundColor: colors.blue,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 10,
-    marginHorizontal: 10,
-    width: "28%",
+    marginHorizontal: 5,
+    width: "22%",
     alignItems: "center",
   },
   inactiveFilterButton: {
     backgroundColor: colors.gray_button,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 10,
-    marginHorizontal: 10,
-    width: "28%",
+    marginHorizontal: 5,
+    width: "22%",
     alignItems: "center",
+  },
+  optionText: {
+    color: colors.black,
+    fontWeight: "bold",
+    fontSize: 12,
   },
   filterText: {
     color: colors.white,
