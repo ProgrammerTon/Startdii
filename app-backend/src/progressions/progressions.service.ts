@@ -66,7 +66,7 @@ export class ProgressionsService {
   async updateWeeklyGoal() {
 		const {selected_easy_goals, selected_hard_goals} = await this.randomWeeklyGoal();
 		const users = await this.userModel.find({});
-		this.progressionModel.deleteMany({}).exec();
+		await this.progressionModel.deleteMany({}).exec();
 		for (let i = 0; i < users.length; i++) {
 			const createProgressionDto = {
 				current_progress: 0,
