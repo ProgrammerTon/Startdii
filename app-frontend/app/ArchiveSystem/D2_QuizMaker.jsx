@@ -185,9 +185,11 @@ const QuizMakerPage = () => {
       />
 
       <View style={styles.buttonContainer}>
+        {/*
         <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
+        */}
         <TouchableOpacity style={styles.publishButton} onPress={Publish}>
           <Text style={styles.buttonText}>Publish</Text>
         </TouchableOpacity>

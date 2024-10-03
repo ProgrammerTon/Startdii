@@ -52,86 +52,70 @@ const ArchiveMainPage = () => {
   };
 
   const fetchToggle = async (of = offset, reset = false, isSearch = false) => {
-    const sortOrder = filterDirection === "↓" ? "desc" : "asc";
-    if (searchField.trim() !== "") {
-      isSearch = true;
-    }
-    const { title, tags } = extractTitleAndTags(searchField);
-    if (!isSearchNote) {
-      const sources = await getSource(of, sortOrder, title, tags, ActiveFilter);
-
-      if (sources && sources?.length !== 0) {
-        if (reset) {
-          setData([...sources]);
-        } else {
-          setData((prevData) => (reset ? sources : [...prevData, ...sources]));
-        }
-        setOffset(of + 1); // Increment the offset for pagination
-      }
-    } else {
-      const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
-
-      if (quizs?.length !== 0) {
-        setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
-        setOffset(of + 1); // Increment the offset for pagination
-      }
-    }
-  };
-
-  const fetchData = async (of = offset, reset = false, isSearch = false) => {
-    if (!refreshing) {
+    try {
       const sortOrder = filterDirection === "↓" ? "desc" : "asc";
       if (searchField.trim() !== "") {
         isSearch = true;
       }
       const { title, tags } = extractTitleAndTags(searchField);
-      console.log(title, tags);
-      if (isSearchNote) {
-        if (ActiveFilter === "Favorite") {
-          const fav_sources = await getFavoriteSource(user._id);
-          setData(fav_sources.favorite_sources.reverse());
-        } else {
-          const sources = await getSource(
-            of,
-            sortOrder,
-            title,
-            tags,
-            ActiveFilter
-          );
-
-          if (sources && sources?.length !== 0) {
-            if (!isSearch) {
-              setData((prevData) =>
-                reset ? sources : [...prevData, ...sources]
-              );
-              setOffset(of + 1); // Increment the offset for pagination
-            } else {
-              setData([...sources]);
-              setOffset(of + 1); // Increment the offset for pagination
-            }
-          }
+  
+      if (!isSearchNote) {
+        const sources = await getSource(of, sortOrder, title, tags, ActiveFilter);
+        if (sources && sources?.length !== 0) {
+          setData(reset ? sources : [...data, ...sources]);
+          setOffset(of + 1);
         }
       } else {
-        if (ActiveFilter === "Favorite") {
-          const fav_quizzes = await getFavoriteQuiz(user._id);
-          setData(fav_quizzes.favorite_quizzes.reverse());
-        } else {
-          const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
+        const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
+        if (quizs?.length !== 0) {
+          setData(reset ? quizs : [...data, ...quizs]);
+          setOffset(of + 1);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching toggle data:", error); // Handle the error appropriately
+    }
+  };
+  
 
-          if (quizs && quizs?.length !== 0) {
-            if (!isSearch) {
-              setData((prevData) => (reset ? quizs : [...prevData, ...quizs]));
-              setOffset(of + 1); // Increment the offset for pagination
-            } else {
-              setData([...quizs]);
-              setOffset(of + 1); // Increment the offset for pagination
+  const fetchData = async (of = offset, reset = false, isSearch = false) => {
+    try {
+      if (!refreshing) {
+        const sortOrder = filterDirection === "↓" ? "desc" : "asc";
+        if (searchField.trim() !== "") {
+          isSearch = true;
+        }
+        const { title, tags } = extractTitleAndTags(searchField);
+  
+        if (isSearchNote) {
+          if (ActiveFilter === "Favorite") {
+            const fav_sources = await getFavoriteSource(user._id);
+            setData(fav_sources.favorite_sources.reverse());
+          } else {
+            const sources = await getSource(of, sortOrder, title, tags, ActiveFilter);
+            if (sources && sources?.length !== 0) {
+              setData(reset ? sources : [...data, ...sources]);
+              setOffset(of + 1);
+            }
+          }
+        } else {
+          if (ActiveFilter === "Favorite") {
+            const fav_quizzes = await getFavoriteQuiz(user._id);
+            setData(fav_quizzes.favorite_quizzes.reverse());
+          } else {
+            const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
+            if (quizs?.length !== 0) {
+              setData(reset ? quizs : [...data, ...quizs]);
+              setOffset(of + 1);
             }
           }
         }
       }
+    } catch (error) {
+      console.error("Error fetching data:", error); // Handle the error appropriately
     }
-    console.log(data);
   };
+  
 
   const extractTitleAndTags = (input) => {
     const parts = input.split(" "); // Split by " +"
@@ -166,9 +150,9 @@ const ArchiveMainPage = () => {
   }, [filterDirection]);
 
   const toggleOption = async () => {
+    setIsSearchNote(!isSearchNote);
     setOffset(1);
     setData([]);
-    setIsSearchNote(!isSearchNote);
   };
 
   const ToggleFilterChange = (filter) => {
