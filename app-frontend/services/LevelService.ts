@@ -9,7 +9,7 @@ export async function getUserLevel(userId: string): Promise<any | null> {
     console.error("Failed to get user level data", await res.text());
     return null;
   }
-  const data = await res.json()
+  const data = await res.json();
   return data;
 }
 
@@ -22,8 +22,7 @@ export async function getUserGoal(userId: string): Promise<any | null> {
     console.error("Failed to get user goal data", await res.text());
     return null;
   }
-  const data = await res.json()
-  console.log('getusergoal', data);
+  const data = await res.json();
   return data;
 }
 
@@ -36,7 +35,7 @@ export async function addUserExp(userId: string, expToAdd: number) {
     console.error("Failed to add EXP", await res.text());
     return null;
   }
-  const data = await res.json()
+  const data = await res.json();
   return data;
 }
 
@@ -49,6 +48,6 @@ export async function addGoalProgress(userId: string, goalType: string) {
     console.error("Failed to progress quest", await res.text());
     return null;
   }
-  const data = await res.json()
+  const data = await res.json();
   return data;
 }

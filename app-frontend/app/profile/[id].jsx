@@ -61,18 +61,36 @@ export default function ProfileTest() {
   const [userLevel, setUserLevel] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    if (id) {
-      loadUserLevel();
-    }
-  }, [id]);
-
   const loadUserLevel = async () => {
-    setRefreshing(true);
     const user_lvl = await getUserLevel(id);
     setUserLevel(user_lvl);
+  };
+
+  const fetchProfile = async () => {
+    const data = await getOtherProfile(id);
+    if (!data) {
+      Alert.alert("User Not Found");
+    }
+    console.log("Other User Data", data);
+    setUser(data);
+    setSelectedChar(data.character);
+    setSelectedColor(data.characterColor);
+    setSelectedHat(data.characterHat);
+  };
+
+  const initPage = async () => {
+    setRefreshing(true);
+    await Promise.all([fetchProfile(), loadUserLevel()]);
     setRefreshing(false);
   };
+
+  useEffect(() => {
+    if (!isLogged) {
+      router.replace("/sign-in");
+    } else {
+      initPage();
+    }
+  }, []);
 
   const getCharacterComponent = React.useMemo(() => {
     switch (selectedChar) {
@@ -161,34 +179,6 @@ export default function ProfileTest() {
         return <Inventory id={id} />;
     }
   };
-
-  const menuItems = [
-    { id: "1", name: "Weekly Goals" },
-    { id: "2", name: "Inventory" },
-    { id: "3", name: "History" },
-  ];
-
-  const fetchProfile = async () => {
-    setRefreshing(true);
-    const data = await getOtherProfile(id);
-    if (!data) {
-      Alert.alert("User Not Found");
-    }
-    console.log("Other User Data", data);
-    setUser(data);
-    setSelectedChar(data.character);
-    setSelectedColor(data.characterColor);
-    setSelectedHat(data.characterHat);
-    setRefreshing(false);
-  };
-
-  useEffect(() => {
-    if (!isLogged) {
-      router.replace("/sign-in");
-    } else {
-      fetchProfile();
-    }
-  }, []);
 
   return refreshing ? (
     <Loading />

@@ -26,6 +26,7 @@ import { getAnswers } from "../../services/QuizService";
 import { useQuestionContext } from "../../context/QuestionProvider";
 import StatButton from "../Quiz_Component/StatButton";
 import { getUserRatingQuiz } from "../../services/QuizService";
+import Loading from "../test_loading/test";
 
 const { width, height } = Dimensions.get("window");
 
@@ -101,14 +102,13 @@ const QuizSummaryPage = () => {
   };
 
   const onRefresh = async () => {
-    await fetchQuiz();
-    await fetchComments();
-    await fetchRating();
+    await Promise.all([fetchQuiz(), fetchComments(), fetchRating()]);
   };
 
   const handleRating = async (sc) => {
     await ratingQuiz(quizId, user._id, sc);
     setRatingScore(sc);
+    fetchQuiz();
   };
 
   const fetchGetAnswers = async () => {
@@ -129,21 +129,21 @@ const QuizSummaryPage = () => {
     }
   };
 
+  const initPage = async () => {
+    setRefreshing(true);
+    await Promise.all([onRefresh(), fetchGetAnswers()]);
+    setRefreshing(false);
+  };
+
   useEffect(() => {
     if (quizId) {
-      fetchGetAnswers();
+      initPage();
     }
   }, [quizId]);
 
-  useEffect(() => {
-    setRefreshing(true);
-    fetchQuiz();
-    fetchRating();
-    fetchComments();
-    setRefreshing(false);
-  }, []);
-
-  return (
+  return refreshing ? (
+    <Loading />
+  ) : (
     <ScrollView
       style={styles.container}
       refreshControl={
@@ -157,7 +157,7 @@ const QuizSummaryPage = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Finished</Text>
       </View>
-        {/* Score and progress bar container */}
+      {/* Score and progress bar container */}
       <View style={styles.scoreProgressContainer}>
         <Text style={styles.scoreText}>
           {score} / {questions?.length}
@@ -165,9 +165,7 @@ const QuizSummaryPage = () => {
         <ScoreProgress percent={(score / questions?.length) * 100} />
       </View>
 
-      <StatButton
-        handleOnPress={() => router.push("/quiz/F7_quizstatistic")}
-      />
+      <StatButton handleOnPress={() => router.push("/quiz/F7_quizstatistic")} />
       {userAnswers?.length && eachQuestionAnswers?.length ? (
         <AnswerButton
           eachQuestionAnswers={eachQuestionAnswers}

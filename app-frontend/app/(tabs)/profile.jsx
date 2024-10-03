@@ -102,7 +102,11 @@ export default function ProfileTest() {
   );
 
   useEffect(() => {
-    initPage();
+    if (!isLogged) {
+      router.replace("/sign-in");
+    } else {
+      initPage();
+    }
   }, []);
 
   const loadUserLevel = async () => {
@@ -207,18 +211,6 @@ export default function ProfileTest() {
         return <WeeklyGoals id={user?._id} />;
     }
   };
-
-  const menuItems = [
-    { id: "1", name: "Weekly Goals" },
-    { id: "2", name: "Inventory" },
-    { id: "3", name: "History" },
-  ];
-
-  useEffect(() => {
-    if (!isLogged) {
-      router.replace("/sign-in");
-    }
-  }, []);
 
   return refreshing ? (
     <Loading />

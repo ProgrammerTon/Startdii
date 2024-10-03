@@ -68,17 +68,18 @@ const ChatRoom = () => {
     isLogged,
     clearMessage,
   } = useGlobalContext();
+  const [ischatend, setIschatend] = useState(false);
 
   useEffect(() => {
     if (!isLogged || !user) {
       router.replace("/sign-in");
     } else {
+      console.log("Join Room", room);
       setName(user.username);
+      joinRoom(room);
+      fetchChat();
+      fetchChatInfo();
     }
-    console.log("Join Room", room);
-    joinRoom(room);
-    fetchChat();
-    fetchChatInfo();
     return () => {
       leaveRoom(room);
       clearMessage();
@@ -86,10 +87,15 @@ const ChatRoom = () => {
   }, []);
 
   const fetchChat = async () => {
-    setLoading(true);
-    await fetchMessage(room, offset);
-    setOffset(offset + 1);
-    setLoading(false);
+    if (!ischatend && !loading) {
+      setLoading(true);
+      const data = await fetchMessage(room, offset);
+      if (data.length === 0) {
+        setIschatend(true);
+      }
+      setOffset(offset + 1);
+      setLoading(false);
+    }
   };
 
   const fetchChatInfo = async () => {
