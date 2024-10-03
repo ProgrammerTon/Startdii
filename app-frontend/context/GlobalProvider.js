@@ -37,6 +37,7 @@ const GlobalProvider = ({ children }) => {
         });
       });
       setMessages((prevMessages) => [...prevMessages, ...chats]);
+      return chats;
     }
   };
 
