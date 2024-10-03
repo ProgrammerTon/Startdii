@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
+import { StyleSheet, View, TouchableOpacity, FlatList, Text } from "react-native";
 import InvenSourceCard from "../app/inventorynote/E1_InvenSourceCard.jsx";
 import InvenQuizCard from "../app/inventoryquiz/F1_InvenQuizCard.jsx";
 import Feather from "@expo/vector-icons/Feather";
@@ -8,7 +8,6 @@ import { useFocusEffect } from "expo-router";
 import colors from "../constants/color.js";
 import { getQuizInventory } from "../services/UserService";
 import { getSourceInventory } from "../services/UserService";
-import ToggleNoteQuiz from "./ToggleNoteQuiz.jsx";
 
 const Inventory = ({ id }) => {
   const { user } = useGlobalContext();
@@ -46,35 +45,37 @@ const Inventory = ({ id }) => {
     fetchData();
   }, [isSearchNote]);
 
-  const openAddToggleNoteQuizVisible = () => {
-    setAddToggleNoteQuizVisible(true);
+  const handleToggleSearch = async (e) => {
+    if (e && !isSearchNote) {
+      setRefreshing(true);
+      setIsSearchNote(e);
+      setData([]);  
+      setRefreshing(false);
+    }
+    if (!e && isSearchNote) {
+      setRefreshing(true);
+      setIsSearchNote(e);
+      setData([]);
+      setRefreshing(false);
+    }
+    toggleOption();
   };
 
-  const closeAddToggleNoteQuizVisible = () => {
-    setAddToggleNoteQuizVisible(false);
+  const toggleOption = async () => {  
+    setOffset(1);
+    setData([]);
+    setIsSearchNote(!isSearchNote);
   };
 
-  const handleToggleSearch = (e) => {
-    setRefreshing(true);
-    setIsSearchNote(e);
-    fetchData();
-    setRefreshing(false);
-  };
+  const optionText = isSearchNote ? "Note" : "Quiz";
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <TouchableOpacity
-          onPress={openAddToggleNoteQuizVisible}
-          style={{ marginRight: 10 }}
-        >
-          <Feather name="menu" size={24} color={colors.black} />
-        </TouchableOpacity>
-        <ToggleNoteQuiz
-          visible={AddToggleNoteQuizVisible}
-          onClose={closeAddToggleNoteQuizVisible}
-          setValue={(e) => handleToggleSearch(e)}
-        />
+      <TouchableOpacity
+        style={isSearchNote ? styles.searchNote : styles.searchQuiz}
+        onPress={(e) => handleToggleSearch(e)}
+      >
+        <Text style={styles.optionText}>{optionText}</Text>
       </TouchableOpacity>
       <FlatList
         data={data}
@@ -148,5 +149,28 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     flex: 1,
+  },
+  searchNote: {
+    backgroundColor: colors.yellow,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    width: "22%",
+    alignItems: "center",
+  },
+  searchQuiz: {
+    backgroundColor: colors.green,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginHorizontal: 5,
+    width: "22%",
+    alignItems: "center",
+  },
+  optionText: {
+    color: colors.black,
+    fontWeight: "bold",
+    fontSize: 12,
   },
 });
