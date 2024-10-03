@@ -32,7 +32,7 @@ const ArchiveMainPage = () => {
   const [isSearchNote, setIsSearchNote] = useState(true);
   const { user, isLogged } = useGlobalContext();
 
-  const handleToggleSearch = (e) => {
+  const handleToggleSearch = async (e) => {
     if (e && !isSearchNote) {
       setRefreshing(true);
       setIsSearchNote(e);
@@ -47,6 +47,7 @@ const ArchiveMainPage = () => {
       fetchToggle(1, true); // Fetch first page of quizzes
       setRefreshing(false);
     }
+    toggleOption();
   };
 
   const fetchToggle = async (of = offset, reset = false, isSearch = false) => {
@@ -154,6 +155,7 @@ const ArchiveMainPage = () => {
     setOffset(1); // Reset offset
     setData([]);
     await fetchData(1, true); // Fetch first page of data
+    //await fetchToggle(1, true);
     setRefreshing(false);
   };
 
@@ -162,9 +164,11 @@ const ArchiveMainPage = () => {
     handleRefresh(); // Refresh data when filter changes
   }, [filterDirection]);
 
-  const toggleOption = () => {
+  const toggleOption = async () => {  
+    setOffset(1);
+    setData([]);
     setIsSearchNote(!isSearchNote);
-  }
+  };
 
   const ToggleFilterChange = (filter) => {
     if (ActiveFilter === filter) {
@@ -178,7 +182,7 @@ const ArchiveMainPage = () => {
   };
 
   const optionText = isSearchNote ? "Note" : "Quiz";
-    
+
   const filterText =
     ActiveFilter === "Latest"
       ? `Latest ${filterDirection}`
@@ -209,12 +213,9 @@ const ArchiveMainPage = () => {
         />
       </View>
       <View style={styles.filterContainer}>
-      <TouchableOpacity
-          style={
-            isSearchNote ? styles.searchNote : styles.searchQuiz
-          }
-          onPress={() => toggleOption()}
-          //onPress={(e) => handleToggleSearch(e)}
+        <TouchableOpacity
+          style={isSearchNote ? styles.searchNote : styles.searchQuiz}
+          onPress={(e) => handleToggleSearch(e)}
         >
           <Text style={styles.optionText}>{optionText}</Text>
         </TouchableOpacity>
