@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -393,6 +393,19 @@ export default function DressTest() {
   // const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.char} />);
   // const [selectedColor, setSelectedColor] = useState(colors.green);
   // const [selectedHat, setSelectedHat] = useState('HNone');
+  const [userLevel, setUserLevel] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      loadUserLevel(user?._id);
+    }
+  }, [user]);
+
+  const loadUserLevel = async () => {
+    const user_lvl = await getUserLevel(user?._id);
+    setUserLevel(user_lvl);
+  };
+
   const {
     selectedChar,
     setSelectedChar,
@@ -521,7 +534,7 @@ export default function DressTest() {
             {() => <ColourDetails onColorSelect={handleUpdateColor} />}
           </Tab.Screen>
           <Tab.Screen name="Hat">
-            {() => <HatDetails onHatSelect={handleUpdateHat} level={getUserLevel(user._id)} />}
+            {() => <HatDetails onHatSelect={handleUpdateHat} level={(userLevel) ? userLevel.level : 0} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>
