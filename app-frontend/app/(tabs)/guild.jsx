@@ -20,6 +20,7 @@ import { useGuildContext } from "../../context/GuildProvider";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
+import { FontAwesome } from "@expo/vector-icons";
 
 const GuildPage = () => {
   const [guilds, setGuilds] = useState([]);
@@ -110,7 +111,8 @@ const GuildPage = () => {
         style={styles.floatingButton}
         onPress={openguildCreateJoinWindow}
       >
-        <Text style={styles.floatingButtonText}>+</Text>
+        {/* <Text style={styles.floatingButtonText}>+</Text> */}
+        <FontAwesome name="plus" size={28} color={colors.white} />
       </TouchableOpacity>
       <CreateJoinGuild
         visible={guildCreateJoinWindow}
@@ -157,6 +159,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    zIndex: 1000,
   },
   floatingButtonText: {
     color: colors.white,

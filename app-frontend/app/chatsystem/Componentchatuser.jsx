@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 // Get screen width for responsive design
 const { width } = Dimensions.get("window");
@@ -33,10 +35,10 @@ const Componentchatuser = ({ item }) => {
         }}
       >
         <View style={styles.textContainer}>
-          <Text style={styles.username}>{item.username}</Text>
-          <Text style={styles.message}>{item.lastMessage}</Text>
+          <Text style={[fonts.EngBold16, styles.username]}>{item.username}</Text>
+          <Text style={[fonts.EngMedium14, styles.message]}>{item.lastMessage}</Text>
         </View>
-        <Text style={styles.time}>{timeString}</Text>
+        <Text style={[fonts.EngRegular12, styles.time]}>{timeString}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -52,27 +54,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.gray_bg,
     paddingVertical: 12,
     paddingHorizontal: 15,
     borderRadius: 10,
-    elevation: 2,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   textContainer: {
     flex: 1, // Takes up available space
   },
   username: {
-    fontSize: 16,
-    fontWeight: "bold",
+    color: colors.black,
   },
   message: {
-    fontSize: 14,
-    color: "#555",
+    color: colors.gray_font,
     marginTop: 2,
   },
   time: {
-    fontSize: 12,
-    color: "#999",
+    color: colors.gray_font,
+    bottom: 10,
   },
 });
 
