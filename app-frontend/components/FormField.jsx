@@ -1,8 +1,15 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+} from "react-native";
 import fonts from "../constants/font";
 import colors from "../constants/color";
-import { Shadow } from 'react-native-shadow-2';
+import { Shadow } from "react-native-shadow-2";
 
 const FormField = ({
   title,
@@ -10,6 +17,7 @@ const FormField = ({
   placeholder,
   handleChangeText,
   otherStyles,
+  ispass,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +32,7 @@ const FormField = ({
           placeholder={placeholder}
           placeholderTextColor={colors.black}
           onChangeText={handleChangeText}
+          secureTextEntry={ispass}
           {...props}
         />
       </View>
@@ -33,7 +42,7 @@ const FormField = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: '1%',
+    marginHorizontal: "1%",
   },
   inputContainer: {
     backgroundColor: colors.white,
@@ -43,19 +52,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5, // Android shadow equivalent
-    flexDirection: 'row', // Equivalent to flex flex-row
-    alignItems: 'center', // Equivalent to items-center
-    width: '91.666667%', // Equivalent to w-11/12
-    height: '44px',
-    padding: '3%',
-    marginTop: '2%',
+    flexDirection: "row", // Equivalent to flex flex-row
+    alignItems: "center", // Equivalent to items-center
+    width: "91.666667%", // Equivalent to w-11/12
+    height: "44px",
+    padding: "3%",
+    marginTop: "2%",
   },
   textInput: {
     flex: 1,
-    color: colors.black, 
+    color: colors.black,
     fontFamily: "InterMedium",
     fontWeight: "medium",
-    fontSize: 14
+    fontSize: 14,
   },
 });
 
