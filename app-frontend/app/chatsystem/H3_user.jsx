@@ -29,7 +29,7 @@ const ChatSearch = () => {
       </View>
 
       {/* Search Bar */}
-      <View style={styles.searchBarContainer}>
+      {/* <View style={styles.searchBarContainer}>
         <Ionicons
           name="search"
           size={20}
@@ -40,7 +40,7 @@ const ChatSearch = () => {
           style={styles.searchInput}
           placeholder="Search in conversation"
         />
-      </View>
+      </View> */}
 
       {/* Note Button */}
       <TouchableOpacity

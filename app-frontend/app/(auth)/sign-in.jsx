@@ -133,7 +133,7 @@ export default function SignIn() {
     buttonContainer: {
       position: "absolute",
       alignItems: "center",
-      bottom: "50.5%",
+      bottom: "57.5%",
     },
   };
 
@@ -159,6 +159,7 @@ export default function SignIn() {
               value={form.password}
               handleChangeText={(e) => setForm({ ...form, password: e })}
               otherStyles="mt-3"
+              ispass={true}
             />
 {/*
             <TouchableOpacity style={styles.box} onPress={submit}>

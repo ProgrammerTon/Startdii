@@ -226,9 +226,9 @@ export default function ProfileTest() {
           <Text style={[fonts.EngBold22, styles.username]}>
             {user?.username}
           </Text>
-          <View style={styles.pencilContainer}>
+          {/* <View style={styles.pencilContainer}>
             <PencilIcon />
-          </View>
+          </View> */}
         </TouchableOpacity>
         <View style={styles.signoutContainer}>
           <SignoutButton onPress={() => {}} />

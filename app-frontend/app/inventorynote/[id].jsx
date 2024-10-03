@@ -139,10 +139,21 @@ const SourceDetailPage = () => {
       }
     }
   };
-  console.log(user._id)
-  console.log(source?.ownerId)
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <BackButton />
+        <Text style={[fonts.EngBold22, styles.headerTitle]}>
+          {source?.title?.match(/.{1,15}/g).join("\n")} {/* Handle long title */}
+        </Text>
+        {user?._id === source?.ownerId && (
+          <View style={styles.editDeleteContainer}>
+            <EditNoteComponent sourceId={id} />
+            <DeleteNoteComponent sourceId={id} />
+          </View>
+        )}
+      </View>
+  
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -152,23 +163,6 @@ const SourceDetailPage = () => {
           />
         }
       >
-        <View style={styles.headerWrapper}>
-          <View style={styles.backButtonContainer}>
-            {/*<BackButton />*/}
-          </View>
-          <Text style={styles.headerStyle}>
-            {source?.title?.split(" ").reduce((acc, word, i) => {
-              return i % 10 === 0 && i !== 0 ? `${acc}\n${word}` : `${acc} ${word}`;
-            }, "").trim()}
-          </Text>
-          {user?._id === source?.ownerId && (
-            <View style={styles.editDeleteContainer}>
-              <EditNoteComponent sourceId={id} />
-              <DeleteNoteComponent sourceId={id} />
-            </View>
-          )}
-        </View>
-
         <View style={styles.infoContainer}>
           <Text style={styles.description}>{source?.description}</Text>
           {source && <TagList tags={source?.tags} />}
@@ -182,7 +176,7 @@ const SourceDetailPage = () => {
             <Text>{source?.content}</Text>
           </View>
         </View>
-
+  
         {["png", "jpg"].some((extension) =>
           source?.filename?.endsWith(extension)
         ) ? (
@@ -191,14 +185,14 @@ const SourceDetailPage = () => {
             style={{ width: 200, height: 200 }}
           />
         ) : null}
-
+  
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.button} onPress={handleDownload}>
             <FontAwesome name="download" size={24} color="#0E68D9" />
             <Text style={styles.buttonText}>Download</Text>
           </TouchableOpacity>
         </View>
-
+  
         <View style={styles.ratingContainer}>
           <RatingBlock
             ScoreRating={Math.round(source?.score)}
@@ -209,7 +203,7 @@ const SourceDetailPage = () => {
             initialRating={ratingScore}
           />
         </View>
-
+  
         {/* CommentBar with input */}
         <View style={styles.commentContainer}>
           <CommentBar
@@ -217,7 +211,7 @@ const SourceDetailPage = () => {
             handleChangeText={setCommentInput}
             onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
           />
-
+  
           {/* Render all comments */}
           {comments.map((comment, index) => (
             <CommentBox
@@ -231,6 +225,7 @@ const SourceDetailPage = () => {
       </ScrollView>
     </View>
   );
+  
 };
 
 export default SourceDetailPage;
@@ -240,21 +235,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F8F8F8",
   },
-  headerWrapper: {
+  header: {
+    backgroundColor: colors.yellow,
+    textAlign: "center",
+    height: "10.625%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FEDD3A",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    justifyContent: "space-between",
+    paddingHorizontal: width * 0.05,
+    position: "relative",
   },
-  headerStyle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    flex: 1,  // Ensures the title takes available space
-    flexWrap: "wrap",
-    textAlign: "center",  // Centers the title text
-    marginLeft: 10,  // Adds space between BackButton and title
-  },  
+  headerTitle: {
+    marginLeft: width * 0.13,
+    flexGrow: 1, 
+    color: colors.black,
+    textAlign: "center",
+  },
   editDeleteContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -310,24 +306,6 @@ const styles = StyleSheet.create({
     color: colors.blue,
     marginTop: 6,
   },
-  // headerWrapper: {
-  //   flexDirection: "row",
-  //   justifyContent: "space-between",
-  //   alignItems: "center",
-  //   height: height * 0.1,
-  //   backgroundColor: "#FEDD3A",
-  //   paddingVertical: 15,
-  //   paddingHorizontal: width * 0.1,
-  //   position: "relative",
-  //   justifyContent: "center",
-  // },
-  headerStyle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    flex: 1,
-    flexWrap: "wrap",   // Allows title to wrap if too long
-    flexShrink: 1,      // Prevents the buttons from shrinking
-  },
   commentContainer: {
     marginTop: 12,
     marginHorizontal: width * 0.05,
@@ -335,14 +313,7 @@ const styles = StyleSheet.create({
   ratingContainer: {
     marginHorizontal: width * 0.05,
   },
-  editDeleteContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: 10,
-    flexGrow: 0,      
-  },
   backButtonContainer: {
     marginRight: 10, 
   },
-  
 });
