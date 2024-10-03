@@ -1,6 +1,8 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const UserNameComponent = ({ id, username, onPress }) => {
   return (
@@ -9,9 +11,9 @@ const UserNameComponent = ({ id, username, onPress }) => {
       style={styles.container}
       onPress={() => router.push(`profile/${id}`)}
     >
-      <Text style={styles.username}>{username}</Text>
+      <Text style={[fonts.EngSemiBold16, styles.username]}>{username}</Text>
       <TouchableOpacity style={styles.button} onPress={() => onPress(id)}>
-        <Text style={styles.buttonText}>Add User</Text>
+        <Text style={[fonts.EngBold14, styles.buttonText]}>Add User</Text>
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -24,29 +26,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    backgroundColor: "#fff",
+    borderWidth: 2,
+    borderColor: colors.gray_button,
+    borderRadius: 10,
+    backgroundColor: colors.white,
   },
   username: {
     flex: 1,
-    height: 40,
-    borderColor: "#ddd",
-    borderWidth: 1,
-    borderRadius: 5,
     paddingHorizontal: 10,
     marginRight: 10,
     lineHeight: 40,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: colors.blue,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: colors.white,
   },
 });
