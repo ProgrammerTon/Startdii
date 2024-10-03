@@ -245,7 +245,7 @@ function HatDetails({ onHatSelect, level }) {
             </TouchableOpacity>
           </View>
           <View style={[isSelected("HDeer") ? styles.selected : styles.unselected, isUnlocked(10) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(10) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 10 to unlock</Text>
               </View>
@@ -262,7 +262,7 @@ function HatDetails({ onHatSelect, level }) {
 
         <View style={styles.rowcontainer}>
           <View style={[isSelected("HFlower") ? styles.selected : styles.unselected, isUnlocked(15) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(15) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 15 to unlock</Text>
               </View>
@@ -276,7 +276,7 @@ function HatDetails({ onHatSelect, level }) {
             </TouchableOpacity>
           </View>
           <View style={[isSelected("HMagic") ? styles.selected : styles.unselected, isUnlocked(20) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(20) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 20 to unlock</Text>
               </View>
@@ -290,7 +290,7 @@ function HatDetails({ onHatSelect, level }) {
             </TouchableOpacity>
           </View>
           <View style={[isSelected("HPlant") ? styles.selected : styles.unselected, isUnlocked(25) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(25) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 25 to unlock</Text>
               </View>
@@ -307,7 +307,7 @@ function HatDetails({ onHatSelect, level }) {
 
         <View style={styles.rowcontainer}>
           <View style={[isSelected("HPlaster") ? styles.selected : styles.unselected, isUnlocked(30) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(30) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 30 to unlock</Text>
               </View>
@@ -321,7 +321,7 @@ function HatDetails({ onHatSelect, level }) {
             </TouchableOpacity>
           </View>
           <View style={[isSelected("HShark") ? styles.selected : styles.unselected, isUnlocked(35) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(35) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 35 to unlock</Text>
               </View>
@@ -335,7 +335,7 @@ function HatDetails({ onHatSelect, level }) {
             </TouchableOpacity>
           </View>
           <View style={[isSelected("HXmas") ? styles.selected : styles.unselected, isUnlocked(40) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(40) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 40 to unlock</Text>
               </View>
@@ -352,7 +352,7 @@ function HatDetails({ onHatSelect, level }) {
 
         <View style={styles.rowcontainer}>
           <View style={[isSelected("HAfro") ? styles.selected : styles.unselected, isUnlocked(45) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(45) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 45 to unlock</Text>
               </View>
@@ -366,7 +366,7 @@ function HatDetails({ onHatSelect, level }) {
             </TouchableOpacity>
           </View>
           <View style={[isSelected("HJuaz") ? styles.selected : styles.unselected, isUnlocked(50) ? styles.unlocked : styles.locked]}>
-            {!isUnlocked(5) && (
+            {!isUnlocked(50) && (
               <View style={styles.lockTextContainer}>
                 <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 50 to unlock</Text>
               </View>
