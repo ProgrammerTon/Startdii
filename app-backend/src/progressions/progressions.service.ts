@@ -77,30 +77,21 @@ export class ProgressionsService {
 
   @Cron('59 23 * * 0')
   async updateWeeklyGoal() {
-    const { selected_easy_goals, selected_hard_goals } =
-      await this.randomWeeklyGoal();
-    const users = await this.userModel.find({});
-    await this.progressionModel.deleteMany({}).exec();
-    for (let i = 0; i < users.length; i++) {
-      const createProgressionDto = {
-        current_progress: 0,
-      };
-      for (let j = 0; j < selected_easy_goals.length; j++) {
-        await this.create(
-          createProgressionDto,
-          users[i]._id as ObjectId,
-          selected_easy_goals[j]._id as ObjectId,
-        );
-      }
-      for (let j = 0; j < selected_hard_goals.length; j++) {
-        await this.create(
-          createProgressionDto,
-          users[i]._id as ObjectId,
-          selected_hard_goals[j]._id as ObjectId,
-        );
-      }
-    }
-  }
+		const {selected_easy_goals, selected_hard_goals} = await this.randomWeeklyGoal();
+		const users = await this.userModel.find({});
+		await this.progressionModel.deleteMany({}).exec();
+		for (let i = 0; i < users.length; i++) {
+			const createProgressionDto = {
+				current_progress: 0,
+			};
+			for (let j = 0; j < selected_easy_goals.length; j++) {
+				await this.create(createProgressionDto, users[i]._id as ObjectId, selected_easy_goals[j]._id as ObjectId);
+			}
+			for (let j = 0; j < selected_hard_goals.length; j++) {
+				await this.create(createProgressionDto, users[i]._id as ObjectId, selected_hard_goals[j]._id as ObjectId);
+			}
+		}
+  }	
 
   async updateProgress(userId: ObjectId, goalType: GoalType) {
     const total_goal_count = 3;
