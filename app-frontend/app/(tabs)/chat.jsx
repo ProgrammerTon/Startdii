@@ -14,8 +14,10 @@ import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { getChatList } from "../../services/ChatListService";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 // Get screen width for responsive design
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const ChatH1 = () => {
   const [userData, setUserData] = useState([]);
@@ -65,7 +67,7 @@ const ChatH1 = () => {
   return (
     <SafeAreaViewAndroid style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>Chat</Text>
+        <Text style={[fonts.EngBold22, styles.header]}>Chat</Text>
       </View>
 
       <FlatList
@@ -98,25 +100,22 @@ const ChatH1 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    paddingTop: 35,
+    backgroundColor: colors.gray_bg,
   },
   headerContainer: {
-    backgroundColor: "#007bff", // Blue background color
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginBottom: 20,
+    backgroundColor: colors.blue,
+    textAlign: "center",
+    height: "10.625%",
+    flexDirection: "row",
     alignItems: "center",
-    width: width - 40, // Responsive width
-    alignSelf: "center",
+    justifyContent: "center",
+    marginBottom: 15,
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#fff",
+    color: colors.white,
   },
   scrollViewContainer: {
     flexGrow: 1,
@@ -136,7 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   deleteButtonText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 14,
     fontWeight: "bold",
   },

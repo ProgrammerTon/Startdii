@@ -10,6 +10,7 @@ const FormField = ({
   placeholder,
   handleChangeText,
   otherStyles,
+  ispass,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +25,7 @@ const FormField = ({
           placeholder={placeholder}
           placeholderTextColor={colors.black}
           onChangeText={handleChangeText}
+          secureTextEntry={ispass}
           {...props}
         />
       </View>
