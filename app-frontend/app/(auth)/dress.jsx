@@ -36,6 +36,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { updateCostume } from "../../services/UserService";
 
 import { CharacterContext } from "../profile/charcontext";
+import { getUserLevel } from "../../services/LevelService";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -180,13 +181,16 @@ function ColourDetails({ onColorSelect }) {
   );
 }
 
-function HatDetails({ onHatSelect }) {
+function HatDetails({ onHatSelect, level }) {
   const { selectedHat, setSelectedHat } = useContext(CharacterContext);
-  const handleHatSelect = (hat) => {
-    setSelectedHat(hat);
-    onHatSelect(hat);
+  const handleHatSelect = (hat, requiredLevel) => {
+    if (level >= requiredLevel) {
+      setSelectedHat(hat);
+      onHatSelect(hat);
+    }
   };
   const isSelected = (hat) => selectedHat === hat;
+  const isUnlocked = (requiredLevel) => level >= requiredLevel;
   return (
     <SafeAreaView style={styles.bg}>
       <ScrollView style={{ backgroundColor: colors.white }}>
@@ -194,7 +198,7 @@ function HatDetails({ onHatSelect }) {
           <View style={isSelected("HNone") ? styles.selected : styles.unselected}>
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HNone")}
+              onPress={() => handleHatSelect("HNone", 0)}
             >
               <HNone />
             </TouchableOpacity>
@@ -202,7 +206,7 @@ function HatDetails({ onHatSelect }) {
           <View style={isSelected("HBanana") ? styles.selected : styles.unselected}>
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HBanana")}
+              onPress={() => handleHatSelect("HBanana", 0)}
             >
               <HBanana />
             </TouchableOpacity>
@@ -210,7 +214,7 @@ function HatDetails({ onHatSelect }) {
           <View style={isSelected("HCap") ? styles.selected : styles.unselected}>
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HCap")}
+              onPress={() => handleHatSelect("HCap", 0)}
             >
               <HCap />
             </TouchableOpacity>
@@ -221,23 +225,35 @@ function HatDetails({ onHatSelect }) {
           <View style={isSelected("HCowboy") ? styles.selected : styles.unselected}>
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HCowboy")}
+              onPress={() => handleHatSelect("HCowboy", 0)}
             >
               <HCowboy />
             </TouchableOpacity>
           </View>
-          <View style={isSelected("HCrown") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HCrown") ? styles.selected : styles.unselected, isUnlocked(5) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 5 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HCrown")}
+              onPress={() => handleHatSelect("HCrown", 5)}
+              disabled={!isUnlocked(5)}
             >
               <HCrown />
             </TouchableOpacity>
           </View>
-          <View style={isSelected("HDeer") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HDeer") ? styles.selected : styles.unselected, isUnlocked(10) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 10 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HDeer")}
+              onPress={() => handleHatSelect("HDeer", 10)}
+              disabled={!isUnlocked(10)}
             >
               <HDeer />
             </TouchableOpacity>
@@ -245,26 +261,44 @@ function HatDetails({ onHatSelect }) {
         </View>
 
         <View style={styles.rowcontainer}>
-          <View style={isSelected("HFlower") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HFlower") ? styles.selected : styles.unselected, isUnlocked(15) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 15 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HFlower")}
+              onPress={() => handleHatSelect("HFlower", 15)}
+              disabled={!isUnlocked(15)}
             >
               <HFlower />
             </TouchableOpacity>
           </View>
-          <View style={isSelected("HMagic") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HMagic") ? styles.selected : styles.unselected, isUnlocked(20) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 20 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HMagic")}
+              onPress={() => handleHatSelect("HMagic", 20)}
+              disabled={!isUnlocked(20)}
             >
               <HMagic />
             </TouchableOpacity>
           </View>
-          <View style={isSelected("HPlant") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HPlant") ? styles.selected : styles.unselected, isUnlocked(25) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 25 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HPlant")}
+              onPress={() => handleHatSelect("HPlant", 25)}
+              disabled={!isUnlocked(25)}
             >
               <HPlant />
             </TouchableOpacity>
@@ -272,26 +306,44 @@ function HatDetails({ onHatSelect }) {
         </View>
 
         <View style={styles.rowcontainer}>
-          <View style={isSelected("HPlaster") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HPlaster") ? styles.selected : styles.unselected, isUnlocked(30) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 30 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HPlaster")}
+              onPress={() => handleHatSelect("HPlaster", 30)}
+              disabled={!isUnlocked(30)}
             >
               <HPlaster />
             </TouchableOpacity>
           </View>
-          <View style={isSelected("HShark") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HShark") ? styles.selected : styles.unselected, isUnlocked(35) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 35 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HShark")}
+              onPress={() => handleHatSelect("HShark", 35)}
+              disabled={!isUnlocked(35)}
             >
               <HShark />
             </TouchableOpacity>
           </View>
-          <View style={isSelected("HXmas") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HXmas") ? styles.selected : styles.unselected, isUnlocked(40) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 40 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HXmas")}
+              onPress={() => handleHatSelect("HXmas", 40)}
+              disabled={!isUnlocked(40)}
             >
               <HXmas />
             </TouchableOpacity>
@@ -299,18 +351,30 @@ function HatDetails({ onHatSelect }) {
         </View>
 
         <View style={styles.rowcontainer}>
-          <View style={isSelected("HAfro") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HAfro") ? styles.selected : styles.unselected, isUnlocked(45) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 45 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HAfro")}
+              onPress={() => handleHatSelect("HAfro", 45)}
+              disabled={!isUnlocked(45)}
             >
               <HAfro />
             </TouchableOpacity>
           </View>
-          <View style={isSelected("HJuaz") ? styles.selected : styles.unselected}>
+          <View style={[isSelected("HJuaz") ? styles.selected : styles.unselected, isUnlocked(50) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 50 to unlock</Text>
+              </View>
+            )}
             <TouchableOpacity
               style={styles.eachcontainer}
-              onPress={() => handleHatSelect("HJuaz")}
+              onPress={() => handleHatSelect("HJuaz", 50)}
+              disabled={!isUnlocked(50)}
             >
               <HJuaz />
             </TouchableOpacity>
@@ -411,6 +475,7 @@ export default function DressTest() {
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
         <BackButton></BackButton>
+        <Text style={[fonts.EngBold22, styles.headerText]}>Dressing Room</Text>
       </View>
 
       <View style={styles.mainContainer}>
@@ -456,7 +521,7 @@ export default function DressTest() {
             {() => <ColourDetails onColorSelect={handleUpdateColor} />}
           </Tab.Screen>
           <Tab.Screen name="Hat">
-            {() => <HatDetails onHatSelect={handleUpdateHat} />}
+            {() => <HatDetails onHatSelect={handleUpdateHat} level={getUserLevel(user._id)} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>
@@ -474,6 +539,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.pink,
     textAlign: "center",
     height: "10.625%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerText: {
+    color: colors.black,
   },
   tabContainer: {
     flex: 1,
@@ -484,7 +555,6 @@ const styles = StyleSheet.create({
     height: "45.125%",
   },
   eachcontainer: {
-    //backgroundColor:colors.green,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -517,7 +587,6 @@ const styles = StyleSheet.create({
     position: "relative", // Ensures the child elements (hat) can be positioned absolutely inside this container
   },
   hatContainer: {
-    //backgroundColor:colors.green,
     height: "56%",
     width: "56%",
     top: "-104%",
@@ -536,5 +605,25 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderRadius: 10,
     alignItems: "center",
+  },
+  locked: {
+    flex: 1,
+    backgroundColor: colors.white,
+    opacity: 0.35,
+  },
+  unlocked: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  lockTextContainer: {
+    zIndex: 1,
+    textAlign: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    top: '40%',
+  },
+  lockText: {
+    color: colors.black,
   },
 });

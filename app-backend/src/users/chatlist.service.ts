@@ -21,6 +21,9 @@ export class ChatListService {
     const chat = plainToInstance(ChatList, createChatDto);
     chat.ownerId = new Types.ObjectId(chat.ownerId);
     chat.userId = new Types.ObjectId(chat.userId);
+    if (chat.ownerId === chat.userId) {
+      throw Error('Chat Cant Be Added');
+    }
     chat.chatroom = new Types.ObjectId();
 
     const existingChat = await this.chatListModel
