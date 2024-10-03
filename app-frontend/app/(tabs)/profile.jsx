@@ -248,7 +248,7 @@ export default function ProfileTest() {
 
 const styles = {
   bg: {
-    height: height * 0.89,
+    height: height,
     backgroundColor: colors.gray_bg,
   },
   toptab: {
@@ -259,6 +259,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: width * 0.1,
+    paddingTop: height * 0.025,
     marginTop: height * 0.025,
     position: "relative",
   },
@@ -275,6 +276,7 @@ const styles = {
   signoutContainer: {
     position: "absolute",
     right: 20,
+    paddingTop: height * 0.025,
   },
   pencilContainer: {
     bottom: -2,

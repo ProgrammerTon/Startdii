@@ -20,6 +20,7 @@ import { ActivityIndicator } from "react-native";
 import { router, useFocusEffect } from "expo-router";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid.jsx";
 import colors from "../../constants/color.js";
+import { FontAwesome } from "@expo/vector-icons";
 
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Latest");
@@ -164,7 +165,7 @@ const ArchiveMainPage = () => {
     handleRefresh(); // Refresh data when filter changes
   }, [filterDirection]);
 
-  const toggleOption = async () => {  
+  const toggleOption = async () => {
     setOffset(1);
     setData([]);
     setIsSearchNote(!isSearchNote);
@@ -253,7 +254,7 @@ const ArchiveMainPage = () => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.floatingButton} onPress={openAddWindow}>
-        <Text style={styles.floatingButtonText}>+</Text>
+        <FontAwesome name="plus" size={28} color={colors.white} />
       </TouchableOpacity>
       <AddNoteQuizWindow visible={AddWindowVisible} onClose={closeAddWindow} />
       <FlatList
@@ -403,8 +404,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    bottom: 100,
-    right: 20,
+    bottom: 125,
+    right: 30,
     shadowColor: colors.gray_bgblur,
     shadowOffset: [{ width: 0, height: 0 }],
     shadowOpacity: 0.25,
