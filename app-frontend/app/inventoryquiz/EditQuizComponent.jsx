@@ -12,7 +12,6 @@ const EditQuizComponent = ({ quizId }) => {
   return (
     <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
       <AntDesign name="edit" size={24} color="black" />
-      <Text style={styles.editText}>Edit</Text>
     </TouchableOpacity>
   );
 };

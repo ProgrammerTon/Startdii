@@ -7,6 +7,7 @@ import {
   ScrollView,
   RefreshControl,
   TextInput,
+  Dimensions,
   Alert,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
@@ -33,6 +34,10 @@ import DeleteQuizComponent from "./DeleteQuizComponent";
 import EditQuizComponent from "./EditQuizComponent";
 import QuizFlow from "../quiz/F3_quizflow";
 import StatButton from "../Quiz_Component/StatButton";
+import BackButton from "../../components/BackButton";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+const { width, height } = Dimensions.get("window");
 
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();
@@ -151,66 +156,80 @@ const SumQuizPage = () => {
   }, []);
 
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          colors={["#9Bd35A", "#689F38"]} // Optional: Customize refresh colors
-        />
-      }
-    >
-      <View style={styles.headerWrapper}>
-        <Text style={styles.headerStyle}>{quiz?.title}</Text>
-        <EditQuizComponent
-          quizId={id} 
-        />
-        <DeleteQuizComponent
-          quizId={id} 
-        />
-      </View>
-      <DescriptionBlock QuizDescription={quiz?.description} />
-      <View style={styles.tagsContainer}>
-        {quiz?.tags.map((tag, ind) => {
-          return <Tag key={`${tag}-{ind}`} label={`#${tag}`} />;
-        })}
-      </View>
+    <View style={styles.container}>
+      {/* Header outside of ScrollView */}
       <View style={styles.headerContainer}>
-        <TimeDateBlock timeDate={quiz?.date} />
-        <UsernameBlock username={quiz?.ownerId?.username} />
+        <View style={styles.headerWrapper}>
+          <Text style={styles.headerStyle}>
+            {quiz?.title?.split(" ").reduce((acc, word, i) => {
+              return i % 10 === 0 && i !== 0
+                ? `${acc}\n${word}`
+                : `${acc} ${word}`;
+            }, "").trim()}
+          </Text>
+          {user?._id === quiz?.ownerId._id && (
+            <View style={styles.editDeleteContainer}>
+              <EditQuizComponent quizId={id} />
+              <DeleteQuizComponent quizId={id} />
+            </View>
+          )}
+        </View>
       </View>
-      <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
-      <StatButton handleOnPress={() => router.push({
-        pathname: '/inventoryquiz/F7_InvenStatistic',
-        params: {
-          quizId: id,  
-        },
-      })} />
-      <RatingBlock
-        ScoreRating={Math.round(quiz?.avg_rating_score)}
-        numComment={quiz?.rating_count}
-      />
-      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
-
-      {/* CommentBar with input */}
-      <CommentBar
-        value={commentInput}
-        handleChangeText={setCommentInput}
-        onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
-      />
-
-      {/* Render all comments */}
-      {comments.map((comment, index) => (
-        <CommentBox
-          key={index}
-          username={comment.username}
-          date={comment.date}
-          comment={comment.comment}
+  
+      {/* ScrollView for the rest of the content */}
+      <ScrollView
+        style={styles.scrollContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#9Bd35A", "#689F38"]} // Optional: Customize refresh colors
+          />
+        }
+      >
+        <DescriptionBlock QuizDescription={quiz?.description} />
+        <View style={styles.tagsContainer}>
+          {quiz?.tags.map((tag, ind) => {
+            return <Tag key={`${tag}-{ind}`} label={`#${tag}`} />;
+          })}
+        </View>
+        <View style={styles.headerContainer}>
+          <TimeDateBlock timeDate={quiz?.date} />
+          <UsernameBlock username={quiz?.ownerId?.username} />
+        </View>
+        <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
+        <StatButton handleOnPress={() => router.push({
+          pathname: '/inventoryquiz/F7_InvenStatistic',
+          params: {
+            quizId: id,  
+          },
+        })} />
+        <RatingBlock
+          ScoreRating={Math.round(quiz?.avg_rating_score)}
+          numComment={quiz?.rating_count}
         />
-      ))}
-    </ScrollView>
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+  
+        {/* CommentBar with input */}
+        <CommentBar
+          value={commentInput}
+          handleChangeText={setCommentInput}
+          onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
+        />
+  
+        {/* Render all comments */}
+        {comments.map((comment, index) => (
+          <CommentBox
+            key={index}
+            username={comment.username}
+            date={comment.date}
+            comment={comment.comment}
+          />
+        ))}
+      </ScrollView>
+    </View>
   );
+  
 };
 
 export default SumQuizPage;
@@ -218,35 +237,45 @@ export default SumQuizPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: "#F8F8F8",
+    backgroundColor: colors.gray_bg,
+    height: "100%",
+  },
+  scrollContainer: {
+    padding: 16, // Keep the padding for the ScrollView
   },
   headerStyle: {
     fontSize: 24,
     fontWeight: "bold",
+    flex: 1,
+    flexWrap: "wrap",   // Allows title to wrap if too long
+    flexShrink: 1,      // Prevents the buttons from shrinking
   },
   tagsContainer: {
     flexDirection: "row",
     marginVertical: 10,
   },
   headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 10,
+    padding: 0, // Set to 0 to remove padding
   },
   headerQs: {
     fontSize: 18,
     fontWeight: "bold",
     marginVertical: 10,
   },
+
   headerWrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#04B36E",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    position: "relative",
-    justifyContent: "center",
+    backgroundColor: colors.green,
+    paddingVertical: 0, // Optional: You can also keep this if needed
+    paddingHorizontal: 0, // Optional: You can also keep this if needed
+    height: height * 0.10,
+  },
+  editDeleteContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
+    flexGrow: 0,        // Ensures buttons remain visible and don't grow beyond
   },
 });
