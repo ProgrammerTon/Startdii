@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -36,52 +36,71 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { updateCostume } from "../../services/UserService";
 
 import { CharacterContext } from "../profile/charcontext";
+import { getUserLevel } from "../../services/LevelService";
 
 const Tab = createMaterialTopTabNavigator();
 
 function ShapeDetails({ onCharSelect, color }) {
+  const { selectedChar, setSelectedChar } = useContext(CharacterContext);
+  const handleColorSelect = (char) => {
+    setSelectedChar(char);
+    onCharSelect(char);
+  };
+  const isSelected = (char) => selectedChar === char;
   return (
     <SafeAreaView style={styles.bg}>
       <ScrollView style={{ backgroundColor: colors.white }}>
         <View style={styles.rowcontainer}>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onCharSelect("Char1")}
-          >
-            <Char1 color={color} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onCharSelect("Char2")}
-          >
-            <Char2 color={color} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onCharSelect("Char3")}
-          >
-            <Char3 color={color} />
-          </TouchableOpacity>
+          <View style={isSelected('Char1') ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleColorSelect("Char1")}
+            >
+              <Char1 color={color} />
+            </TouchableOpacity>
+          </View>
+          <View style={isSelected('Char2') ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleColorSelect("Char2")}
+            >
+              <Char2 color={color} />
+            </TouchableOpacity>
+          </View>
+          <View style={isSelected('Char3') ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleColorSelect("Char3")}
+            >
+              <Char3 color={color} />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.rowcontainer}>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onCharSelect("Char4")}
-          >
-            <Char4 color={color} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onCharSelect("Char5")}
-          >
-            <Char5 color={color} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onCharSelect("Char6")}
-          >
-            <Char6 color={color} />
-          </TouchableOpacity>
+          <View style={isSelected('Char4') ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleColorSelect("Char4")}
+            >
+              <Char4 color={color} />
+            </TouchableOpacity>
+          </View>
+          <View style={isSelected('Char5') ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleColorSelect("Char5")}
+            >
+              <Char5 color={color} />
+            </TouchableOpacity>
+          </View>
+          <View style={isSelected('Char6') ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleColorSelect("Char6")}
+            >
+              <Char6 color={color} />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -89,54 +108,72 @@ function ShapeDetails({ onCharSelect, color }) {
 }
 
 function ColourDetails({ onColorSelect }) {
+  const { selectedColor, setSelectedColor } = useContext(CharacterContext);
+  const handleColorSelect = (color) => {
+    setSelectedColor(color);
+    onColorSelect(color);
+  };
+  const isSelected = (color) => selectedColor === color;
   return (
     <SafeAreaView style={styles.bg}>
       <ScrollView style={{ backgroundColor: colors.white }}>
         <View style={styles.rowcontainer}>
-          <View style={styles.eachcontainer}>
-            <TouchableOpacity onPress={() => onColorSelect(colors.green)}>
-              <View
-                style={[styles.colorbutton, { backgroundColor: colors.green }]}
-              />
-            </TouchableOpacity>
+          <View style={isSelected(colors.green) ? styles.selected : styles.unselected}>
+            <View style={styles.eachcontainer}>
+              <TouchableOpacity onPress={() => handleColorSelect(colors.green)}>
+                <View
+                  style={[styles.colorbutton, { backgroundColor: colors.green }]}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.eachcontainer}>
-            <TouchableOpacity onPress={() => onColorSelect(colors.blue)}>
-              <View
-                style={[styles.colorbutton, { backgroundColor: colors.blue }]}
-              />
-            </TouchableOpacity>
+          <View style={isSelected(colors.blue) ? styles.selected : styles.unselected}>
+            <View style={styles.eachcontainer}>
+              <TouchableOpacity onPress={() => handleColorSelect(colors.blue)}>
+                <View
+                  style={[styles.colorbutton, { backgroundColor: colors.blue }]}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.eachcontainer}>
-            <TouchableOpacity onPress={() => onColorSelect(colors.red)}>
-              <View
-                style={[styles.colorbutton, { backgroundColor: colors.red }]}
-              />
-            </TouchableOpacity>
+          <View style={isSelected(colors.red) ? styles.selected : styles.unselected}>
+            <View style={styles.eachcontainer}>
+              <TouchableOpacity onPress={() => handleColorSelect(colors.red)}>
+                <View
+                  style={[styles.colorbutton, { backgroundColor: colors.red }]}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
         <View style={styles.rowcontainer}>
-          <View style={styles.eachcontainer}>
-            <TouchableOpacity onPress={() => onColorSelect(colors.pink)}>
-              <View
-                style={[styles.colorbutton, { backgroundColor: colors.pink }]}
-              />
-            </TouchableOpacity>
+          <View style={isSelected(colors.pink) ? styles.selected : styles.unselected}>
+            <View style={styles.eachcontainer}>
+              <TouchableOpacity onPress={() => handleColorSelect(colors.pink)}>
+                <View
+                  style={[styles.colorbutton, { backgroundColor: colors.pink }]}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.eachcontainer}>
-            <TouchableOpacity onPress={() => onColorSelect(colors.yellow)}>
-              <View
-                style={[styles.colorbutton, { backgroundColor: colors.yellow }]}
-              />
-            </TouchableOpacity>
+          <View style={isSelected(colors.yellow) ? styles.selected : styles.unselected}>
+            <View style={styles.eachcontainer}>
+              <TouchableOpacity onPress={() => handleColorSelect(colors.yellow)}>
+                <View
+                  style={[styles.colorbutton, { backgroundColor: colors.yellow }]}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.eachcontainer}>
-            <TouchableOpacity onPress={() => onColorSelect(colors.purple)}>
-              <View
-                style={[styles.colorbutton, { backgroundColor: colors.purple }]}
-              />
-            </TouchableOpacity>
+          <View style={isSelected(colors.purple) ? styles.selected : styles.unselected}>
+            <View style={styles.eachcontainer}>
+              <TouchableOpacity onPress={() => handleColorSelect(colors.purple)}>
+                <View
+                  style={[styles.colorbutton, { backgroundColor: colors.purple }]}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -144,109 +181,206 @@ function ColourDetails({ onColorSelect }) {
   );
 }
 
-function HatDetails({ onHatSelect }) {
+function HatDetails({ onHatSelect, level }) {
+  const { selectedHat, setSelectedHat } = useContext(CharacterContext);
+  const handleHatSelect = (hat, requiredLevel) => {
+    if (level >= requiredLevel) {
+      setSelectedHat(hat);
+      onHatSelect(hat);
+    }
+  };
+  const isSelected = (hat) => selectedHat === hat;
+  const isUnlocked = (requiredLevel) => level >= requiredLevel;
   return (
     <SafeAreaView style={styles.bg}>
       <ScrollView style={{ backgroundColor: colors.white }}>
         <View style={styles.rowcontainer}>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HNone")}
-          >
-            <HNone />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HBanana")}
-          >
-            <HBanana />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HCap")}
-          >
-            <HCap />
-          </TouchableOpacity>
+          <View style={isSelected("HNone") ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HNone", 0)}
+            >
+              <HNone />
+            </TouchableOpacity>
+          </View>
+          <View style={isSelected("HBanana") ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HBanana", 0)}
+            >
+              <HBanana />
+            </TouchableOpacity>
+          </View>
+          <View style={isSelected("HCap") ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HCap", 0)}
+            >
+              <HCap />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.rowcontainer}>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HCowboy")}
-          >
-            <HCowboy />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HCrown")}
-          >
-            <HCrown />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HDeer")}
-          >
-            <HDeer />
-          </TouchableOpacity>
+          <View style={isSelected("HCowboy") ? styles.selected : styles.unselected}>
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HCowboy", 0)}
+            >
+              <HCowboy />
+            </TouchableOpacity>
+          </View>
+          <View style={[isSelected("HCrown") ? styles.selected : styles.unselected, isUnlocked(5) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(5) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 5 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HCrown", 5)}
+              disabled={!isUnlocked(5)}
+            >
+              <HCrown />
+            </TouchableOpacity>
+          </View>
+          <View style={[isSelected("HDeer") ? styles.selected : styles.unselected, isUnlocked(10) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(10) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 10 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HDeer", 10)}
+              disabled={!isUnlocked(10)}
+            >
+              <HDeer />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.rowcontainer}>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HFlower")}
-          >
-            <HFlower />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HMagic")}
-          >
-            <HMagic />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HPlant")}
-          >
-            <HPlant />
-          </TouchableOpacity>
+          <View style={[isSelected("HFlower") ? styles.selected : styles.unselected, isUnlocked(15) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(15) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 15 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HFlower", 15)}
+              disabled={!isUnlocked(15)}
+            >
+              <HFlower />
+            </TouchableOpacity>
+          </View>
+          <View style={[isSelected("HMagic") ? styles.selected : styles.unselected, isUnlocked(20) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(20) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 20 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HMagic", 20)}
+              disabled={!isUnlocked(20)}
+            >
+              <HMagic />
+            </TouchableOpacity>
+          </View>
+          <View style={[isSelected("HPlant") ? styles.selected : styles.unselected, isUnlocked(25) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(25) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 25 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HPlant", 25)}
+              disabled={!isUnlocked(25)}
+            >
+              <HPlant />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.rowcontainer}>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HPlaster")}
-          >
-            <HPlaster />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HShark")}
-          >
-            <HShark />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HXmas")}
-          >
-            <HXmas />
-          </TouchableOpacity>
+          <View style={[isSelected("HPlaster") ? styles.selected : styles.unselected, isUnlocked(30) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(30) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 30 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HPlaster", 30)}
+              disabled={!isUnlocked(30)}
+            >
+              <HPlaster />
+            </TouchableOpacity>
+          </View>
+          <View style={[isSelected("HShark") ? styles.selected : styles.unselected, isUnlocked(35) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(35) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 35 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HShark", 35)}
+              disabled={!isUnlocked(35)}
+            >
+              <HShark />
+            </TouchableOpacity>
+          </View>
+          <View style={[isSelected("HXmas") ? styles.selected : styles.unselected, isUnlocked(40) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(40) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 40 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HXmas", 40)}
+              disabled={!isUnlocked(40)}
+            >
+              <HXmas />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.rowcontainer}>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HAfro")}
-          >
-            <HAfro />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.eachcontainer}
-            onPress={() => onHatSelect("HJuaz")}
-          >
-            <HJuaz />
-          </TouchableOpacity>
+          <View style={[isSelected("HAfro") ? styles.selected : styles.unselected, isUnlocked(45) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(45) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 45 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HAfro", 45)}
+              disabled={!isUnlocked(45)}
+            >
+              <HAfro />
+            </TouchableOpacity>
+          </View>
+          <View style={[isSelected("HJuaz") ? styles.selected : styles.unselected, isUnlocked(50) ? styles.unlocked : styles.locked]}>
+            {!isUnlocked(50) && (
+              <View style={styles.lockTextContainer}>
+                <Text style={[fonts.EngSemiBold14, styles.lockText]}>Level 50 to unlock</Text>
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.eachcontainer}
+              onPress={() => handleHatSelect("HJuaz", 50)}
+              disabled={!isUnlocked(50)}
+            >
+              <HJuaz />
+            </TouchableOpacity>
+          </View>
           <View
-              style={[{height:38,width:120, backgroundColor: colors.white}]}
+            style={styles.unselected}
           />
         </View>
 
@@ -259,6 +393,19 @@ export default function DressTest() {
   // const [selectedChar, setSelectedChar] = useState(<Char1 style={styles.char} />);
   // const [selectedColor, setSelectedColor] = useState(colors.green);
   // const [selectedHat, setSelectedHat] = useState('HNone');
+  const [userLevel, setUserLevel] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      loadUserLevel(user?._id);
+    }
+  }, [user]);
+
+  const loadUserLevel = async () => {
+    const user_lvl = await getUserLevel(user?._id);
+    setUserLevel(user_lvl);
+  };
+
   const {
     selectedChar,
     setSelectedChar,
@@ -341,6 +488,7 @@ export default function DressTest() {
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
         <BackButton></BackButton>
+        <Text style={[fonts.EngBold22, styles.headerText]}>Dressing Room</Text>
       </View>
 
       <View style={styles.mainContainer}>
@@ -359,9 +507,19 @@ export default function DressTest() {
         <Tab.Navigator
           screenOptions={{
             tabBarActiveTintColor: colors.red,
-            tabBarIndicatorStyle: { backgroundColor: colors.red },
-            tabBarLabelStyle: { fonts: fonts.EngMedium16 },
-            tabBarStyle: { backgroundColor: colors.white },
+            tabBarIndicatorStyle: {
+              backgroundColor: colors.red,
+              height: 3,
+              borderRadius: 50,
+            },
+            tabBarLabelStyle: fonts.EngSemiBold16,
+            tabBarStyle: {
+              backgroundColor: colors.white,
+              padding: 2,
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              elevation: 0,
+            },
           }}
         >
           <Tab.Screen name="Shape">
@@ -376,7 +534,7 @@ export default function DressTest() {
             {() => <ColourDetails onColorSelect={handleUpdateColor} />}
           </Tab.Screen>
           <Tab.Screen name="Hat">
-            {() => <HatDetails onHatSelect={handleUpdateHat} />}
+            {() => <HatDetails onHatSelect={handleUpdateHat} level={(userLevel) ? userLevel.level : 0} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>
@@ -394,6 +552,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.pink,
     textAlign: "center",
     height: "10.625%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerText: {
+    color: colors.black,
   },
   tabContainer: {
     flex: 1,
@@ -404,7 +568,6 @@ const styles = StyleSheet.create({
     height: "45.125%",
   },
   eachcontainer: {
-    //backgroundColor:colors.green,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -437,10 +600,43 @@ const styles = StyleSheet.create({
     position: "relative", // Ensures the child elements (hat) can be positioned absolutely inside this container
   },
   hatContainer: {
-    //backgroundColor:colors.green,
     height: "56%",
     width: "56%",
     top: "-104%",
     left: "22.5%",
+  },
+  selected: {
+    flex: 1,
+    borderWidth: 3,
+    borderColor: colors.gray_button,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  unselected: {
+    flex: 1,
+    borderWidth: 3,
+    borderColor: 'transparent',
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  locked: {
+    flex: 1,
+    backgroundColor: colors.white,
+    opacity: 0.35,
+  },
+  unlocked: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  lockTextContainer: {
+    zIndex: 1,
+    textAlign: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    top: '40%',
+  },
+  lockText: {
+    color: colors.black,
   },
 });

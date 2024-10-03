@@ -1,23 +1,8 @@
 import { View } from "react-native";
 import React, { useState } from "react";
 import GoalProcess from "./GoalProcess";
-import { getUserGoal } from "../services/LevelService";
-import { useEffect } from "react";
 
-export default function WeeklyGoals({ id }) {
-  const [userGoal, setUserGoal] = useState(null);
-
-  useEffect(() => {
-    if (id) {
-      loadUserGoal();
-    }
-  }, [id]);
-
-  const loadUserGoal = async () => {
-    const user_goal = await getUserGoal(id);
-    setUserGoal(user_goal);
-  };
-
+export default function WeeklyGoals({ userGoal }) {
   return (
     <View style={styles.container}>
       {userGoal?.map((goal, index) => {
@@ -25,9 +10,9 @@ export default function WeeklyGoals({ id }) {
           <GoalProcess
             key={index}
             title={goal.goalId.title}
-            percent={`${
-              Math.round(goal.current_progress / goal.goalId.objective_count * 100)
-            }%`}
+            percent={`${Math.round(
+              (goal.current_progress / goal.goalId.objective_count) * 100
+            )}%`}
           />
         );
       })}

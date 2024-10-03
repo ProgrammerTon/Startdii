@@ -23,7 +23,7 @@ import colors from "../../constants/color";
 
 const GuildPage = () => {
   const [guilds, setGuilds] = useState([]);
-  const [refreshing, setRefreshing] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const { isLogged } = useGlobalContext();
   const { setGuildId } = useGuildContext();
 
@@ -31,10 +31,21 @@ const GuildPage = () => {
     if (!isLogged) {
       router.replace("/sign-in");
     } else {
+      setRefreshing(true);
       loadGuildsData();
       setRefreshing(false);
     }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!isLogged) {
+        router.replace("/sign-in");
+      } else {
+        loadGuildsData();
+      }
+    }, [])
+  );
 
   const loadGuildsData = async () => {
     const guilds = await guildList();
