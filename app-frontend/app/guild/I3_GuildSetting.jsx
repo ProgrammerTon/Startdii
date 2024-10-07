@@ -57,7 +57,7 @@ const GuildSettingPage = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>{guildName}</Text>
+        <Text style={styles.headerText}>{guild?.name}</Text>
       </View>
 
       {/* Buttons */}
