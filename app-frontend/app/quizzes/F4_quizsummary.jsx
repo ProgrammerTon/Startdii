@@ -104,11 +104,6 @@ const QuizSummaryPage = ({
     await fetchRating();
   };
 
-  const fetchRating = async () => {
-    const data = await getUserRatingQuiz(user._id, quiz._id);
-    setRatingScore(data);
-  };
-
   const handleRating = async (sc) => {
     await ratingQuiz(id, user._id, sc);
     setRatingScore(sc);
