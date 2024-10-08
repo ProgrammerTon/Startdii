@@ -21,6 +21,7 @@ import { getCommentsQuiz } from "../../services/CommentService";
 import StatButton from "../Quiz_Component/StatButton";
 import { createCommentSource } from "../../services/CommentService";
 import { router } from "expo-router";
+import { ratingQuiz } from "../../services/QuizService";
 import { getUserRatingQuiz } from "../../services/QuizService";
 
 const { width, height } = Dimensions.get("window");
@@ -103,10 +104,22 @@ const QuizSummaryPage = ({
     await fetchRating();
   };
 
+  const fetchRating = async () => {
+    const data = await getUserRatingQuiz(user._id, quiz._id);
+    setRatingScore(data);
+  };
+
   const handleRating = async (sc) => {
     await ratingQuiz(id, user._id, sc);
     setRatingScore(sc);
+    fetchQuiz();
   };
+
+  useEffect(() => {
+    if (user && quiz) {
+      fetchRating();
+    }
+  }, [user, quiz]);
 
   useEffect(() => {
     setRefreshing(true);
@@ -144,13 +157,11 @@ const QuizSummaryPage = ({
         userAnswers={userAnswers}
         quizData={quizData}
       />
-      <View style={styles.ratingContainer}>
-        <RatingBlock
-          ScoreRating={Math.round(quiz?.averageScore)}
-          numComment={quiz?.count}
-        />
-        <RatingBar onRatingChange={handleRating} initialRating={ratingScore}/>
-      </View>
+      <RatingBlock
+        ScoreRating={Math.round(quiz?.averageScore)}
+        numComment={quiz?.count}
+      />
+      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
 
       {/* CommentBar with input */}
       <View style={styles.commentContainer}>

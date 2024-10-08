@@ -7,6 +7,7 @@ import {
   ScrollView,
   RefreshControl,
   TextInput,
+  Dimensions,
   Alert,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
@@ -33,10 +34,13 @@ import DeleteQuizComponent from "./DeleteQuizComponent";
 import EditQuizComponent from "./EditQuizComponent";
 import QuizFlow from "../quiz/F3_quizflow";
 import StatButton from "../Quiz_Component/StatButton";
+import BackButton from "../../components/BackButton";  // Add BackButton import
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+const { width, height } = Dimensions.get("window");
 
 const SumQuizPage = () => {
   const { id } = useLocalSearchParams();
-  //console.log(`Best ${id}`);
   const TotalQuestion = 11;
   const [quiz, setQuiz] = useState(null);
   const { user } = useGlobalContext();
@@ -46,41 +50,30 @@ const SumQuizPage = () => {
 
   // State to hold the list of comments
   const [comments, setComments] = useState([]);
-  // State for the input value in the CommentBar
   const [commentInput, setCommentInput] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
-  // Function to handle submitting a new comment
   const handleSubmitComment = async () => {
-    if (commentInput.trim() === "") return; // Prevent empty comments
-
-    // Create a new comment object
+    if (commentInput.trim() === "") return;
     const newComment = {
-      username: user.username, // Replace with dynamic username if available
+      username: user.username,
       date: new Date().toLocaleDateString(),
       comment: commentInput,
     };
-
-    // Add the new comment to the top of the comments list
     setComments([newComment, ...comments]);
 
     const data = await createCommentSource(null, id, commentInput);
     if (!data) {
       Alert.alert("Failed");
     }
-
-    // Clear the comment input
     setCommentInput("");
   };
 
   const fetchQuiz = async () => {
-    console.log(`Kuy ${id}`);
     const data = await findQuiz(id);
-    console.log("Quiz", data);
     if (!data) {
       return null;
     }
-    //console.log("Quiz", data);
     const date = new Date(data.updatedAt);
     const formattedDate = new Intl.DateTimeFormat("en-GB", {
       year: "2-digit",
@@ -88,7 +81,7 @@ const SumQuizPage = () => {
       day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
-      hour12: false, // 24-hour format
+      hour12: false,
     }).format(date);
     data.date = formattedDate;
     setQuiz(data);
@@ -112,7 +105,7 @@ const SumQuizPage = () => {
   const fetchComments = async () => {
     const data = await getCommentsQuiz(id);
     const newComment = data.map((com) => ({
-      username: com.parentComment.username, // Replace with dynamic username if available
+      username: com.parentComment.username,
       date: new Date(com.parentComment.updatedAt).toLocaleDateString(),
       comment: com.parentComment.content,
     }));
@@ -151,65 +144,87 @@ const SumQuizPage = () => {
   }, []);
 
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          colors={["#9Bd35A", "#689F38"]} // Optional: Customize refresh colors
-        />
-      }
-    >
-      <View style={styles.headerWrapper}>
-        <Text style={styles.headerStyle}>{quiz?.title}</Text>
-        <EditQuizComponent
-          quizId={id} 
-        />
-        <DeleteQuizComponent
-          quizId={id} 
-        />
+    <View style={styles.container}>
+      {/* Header with BackButton */}
+      <View style={styles.header}>
+        <BackButton />
+        <Text style={[fonts.EngBold22, styles.headerTitle]}>
+          {quiz?.title?.match(/.{1,15}/g).join("\n")} {/* Handle long title */}
+        </Text>
+        {user?._id === quiz?.ownerId._id && (
+          <View style={styles.editDeleteContainer}>
+            <EditQuizComponent quizId={id} />
+            <DeleteQuizComponent quizId={id} />
+          </View>
+        )}
       </View>
-      <DescriptionBlock QuizDescription={quiz?.description} />
-      <View style={styles.tagsContainer}>
-        {quiz?.tags.map((tag, ind) => {
-          return <Tag key={`${tag}-{ind}`} label={`#${tag}`} />;
-        })}
-      </View>
-      <View style={styles.headerContainer}>
-        <TimeDateBlock timeDate={quiz?.date} />
-        <UsernameBlock username={quiz?.ownerId?.username} />
-      </View>
-      <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
-      <StatButton handleOnPress={() => router.push({
-        pathname: '/inventoryquiz/F7_InvenStatistic',
-        params: {
-          quizId: id,  
-        },
-      })} />
-      <RatingBlock
-        ScoreRating={Math.round(quiz?.avg_rating_score)}
-        numComment={quiz?.rating_count}
-      />
-      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
 
-      {/* CommentBar with input */}
-      <CommentBar
-        value={commentInput}
-        handleChangeText={setCommentInput}
-        onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
-      />
+      {/* ScrollView for the content */}
+      <ScrollView
+        style={styles.scrollContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#9Bd35A", "#689F38"]}
+          />
+        }
+      >
+        <View style={styles.infoContainer}>
+          <Text style={[fonts.EngRegular16, styles.description]}>
+            {quiz?.description}
+          </Text>
+          {quiz && <TagList tags={quiz?.tags} />}
+          <View style={styles.dateAuthorContainer}>
+            <Text style={[fonts.EngRegular12, styles.dateText]}>
+              {quiz?.date}
+            </Text>
+            <TouchableOpacity
+              style={styles.authorContainer}
+              // onPress={() => router.push(`profile/${quiz.ownerId._id}`)}
+            >
+              <Text style={[fonts.EngMedium12, styles.authorText]}>
+                By {quiz?.ownerId?.username}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      {/* Render all comments */}
-      {comments.map((comment, index) => (
-        <CommentBox
-          key={index}
-          username={comment.username}
-          date={comment.date}
-          comment={comment.comment}
+        <Text style={styles.headerQs}>{quiz?.questions?.length} Questions</Text>
+        <StatButton
+          handleOnPress={() =>
+            router.push({
+              pathname: "/inventoryquiz/F7_InvenStatistic",
+              params: {
+                quizId: id,
+              },
+            })
+          }
         />
-      ))}
-    </ScrollView>
+        <RatingBlock
+          ScoreRating={Math.round(quiz?.avg_rating_score)}
+          numComment={quiz?.rating_count}
+        />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+
+        {/* CommentBar with input */}
+        <CommentBar
+          value={commentInput}
+          handleChangeText={setCommentInput}
+          onSubmit={handleSubmitComment}
+        />
+
+        {/* Render all comments */}
+        {comments.map((comment, index) => (
+          <CommentBox
+            key={index}
+            username={comment.username}
+            date={comment.date}
+            comment={comment.comment}
+          />
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
@@ -218,35 +233,67 @@ export default SumQuizPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: "#F8F8F8",
+    backgroundColor: colors.gray_bg,
+    height: "100%",
   },
-  headerStyle: {
-    fontSize: 24,
-    fontWeight: "bold",
+  scrollContainer: {
+    padding: 16,
+  },
+  header: {
+    backgroundColor: colors.green,
+    textAlign: "center",
+    height: "10.625%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: width * 0.05,
+    position: "relative",
+  },
+  headerTitle: {
+    marginLeft: width * 0.13,
+    flexGrow: 1, 
+    color: colors.black,
+    textAlign: "center",
+  },
+  editDeleteContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   tagsContainer: {
     flexDirection: "row",
     marginVertical: 10,
   },
   headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 10,
+    padding: 0,
   },
   headerQs: {
     fontSize: 18,
     fontWeight: "bold",
     marginVertical: 10,
   },
-  headerWrapper: {
+  infoContainer: {
+    marginVertical: 20,
+    marginHorizontal: width * 0.05,
+  },
+  dateAuthorContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#04B36E",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    position: "relative",
-    justifyContent: "center",
+    marginTop: 10,
+  },
+  authorText: {
+    color: colors.blue,
+  },
+  description: {
+    marginBottom: 10,
+    color: colors.black,
+  },
+  authorContainer: {
+    backgroundColor: colors.white,
+    paddingVertical: 6,
+    paddingHorizontal: width * 0.025,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: colors.blue,
   },
 });

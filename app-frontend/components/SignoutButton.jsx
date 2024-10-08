@@ -7,7 +7,11 @@ import SignUp from "../app/(auth)/sign-in";
 import { useGlobalContext } from "../context/GlobalProvider";
 import { logoutUser } from "../utils/asyncstroage";
 import { router } from "expo-router";
+<<<<<<< HEAD
 import RecheckBox from "./recheckbox";
+=======
+import RecheckBox from "./RecheckBox";
+>>>>>>> ca70dc94395848e0fd31487b02cd66af986122bb
 
 const SignoutButton = ({ onPress, style, navigation }) => {
   const { setUser, setIsLogged } = useGlobalContext();

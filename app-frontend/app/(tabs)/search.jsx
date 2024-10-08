@@ -17,6 +17,8 @@ import { addChatList } from "../../services/ChatListService";
 import { router } from "expo-router";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const UserFinderPage = () => {
   const [searchUsername, setSearchUsername] = useState("");
@@ -61,7 +63,7 @@ const UserFinderPage = () => {
         onSubmit={onSubmit}
       />
 
-      <ScrollView className="mb-20">
+      <ScrollView>
         {userFound.map((user, ind) => {
           return (
             <UserNameComponent
@@ -81,7 +83,7 @@ export default UserFinderPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: colors.gray_bg,
     padding: 20,
     paddingTop: 50,
   },

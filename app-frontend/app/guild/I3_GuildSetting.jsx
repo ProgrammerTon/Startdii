@@ -57,7 +57,7 @@ const GuildSettingPage = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>{guildName}</Text>
+        <Text style={styles.headerText}>{guild?.name}</Text>
       </View>
 
       {/* Buttons */}
@@ -81,7 +81,7 @@ const GuildSettingPage = () => {
         />
 
         {/* Search Button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.button}
           onPress={() => {
             router.push("/guild/I5_Search");
@@ -89,7 +89,7 @@ const GuildSettingPage = () => {
         >
           <Ionicons name="search" size={24} color="green" />
           <Text style={styles.buttonText}>SEARCH</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity style={styles.button} onPress={openLeaveWindow}>
           <Ionicons name="exit-outline" size={24} color="green" />

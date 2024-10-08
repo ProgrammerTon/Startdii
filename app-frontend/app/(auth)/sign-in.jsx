@@ -133,7 +133,7 @@ export default function SignIn() {
     buttonContainer: {
       position: "absolute",
       alignItems: "center",
-      bottom: "50.5%",
+      bottom: "57.5%",
     },
   };
 
@@ -159,13 +159,17 @@ export default function SignIn() {
               value={form.password}
               handleChangeText={(e) => setForm({ ...form, password: e })}
               otherStyles="mt-3"
+              ispass={true}
             />
-
+{/*
             <TouchableOpacity style={styles.box} onPress={submit}>
+              
               <Text style={[fonts.EngMedium12, styles.text]}>
                 Forgot Password ?
               </Text>
+
             </TouchableOpacity>
+*/}
           </View>
           <View style={styles.buttonContainer}>
             <Button
@@ -186,12 +190,12 @@ export default function SignIn() {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableHighlight
+        {/* <TouchableHighlight
           onPress={() => router.push("/dev")}
           className="bg-green-600 p-2 rounded-xl"
         >
           <Text className="text-lg">Dev</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
       </ScrollView>
     </SafeAreaView>
   );

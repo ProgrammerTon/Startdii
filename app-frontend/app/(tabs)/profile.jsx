@@ -102,7 +102,11 @@ export default function ProfileTest() {
   );
 
   useEffect(() => {
-    initPage();
+    if (!isLogged) {
+      router.replace("/sign-in");
+    } else {
+      initPage();
+    }
   }, []);
 
   const loadUserLevel = async () => {
@@ -208,18 +212,6 @@ export default function ProfileTest() {
     }
   };
 
-  const menuItems = [
-    { id: "1", name: "Weekly Goals" },
-    { id: "2", name: "Inventory" },
-    { id: "3", name: "History" },
-  ];
-
-  useEffect(() => {
-    if (!isLogged) {
-      router.replace("/sign-in");
-    }
-  }, []);
-
   return refreshing ? (
     <Loading />
   ) : (
@@ -234,9 +226,9 @@ export default function ProfileTest() {
           <Text style={[fonts.EngBold22, styles.username]}>
             {user?.username}
           </Text>
-          <View style={styles.pencilContainer}>
+          {/* <View style={styles.pencilContainer}>
             <PencilIcon />
-          </View>
+          </View> */}
         </TouchableOpacity>
         <View style={styles.signoutContainer}>
           <SignoutButton onPress={() => {}} />
@@ -256,7 +248,7 @@ export default function ProfileTest() {
 
 const styles = {
   bg: {
-    height: height * 0.89,
+    height: height,
     backgroundColor: colors.gray_bg,
   },
   toptab: {
@@ -267,6 +259,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: width * 0.1,
+    paddingTop: height * 0.025,
     marginTop: height * 0.025,
     position: "relative",
   },
@@ -283,6 +276,7 @@ const styles = {
   signoutContainer: {
     position: "absolute",
     right: 20,
+    paddingTop: height * 0.025,
   },
   pencilContainer: {
     bottom: -2,

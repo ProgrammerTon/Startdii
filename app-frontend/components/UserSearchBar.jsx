@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
+import colors from "../constants/color";
+import fonts from "../constants/font";
 
 const UserSearchBar = ({ value, handleChangeText, onSubmit }) => {
   return (
@@ -13,7 +15,7 @@ const UserSearchBar = ({ value, handleChangeText, onSubmit }) => {
       <TextInput
         style={styles.searchInput}
         placeholder="Search"
-        placeholderTextColor="#c4c4c4"
+        placeholderTextColor={colors.gray_button}
         value={value}
         onSubmitEditing={onSubmit}
         onChangeText={handleChangeText}
@@ -25,11 +27,16 @@ const UserSearchBar = ({ value, handleChangeText, onSubmit }) => {
 const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 25,
     paddingHorizontal: 15,
     paddingVertical: 10,
     marginBottom: 20,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   searchInput: {
     flex: 1,
