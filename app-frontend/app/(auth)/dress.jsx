@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import Entypo from "@expo/vector-icons/Entypo";
+import { Redirect, router } from "expo-router";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
 import BackButton from "../../components/BackButton";
@@ -37,6 +39,7 @@ import { updateCostume } from "../../services/UserService";
 
 import { CharacterContext } from "../profile/charcontext";
 import { getUserLevel } from "../../services/LevelService";
+const { width, height } = Dimensions.get("window");
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -487,7 +490,12 @@ export default function DressTest() {
   return (
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
-        <BackButton></BackButton>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.pink} />
+        </TouchableOpacity>
         <Text style={[fonts.EngBold22, styles.headerText]}>Dressing Room</Text>
       </View>
 
@@ -555,6 +563,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
     color: colors.black,
