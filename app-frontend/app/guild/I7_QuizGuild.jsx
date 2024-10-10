@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList, RefreshControl } from "react-native";
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Dimensions, RefreshControl } from "react-native";
 import QuizCard from "../../components/F1_QuizCard";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
 import { getGuildQuiz } from "../../services/ChatService";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get("window");
 
 const QuizGuildPage = () => {
   const { user } = useGlobalContext();
@@ -64,6 +67,15 @@ const QuizGuildPage = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.green} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Quiz</Text>
+      </View>
       <FlatList
         data={data}
         renderItem={({ item }) => {
@@ -87,6 +99,7 @@ const QuizGuildPage = () => {
         contentContainerStyle={{ paddingBottom: 110 }}
         onEndReached={() => fetchData(offset)}
         onEndReachedThreshold={0.1}
+        style={styles.quizList}
       />
     </View>
   );
@@ -100,4 +113,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: 0,
   },
+  header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.green,
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
+  },
+  headerText: {
+    fontSize: 20,
+    color: "#000",
+    fontWeight: "bold",
+  },
+  quizList: {
+    padding: 20,
+  }
 });
