@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
+  TouchableOpacity,
   StyleSheet,
   ScrollView,
   Dimensions,
@@ -27,6 +28,8 @@ import { useQuestionContext } from "../../context/QuestionProvider";
 import StatButton from "../Quiz_Component/StatButton";
 import { getUserRatingQuiz } from "../../services/QuizService";
 import Loading from "../test_loading/test";
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -155,6 +158,12 @@ const QuizSummaryPage = () => {
       }
     >
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.green} />
+        </TouchableOpacity>
         <Text style={styles.headerText}>Finished</Text>
       </View>
       {/* Score and progress bar container */}
@@ -216,6 +225,13 @@ const styles = StyleSheet.create({
     padding: height * 0.02,
     alignItems: "center",
     justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
     fontSize: 24,

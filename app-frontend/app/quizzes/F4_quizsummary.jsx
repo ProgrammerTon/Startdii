@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
+  TouchableOpacity,
   StyleSheet,
   ScrollView,
   Dimensions,
@@ -23,6 +24,8 @@ import { createCommentSource } from "../../services/CommentService";
 import { router } from "expo-router";
 import { ratingQuiz } from "../../services/QuizService";
 import { getUserRatingQuiz } from "../../services/QuizService";
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -135,6 +138,12 @@ const QuizSummaryPage = ({
       }
     >
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.green} />
+        </TouchableOpacity>
         <Text style={styles.headerText}>Finished</Text>
       </View>
 
@@ -152,11 +161,13 @@ const QuizSummaryPage = ({
         userAnswers={userAnswers}
         quizData={quizData}
       />
-      <RatingBlock
-        ScoreRating={Math.round(quiz?.averageScore)}
-        numComment={quiz?.count}
-      />
-      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      <View style={styles.ratingContainer}>
+        <RatingBlock
+          ScoreRating={Math.round(quiz?.averageScore)}
+          numComment={quiz?.count}
+        />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      </View>
 
       {/* CommentBar with input */}
       <View style={styles.commentContainer}>
@@ -193,6 +204,13 @@ const styles = StyleSheet.create({
     padding: height * 0.02,
     alignItems: "center",
     justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
     fontSize: 24,
