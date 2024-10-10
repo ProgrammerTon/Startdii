@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, FlatList, RefreshControl } from "react-native";
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Dimensions, RefreshControl } from "react-native";
 import SourceCard from "../../components/E1_SourceCard";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import { getGuildSource } from "../../services/ChatService";
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get("window");
 
 const NoteUserPage = () => {
   const { user } = useGlobalContext();
@@ -51,6 +54,15 @@ const NoteUserPage = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Note</Text>
+      </View>
       <FlatList
         data={data}
         renderItem={({ item }) => {
@@ -74,6 +86,7 @@ const NoteUserPage = () => {
         contentContainerStyle={{ paddingBottom: 110 }}
         onEndReached={() => fetchData()}
         onEndReachedThreshold={0.1}
+        style={styles.sourceList}
       />
     </View>
   );
@@ -85,7 +98,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 0,
-    padding: 20,
   },
+  header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.yellow,
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
+  },
+  headerText: {
+    fontSize: 20,
+    color: "#000",
+    fontWeight: "bold",
+  },
+  sourceList: {
+    padding: 20,
+  }
 });
