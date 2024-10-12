@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: colors.blue,
     textAlign: "center",
-    height: "10.625%",
+    height: "9.625%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

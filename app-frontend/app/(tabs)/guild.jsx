@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.gray_bg,
-    paddingTop: 35,
   },
   guildContainer: {
     padding: 20,

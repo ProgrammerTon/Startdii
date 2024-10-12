@@ -6,7 +6,7 @@ import { router,useRouter } from 'expo-router';
 const BackButton = () => {
 
   return (
-    <TouchableOpacity style={styles.button} onPress={() => router.push("/(tabs)/profile")} >
+    <TouchableOpacity style={styles.button} onPress={() => router.back()} >
       <Svg
         style={styles.iconContainer}
         viewBox="0 0 22 19"
