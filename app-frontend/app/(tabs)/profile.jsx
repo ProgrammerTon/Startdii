@@ -254,7 +254,7 @@ const styles = {
   toptab: {
     backgroundColor: colors.pink,
     textAlign: "center",
-    height: height * 0.10625,
+    height: "7.325%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

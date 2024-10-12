@@ -5,7 +5,7 @@ import GuildProvider from "../../context/GuildProvider";
 
 const _layout = () => {
   return (
-    <GuildProvider>
+    <GuildProvider >
       <Slot />
     </GuildProvider>
   );

@@ -11,6 +11,7 @@ import {
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
+import Svg, { Path } from 'react-native-svg';
 import BackButton from "../../components/BackButton";
 import Char1 from "../../components/charactor/Charactor01";
 import Char2 from "../../components/charactor/Charactor02";
@@ -638,5 +639,23 @@ const styles = StyleSheet.create({
   },
   lockText: {
     color: colors.black,
+  },
+  button: {
+    position: "absolute",
+    left: '-3%',
+    BOTTOM: '5%',
+    backgroundColor: colors.white,
+    borderRadius: 30,
+    height: 42,
+    width: 42,
+    zIndex: 1,
+    alignItems: "center",
+    justifyContent: 'center',
+  },
+  iconContainer: {
+    justifyContent: 'center', // Center the SVG vertically
+    alignItems: 'center', // Center the SVG horizontally
+    height: '100%', // Ensure container fills the button
+    width: '100%',  // Ensure container fills the button
   },
 });

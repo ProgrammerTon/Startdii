@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text , Alert} from 'react-native';
 import Entypo from "@expo/vector-icons/Entypo";
 import ReportNoteWindow from './NoteReport';
 import colors from '../../constants/color';
@@ -28,6 +28,7 @@ const TestReportNote = ({sourceId}) => {
         onSubmit={(reason, description) => {
           console.log("Selected Reason:", reason);
           console.log("Description:", description);
+          Alert.alert("Report Success!");
           closeModal();
         }
    }
