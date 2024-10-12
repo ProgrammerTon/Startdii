@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
   ActivityIndicator,
   Alert,
@@ -12,6 +13,9 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
 import { findQuiz } from "../../services/QuizService"; 
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get("window");
 
 const QuizDesEdit = () => {
   const { quizId, } = useLocalSearchParams(); 
@@ -81,8 +85,16 @@ const QuizDesEdit = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Edit Quiz</Text>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.green} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Edit Quiz</Text>
+      </View>
+      <ScrollView style={styles.content}>
 
         <Text style={styles.label}>Name</Text>
         <TextInput
@@ -132,8 +144,32 @@ export default QuizDesEdit;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#f4f4f4",
+  },
+  header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.green,
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
+  },
+  headerText: {
+    fontSize: 24,
+    color: "#000",
+    fontWeight: "bold",
+  },
+  content: {
+    padding: 20
   },
   loadingContainer: {
     flex: 1,
@@ -170,7 +206,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 15,
     backgroundColor: "#fff",
-    textAlignVertical: "top", // Ensures text starts at the top-left
   },
   buttonContainer: {
     flexDirection: "row",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Modal, TouchableWithoutFeedback, Pressable } from 'react-native';
 
 const UploadCompleteWindow = ({ visible, onClose }) => {
   return (
@@ -9,11 +9,13 @@ const UploadCompleteWindow = ({ visible, onClose }) => {
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={styles.modalContainer}>
-        <Pressable style={styles.InteractButton} onPress={onClose}>
-            <Text style={styles.InteractButtonText}>Upload Complete!</Text>
-        </Pressable>
-      </View>
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.modalContainer}>
+          <Pressable style={styles.InteractButton} onPress={onClose}>
+              <Text style={styles.InteractButtonText}>Upload Complete!</Text>
+          </Pressable>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };

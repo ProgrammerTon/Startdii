@@ -37,6 +37,7 @@ import StatButton from "../Quiz_Component/StatButton";
 import BackButton from "../../components/BackButton";  // Add BackButton import
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
+import Entypo from "@expo/vector-icons/Entypo";
 const { width, height } = Dimensions.get("window");
 
 const SumQuizPage = () => {
@@ -147,7 +148,12 @@ const SumQuizPage = () => {
     <View style={styles.container}>
       {/* Header with BackButton */}
       <View style={styles.header}>
-        <BackButton />
+      <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.green} />
+        </TouchableOpacity>
         <Text style={[fonts.EngBold22, styles.headerTitle]}>
           {quiz?.title?.match(/.{1,15}/g).join("\n")} {/* Handle long title */}
         </Text>
@@ -248,6 +254,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: width * 0.05,
     position: "relative",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerTitle: {
     marginLeft: width * 0.13,
