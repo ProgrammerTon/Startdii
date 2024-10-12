@@ -52,6 +52,7 @@ import Loading from "../test_loading/test";
 import TestReportUser from "../reportsystem/ReportUser";
 import BackButton from "../../components/BackButton";
 import Svg, { Path } from 'react-native-svg';
+import Entypo from "@expo/vector-icons/Entypo";
 const { width, height } = Dimensions.get('window');
 
 export default function ProfileTest() {
@@ -190,26 +191,19 @@ export default function ProfileTest() {
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
         <View style={styles.usernameContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => router.back()} >
-            <Svg
-              style={styles.iconContainer}
-              viewBox="0 0 22 19"
-              fill={colors.blue}
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg">
-              <Path
-                fillRule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clipRule="evenodd" />
-            </Svg>
-          </TouchableOpacity>
-          <Text style={[fonts.EngBold22, styles.username]}>
-            {user?.username}
-          </Text>
-          <TestReportUser
-            userId={id} // Pass the sourceId to the report window
-            onPress={() => console.log("Report Button Pressed")}
-          />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
+        </TouchableOpacity>
+        <Text style={[fonts.EngBold22, styles.username]}>
+          {user?.username}
+        </Text>
+        <TestReportUser
+          userId={id} // Pass the sourceId to the report window
+          onPress={() => console.log("Report Button Pressed")}
+        />
         </View>
       </View>
       <FlatList
@@ -224,17 +218,18 @@ export default function ProfileTest() {
 
 const styles = {
   bg: {
-    height: "100%",
+    flex: 1,
     backgroundColor: colors.gray_bg,
   },
   toptab: {
     backgroundColor: colors.pink,
     textAlign: "center",
-    height: "10.625%",
+    height: height * 0.1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     paddingHorizontal: 20,
+    paddingHorizontal: width * 0.1,
     position: "relative",
   },
   usernameContainer: {
@@ -242,6 +237,13 @@ const styles = {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: -width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   username: {
     color: colors.black,
@@ -301,18 +303,6 @@ const styles = {
   text: {
     color: colors.black,
     fontSize: 20,
-  },
-  button: {
-    position: "absolute",
-    left: '-3%',
-    BOTTOM: '5%',
-    backgroundColor: colors.white,
-    borderRadius: 30,
-    height: 42,
-    width: 42,
-    zIndex: 1,
-    alignItems: "center",
-    justifyContent: 'center',
   },
   iconContainer: {
     justifyContent: 'center', // Center the SVG vertically
