@@ -244,10 +244,10 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.yellow,
     textAlign: "center",
-    height: "10.625%",
+    height: height * 0.1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     paddingHorizontal: width * 0.05,
     position: "relative",
   },
@@ -259,8 +259,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   headerTitle: {
-    marginLeft: width * 0.13,
-    flexGrow: 1, 
+    //flexGrow: 1, 
     color: colors.black,
     textAlign: "center",
   },
