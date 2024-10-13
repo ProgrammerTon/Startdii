@@ -59,7 +59,7 @@ export default function QuizChoices({
             style={{ backgroundColor: "#fff", borderRadius: 30 }}
             onPress={() => setCloseQuiz(true)}
           >
-            <AntDesign name="closecircle" size={30} color="red" />
+            <AntDesign name="closecircle" size={35} color="red" />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
@@ -102,8 +102,8 @@ export default function QuizChoices({
           <View style={styles.leaveQuizPopUp}>
             <View>
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                {" "}
-                Do you want to Leave Quiz?{" "}
+                {""}
+                Do you want to Leave Quiz?{""}
               </Text>
             </View>
             <View
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignSelf: "flex-end",
-    marginRight: width * 0.05,
+    marginRight: width * 0.07,
     marginTop: height * 0.07,
   },
   quizNumber: {

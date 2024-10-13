@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image , ScrollView} from "react-native";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image , ScrollView} from "react-native";
+import { Ionicons, FontAwesome, Entypo } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
 import ChatSearchBar from "../../components/ChatSearchBar";
 import InviteCodeWindow from "./InviteCodeWindow";
@@ -13,6 +13,7 @@ import QuizGuildPage from "./I7_QuizGuild";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import images from "../../constants/images";
+const { width, height } = Dimensions.get("window");
 
 const GuildSettingPage = () => {
   const guildName = "Test_guild";
@@ -53,10 +54,15 @@ const GuildSettingPage = () => {
   };
 
   return (
-    <ScrollView>
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color="#fca6cc" />
+        </TouchableOpacity>
         <Text style={styles.headerText}>{guild?.name}</Text>
       </View>
 
@@ -128,12 +134,12 @@ const GuildSettingPage = () => {
           <Text style={styles.noteQuizText}>Quiz</Text>
         </TouchableOpacity>
         
-        <View style={styles.guildDescriptionContainer}>
+        {/* <View style={styles.guildDescriptionContainer}>
           <Text style={styles.guildDescriptionHeader}>Guild Name</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
             {guild.name}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.guildDescriptionContainer}>
           <Text style={styles.guildDescriptionHeader}>Guild Description</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
@@ -142,7 +148,7 @@ const GuildSettingPage = () => {
         </View>
       </View>
     </View>
-    </ScrollView>
+
   );
 };
 
@@ -155,17 +161,25 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fca6cc",
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    position: "relative",
     justifyContent: "center",
+    backgroundColor: "#fca6cc",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
-    color: "black",
-    fontSize: 18,
+    fontSize: 20,
+    color: "#000",
     fontWeight: "bold",
   },
   buttonsContainer: {
@@ -207,15 +221,31 @@ const styles = StyleSheet.create({
   },
   noteButton: {
     backgroundColor: "#FFF",
+    width: width * 0.7,
+    paddingVertical: 20,
     borderRadius: 10,
-    padding: 100,
+    marginTop: 10,
+    alignSelf: "center",
     alignItems: "center",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   quizButton: {
     backgroundColor: "#FFF",
+    width: width * 0.7,
+    paddingVertical: 20,
     borderRadius: 10,
-    padding: 50,
+    marginTop: height * 0.05,
+    alignSelf: "center",
     alignItems: "center",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   noteQuizText: {
     fontSize: 30,

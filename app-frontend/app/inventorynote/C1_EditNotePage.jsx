@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
   FlatList,
   KeyboardAvoidingView,
@@ -20,6 +21,9 @@ import { uploadFile } from "../../services/MyFileService";
 import { findSource,updateSource } from "../../services/SourceService";
 import { useLocalSearchParams } from "expo-router";
 import { router } from "expo-router";
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get("window");
 const EditNotePage = () => {
   const { sourceId } = useLocalSearchParams();
   const [name, setName] = useState("");
@@ -161,8 +165,16 @@ const EditNotePage = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Note</Text>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Edit Note</Text>
+      </View>
+      <ScrollView style={styles.content}>
 
         <Text style={styles.label}>Name</Text>
         <TextInput
@@ -254,15 +266,32 @@ const EditNotePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#f4f4f4",
   },
-  title: {
+  header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.yellow,
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
+  },
+  headerText: {
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
     color: "#000",
+    fontWeight: "bold",
+  },
+  content: {
+    padding: 20
   },
   label: {
     fontSize: 16,

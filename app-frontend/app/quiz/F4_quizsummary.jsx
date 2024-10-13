@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
+  TouchableOpacity,
   StyleSheet,
   ScrollView,
   Dimensions,
@@ -27,6 +28,8 @@ import { useQuestionContext } from "../../context/QuestionProvider";
 import StatButton from "../Quiz_Component/StatButton";
 import { getUserRatingQuiz } from "../../services/QuizService";
 import Loading from "../test_loading/test";
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -155,6 +158,12 @@ const QuizSummaryPage = () => {
       }
     >
       <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.green} />
+        </TouchableOpacity>
         <Text style={styles.headerText}>Finished</Text>
       </View>
       {/* Score and progress bar container */}
@@ -173,28 +182,32 @@ const QuizSummaryPage = () => {
           quizData={questions}
         />
       ) : null}
-      <RatingBlock
-        ScoreRating={Math.round(quiz?.averageScore)}
-        numComment={quiz?.count}
-      />
-      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      <View style={styles.ratingContainer}>
+        <RatingBlock
+          ScoreRating={Math.round(quiz?.averageScore)}
+          numComment={quiz?.count}
+        />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      </View>
 
       {/* CommentBar with input */}
-      <CommentBar
-        value={commentInput}
-        handleChangeText={setCommentInput}
-        onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
-      />
-
-      {/* Render all comments */}
-      {comments.map((comment, index) => (
-        <CommentBox
-          key={index}
-          username={comment.username}
-          date={comment.date}
-          comment={comment.comment}
+      <View style={styles.commentContainer}>
+        <CommentBar
+          value={commentInput}
+          handleChangeText={setCommentInput}
+          onSubmit={handleSubmitComment} // Submits on pressing "Done" on keyboard
         />
-      ))}
+
+        {/* Render all comments */}
+        {comments.map((comment, index) => (
+          <CommentBox
+            key={index}
+            username={comment.username}
+            date={comment.date}
+            comment={comment.comment}
+          />
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -212,6 +225,13 @@ const styles = StyleSheet.create({
     padding: height * 0.02,
     alignItems: "center",
     justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
     fontSize: 24,
@@ -240,5 +260,12 @@ const styles = StyleSheet.create({
   correctText: {
     fontSize: 16,
     color: "green",
+  },
+  commentContainer: {
+    marginTop: 12,
+    marginHorizontal: width * 0.05,
+  },
+  ratingContainer: {
+    marginHorizontal: width * 0.05,
   },
 });

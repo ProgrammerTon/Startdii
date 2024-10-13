@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get("window");
 // Reason Modal Component
 const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
   const reasons = [
-    "Spread Miss Information",
+    "Spreading Misinformation",
     "Disrespectful Behavior",
     "Offensive Name",
     "Privacy Violation",

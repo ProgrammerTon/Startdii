@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    bottom: height * 0.17,
-    right: width * -0.615,
+    bottom: height * 0.19,
+    right: width * -0.585,
   },
   modalContent: {
     width: "30%",

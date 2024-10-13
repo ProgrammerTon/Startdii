@@ -5,11 +5,15 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
 } from "react-native";
 import { Redirect, router } from "expo-router";
 import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
 import { useQuizContext } from "../../context/QuizProvider";
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get("window");
 
 const AddQuizPage = () => {
   const { title, setTitle, description, setDescription, tags, setTags } =
@@ -42,8 +46,16 @@ const AddQuizPage = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Quiz</Text>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.green} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Create Quiz</Text>
+      </View>
+      <ScrollView style={styles.content}>
 
         <Text style={styles.label}>Name</Text>
         <TextInput
@@ -91,15 +103,32 @@ const AddQuizPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#f4f4f4",
   },
-  title: {
+  header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.green,
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
+  },
+  headerText: {
     fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
     color: "#000",
+    fontWeight: "bold",
+  },
+  content: {
+    padding: 20
   },
   label: {
     fontSize: 16,

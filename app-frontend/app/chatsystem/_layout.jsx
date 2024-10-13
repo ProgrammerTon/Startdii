@@ -2,24 +2,24 @@ import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-export default function AuthLayout() {
+export default function ChatLayout() {
   return (
     <>
       <Stack>
         <Stack.Screen
-          name="sign-in"
+          name="H3_user"
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="sign-up"
+          name="H4_NoteUser"
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="dress"
+          name="H5_QuizUser"
           options={{
             headerShown: false,
           }}

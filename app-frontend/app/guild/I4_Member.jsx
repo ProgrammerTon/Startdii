@@ -4,12 +4,14 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
   FlatList,
   Alert,
   RefreshControl,
 } from "react-native";
 import MemberItem from "./MemberItem"; // Import the new component
+import { useLocalSearchParams, router } from "expo-router";
 import { useGuildContext } from "../../context/GuildProvider";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import {
@@ -20,6 +22,8 @@ import {
   promoteViceLeader,
   guildDetail,
 } from "../../services/GuildService";
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get("window");
 
 const MemberScreen = () => {
   // const members = [
@@ -131,8 +135,11 @@ const MemberScreen = () => {
       }
     >
       <View style={styles.header}>
-        <TouchableOpacity>
-          <Text style={styles.backButton}>{"<"}</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color="#fca6cc" />
         </TouchableOpacity>
         <Text style={styles.headerText}>MEMBER</Text>
       </View>
@@ -166,21 +173,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f8f8",
   },
   header: {
-    backgroundColor: "#fca6cc",
+    height: height * 0.1,
+    width: width,
     paddingVertical: 10,
     paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fca6cc",
   },
   backButton: {
-    fontSize: 24,
-    color: "#000",
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 20,
     color: "#000",
     fontWeight: "bold",
-    marginLeft: 20,
   },
   memberContainer: {
     flex: 1,
