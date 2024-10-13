@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: colors.gray_bg,
     padding: 20,
-    paddingTop: 50,
+    paddingTop: 30,
     // alignItems: "center",
   },
   headerContainer: {

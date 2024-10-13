@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   iconStyle:{
-    alignSelf: "flex-start",
+    alignSelf: "center",
     marginLeft: 8,
   },
   textWrapper: {
