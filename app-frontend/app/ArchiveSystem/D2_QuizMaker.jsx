@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   content: {
-    height: height * 0.72,
+    height: height * 0.82,
     padding: 20
   },
   counterText: {

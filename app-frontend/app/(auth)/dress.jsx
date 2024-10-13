@@ -488,12 +488,21 @@ export default function DressTest() {
     }
   };
 
+  const [currentTab,setCurrentTab] = useState('Shape')
+
   return (
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => {
+            if (currentTab === 'Shape') {
+              router.back(); // 'Shape' tab
+            } else {
+              router.back(); // 'Colour' or 'Hat' tab, call router.back() twice
+              router.back();
+            }
+          }}
         >
           <Entypo name="chevron-left" size={30} color={colors.pink} />
         </TouchableOpacity>
