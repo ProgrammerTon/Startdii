@@ -134,12 +134,12 @@ const GuildSettingPage = () => {
           <Text style={styles.noteQuizText}>Quiz</Text>
         </TouchableOpacity>
         
-        <View style={styles.guildDescriptionContainer}>
+        {/* <View style={styles.guildDescriptionContainer}>
           <Text style={styles.guildDescriptionHeader}>Guild Name</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
             {guild.name}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.guildDescriptionContainer}>
           <Text style={styles.guildDescriptionHeader}>Guild Description</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
