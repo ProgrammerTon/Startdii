@@ -15,6 +15,7 @@ import { Text as SvgText } from "react-native-svg";
 import { YAxis, XAxis } from "react-native-svg-charts";
 import { useQuestionContext } from "../../context/QuestionProvider";
 import { findQuiz } from "../../services/QuizService";
+import colors from "../../constants/color";
 
 const { width, height } = Dimensions.get("window");
 
@@ -123,7 +124,7 @@ const QuizStatistics = () => {
           style={styles.closeQuiz}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color="blue" />
+          <Entypo name="chevron-left" size={30} color={colors.green} />
         </TouchableOpacity>
         <Text style={styles.title}>Summary</Text>
       </View>

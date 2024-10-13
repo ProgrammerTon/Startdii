@@ -259,7 +259,6 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: width * 0.1,
-    marginTop: 30,
     position: "relative",
   },
   usernameContainer: {
