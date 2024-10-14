@@ -18,7 +18,10 @@ import { createQuiz, findQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { router, useLocalSearchParams } from "expo-router";  
 import colors from "../../constants/color";
+import fonts from "../../constants/font";
 import Entypo from "@expo/vector-icons/Entypo";
+import { FontAwesome } from "@expo/vector-icons";
+
 const { width, height } = Dimensions.get("window");
 
 const QuizQuestionEdit = () => {
@@ -202,7 +205,7 @@ const QuizQuestionEdit = () => {
 
   const renderItem = ({ item, index }) => (
     <View key={item.id} style={styles.questionContainer}>
-      <Text style={styles.questionNumber}>Question {index + 1}</Text>
+      <Text style={[fonts.EngSemiBold18, styles.questionNumber]}>Question {index + 1}</Text>
       <QuestionComponent
         questionNumber={index + 1}
         question={item}
@@ -212,7 +215,7 @@ const QuizQuestionEdit = () => {
         style={styles.deleteButton}
         onPress={() => deleteQuestion(item.id)}
       >
-        <Text style={styles.deleteText}>Delete</Text>
+        <Text style={[fonts.EngMedium16, styles.deleteText]}>Delete</Text>
       </TouchableOpacity>
     </View>
   );
@@ -232,9 +235,9 @@ const QuizQuestionEdit = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color={colors.green} />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Create Quiz</Text>
+        <Text style={[fonts.EngBold22, styles.headerText]}>Create Quiz</Text>
       </View>
       <View style={styles.content}>
         <FlatList
@@ -243,13 +246,13 @@ const QuizQuestionEdit = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           ListHeaderComponent={
-            <Text style={styles.counterText}>
+            <Text style={[fonts.EngBold18, styles.counterText]}>
               Total Questions: {questions.length}
             </Text>
           }
           ListFooterComponent={
             <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
-              <Text style={styles.plusText}>+</Text>
+              <FontAwesome name="plus" size={25} color={colors.white} />
             </TouchableOpacity>
           }
         />
@@ -258,7 +261,7 @@ const QuizQuestionEdit = () => {
       <View style={styles.buttonContainer}>
         {/* Removed the Save button as per your requirement */}
         <TouchableOpacity style={styles.publishButton} onPress={Publish}>
-          <Text style={styles.buttonText}>Publish</Text>
+          <Text style={[fonts.EngMedium16, styles.buttonText]}>Publish</Text>
         </TouchableOpacity>
         <ErrorEmptyFieldWindow
           visible={AddErrorEmptyFieldWindow}
@@ -282,7 +285,7 @@ export default QuizQuestionEdit;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: colors.gray_bg,
   },
   header: {
     height: height * 0.1,
@@ -297,79 +300,84 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerText: {
-    fontSize: 24,
-    color: "#000",
-    fontWeight: "bold",
+    color: colors.black,
   },
   content: {
     height: height * 0.82,
-    padding: 20
+    paddingVertical: 20,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f4f4f4",
+    backgroundColor: colors.gray_bg,
   },
   counterText: {
-    fontSize: width * 0.05,
-    fontWeight: "bold",
-    marginBottom: 10,
+    fontSize: 20,
+    marginBottom: 15,
     textAlign: "center",
+    color: colors.black,
   },
   questionContainer: {
     marginBottom: 20,
+    marginHorizontal: 20,
     padding: width * 0.05,
-    backgroundColor: "#fff",
-    borderRadius: 5,
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   questionNumber: {
-    fontSize: width * 0.045,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
+    color: colors.black,
   },
   deleteButton: {
-    backgroundColor: "#e74c3c",
-    padding: width * 0.03,
-    borderRadius: 5,
-    marginTop: 10,
+    backgroundColor: colors.red,
+    paddingVertical: 14,
+    paddingHorizontal: 22,
+    borderRadius: 50,
     alignSelf: "center",
   },
   deleteText: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: colors.white,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "center",
   },
   publishButton: {
-    backgroundColor: "#3498db",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 25,
+    backgroundColor: colors.blue,
+    paddingVertical: 14,
+    paddingHorizontal: 22,
+    borderRadius: 50,
   },
   buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
+    color: colors.white,
   },
   addButton: {
-    backgroundColor: "#4CAF50",
-    padding: width * 0.05,
+    backgroundColor: colors.green,
+    paddingVertical: width * 0.04,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
     marginVertical: 10,
-  },
-  plusText: {
-    color: "#fff",
-    fontSize: width * 0.08,
+    marginHorizontal: width * 0.33,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
