@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { deleteSource } from '../../services/SourceService';
 import { router } from 'expo-router';
 import colors from '../../constants/color';
-import RecheckBox from '../../components/recheckbox';
+import RecheckBox from '../../components/RecheckBox';
 
 const DeleteNoteComponent = ({ sourceId }) => {
   const [isModalVisible, setModalVisible] = useState(false);

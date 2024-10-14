@@ -108,7 +108,7 @@ const QuizQuestionEdit = () => {
   };
 
   const Publish = async () => {
-    if (questions.length < 5) {
+    if (questions.length < 1) {
       Alert.alert(
         "Insufficient Questions",
         "You need to create at least 5 questions before publishing."
@@ -237,7 +237,7 @@ const QuizQuestionEdit = () => {
         >
           <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
-        <Text style={[fonts.EngBold22, styles.headerText]}>Create Quiz</Text>
+        <Text style={[fonts.EngBold22, styles.headerText]}>Edit Quiz</Text>
       </View>
       <View style={styles.content}>
         <FlatList

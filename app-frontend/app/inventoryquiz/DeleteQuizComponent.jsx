@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { deleteQuiz } from '../../services/QuizService';
 import { router } from 'expo-router';
 import colors from '../../constants/color';
-import RecheckBox from '../../components/recheckbox';
+import RecheckBox from '../../components/RecheckBox';
 
 const DeleteQuizComponent = ({ quizId }) => {
   const [isModalVisible, setModalVisible] = useState(false);
