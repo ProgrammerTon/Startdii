@@ -24,6 +24,7 @@ import { router } from "expo-router";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import Entypo from "@expo/vector-icons/Entypo";
+import RecheckBox from "../../components/recheckbox";
 const { width, height } = Dimensions.get("window");
 const EditNotePage = () => {
   const { sourceId } = useLocalSearchParams();
@@ -32,7 +33,7 @@ const EditNotePage = () => {
   const [tag, setTag] = useState("");
   const [content, setContent] = useState("");
   const { user } = useGlobalContext();
-
+  const [isModalVisible, setModalVisible] = useState(false);
   const [AddUploadWindowVisible, setAddUploadWindowVisible] = useState(false);
   const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
 
@@ -72,6 +73,11 @@ const EditNotePage = () => {
     setDescription("");
     setTag("");
     setContent("");
+    setModalVisible(false);
+  };
+
+  const openModal = () => {
+    setModalVisible(true);
   };
 
   const [isPublishing, setIsPublishing] = useState(false);
@@ -243,9 +249,17 @@ const EditNotePage = () => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.resetButton} onPress={resetFields}>
+          <TouchableOpacity style={styles.resetButton} onPress={openModal}>
             <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Reset</Text>
           </TouchableOpacity>
+          <RecheckBox
+            visible={isModalVisible}
+            onClose={() => setModalVisible(false)}
+            onYesPress={resetFields}
+            title="Are you sure you want to reset ?"
+            yes="Yes, Reset"
+            no="Cancel"
+          />
 
           <TouchableOpacity style={styles.publishButton} onPress={Publish}>
             <Text style={[fonts.EngMedium16, styles.publishButtonText]}>Publish</Text>
