@@ -66,10 +66,10 @@ const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
     return answers.map((answer, index) => (
       <TouchableOpacity
         key={index}
-        style={[styles.answerButton, { backgroundColor: answer === 1 ? 'green' : 'red' }]}
+        style={[styles.answerButton, { backgroundColor: answer === 1 ? colors.green : colors.red }]}
         onPress={() => handlePress(index)}
       >
-        <Text style={styles.answerText}>
+        <Text style={[fonts.EngMedium14, styles.answerText]}>
           {index + 1}
         </Text>
       </TouchableOpacity>
@@ -91,7 +91,7 @@ const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Answers:</Text>
+            <Text style={[fonts.EngBold18, styles.modalTitle]}>Answers :</Text>
             <View style={styles.answersContainer}>
               {renderAnswers()}
             </View>
@@ -99,7 +99,7 @@ const AnswerButton = ({ eachQuestionAnswers, userAnswers, quizData }) => {
               style={styles.closeButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={[fonts.EngMedium16, styles.closeButtonText]}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -135,22 +135,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
+    backgroundColor: "rgba(145, 145, 145, 0.5)", // semi-transparent background
   },
   modalContainer: {
     width: width * 0.8,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     borderRadius: 10,
     alignItems: 'center',
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 10,
+    fontSize: 20,
+    color: colors.black,
   },
   answersContainer: {
-    marginVertical: 10,
+    marginVertical: 5,
     flexDirection: 'row', // Arrange buttons horizontally
     flexWrap: 'wrap', // Wrap buttons if they exceed width
     justifyContent: 'center', // Center items horizontally
@@ -159,27 +159,22 @@ const styles = StyleSheet.create({
     flexBasis: '15%', 
     paddingVertical: 15,
     margin: 5,
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#007BFF', 
   },
   answerText: {
-    fontSize: 11,
-    fontWeight: 'bold',
-    color: '#fff',
+    color: colors.white,
   },
   closeButton: {
-    marginTop: 20,
-    backgroundColor: '#007BFF',
+    marginTop: 15,
+    backgroundColor: colors.blue,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 50,
   },
   closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: colors.white,
   },
 });
 

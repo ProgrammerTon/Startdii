@@ -110,16 +110,26 @@ const QuizMakerPage = () => {
           throw new Error("Incomplete choices");
         }
 
+        // return {
+        //   question: questionText,
+        //   qType: selectedOption,
+        //   choices: selectedOption === "choice" ? Object.values(textInputs) : [],
+        //   answers:
+        //     selectedOption === "fill"
+        //       ? isNaN(parseFloat(value))
+        //         ? value
+        //         : parseFloat(value)
+        //       : activeButtons,
+        // };
         return {
           question: questionText,
           qType: selectedOption,
-          choices: selectedOption === "choice" ? Object.values(textInputs) : [],
+          choices:
+            selectedOption === "choice"
+              ? Object.values(textInputs).filter((choice) => choice.trim() !== "")
+              : [],
           answers:
-            selectedOption === "fill"
-              ? isNaN(parseFloat(value))
-                ? value
-                : parseFloat(value)
-              : activeButtons,
+            selectedOption === "fill" ? value : activeButtons || [],
         };
       });
 

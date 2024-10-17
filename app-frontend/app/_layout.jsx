@@ -24,6 +24,8 @@ export default function RootLayout() {
                 <Stack.Screen name="quiz" options={{ headerShown: false }} />
                 <Stack.Screen name="ArchiveSystem" options={{ headerShown: false }} />
                 <Stack.Screen name="sources/[id]" options={{ headerShown: false }} />
+                <Stack.Screen name="quizzes/F6_quizfillsolution" options={{ headerShown: false }} />
+                <Stack.Screen name="quizzes/F6_quizchoicesolution" options={{ headerShown: false }} />
               </Stack>
             </SafeAreaView>
         </CharacterProvider>

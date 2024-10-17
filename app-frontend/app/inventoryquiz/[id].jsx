@@ -152,7 +152,7 @@ const SumQuizPage = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color={colors.green} />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
         <Text style={[fonts.EngBold22, styles.headerTitle]}>
           {quiz?.title?.match(/.{1,15}/g).join("\n")} {/* Handle long title */}
@@ -258,9 +258,14 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerTitle: {
     //flexGrow: 1, 
@@ -270,6 +275,8 @@ const styles = StyleSheet.create({
   editDeleteContainer: {
     flexDirection: "row",
     alignItems: "center",
+    position: "absolute",
+    right: width * 0.05, 
   },
   tagsContainer: {
     flexDirection: "row",

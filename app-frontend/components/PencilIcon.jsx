@@ -3,7 +3,7 @@ import Svg, { Path } from 'react-native-svg';
 import colors from "../constants/color";
 
 const PencilIcon = (props) => {
-    const { fill = colors.black, width = 20, height = 20, ...restProps } = props;
+    const { fill = colors.red, width = 22, height = 22, ...restProps } = props;
 
     return (
         <Svg viewBox="0 0 20 20" fill={fill} width={width} height={height} aria-hidden="true" {...restProps}>

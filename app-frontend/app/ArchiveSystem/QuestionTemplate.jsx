@@ -8,6 +8,8 @@ import {
   StyleSheet,
 } from "react-native";
 import ChoiceBoxes from "./ChoiceBoxes";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const QuestionTemplate = ({ question, setQuestions }) => {
   const [selectedOption, setSelectedOption] = useState(
@@ -72,7 +74,7 @@ const QuestionTemplate = ({ question, setQuestions }) => {
             selectedOption === "fill" && styles.selectedRadio,
           ]}
         />
-        <Text style={styles.optionText}>Fill the answer</Text>
+        <Text style={[fonts.EngMedium16, styles.optionText]}>Fill the answer</Text>
         {selectedOption === "fill" && (
           <TextInput
             style={styles.answerInput}
@@ -94,16 +96,16 @@ const QuestionTemplate = ({ question, setQuestions }) => {
             selectedOption === "choice" && styles.selectedRadio,
           ]}
         />
-        <Text style={styles.optionText}>Choice</Text>
+        <Text style={[fonts.EngMedium16, styles.optionText]}>Choice</Text>
 
         {selectedOption === "choice" && (
           <View style={styles.choiceContainer}>
             <TouchableOpacity onPress={() => handleChoiceChange("decrease")}>
-              <Text style={styles.choiceButton}>-</Text>
+              <Text style={[fonts.EngBold18, styles.choiceButton]}>-</Text>
             </TouchableOpacity>
             <Text style={styles.choiceNumber}>{choices}</Text>
             <TouchableOpacity onPress={() => handleChoiceChange("increase")}>
-              <Text style={styles.choiceButton}>+</Text>
+              <Text style={[fonts.EngBold18, styles.choiceButton]}>+</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -140,22 +142,23 @@ const styles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#FF4500",
+    borderColor: colors.red,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 10,
   },
   selectedRadio: {
-    backgroundColor: "#FF4500",
+    backgroundColor: colors.red,
   },
   optionText: {
-    fontSize: 16,
+    color: colors.black,
   },
   answerInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 5,
+    borderColor: colors.gray_button,
+    borderWidth: 1.75,
+    borderRadius: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     marginLeft: 10,
     flex: 1,
   },
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
   },
   choiceButton: {
     fontSize: 20,
-    color: "#0066FF",
+    color: colors.blue,
     paddingHorizontal: 10,
   },
   choiceNumber: {

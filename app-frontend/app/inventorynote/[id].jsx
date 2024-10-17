@@ -239,7 +239,7 @@ export default SourceDetailPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F8F8",
+    backgroundColor: colors.gray_bg,
   },
   header: {
     backgroundColor: colors.yellow,
@@ -254,9 +254,14 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerTitle: {
     //flexGrow: 1, 
@@ -266,7 +271,8 @@ const styles = StyleSheet.create({
   editDeleteContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 10,
+    position: "absolute",
+    right: width * 0.05, 
   },
   infoContainer: {
     marginVertical: 20,

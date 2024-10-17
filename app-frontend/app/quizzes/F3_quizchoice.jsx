@@ -11,6 +11,8 @@ import { React, useState, useEffect } from "react";
 import QuizChoice from "../../components/QuizChoice";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 const { width, height } = Dimensions.get("window");
 
 export default function QuizChoices({
@@ -56,19 +58,19 @@ export default function QuizChoices({
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
           <TouchableOpacity
-            style={{ backgroundColor: "#fff", borderRadius: 30 }}
+            style={{ backgroundColor: colors.white, borderRadius: 30 }}
             onPress={() => setCloseQuiz(true)}
           >
-            <AntDesign name="closecircle" size={35} color="red" />
+            <AntDesign name="closecircle" size={35} color={colors.red} />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
-          <Text style={styles.textNumber}>
+          <Text style={[fonts.EngBold18, styles.textNumber]}>
             {questionNumber} / {totalQuestions}
           </Text>
         </View>
         <View style={styles.question}>
-          <Text style={styles.textStyle}> {questionData.question} </Text>
+          <Text style={[fonts.EngRegular18, styles.textStyle]}> {questionData.question} </Text>
         </View>
       </View>
 
@@ -93,12 +95,12 @@ export default function QuizChoices({
             style={styles.nextButton}
             onPress={() => onSubmit(selectedChoice)}
           >
-            <Text style={{ fontSize: 16, color: "#fff" }}> Next </Text>
+            <Text style={[fonts.EngMedium16, styles.buttonText]}> Next </Text>
           </TouchableOpacity>
         </View>
       </View>
       <Modal transparent={true} visible={closeQuiz}>
-        <View style={{ flex: 1, backgroundColor: "#555555aa" }}>
+        <View style={{ flex: 1, backgroundColor: "rgba(145, 145, 145, 0.5)" }}>
           <View style={styles.leaveQuizPopUp}>
             <View>
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
@@ -124,7 +126,7 @@ export default function QuizChoices({
               </TouchableOpacity>
               <TouchableOpacity style={styles.leaveQuizButton} onPress={() => router.back()}>
                 <Text
-                  style={{ fontSize: 16, fontWeight: "bold", color: "#fff" }}
+                  style={{ fontSize: 16, fontWeight: "bold", color: colors.white }}
                 >
                   {" "}
                   Leave{" "}
@@ -142,7 +144,7 @@ export default function QuizChoices({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eee",
+    backgroundColor: colors.gray_bg,
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "1%",
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
   topPart: {
     height: height * 0.3,
     width: width,
-    backgroundColor: "#04B36E",
+    backgroundColor: colors.green,
   },
   bottomPart: {
     height: height * 0.7,
@@ -166,18 +168,17 @@ const styles = StyleSheet.create({
   },
   quizNumber: {
     alignSelf: "center",
-    backgroundColor: "#ddd",
-    padding: 7,
+    backgroundColor: colors.gray_button,
+    padding: 8,
     paddingHorizontal: 15,
     marginTop: -height * 0.2,
     marginBottom: height * 0.08,
     zIndex: 1,
   },
   question: {
-    //flex: 1,
     width: width * 0.9,
     height: height * 0.25,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -185,17 +186,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     marginVertical: -height * 0.1,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "black",
     borderStyle: "solid",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   textNumber: {
     fontSize: 20,
-    fontWeight: "bold",
+    color: colors.black,
   },
   textStyle: {
-    fontSize: 20,
-    //fontWeight: "bold"
+    color: colors.black,
+  },
+  buttonText: {
+    color: colors.white,
   },
   choice: {
     flex: 4,
@@ -211,8 +217,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginRight: 20,
     marginVertical: -height * 0.13,
-    backgroundColor: "#0270ED",
-    borderRadius: 20,
+    backgroundColor: colors.blue,
+    borderRadius: 50,
     alignSelf: "flex-end",
   },
   headerText: {
@@ -235,12 +241,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginVertical: 5,
     marginHorizontal: 20,
-    backgroundColor: "#F44D19",
+    backgroundColor: colors.red,
     paddingHorizontal: width * 0.05,
     borderRadius: 20,
   },
   leaveQuizPopUp: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     marginTop: height * 0.4,
     margin: 50,
     padding: 20,

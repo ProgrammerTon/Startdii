@@ -6,8 +6,13 @@ import {
   Modal,
   Pressable,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+
+const { width, height } = Dimensions.get("window");
 
 const InviteCodeWindow = ({ visible, onClose, code }) => {
   const copyToClipboard = async () => {
@@ -23,18 +28,18 @@ const InviteCodeWindow = ({ visible, onClose, code }) => {
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Invite Code</Text>
+          <Text style={[fonts.EngMedium16, styles.modalTitle]}>Invite Code</Text>
           <Text style={styles.codeText}>{code}</Text>
 
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={[fonts.EngMedium16, styles.cancelButtonText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.copyButton}
               onPress={copyToClipboard}
             >
-              <Text style={styles.copyButtonText}>Copy</Text>
+              <Text style={[fonts.EngMedium16, styles.copyButtonText]}>Copy</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -48,52 +53,52 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: 'rgba(145, 145, 145, 0.5)',
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: "400",
     marginBottom: 10,
+    color: colors.gray_font,
   },
   codeText: {
     fontSize: 32,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 15,
+    color: colors.black,
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    paddingHorizontal: width * 0.05,
+    gap: width * 0.05,
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: colors.gray_button,
     paddingVertical: 10,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 50,
     marginRight: 10,
   },
   cancelButtonText: {
-    color: "#000000",
-    fontSize: 16,
+    color: colors.black,
   },
   copyButton: {
     flex: 1,
-    backgroundColor: "#4285F4",
+    backgroundColor: colors.blue,
     paddingVertical: 10,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 50,
   },
   copyButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
+    color: colors.white,
   },
 });
 
