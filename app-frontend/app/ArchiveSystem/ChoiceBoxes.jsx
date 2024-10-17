@@ -6,6 +6,8 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const ChoiceBoxes = ({
   count,
@@ -46,7 +48,7 @@ const ChoiceBoxes = ({
             }
             onPress={() => toggleButtonColor(i)}
           >
-            <Text style={styles.toggleButtonText}>
+            <Text style={[fonts.EngBold14, styles.toggleButtonText]}>
               {activeButtons.includes(i) ? "True" : "False"}
             </Text>
           </TouchableOpacity>
@@ -75,26 +77,25 @@ const styles = StyleSheet.create({
   },
   choiceBox: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
+    borderWidth: 1.75,
+    borderColor: colors.gray_button,
+    borderRadius: 10,
     padding: 10,
     marginRight: 10,
   },
   activeFilterButton: {
-    backgroundColor: "green",
+    backgroundColor: colors.green,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   inactiveFilterButton: {
-    backgroundColor: "gray",
+    backgroundColor: colors.gray_font,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   toggleButtonText: {
-    color: "white",
-    fontWeight: "bold",
+    color: colors.white,
   },
 });

@@ -101,11 +101,11 @@ const QuestionTemplate = ({ question, setQuestions }) => {
         {selectedOption === "choice" && (
           <View style={styles.choiceContainer}>
             <TouchableOpacity onPress={() => handleChoiceChange("decrease")}>
-              <Text style={styles.choiceButton}>-</Text>
+              <Text style={[fonts.EngBold18, styles.choiceButton]}>-</Text>
             </TouchableOpacity>
             <Text style={styles.choiceNumber}>{choices}</Text>
             <TouchableOpacity onPress={() => handleChoiceChange("increase")}>
-              <Text style={styles.choiceButton}>+</Text>
+              <Text style={[fonts.EngBold18, styles.choiceButton]}>+</Text>
             </TouchableOpacity>
           </View>
         )}

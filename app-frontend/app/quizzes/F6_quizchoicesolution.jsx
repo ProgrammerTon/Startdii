@@ -9,6 +9,8 @@ import {
 import React from "react";
 import QuizChoice from "../../components/QuizChoice";
 import Entypo from '@expo/vector-icons/Entypo';
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 import { router, useRouter , useLocalSearchParams} from "expo-router";
 
 const { width, height } = Dimensions.get('window');
@@ -36,17 +38,17 @@ export default function QuizChoiceSolution() {
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
           <TouchableOpacity
-            style={{ backgroundColor: "#fff", borderRadius: 20, padding: 5 }}
+            style={{ backgroundColor: colors.white, borderRadius: 20, padding: 5 }}
             onPress={() => router.back()}
           >
-            <Entypo name="chevron-left" size={30} color="blue" />
+            <Entypo name="chevron-left" size={30} color={colors.blue} />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
-          <Text style={styles.textNumber}>{questionNumber} / {totalQuestions}</Text>
+          <Text style={[fonts.EngBold18, styles.textNumber]}>{questionNumber} / {totalQuestions}</Text>
         </View>
         <View style={styles.question}>
-          <Text style={styles.textStyle}>{parsedQuestionData.question}</Text>
+          <Text style={[fonts.EngRegular18, styles.textStyle]}>{parsedQuestionData.question}</Text>
         </View>
       </View>
 
@@ -74,7 +76,7 @@ export default function QuizChoiceSolution() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eee",
+    backgroundColor: colors.gray_bg,
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: '1%',
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
   topPart: {
     height: height * 0.3,
     width: width,
-    backgroundColor: "#04B36E",
+    backgroundColor: colors.green,
   },
   bottomPart: {
     height: height * 0.7,
@@ -98,8 +100,8 @@ const styles = StyleSheet.create({
   },
   quizNumber: {
     alignSelf: "center",
-    backgroundColor: "#ddd",
-    padding: 7,
+    backgroundColor: colors.gray_button,
+    padding: 8,
     paddingHorizontal: 15,
     marginTop: -height * 0.2,
     marginBottom: height * 0.08,
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
   question: {
     width: width * 0.9,
     height: height * 0.25,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -116,16 +118,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     marginVertical: -height * 0.1,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "black",
     borderStyle: "solid",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   textNumber: {
     fontSize: 20,
-    fontWeight: "bold",
+    color: colors.black,
   },
   textStyle: {
-    fontSize: 20,
+    color: colors.black,
   },
   choice: {
     flex: 4,
@@ -137,23 +142,23 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   choiceContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#04B36E", // Green border for default
+    borderColor: colors.green, // Green border for default
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
   selectedContainer: {
-    backgroundColor: "#04B36E", // Green background when selected
+    backgroundColor: colors.green, // Green background when selected
   },
   correctContainer: {
-    borderColor: "#29DE91", // Green border for correct answers
+    borderColor: colors.green,
   },
   wrongContainer: {
-    backgroundColor: "#F44D19", // Red background for wrong answers
+    backgroundColor: colors.red, // Red background for wrong answers
   },
 });

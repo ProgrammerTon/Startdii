@@ -18,6 +18,8 @@ import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import SourceCard from "../../components/E1_SourceCard";
 import QuizCard from "../../components/F1_QuizCard";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 const { width, height } = Dimensions.get("window");
 const ChatView = ({ message, index, name }) => {
   const isCurrentUser = message.sender === name;
@@ -123,9 +125,9 @@ const ChatRoom = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color="#007bff" />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>{userTitle}</Text>
+        <Text style={[fonts.EngBold22, styles.headerText]}>{userTitle}</Text>
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() =>
@@ -135,7 +137,7 @@ const ChatRoom = () => {
             })
           }
         >
-          <Entypo name="menu" size={30} color="white" />
+          <Entypo name="menu" size={30} color={colors.white} />
         </TouchableOpacity>
       </View>
 
@@ -231,7 +233,7 @@ const ChatRoom = () => {
           placeholder="Type a message"
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-          <Ionicons name="send" size={24} color="white" />
+          <Ionicons name="send" size={24} color={colors.white} />
         </TouchableOpacity>
       </View>
     </View>
@@ -242,7 +244,7 @@ export default ChatRoom;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
   },
   chatContainer: {
     flex: 1,
@@ -267,10 +269,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   timeContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
   },
   userMessage: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: colors.gray_bg,
     alignSelf: "flex-start",
   },
   receiverMessage: {
@@ -282,12 +284,12 @@ const styles = StyleSheet.create({
   },
   messageTime: {
     fontSize: 12,
-    color: "#888",
+    color: colors.gray_font,
     alignSelf: "flex-end",
   },
   inputContainer: {
     height: height * 0.08,
-    backgroundColor: "#007bff",
+    backgroundColor: colors.blue,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -295,28 +297,26 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     marginVertical: 3,
-    backgroundColor: "#fff",
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 30,
+    backgroundColor: colors.white,
+    borderRadius: 50,
     paddingVertical: 10,
     paddingHorizontal: 15,
     fontSize: 16,
   },
   sendButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: colors.blue,
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
   sendButtonText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 16,
   },
   header: {
     height: height * 0.1,
     width: width,
-    backgroundColor: "#007bff",
+    backgroundColor: colors.blue,
     paddingVertical: 10,
     paddingHorizontal: 15,
     flexDirection: "row",
@@ -326,14 +326,12 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
   },
   headerText: {
-    fontSize: 20,
-    color: "#fff",
-    fontWeight: "bold",
+    color: colors.white,
   },
   menuButton: {
     position: "absolute",

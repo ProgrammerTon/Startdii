@@ -11,6 +11,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 const { width, height } = Dimensions.get("window");
 
 const ChatSearch = () => {
@@ -23,9 +25,9 @@ const ChatSearch = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color="#007bff" />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>{name}</Text>
+        <Text style={[fonts.EngBold22, styles.headerText]}>{name}</Text>
       </View>
 
       {/* Search Bar */}
@@ -43,30 +45,32 @@ const ChatSearch = () => {
       </View> */}
 
       {/* Note Button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() =>
-          router.push({
-            pathname: "/chatsystem/H4_NoteUser",
-            params: { room: room },
-          })
-        }
-      >
-        <Text style={styles.buttonText}>Note</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            router.push({
+              pathname: "/chatsystem/H4_NoteUser",
+              params: { room: room },
+            })
+          }
+        >
+          <Text style={[fonts.EngBold22, styles.buttonText]}>Note</Text>
+        </TouchableOpacity>
 
-      {/* Quiz Button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() =>
-          router.push({
-            pathname: "/chatsystem/H5_QuizUser",
-            params: { room: room },
-          })
-        }
-      >
-        <Text style={styles.buttonText}>Quiz</Text>
-      </TouchableOpacity>
+        {/* Quiz Button */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            router.push({
+              pathname: "/chatsystem/H5_QuizUser",
+              params: { room: room },
+            })
+          }
+        >
+          <Text style={[fonts.EngBold22, styles.buttonText]}>Quiz</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -76,12 +80,12 @@ export default ChatSearch;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.gray_bg,
   },
   header: {
     height: height * 0.1,
     width: width,
-    backgroundColor: "#007bff",
+    backgroundColor: colors.blue,
     paddingVertical: 10,
     paddingHorizontal: 15,
     flexDirection: "row",
@@ -91,14 +95,12 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
   },
   headerText: {
-    fontSize: 20,
-    color: "#fff",
-    fontWeight: "bold",
+    color: colors.white,
   },
   searchBarContainer: {
     flexDirection: "row",
@@ -116,29 +118,28 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: "#000",
+    color: colors.black,
+  },
+  buttonContainer: {
+    marginTop: 10,
   },
   button: {
     flexDirection: "column",
     alignSelf: "center",
     alignItems: "center",
-    height: height * 0.1,
     width: width * 0.9,
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    paddingVertical: 20,
-    paddingHorizontal: 15,
-    marginVertical: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    paddingVertical: 25,
+    marginVertical: 10,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
     elevation: 5,
   },
   buttonText: {
-    fontSize: 30,
-    color: "#000",
-    fontWeight: "bold",
+    color: colors.black,
   },
   icon: {
     width: 50,
