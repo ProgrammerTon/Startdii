@@ -59,6 +59,7 @@ const QuizDesEdit = () => {
   };
 
   const openModal = () => {
+    console.log("Opening modal");  
     setModalVisible(true);
   };
 
