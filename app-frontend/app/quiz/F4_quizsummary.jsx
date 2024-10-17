@@ -29,6 +29,7 @@ import StatButton from "../Quiz_Component/StatButton";
 import { getUserRatingQuiz } from "../../services/QuizService";
 import Loading from "../test_loading/test";
 import colors from "../../constants/color";
+import fonts from "../../constants/font";
 import Entypo from "@expo/vector-icons/Entypo";
 
 const { width, height } = Dimensions.get("window");
@@ -162,16 +163,18 @@ const QuizSummaryPage = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color={colors.green} />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Finished</Text>
+        <Text style={[fonts.EngBold22, styles.headerText]}>Finished</Text>
       </View>
       {/* Score and progress bar container */}
       <View style={styles.scoreProgressContainer}>
-        <Text style={styles.scoreText}>
+        <Text style={[fonts.EngBold22, styles.scoreText]}>
           {score} / {questions?.length}
         </Text>
-        <ScoreProgress percent={(score / questions?.length) * 100} />
+        <View>
+          <ScoreProgress percent={(score / questions?.length) * 100} />
+        </View>
       </View>
 
       <StatButton handleOnPress={() => router.push("/quiz/F7_quizstatistic")} />
@@ -217,10 +220,10 @@ export default QuizSummaryPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F8F8",
+    backgroundColor: colors.gray_bg,
   },
   header: {
-    backgroundColor: "#04B36E",
+    backgroundColor: colors.green,
     height: height * 0.1,
     padding: height * 0.02,
     alignItems: "center",
@@ -229,20 +232,19 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
   },
   headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 0,
+    color: colors.black,
   },
   scoreProgressContainer: {
     alignItems: "center", // Center contents horizontally
     marginVertical: 20,
   },
   scoreText: {
+    color: colors.black,
     fontSize: 40,
     marginBottom: 20,
     textAlign: "center", // Center the text
@@ -259,7 +261,7 @@ const styles = StyleSheet.create({
   },
   correctText: {
     fontSize: 16,
-    color: "green",
+    color: colors.green,
   },
   commentContainer: {
     marginTop: 12,
@@ -267,5 +269,6 @@ const styles = StyleSheet.create({
   },
   ratingContainer: {
     marginHorizontal: width * 0.05,
+    marginTop: 10,
   },
 });

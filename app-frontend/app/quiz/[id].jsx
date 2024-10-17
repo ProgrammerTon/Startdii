@@ -167,7 +167,7 @@ const SumQuizPage = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color={colors.green} />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
         <Text style={[fonts.EngBold22, styles.headerTitle]}>{quiz?.title}</Text>
         <TestReport onPress={() => console.log("Report Button Pressed")} />

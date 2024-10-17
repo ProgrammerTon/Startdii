@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, Dimensions } from "react-native";
 import { PieChart } from "react-native-svg-charts";
 import { Text as SvgText } from "react-native-svg";
+import colors from "../../constants/color";
 const { width, height } = Dimensions.get("window");
 
 const PieChartQuestion = ({ questionData, usercorrect, userwrong }) => {
@@ -20,12 +21,12 @@ const PieChartQuestion = ({ questionData, usercorrect, userwrong }) => {
       {
         key: "0",
         value: userwrong,
-        svg: { fill: "#ff6347" },
+        svg: { fill: "#F44D19" },
       },
       {
         key: "1",
         value: usercorrect,
-        svg: { fill: "#32cd32" },
+        svg: { fill: "#04B36E" },
       },
     ];
     return scoreData;
@@ -66,7 +67,7 @@ export default PieChartQuestion;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     paddingTop: 20,
     paddingHorizontal: 20,
   },

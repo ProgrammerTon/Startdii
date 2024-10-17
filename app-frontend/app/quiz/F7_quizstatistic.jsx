@@ -16,6 +16,7 @@ import { YAxis, XAxis } from "react-native-svg-charts";
 import { useQuestionContext } from "../../context/QuestionProvider";
 import { findQuiz } from "../../services/QuizService";
 import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const { width, height } = Dimensions.get("window");
 
@@ -31,12 +32,12 @@ const QuizStatistics = () => {
     return (
       <>
         <View style={styles.legendItem}>
-          <View style={[styles.colorBox, { backgroundColor: "#32cd32" }]} />
-          <Text style={styles.legendText}>Correct</Text>
+          <View style={[styles.colorBox, { backgroundColor: colors.green }]} />
+          <Text style={[fonts.EngSemiBold14, styles.legendText]}>Correct</Text>
         </View>
         <View style={styles.legendItem}>
-          <View style={[styles.colorBox, { backgroundColor: "#ff6347" }]} />
-          <Text style={styles.legendText}>Incorrect</Text>
+          <View style={[styles.colorBox, { backgroundColor: colors.red }]} />
+          <Text style={[fonts.EngSemiBold14, styles.legendText]}>Incorrect</Text>
         </View>
       </>
     );
@@ -98,7 +99,7 @@ const QuizStatistics = () => {
         x={x(index) + bandwidth / 2}
         y={y(value.count) - 10}
         fontSize={14}
-        fill="black"
+        fill={colors.black}
         alignmentBaseline="middle"
         textAnchor="middle"
       />
@@ -124,9 +125,9 @@ const QuizStatistics = () => {
           style={styles.closeQuiz}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color={colors.green} />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
-        <Text style={styles.title}>Summary</Text>
+        <Text style={[fonts.EngBold22, styles.title]}>Summary</Text>
       </View>
 
       <ScrollView
@@ -134,7 +135,7 @@ const QuizStatistics = () => {
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* User Count */}
-        <Text style={styles.userCount}>
+        <Text style={[fonts.EngSemiBold16, styles.userCount]}>
           Number of users: {allUsersScore.length}
         </Text>
 
@@ -156,7 +157,7 @@ const QuizStatistics = () => {
               data={data}
               xAccessor={({ item }) => item.score}
               yAccessor={({ item }) => item.count}
-              svg={{ fill: "rgb(134, 65, 244)" }} // Bar color
+              svg={{ fill: colors.blue }} // Bar color
               contentInset={{ top: 20, bottom: 20 }} // Match with YAxis
               spacingInner={0.3} // Space between bars
               yMax={Math.max(...data.map((d) => d.count))} // Set max value for y-axis
@@ -167,7 +168,7 @@ const QuizStatistics = () => {
             <XAxis
               data={data}
               contentInset={{ left: 10, right: 10 }} // Spacing
-              svg={{ fontSize: 10, fill: "black" }} // Label styling
+              svg={{ fontSize: 10, fill: colors.black }} // Label styling
             />
           </View>
         </View>
@@ -185,7 +186,7 @@ export default QuizStatistics;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eee",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "1%",
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
   topPart: {
     height: height * 0.1,
     width: width,
-    backgroundColor: "#04B36E",
+    backgroundColor: colors.green,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -207,20 +208,17 @@ const styles = StyleSheet.create({
   closeQuiz: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
     top: height * 0.025,
   },
   title: {
-    fontSize: width * 0.06,
-    fontWeight: "bold",
     textAlign: "center",
     position: "absolute",
-    top: height * 0.025,
+    color: colors.black,
   },
   userCount: {
-    fontSize: 16,
     textAlign: "center",
     marginBottom: 10,
   },
@@ -249,6 +247,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   legendText: {
-    fontSize: 16,
+    color: colors.black,
   },
 });

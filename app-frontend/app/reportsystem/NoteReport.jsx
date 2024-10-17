@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { getCurrentToken }from "../../utils/asyncstroage";
 import { reportToAdmin } from "../../services/ReportService";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 const { width, height } = Dimensions.get("window");
 
 // Reason Modal Component
@@ -138,7 +140,7 @@ const ReportNoteWindow = ({ visible, onClose, onSubmit,sourceId }) => {
         <View style={styles.modalContainer}>
           {/* Orange Header with rounded corners */}
           <View style={styles.header}>
-            <Text style={styles.headerText}>Report Note</Text>
+            <Text style={[fonts.EngBold18, styles.headerText]}>Report Note</Text>
           </View>
           <View style={styles.modalContent}>
           {/* Select Reason */}
@@ -151,11 +153,11 @@ const ReportNoteWindow = ({ visible, onClose, onSubmit,sourceId }) => {
               setReasonModalVisible(true);
             }}
           >
-            <Text>{selectedReason}</Text>
+            <Text style={[fonts.EngMedium16, styles.cancelButtonText]}>{selectedReason}</Text>
           </TouchableOpacity>
 
           {/* Description Label */}
-          <Text style={styles.descriptionLabel}>Description</Text>
+          <Text style={[fonts.EngSemiBold16, styles.descriptionLabel]}>Description</Text>
 
           {/* Description Input */}
           <TextInput
@@ -168,10 +170,10 @@ const ReportNoteWindow = ({ visible, onClose, onSubmit,sourceId }) => {
 
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={handleClose}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={[fonts.EngMedium16, styles.cancelButtonText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.submitButtonText}>Submit</Text>
+              <Text style={[fonts.EngMedium16, styles.submitButtonText]}>Submit</Text>
             </TouchableOpacity>
           </View>
           </View>
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(145, 145, 145, 0.5)",
   },
   modalOverlayReason: {
     flex: 1,
@@ -203,17 +205,17 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 10,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 4,
+    // elevation: 5,
   },
   modalContent: {
     padding: 20, 
@@ -221,38 +223,38 @@ const styles = StyleSheet.create({
   },
   header: {
     width: "100%",
-    backgroundColor: "#FF5722",
+    backgroundColor: colors.red,
     paddingVertical: 15,
     alignItems: "center",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     marginBottom: 10,
-    borderColor: "#FF5722", 
-    borderWidth: 1,
+    // borderColor: "#FF5722", 
+    // borderWidth: 1,
   },
   headerText: {
-    color: "#000000",
+    color: colors.black,
     fontSize: 20,
-    fontWeight: "bold",
   },
   reasonModalContainer: {
     position: "absolute",
     width: "80%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 10,
     alignItems: "center",
-    borderWidth: 1,
+    // borderWidth: 1,
   },
   reasonButton: {
     paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomWidth: 1.75,
+    borderBottomColor: colors.gray_button,
     width: "100%",
     alignItems: "center",
   },
   reasonText: {
     fontSize: 16,
+    color: colors.black,
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -262,43 +264,42 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: "#E0E0E0",
-    paddingVertical: 10,
+    backgroundColor: colors.gray_button,
+    paddingVertical: 12,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 50,
     marginRight: 10,
   },
   cancelButtonText: {
-    color: "#000000",
-    fontSize: 16,
+    color: colors.black,
   },
   submitButton: {
     flex: 1,
-    backgroundColor: "#4285F4",
-    paddingVertical: 10,
+    backgroundColor: colors.blue,
+    paddingVertical: 12,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 50,
   },
   submitButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
+    color: colors.white,
   },
   selectReasonContainer: {
-    backgroundColor: "#f4ede4",
+    backgroundColor: colors.white,
     borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: 15,
     marginBottom: 15,
     width: "100%",
     alignItems: "center",
+    borderColor: colors.gray_button, 
+    borderWidth: 1.75,
   },
   descriptionLabel: {
     alignSelf: "flex-start",
     marginBottom: 5,
-    fontSize: 16,
   },
   descriptionInput: {
-    backgroundColor: "#f4ede4",
+    backgroundColor: colors.white,
     borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -306,6 +307,8 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlignVertical: "top",
     height: 80, 
+    borderColor: colors.gray_button, 
+    borderWidth: 1.75,
   },
 });
 

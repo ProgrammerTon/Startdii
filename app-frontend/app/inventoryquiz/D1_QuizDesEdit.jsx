@@ -12,29 +12,31 @@ import {
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
-import { findQuiz } from "../../services/QuizService"; 
+import { findQuiz } from "../../services/QuizService";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import Entypo from "@expo/vector-icons/Entypo";
+import RecheckBox from "../../components/recheckbox";
 const { width, height } = Dimensions.get("window");
 
 const QuizDesEdit = () => {
-  const { quizId, } = useLocalSearchParams(); 
-  const [title, setTitle] = useState(""); 
-  const [description, setDescription] = useState(""); 
-  const [tags, setTags] = useState(""); 
-  const [loading, setLoading] = useState(true); 
-  const [addErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false); 
+  const { quizId, } = useLocalSearchParams();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [addErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchQuizData = async () => {
       if (quizId) {
         try {
-          const quizData = await findQuiz(quizId); 
+          const quizData = await findQuiz(quizId);
           if (quizData) {
-            setTitle(quizData.title || ""); 
-            setDescription(quizData.description || ""); 
-            setTags(quizData.tags ? quizData.tags.join(", ") : ""); 
+            setTitle(quizData.title || "");
+            setDescription(quizData.description || "");
+            setTags(quizData.tags ? quizData.tags.join(", ") : "");
           } else {
             Alert.alert("Error", "Quiz data not found.");
             router.back();
@@ -53,6 +55,11 @@ const QuizDesEdit = () => {
     setTitle(""); // Reset title field
     setDescription(""); // Reset description field
     setTags(""); // Reset tags field
+    setModalVisible(false);
+  };
+
+  const openModal = () => {
+    setModalVisible(true);
   };
 
   const showErrorEmptyFieldWindow = () => {
@@ -71,7 +78,7 @@ const QuizDesEdit = () => {
       // Navigate to the next step (quiz questions edit page)
       router.push({
         pathname: '/inventoryquiz/D2_QuizQuestionEdit',
-        params: { quizId,title,description,tags }
+        params: { quizId, title, description, tags }
       });
     }
   };
@@ -123,9 +130,17 @@ const QuizDesEdit = () => {
         />
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.resetButton} onPress={resetFields}>
+          <TouchableOpacity style={styles.resetButton} onPress={openModal}>
             <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Reset</Text>
           </TouchableOpacity>
+          <RecheckBox
+            visible={isModalVisible}
+            onClose={() => setModalVisible(false)}
+            onYesPress={resetFields}
+            title="Are you sure you want to reset ?"
+            yes="Yes, Reset"
+            no="Cancel"
+          />
 
           <TouchableOpacity style={styles.nextButton} onPress={nextStep}>
             <Text style={[fonts.EngMedium16, styles.nextButtonText]}>Next</Text>
