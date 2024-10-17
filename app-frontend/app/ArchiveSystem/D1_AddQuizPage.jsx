@@ -13,7 +13,7 @@ import ErrorEmptyFieldWindow from "../../components/ErrorEmptyFieldWindow";
 import { useQuizContext } from "../../context/QuizProvider";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
-import RecheckBox from "../../components/recheckbox";
+import RecheckBox from "../../components/RecheckBox";
 import Entypo from "@expo/vector-icons/Entypo";
 const { width, height } = Dimensions.get("window");
 

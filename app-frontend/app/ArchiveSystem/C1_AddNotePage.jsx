@@ -23,7 +23,7 @@ import { addUserExp, addGoalProgress } from "../../services/LevelService";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import Entypo from "@expo/vector-icons/Entypo";
-import RecheckBox from "../../components/recheckbox";
+import RecheckBox from "../../components/RecheckBox";
 const { width, height } = Dimensions.get("window");
 
 const AddNotePage = () => {

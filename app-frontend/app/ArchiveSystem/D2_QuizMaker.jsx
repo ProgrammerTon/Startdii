@@ -62,7 +62,7 @@ const QuizMakerPage = () => {
 
   const Publish = async () => {
     // Transform tags from a string into an array
-    if (questions.length < 1) {
+    if (questions.length < 5) {
       Alert.alert(`You need to create at least 5 questions before publishing`);
       return;
     }

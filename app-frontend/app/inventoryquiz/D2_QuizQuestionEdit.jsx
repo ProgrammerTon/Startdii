@@ -108,7 +108,7 @@ const QuizQuestionEdit = () => {
   };
 
   const Publish = async () => {
-    if (questions.length < 1) {
+    if (questions.length < 5) {
       Alert.alert(
         "Insufficient Questions",
         "You need to create at least 5 questions before publishing."
