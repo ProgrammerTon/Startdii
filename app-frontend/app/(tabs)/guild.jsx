@@ -21,6 +21,7 @@ import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid";
 import fonts from "../../constants/font";
 import colors from "../../constants/color";
 import { FontAwesome } from "@expo/vector-icons";
+const { width, height } = Dimensions.get("window");
 
 const GuildPage = () => {
   const [guilds, setGuilds] = useState([]);
@@ -130,7 +131,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.gray_bg,
-    paddingTop: 35,
   },
   guildContainer: {
     padding: 20,
@@ -153,8 +153,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    bottom: 125,
-    right: 30,
+    bottom: height * 0.15,
+    right: width * 0.08,
     shadowColor: colors.gray_bgblur,
     shadowOffset: [{ width: 0, height: 0 }],
     shadowOpacity: 0.25,

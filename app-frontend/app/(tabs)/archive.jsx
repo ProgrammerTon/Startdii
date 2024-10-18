@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Dimensions,
   FlatList,
   RefreshControl,
 } from "react-native";
@@ -21,6 +22,7 @@ import { router, useFocusEffect } from "expo-router";
 import SafeAreaViewAndroid from "../../components/SafeAreaViewAndroid.jsx";
 import colors from "../../constants/color.js";
 import { FontAwesome } from "@expo/vector-icons";
+const { width, height } = Dimensions.get("window");
 
 const ArchiveMainPage = () => {
   const [ActiveFilter, setActiveFilter] = useState("Latest");
@@ -310,7 +312,7 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: colors.gray_bg,
     padding: 20,
-    paddingTop: 50,
+    paddingTop: 30,
     // alignItems: "center",
   },
   headerContainer: {
@@ -388,8 +390,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    bottom: 125,
-    right: 30,
+    bottom: height * 0.15,
+    right: width * 0.08,
     shadowColor: colors.gray_bgblur,
     shadowOffset: [{ width: 0, height: 0 }],
     shadowOpacity: 0.25,

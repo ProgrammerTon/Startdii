@@ -18,6 +18,8 @@ import SourceCard from "../../components/E1_SourceCard";
 import QuizCard from "../../components/F1_QuizCard";
 import { guildDetail } from "../../services/GuildService";
 import Loading from "../test_loading/test";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 const { width, height } = Dimensions.get("window");
 
 const ChatScreen = () => {
@@ -93,9 +95,9 @@ const ChatScreen = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color="#fca6cc" />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>{guild?.name}</Text>
+        <Text style={[fonts.EngBold22, styles.headerText]}>{guild?.name}</Text>
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() => router.push("/guild/I3_GuildSetting")}
@@ -233,7 +235,7 @@ const ChatScreen = () => {
           placeholder="message"
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-          <Ionicons name="send" size={24} color="#fca6cc" />
+          <Ionicons name="send" size={24} color={colors.blue} />
         </TouchableOpacity>
       </View>
     </View>
@@ -245,7 +247,7 @@ export default ChatScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: colors.gray_bg,
     justifyContent: "flex-start",
   },
   header: {
@@ -256,19 +258,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fca6cc",
+    backgroundColor: colors.pink,
   },
   backButton: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerText: {
-    fontSize: 20,
-    color: "#000",
-    fontWeight: "bold",
+    color: colors.black,
   },
   menuButton: {
     position: "absolute",
@@ -296,20 +301,20 @@ const styles = StyleSheet.create({
   },
   messageSender: {
     fontSize: 12,
-    color: "#666",
+    color: colors.gray_font,
   },
   messageBubble: {
     padding: 10,
     borderRadius: 10,
-    backgroundColor: "white",
+    backgroundColor: colors.white,
   },
   messageText: {
     fontSize: 16,
-    color: "#000",
+    color: colors.black,
   },
   messageTime: {
     fontSize: 10,
-    color: "#aaa",
+    color: colors.gray_font,
     marginTop: 2,
   },
   currentUser: {
@@ -323,11 +328,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: "#fca6cc",
+    backgroundColor: colors.pink,
   },
   input: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 8,
@@ -336,8 +341,8 @@ const styles = StyleSheet.create({
   sendButton: {
     marginLeft: 10,
     padding: 10,
-    backgroundColor: "#fff",
-    borderRadius: 20,
+    backgroundColor: colors.white,
+    borderRadius: 30,
   },
   sendButtonText: {
     fontSize: 18,

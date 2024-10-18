@@ -248,19 +248,17 @@ export default function ProfileTest() {
 
 const styles = {
   bg: {
-    height: height,
+    flex: 1,
     backgroundColor: colors.gray_bg,
   },
   toptab: {
     backgroundColor: colors.pink,
     textAlign: "center",
-    height: height * 0.10625,
+    height: height * 0.09625,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     paddingHorizontal: width * 0.1,
-    paddingTop: height * 0.025,
-    marginTop: height * 0.025,
     position: "relative",
   },
   usernameContainer: {
@@ -276,7 +274,6 @@ const styles = {
   signoutContainer: {
     position: "absolute",
     right: 20,
-    paddingTop: height * 0.025,
   },
   pencilContainer: {
     bottom: -2,

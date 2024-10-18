@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import colors from "../../constants/color";
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,7 +23,7 @@ const FriendGuildList = ({ content, isSelected = false, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 5,
@@ -30,16 +31,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#eee",
     borderRadius: 10,
-    shadowColor: "#919191",
+    shadowColor: colors.gray_bgblur,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 4,
+    elevation: 5,
     flexDirection: "row",
     justifyContent: "center",
   },
   iconStyle:{
-    alignSelf: "flex-start",
+    alignSelf: "center",
     marginRight: 10,
   },
   textWrapper: {

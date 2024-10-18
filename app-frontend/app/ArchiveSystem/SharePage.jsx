@@ -344,12 +344,13 @@ const styles = StyleSheet.create({
   },
   sharePopUp: {
     backgroundColor: "#fff",
+    height: height * 0.17,
     marginTop: height * 0.4,
     margin: 50,
     padding: 20,
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 10,
-    height: height * 0.15,
   },
   modalButtons: {
     flexDirection: "row",

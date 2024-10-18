@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image , ScrollView} from "react-native";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image , ScrollView} from "react-native";
+import { Ionicons, FontAwesome, Entypo } from "@expo/vector-icons";
 import { Redirect, router } from "expo-router";
 import ChatSearchBar from "../../components/ChatSearchBar";
 import InviteCodeWindow from "./InviteCodeWindow";
@@ -13,6 +13,7 @@ import QuizGuildPage from "./I7_QuizGuild";
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import images from "../../constants/images";
+const { width, height } = Dimensions.get("window");
 
 const GuildSettingPage = () => {
   const guildName = "Test_guild";
@@ -53,11 +54,16 @@ const GuildSettingPage = () => {
   };
 
   return (
-    <ScrollView>
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>{guildName}</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
+        </TouchableOpacity>
+        <Text style={[fonts.EngBold22, styles.headerText]}>{guild?.name}</Text>
       </View>
 
       {/* Buttons */}
@@ -66,13 +72,13 @@ const GuildSettingPage = () => {
           style={styles.button}
           onPress={() => router.push("/guild/I4_Member")}
         >
-          <FontAwesome name="users" size={24} color="green" />
-          <Text style={styles.buttonText}>MEMBER</Text>
+          <FontAwesome name="users" size={30} color={colors.blue} />
+          <Text style={[fonts.EngMedium12, styles.buttonText]}>MEMBER</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={openInviteWindow}>
-          <Ionicons name="person-add" size={24} color="green" />
-          <Text style={styles.buttonText}>INVITE</Text>
+          <Ionicons name="person-add" size={30} color={colors.blue} />
+          <Text style={[fonts.EngMedium12, styles.buttonText]}>INVITE</Text>
         </TouchableOpacity>
         <InviteCodeWindow
           visible={InviteWindowVisible}
@@ -92,8 +98,8 @@ const GuildSettingPage = () => {
         </TouchableOpacity> */}
 
         <TouchableOpacity style={styles.button} onPress={openLeaveWindow}>
-          <Ionicons name="exit-outline" size={24} color="green" />
-          <Text style={styles.buttonText}>LEAVE</Text>
+          <Ionicons name="exit-outline" size={30} color={colors.blue} />
+          <Text style={[fonts.EngMedium12, styles.buttonText]}>LEAVE</Text>
         </TouchableOpacity>
         <LeaveGuildWindow
           visible={LeaveGuildWindowVisible}
@@ -113,7 +119,7 @@ const GuildSettingPage = () => {
             })
           }
         >
-          <Text style={styles.noteQuizText}>Note</Text>
+          <Text style={[fonts.EngBold22, styles.noteQuizText]}>Note</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -125,24 +131,24 @@ const GuildSettingPage = () => {
             })
           }
         >
-          <Text style={styles.noteQuizText}>Quiz</Text>
+          <Text style={[fonts.EngBold22, styles.noteQuizText]}>Quiz</Text>
         </TouchableOpacity>
         
-        <View style={styles.guildDescriptionContainer}>
+        {/* <View style={styles.guildDescriptionContainer}>
           <Text style={styles.guildDescriptionHeader}>Guild Name</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
             {guild.name}
           </Text>
-        </View>
+        </View> */}
         <View style={styles.guildDescriptionContainer}>
-          <Text style={styles.guildDescriptionHeader}>Guild Description</Text>
+          <Text style={[fonts.EngSemiBold16, styles.guildDescriptionHeader]}>Guild Description</Text>
           <Text style={[fonts.EngMedium14, styles.description]}>
             {guild.description}
           </Text>
         </View>
       </View>
     </View>
-    </ScrollView>
+
   );
 };
 
@@ -151,45 +157,56 @@ export default GuildSettingPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.gray_bg,
     justifyContent: "flex-start",
   },
   header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fca6cc",
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    position: "relative",
     justifyContent: "center",
+    backgroundColor: colors.pink,
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 5,
   },
   headerText: {
-    color: "black",
-    fontSize: 18,
-    fontWeight: "bold",
+    color: colors.black,
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
+    gap: width * 0.02,
     marginTop: 20,
     justifyContent: "center",
   },
   button: {
-    backgroundColor: "#F2F2F2",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: "5%",
-    paddingHorizontal: "5%",
+    paddingHorizontal: "2%",
     borderRadius: 10,
     width: "20%",
     aspectRatio: 1,
     marginHorizontal: 5,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   buttonText: {
-    marginTop: 5,
-    fontSize: 8,
-    color: "black",
+    color: colors.blue,
     textAlign: "center",
+    marginTop: 5,
   },
   SearchContainer: {
     flexDirection: "row",
@@ -201,27 +218,40 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   noteQuizContainer: {
-    flexDirection: "column",
-    justifyContent: "space-around",
-    marginTop: 30,
+    // flexDirection: "column",
+    // justifyContent: "space-around",
+    marginTop: 20,
   },
   noteButton: {
-    backgroundColor: "#FFF",
+    backgroundColor: colors.white,
+    width: width * 0.7,
+    paddingVertical: 20,
     borderRadius: 10,
-    padding: 100,
+    marginTop: 5,
+    alignSelf: "center",
     alignItems: "center",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   quizButton: {
-    backgroundColor: "#FFF",
+    backgroundColor: colors.white,
+    width: width * 0.7,
+    paddingVertical: 20,
     borderRadius: 10,
-    padding: 50,
+    marginTop: 20,
+    alignSelf: "center",
     alignItems: "center",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   noteQuizText: {
-    fontSize: 30,
-    color: "black",
-    marginTop: 5,
-    fontWeight: "bold",
+    color: colors.blue,
   },
   description: {
     marginVertical: 6,
@@ -229,20 +259,17 @@ const styles = StyleSheet.create({
   guildDescriptionContainer: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: colors.gray_bg,
     borderRadius: 10,
     marginTop: 30,
     alignItems: "center",
   },
   guildDescriptionHeader: {
-    fontSize: 18,
-    fontWeight: "bold",
     marginBottom: 10,
   },
   description: {
-    fontSize: 14,
     textAlign: "center",
-    color: "gray",
+    color: colors.gray_font,
   },
   footer: {
     flexDirection: "row",

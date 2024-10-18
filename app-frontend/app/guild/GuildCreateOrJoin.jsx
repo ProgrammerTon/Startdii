@@ -7,7 +7,8 @@ import {
   Pressable,
   TouchableOpacity,
   Alert,
-  Dimensions
+  Dimensions,
+  TouchableWithoutFeedback
 } from "react-native";
 import { Redirect, router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
@@ -66,45 +67,45 @@ const CreateJoinGuild = ({ visible, onClose, loadData }) => {
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={styles.joinContainer}>
-              <Text style={[fonts.EngBold16, styles.text]}>Join</Text>
-              <TouchableOpacity
-                style={styles.InteractButton}
-                onPress={openJoinGuildJoinWindow}
-              >
-                <FontAwesome6 name="door-open" size={22} color={colors.red} />
-              </TouchableOpacity>
-            </View>
-            <GuildJoinWindow
-              visible={joinGuild}
-              onClose={closeJoinGuildWindow}
-              value={guildCode}
-              handleChangeText={handleChangeText}
-              onPress={onJoinGuild}
-            />
-
-            <View style={styles.joinContainer}>
-            <Text style={[fonts.EngBold16, styles.text]}>Create</Text>
-              <TouchableOpacity
-                style={styles.InteractButton}
-                onPress={openCreateGuildWindow}
-              >
-                <Feather name="plus-circle" size={28} color={colors.red} />
-              </TouchableOpacity>
-            </View>
-            <GuildCreateWindow
-              visible={createGuild}
-              onClose={closeCreateGuildWindow}
-              loadData={loadData}
-            />
-
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <FontAwesome name="close" size={30} color={colors.white} />
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.fullscreenOverlay}>
+          {/* This is the fullscreen touchable overlay */}
+        </View>
+      </TouchableWithoutFeedback>
+      
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <View style={styles.joinContainer}>
+            <Text style={[fonts.EngBold16, styles.text]}>Join</Text>
+            <TouchableOpacity
+              style={styles.InteractButton}
+              onPress={openJoinGuildJoinWindow}
+            >
+              <FontAwesome6 name="door-open" size={22} color={colors.red} />
             </TouchableOpacity>
           </View>
+          <GuildJoinWindow
+            visible={joinGuild}
+            onClose={closeJoinGuildWindow}
+            value={guildCode}
+            handleChangeText={handleChangeText}
+            onPress={onJoinGuild}
+          />
+
+          <View style={styles.joinContainer}>
+            <Text style={[fonts.EngBold16, styles.text]}>Create</Text>
+            <TouchableOpacity
+              style={styles.InteractButton}
+              onPress={openCreateGuildWindow}
+            >
+              <Feather name="plus-circle" size={28} color={colors.red} />
+            </TouchableOpacity>
+          </View>
+          <GuildCreateWindow
+            visible={createGuild}
+            onClose={closeCreateGuildWindow}
+            loadData={loadData}
+          />
         </View>
       </View>
     </Modal>
@@ -112,6 +113,14 @@ const CreateJoinGuild = ({ visible, onClose, loadData }) => {
 };
 
 const styles = StyleSheet.create({
+  fullscreenOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(145, 145, 145, 0.5)', // Semi-transparent background
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(145, 145, 145, 0.5)',
@@ -119,8 +128,8 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    bottom: height * 0.17,
-    right: width * -0.615,
+    bottom: height * 0.19,
+    right: width * -0.675,
   },
   modalContent: {
     width: "30%",
@@ -131,7 +140,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 10,
     bottom: 10,
-    right: -35,
   },
   InteractButton: {
     borderRadius: 30,

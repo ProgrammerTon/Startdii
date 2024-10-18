@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
+  TouchableOpacity,
   StyleSheet,
   ScrollView,
   Dimensions,
@@ -23,6 +24,9 @@ import { createCommentSource } from "../../services/CommentService";
 import { router } from "expo-router";
 import { ratingQuiz } from "../../services/QuizService";
 import { getUserRatingQuiz } from "../../services/QuizService";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -93,15 +97,15 @@ const QuizSummaryPage = ({
     setComments([...reversedComments]);
   };
 
+  const fetchRating = async () => {
+    const data = await getUserRatingQuiz(user._id, id);
+    setRatingScore(data);
+  };
+
   const onRefresh = async () => {
     await fetchQuiz();
     await fetchComments();
     await fetchRating();
-  };
-
-  const fetchRating = async () => {
-    const data = await getUserRatingQuiz(user._id, quiz._id);
-    setRatingScore(data);
   };
 
   const handleRating = async (sc) => {
@@ -135,12 +139,18 @@ const QuizSummaryPage = ({
       }
     >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Finished</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
+        </TouchableOpacity>
+        <Text style={[fonts.EngBold22, styles.headerText]}>Finished</Text>
       </View>
 
       {/* Score and progress bar container */}
       <View style={styles.scoreProgressContainer}>
-        <Text style={styles.scoreText}>
+        <Text style={[fonts.EngBold22, styles.scoreText]}>
           {score} / {quizData.length}
         </Text>
         <ScoreProgress percent={(score / quizData.length) * 100} />
@@ -152,13 +162,16 @@ const QuizSummaryPage = ({
         userAnswers={userAnswers}
         quizData={quizData}
       />
-      <RatingBlock
-        ScoreRating={Math.round(quiz?.averageScore)}
-        numComment={quiz?.count}
-      />
-      <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      <View style={styles.ratingContainer}>
+        <RatingBlock
+          ScoreRating={Math.round(quiz?.averageScore)}
+          numComment={quiz?.count}
+        />
+        <RatingBar onRatingChange={handleRating} initialRating={ratingScore} />
+      </View>
 
       {/* CommentBar with input */}
+      <View style={styles.commentContainer}>
       <CommentBar
         value={commentInput}
         handleChangeText={setCommentInput}
@@ -166,14 +179,15 @@ const QuizSummaryPage = ({
       />
 
       {/* Render all comments */}
-      {comments.map((comment, index) => (
-        <CommentBox
-          key={index}
-          username={comment.username}
-          date={comment.date}
-          comment={comment.comment}
-        />
-      ))}
+        {comments.map((comment, index) => (
+          <CommentBox
+            key={index}
+            username={comment.username}
+            date={comment.date}
+            comment={comment.comment}
+          />
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -183,25 +197,31 @@ export default QuizSummaryPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F8F8",
+    backgroundColor: colors.gray_bg,
   },
   header: {
-    backgroundColor: "#04B36E",
+    backgroundColor: colors.green,
     height: height * 0.1,
     padding: height * 0.02,
     alignItems: "center",
     justifyContent: "center",
   },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 5,
+  },
   headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 0,
+    color: colors.black,
   },
   scoreProgressContainer: {
     alignItems: "center", // Center contents horizontally
     marginVertical: 20,
   },
   scoreText: {
+    color: colors.black,
     fontSize: 40,
     marginBottom: 20,
     textAlign: "center", // Center the text
@@ -218,6 +238,14 @@ const styles = StyleSheet.create({
   },
   correctText: {
     fontSize: 16,
-    color: "green",
+    color: colors.green,
+  },
+  commentContainer: {
+    marginTop: 12,
+    marginHorizontal: width * 0.05,
+  },
+  ratingContainer: {
+    marginHorizontal: width * 0.05,
+    marginTop: 10,
   },
 });

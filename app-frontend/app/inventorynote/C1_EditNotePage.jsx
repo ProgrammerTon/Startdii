@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Dimensions,
   ScrollView,
   FlatList,
   KeyboardAvoidingView,
@@ -20,6 +21,11 @@ import { uploadFile } from "../../services/MyFileService";
 import { findSource,updateSource } from "../../services/SourceService";
 import { useLocalSearchParams } from "expo-router";
 import { router } from "expo-router";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+import Entypo from "@expo/vector-icons/Entypo";
+import RecheckBox from "../../components/RecheckBox";
+const { width, height } = Dimensions.get("window");
 const EditNotePage = () => {
   const { sourceId } = useLocalSearchParams();
   const [name, setName] = useState("");
@@ -27,7 +33,7 @@ const EditNotePage = () => {
   const [tag, setTag] = useState("");
   const [content, setContent] = useState("");
   const { user } = useGlobalContext();
-
+  const [isModalVisible, setModalVisible] = useState(false);
   const [AddUploadWindowVisible, setAddUploadWindowVisible] = useState(false);
   const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
 
@@ -67,6 +73,11 @@ const EditNotePage = () => {
     setDescription("");
     setTag("");
     setContent("");
+    setModalVisible(false);
+  };
+
+  const openModal = () => {
+    setModalVisible(true);
   };
 
   const [isPublishing, setIsPublishing] = useState(false);
@@ -161,10 +172,18 @@ const EditNotePage = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Note</Text>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
+        </TouchableOpacity>
+        <Text style={[fonts.EngBold22, styles.headerText]}>Edit Note</Text>
+      </View>
+      <ScrollView style={styles.content}>
 
-        <Text style={styles.label}>Name</Text>
+        <Text style={[fonts.EngSemiBold16, styles.label]}>Name</Text>
         <TextInput
           style={styles.input}
           value={name}
@@ -172,7 +191,7 @@ const EditNotePage = () => {
           placeholder="Name"
         />
 
-        <Text style={styles.label}>Description</Text>
+        <Text style={[fonts.EngSemiBold16, styles.label]}>Description</Text>
         <TextInput
           style={styles.textarea}
           value={description}
@@ -181,8 +200,8 @@ const EditNotePage = () => {
           multiline
         />
 
-        <Text style={styles.label}>
-          Tag (Use comma to seperate Tag. Example : KU,Mining)
+        <Text style={[fonts.EngSemiBold16, styles.label]}>
+          Tag (Use comma to seperate Tag. Ex. : KU,Mining)
         </Text>
         <TextInput
           style={styles.input}
@@ -191,7 +210,7 @@ const EditNotePage = () => {
           placeholder="Tag"
         />
 
-        <Text style={styles.label}>Content</Text>
+        <Text style={[fonts.EngSemiBold16, styles.label]}>Content</Text>
 
         <TextInput
           style={styles.textarea}
@@ -217,25 +236,33 @@ const EditNotePage = () => {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.uploadButton} onPress={pickDocuments}>
-            <Text style={styles.uploadButtonText}>Upload</Text>
+            <Text style={[fonts.EngMedium16, styles.uploadButtonText]}>Upload</Text>
           </TouchableOpacity>
           {selectedDocuments.length >= 1 ? (
             <TouchableOpacity
               style={styles.uploadButton}
               onPress={removeDocument}
             >
-              <Text style={styles.resetButton}>Cancel Upload</Text>
+              <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Cancel Upload</Text>
             </TouchableOpacity>
           ) : null}
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.resetButton} onPress={resetFields}>
-            <Text style={styles.resetButtonText}>Reset</Text>
+          <TouchableOpacity style={styles.resetButton} onPress={openModal}>
+            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Reset</Text>
           </TouchableOpacity>
+          <RecheckBox
+            visible={isModalVisible}
+            onClose={() => setModalVisible(false)}
+            onYesPress={resetFields}
+            title="Are you sure you want to reset ?"
+            yes="Yes, Reset"
+            no="Cancel"
+          />
 
           <TouchableOpacity style={styles.publishButton} onPress={Publish}>
-            <Text style={styles.publishButtonText}>Publish</Text>
+            <Text style={[fonts.EngMedium16, styles.publishButtonText]}>Publish</Text>
           </TouchableOpacity>
           <ErrorEmptyFieldWindow
             visible={AddErrorEmptyFieldWindow}
@@ -254,79 +281,91 @@ const EditNotePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#f4f4f4",
+    backgroundColor: colors.gray_bg,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
-    color: "#000",
+  header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.yellow,
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 5,
+  },
+  headerText: {
+    color: colors.black,
+  },
+  content: {
+    padding: 20
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
-    color: "#000",
+    color: colors.black,
   },
   input: {
     height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    borderColor: colors.gray_button,
+    borderWidth: 1.75,
     borderRadius: 25,
     paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
   },
   textarea: {
     height: 80,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    borderColor: colors.gray_button,
+    borderWidth: 1.75,
     borderRadius: 15,
     paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
   },
   uploadButton: {
-    width: 100,
-    height: 40,
-    backgroundColor: "#4d90fe",
+    height: 42,
+    paddingHorizontal: 25,
+    backgroundColor: colors.blue,
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 30,
   },
   uploadButtonText: {
-    color: "#fff",
-    fontSize: 16,
+    color: colors.white,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   resetButton: {
-    width: 100,
-    height: 40,
-    backgroundColor: "#ccc",
+    height: 42,
+    paddingHorizontal: 25,
+    backgroundColor: colors.gray_button,
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
   },
   resetButtonText: {
-    color: "#000",
-    fontSize: 16,
+    color: colors.black,
   },
   publishButton: {
-    width: 100,
-    height: 40,
-    backgroundColor: "#3367d6",
+    height: 42,
+    paddingHorizontal: 25,
+    backgroundColor: colors.blue,
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
   },
   publishButtonText: {
-    color: "#fff",
-    fontSize: 16,
+    color: colors.white,
   },
 });
 

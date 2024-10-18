@@ -34,6 +34,7 @@ import colors from "../../constants/color";
 import fonts from "../../constants/font";
 import BackButton from "../../components/BackButton";
 import Loading from "../test_loading/test";
+import Entypo from "@expo/vector-icons/Entypo";
 const { width, height } = Dimensions.get("window");
 
 const SumQuizPage = () => {
@@ -162,7 +163,12 @@ const SumQuizPage = () => {
   ) : (
     <View style={styles.bg}>
       <View style={styles.header}>
-        <BackButton />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
+        </TouchableOpacity>
         <Text style={[fonts.EngBold22, styles.headerTitle]}>{quiz?.title}</Text>
         <TestReport onPress={() => console.log("Report Button Pressed")} />
       </View>
@@ -271,6 +277,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: width * 0.05,
     position: "relative",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   container: {
     flex: 1,

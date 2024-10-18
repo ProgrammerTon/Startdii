@@ -29,6 +29,7 @@ import { baseUrl } from "@/constants/const";
 import { getUserRatingSource } from "../../services/SourceService";
 import TestReportNote from "../reportsystem/ReportNote";
 import { router } from "expo-router";
+import Entypo from "@expo/vector-icons/Entypo";
 const { width, height } = Dimensions.get("window");
 import colors from "../../constants/color";
 import fonts from "../../constants/font";
@@ -176,7 +177,12 @@ const SourceDetailPage = () => {
     <View style={styles.bg}>
       {/* Header */}
       <View style={styles.header}>
-        <BackButton />
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
+        </TouchableOpacity>
         <Text style={[fonts.EngBold22, styles.headerTitle]}>
           {source?.title}
         </Text>
@@ -307,6 +313,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: width * 0.05,
     position: "relative",
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   headerTitle: {
     marginLeft: width * 0.13,

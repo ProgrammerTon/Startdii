@@ -28,6 +28,15 @@ export default function SignUp() {
     confirmPassword: "",
   });
 
+  const handleWordChange = (e) => {
+    if (e.length > 20) {
+      Alert.alert("Error", "You cannot use more than 20 characters");
+    }
+    else {
+      setForm({ ...form, username: e });
+    }
+  };
+
   const submit = async () => {
     if (
       form.firstname === "" ||
@@ -154,7 +163,9 @@ export default function SignUp() {
             <FormField
               title="Username"
               value={form.username}
-              handleChangeText={(e) => setForm({ ...form, username: e })}
+              handleChangeText={(e) => {
+                handleWordChange(e);
+              }}
               otherStyles="mt-3"
             />
 

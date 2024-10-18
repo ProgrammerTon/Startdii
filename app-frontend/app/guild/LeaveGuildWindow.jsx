@@ -6,7 +6,12 @@ import {
   Modal,
   Pressable,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
+
+const { width, height } = Dimensions.get("window");
 
 const LeaveGuildWindow = ({ visible, onClose, handleLeave }) => {
   return (
@@ -19,16 +24,16 @@ const LeaveGuildWindow = ({ visible, onClose, handleLeave }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.codeText}>
-            <Text style={styles.codeTextPart1}>Do you want to </Text>
-            <Text style={styles.codeTextPart2}>Leave Guild?</Text>
+            <Text style={[fonts.EngSemiBold18, styles.codeTextPart1]}>Do you want to </Text>
+            <Text style={[fonts.EngSemiBold18, styles.codeTextPart2]}>Leave Guild ?</Text>
           </Text>
 
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={[fonts.EngMedium16, styles.cancelButtonText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.leaveButton} onPress={handleLeave}>
-              <Text style={styles.leaveButtonText}>Leave</Text>
+              <Text style={[fonts.EngMedium16, styles.leaveButtonText]}>Leave</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -42,18 +47,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: 'rgba(145, 145, 145, 0.5)',
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: "400",
     marginBottom: 10,
   },
   codeText: {
@@ -65,39 +68,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    paddingHorizontal: width * 0.12,
   },
   cancelButton: {
-    flex: 1,
-    backgroundColor: "#E0E0E0",
-    paddingVertical: 10,
+    backgroundColor: colors.gray_button,
+    height: 48,
+    paddingHorizontal: 18,
     alignItems: "center",
-    borderRadius: 5,
-    marginRight: 10,
+    justifyContent: "center",
+    borderRadius: 50,
   },
   cancelButtonText: {
-    color: "#000000",
+    color: colors.black,
     fontSize: 16,
   },
   leaveButton: {
-    flex: 1,
-    backgroundColor: "#e6401f",
-    paddingVertical: 10,
+    backgroundColor: colors.red,
+    height: 48,
+    paddingHorizontal: 18,
     alignItems: "center",
-    borderRadius: 5,
+    justifyContent: "center",
+    borderRadius: 50,
   },
   leaveButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
+    color: colors.white,
   },
   codeTextPart1: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#000000",
+    color: colors.black,
   },
   codeTextPart2: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#e6401f",
+    color: colors.red,
   },
 });
 

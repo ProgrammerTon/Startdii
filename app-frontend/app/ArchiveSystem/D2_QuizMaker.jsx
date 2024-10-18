@@ -17,8 +17,9 @@ import { createQuiz } from "../../services/QuizService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { router, useRouter } from "expo-router";
 import { addUserExp, addGoalProgress } from "../../services/LevelService";
-
-const { width } = Dimensions.get("window");
+import colors from "../../constants/color";
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get("window");
 
 const QuizMakerPage = () => {
   const { title, description, tags } = useQuizContext();
@@ -109,16 +110,26 @@ const QuizMakerPage = () => {
           throw new Error("Incomplete choices");
         }
 
+        // return {
+        //   question: questionText,
+        //   qType: selectedOption,
+        //   choices: selectedOption === "choice" ? Object.values(textInputs) : [],
+        //   answers:
+        //     selectedOption === "fill"
+        //       ? isNaN(parseFloat(value))
+        //         ? value
+        //         : parseFloat(value)
+        //       : activeButtons,
+        // };
         return {
           question: questionText,
           qType: selectedOption,
-          choices: selectedOption === "choice" ? Object.values(textInputs) : [],
+          choices:
+            selectedOption === "choice"
+              ? Object.values(textInputs).filter((choice) => choice.trim() !== "")
+              : [],
           answers:
-            selectedOption === "fill"
-              ? isNaN(parseFloat(value))
-                ? value
-                : parseFloat(value)
-              : activeButtons,
+            selectedOption === "fill" ? value : activeButtons || [],
         };
       });
 
@@ -167,22 +178,33 @@ const QuizMakerPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        //ref={listRef}
-        data={questions}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={
-          <Text style={styles.counterText}>
-            Total Questions: {questions.length}
-          </Text>
-        }
-        ListFooterComponent={
-          <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
-            <Text style={styles.plusText}>+</Text>
-          </TouchableOpacity>
-        }
-      />
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.green} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Create Quiz</Text>
+      </View>
+      <View style={styles.content}>
+        <FlatList
+          //ref={listRef}
+          data={questions}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          ListHeaderComponent={
+            <Text style={styles.counterText}>
+              Total Questions: {questions.length}
+            </Text>
+          }
+          ListFooterComponent={
+            <TouchableOpacity style={styles.addButton} onPress={addNewQuestion}>
+              <Text style={styles.plusText}>+</Text>
+            </TouchableOpacity>
+          }
+        />
+      </View>
 
       <View style={styles.buttonContainer}>
         {/*
@@ -203,8 +225,33 @@ export default QuizMakerPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#f4f4f4",
+  },
+  header: {
+    height: height * 0.1,
+    width: width,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.green,
+  },
+  backButton: {
+    position: "absolute",
+    left: width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
+  },
+  headerText: {
+    fontSize: 24,
+    color: "#000",
+    fontWeight: "bold",
+  },
+  content: {
+    height: height * 0.82,
+    padding: 20
   },
   counterText: {
     fontSize: width * 0.05, // Adjust font size based on screen width
@@ -238,7 +285,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 20,
   },
   resetButton: {
     backgroundColor: "#ccc",
@@ -265,7 +311,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
-    marginVertical: 20,
+    marginVertical: 10,
   },
   plusText: {
     color: "#fff",

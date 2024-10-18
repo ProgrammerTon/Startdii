@@ -18,10 +18,10 @@ const { width, height } = Dimensions.get("window");
 // Reason Modal Component
 const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
   const reasons = [
-    "Incorrect Information",
-    "Malicious Content",
-    "Inappropriate Content",
-    "Plagiarism",
+    "Spreading Misinformation",
+    "Disrespectful Behavior",
+    "Offensive Name",
+    "Privacy Violation",
   ];
   const startPosition = 80;
   const slideAnimation = useRef(new Animated.Value(startPosition)).current; 
@@ -65,7 +65,7 @@ const ReasonModal = ({ visible, onClose, onSelectReason, reasonButtonY }) => {
 };
 
 // Main ReportQuizWindow Component
-const ReportNoteWindow = ({ visible, onClose, onSubmit,sourceId }) => {
+const ReportUserWindow = ({ visible, onClose, onSubmit,userId }) => {
   const [reasonModalVisible, setReasonModalVisible] = useState(false);
   const [selectedReason, setSelectedReason] = useState("Select reason");
   const [description, setDescription] = useState("");
@@ -86,7 +86,7 @@ const ReportNoteWindow = ({ visible, onClose, onSubmit,sourceId }) => {
   
     try {
       const token = await getCurrentToken();
-      const targetId = sourceId;
+      const targetId = userId;
       console.log("Retrieved Token:", token || "No Token Found");
       console.log("User Token:", token);
       console.log("Retrieved Target Id:", targetId);
@@ -98,7 +98,7 @@ const ReportNoteWindow = ({ visible, onClose, onSubmit,sourceId }) => {
       const data = {
         token: token,
         targetId: targetId,
-        option: "source",
+        option: "user",
         reason: selectedReason,
         description: description,
       };
@@ -312,4 +312,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReportNoteWindow;
+export default ReportUserWindow;

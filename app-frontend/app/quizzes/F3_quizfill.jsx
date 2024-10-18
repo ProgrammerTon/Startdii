@@ -43,7 +43,7 @@ export default function QuizFill({ questionData, onSubmit, questionNumber, total
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
           <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}} onPress={()=>setCloseQuiz(true)}>
-            <AntDesign name="closecircle" size={30} color="red" />
+            <AntDesign name="closecircle" size={35} color="red" />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>

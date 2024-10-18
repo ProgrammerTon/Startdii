@@ -49,6 +49,11 @@ import colors from "../../constants/color";
 import { getOtherProfile } from "../../services/UserService";
 import { getUserLevel } from "../../services/LevelService";
 import Loading from "../test_loading/test";
+import TestReportUser from "../reportsystem/ReportUser";
+import BackButton from "../../components/BackButton";
+import Svg, { Path } from 'react-native-svg';
+import Entypo from "@expo/vector-icons/Entypo";
+const { width, height } = Dimensions.get('window');
 
 export default function ProfileTest() {
   const { id } = useLocalSearchParams();
@@ -185,11 +190,21 @@ export default function ProfileTest() {
   ) : (
     <SafeAreaView style={styles.bg}>
       <View style={styles.toptab}>
-        <TouchableOpacity style={styles.usernameContainer}>
-          <Text style={[fonts.EngBold22, styles.username]}>
-            {user?.username}
-          </Text>
+        <View style={styles.usernameContainer}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
+        <Text style={[fonts.EngBold22, styles.username]}>
+          {user?.username}
+        </Text>
+        <TestReportUser
+          userId={id} // Pass the sourceId to the report window
+          onPress={() => console.log("Report Button Pressed")}
+        />
+        </View>
       </View>
       <FlatList
         ListHeaderComponent={renderHeader}
@@ -203,17 +218,18 @@ export default function ProfileTest() {
 
 const styles = {
   bg: {
-    height: "100%",
+    flex: 1,
     backgroundColor: colors.gray_bg,
   },
   toptab: {
     backgroundColor: colors.pink,
     textAlign: "center",
-    height: "10.625%",
+    height: height * 0.1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     paddingHorizontal: 20,
+    paddingHorizontal: width * 0.1,
     position: "relative",
   },
   usernameContainer: {
@@ -221,6 +237,13 @@ const styles = {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: -width * 0.05,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 5,
   },
   username: {
     color: colors.black,
@@ -280,5 +303,11 @@ const styles = {
   text: {
     color: colors.black,
     fontSize: 20,
+  },
+  iconContainer: {
+    justifyContent: 'center', // Center the SVG vertically
+    alignItems: 'center', // Center the SVG horizontally
+    height: '100%', // Ensure container fills the button
+    width: '100%',  // Ensure container fills the button
   },
 };

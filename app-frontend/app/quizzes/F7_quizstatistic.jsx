@@ -13,6 +13,8 @@ import { router } from "expo-router";
 import PieChartQuestion from "./PieChartQuestion"; // Import the PieChartQuestion component
 import { Text as SvgText } from "react-native-svg";
 import { YAxis, XAxis } from "react-native-svg-charts";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const { width, height } = Dimensions.get("window");
 
@@ -139,7 +141,7 @@ const QuizStatistics = ({
           style={styles.closeQuiz}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color="blue" />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
         <Text style={styles.title}>Summary</Text>
       </View>

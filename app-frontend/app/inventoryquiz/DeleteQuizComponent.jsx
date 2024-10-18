@@ -3,6 +3,8 @@ import { View, TouchableOpacity, StyleSheet, Text, Modal, Alert } from 'react-na
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { deleteQuiz } from '../../services/QuizService';
 import { router } from 'expo-router';
+import colors from '../../constants/color';
+import RecheckBox from '../../components/RecheckBox';
 
 const DeleteQuizComponent = ({ quizId }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -22,11 +24,20 @@ const DeleteQuizComponent = ({ quizId }) => {
 
   return (
     <View>
-      <TouchableOpacity style={styles.reportButton} onPress={() => setModalVisible(true)}>
-        <Ionicons name="trash-bin" size={24} color="black" />
+      <TouchableOpacity style={styles.deleteButton} onPress={() => setModalVisible(true)}>
+        <Ionicons name="trash-bin" size={19} color={colors.white} />
       </TouchableOpacity>
 
-      <Modal
+      <RecheckBox
+        visible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        onYesPress={handleDelete}
+        title="Are you sure you want to delete this quiz ?"
+        yes="Yes, Delete"
+        no="Cancel"
+      />
+
+      {/* <Modal
         transparent={true}
         visible={isModalVisible}
         animationType="slide"
@@ -53,7 +64,7 @@ const DeleteQuizComponent = ({ quizId }) => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </View>
   );
 };
@@ -61,25 +72,30 @@ const DeleteQuizComponent = ({ quizId }) => {
 export default DeleteQuizComponent;
 
 const styles = StyleSheet.create({
-  reportButton: {
+  deleteButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'red',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
+    backgroundColor: colors.red,
+    paddingHorizontal: 9,
+    paddingVertical: 9,
+    borderRadius: 50,
     marginLeft: 10,
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dim background
+    backgroundColor: 'rgba(145, 145, 145, 0.5)', // Dim background
   },
   modalContent: {
     width: 300,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     borderRadius: 10,
     alignItems: 'center',
   },
@@ -96,17 +112,17 @@ const styles = StyleSheet.create({
   modalButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 50,
   },
   confirmButton: {
-    backgroundColor: 'red',
+    backgroundColor: colors.red,
     marginRight: 10,
   },
   cancelButton: {
-    backgroundColor: 'gray',
+    backgroundColor: colors.gray_button,
   },
   buttonText: {
-    color: 'white',
+    color: colors.white,
     fontWeight: 'bold',
   },
 });

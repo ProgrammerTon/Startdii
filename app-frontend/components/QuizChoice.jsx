@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import colors from '../constants/color';
+import fonts from '../constants/font';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,8 +23,8 @@ const QuizChoice = ({ content, isSelected = false, isCorrect = false, isSolution
   return (
     <TouchableOpacity onPress={onPress} disabled={isSolutionType}>
       <View style={getChoiceStyle()}>
-        {(isMultipleAnswer)? (!isCorrect && isSelected && isSolutionType)? <MaterialCommunityIcons name="close-box" size={24} color={"#F44D19"} style={styles.iconStyle}/>
-         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(isCorrect && !isSelected && isSolutionType)? "#F44D19" : (isSelected)? "#29DE91":"#bbb"} style={styles.iconStyle}/> : null}
+        {(isMultipleAnswer)? (!isCorrect && isSelected && isSolutionType)? <MaterialCommunityIcons name="close-box" size={24} color={colors.red} style={styles.iconStyle}/>
+         : <MaterialCommunityIcons name="checkbox-marked" size={24} color={(isCorrect && !isSelected && isSolutionType)? colors.red : (isSelected)? colors.green:colors.gray_button} style={styles.iconStyle}/> : null}
         <View style={styles.textWrapper}>
           <Text style={styles.textStyle}>{content}</Text>
         </View>
@@ -34,73 +36,73 @@ const QuizChoice = ({ content, isSelected = false, isCorrect = false, isSolution
 
 const styles = StyleSheet.create({
   choiceContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#04B36E", // Green border for default
+    borderColor: colors.green, // Green border for default
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
   selectedContainer: {
-    backgroundColor: "#04B36E", // Green background when selected
+    backgroundColor: colors.green, // Green background when selected
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#04B36E", // Green border for default
+    borderColor: colors.green, // Green border for default
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
   correctContainer: {
-    backgroundColor: "#04B36E", // Green background when selected
+    backgroundColor: colors.green, // Green background when selected
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#04B36E", // Green border for correct answers
+    borderColor: colors.green, // Green border for correct answers
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
   correctnotSelectedContainer: {
-    backgroundColor: "#fff", // White background when not selected
+    backgroundColor: colors.white, // White background when not selected
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#F44D19", // Red border for correct and not selected answers
+    borderColor: colors.red, // Red border for correct and not selected answers
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
   wrongSelectedContainer: {
-    backgroundColor: "#04B36E", // Green background for correct answers
+    backgroundColor: colors.green, // Green background for correct answers
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#F44D19", // Red border for wrong answers
+    borderColor: colors.red, // Red border for wrong answers
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
   wrongContainer: {
-    backgroundColor: "#F44D19", // Red background for wrong answers
+    backgroundColor: colors.red, // Red background for wrong answers
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 10,
     borderWidth: 3,
-    borderColor: "#F44D19", // Red border for wrong answers
+    borderColor: colors.red, // Red border for wrong answers
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
   },
   iconStyle:{
-    alignSelf: "flex-start",
+    alignSelf: "center",
     marginLeft: 8,
   },
   textWrapper: {
