@@ -18,6 +18,8 @@ import FriendGuildList from "./FriendGuildList";
 import { getChatList } from "../../services/ChatListService";
 import { guildList } from "../../services/GuildService";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 const { width, height } = Dimensions.get("window");
 
 export default function SharePage() {
@@ -244,7 +246,7 @@ export default function SharePage() {
           style={styles.closeQuiz}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color="blue" />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
         <Text style={styles.title}>Share with</Text>
       </View>
@@ -263,11 +265,11 @@ export default function SharePage() {
             setConfirmShare(true);
           }}
         >
-          <Text style={{ fontSize: 16, color: "#fff" }}> Share </Text>
+          <Text style={[fonts.EngMedium16, styles.fontwhite]}> Share </Text>
         </TouchableOpacity>
       </View>
       <Modal transparent={true} visible={comfirmShare}>
-        <View style={{ flex: 1, backgroundColor: "#555555aa" }}>
+        <View style={{ flex: 1, backgroundColor: "rgba(145, 145, 145, 0.5)" }}>
           <View style={styles.sharePopUp}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
               Do you want to Share?
@@ -277,14 +279,14 @@ export default function SharePage() {
                 style={styles.cancelShareButton}
                 onPress={() => setConfirmShare(false)}
               >
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>Cancel</Text>
+                <Text style={[fonts.EngMedium16, styles.fontblack]}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.confirmShareButton}
                 onPress={() => handleShare()}
               >
                 <Text
-                  style={{ fontSize: 16, fontWeight: "bold", color: "#fff" }}
+                  style={[fonts.EngMedium16, styles.fontwhite]}
                 >
                   {" "}
                   Share{" "}
@@ -303,7 +305,7 @@ const styles = StyleSheet.create({
   header: {
     height: height * 0.1,
     width: width,
-    backgroundColor: "#20AAFF",
+    backgroundColor: colors.blue,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -311,7 +313,7 @@ const styles = StyleSheet.create({
   closeQuiz: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
   },
@@ -334,16 +336,16 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     paddingHorizontal: width * 0.05,
-    paddingVertical: 10,
+    paddingVertical: 13,
     marginRight: 20,
     marginTop: height * 0.02,
     marginBottom: height * 0.05,
-    backgroundColor: "#0270ED",
-    borderRadius: 20,
+    backgroundColor: colors.blue,
+    borderRadius: 50,
     alignSelf: "flex-end",
   },
   sharePopUp: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     height: height * 0.17,
     marginTop: height * 0.4,
     margin: 50,
@@ -358,15 +360,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   cancelShareButton: {
-    backgroundColor: "#bbb",
-    borderRadius: 20,
-    padding: 10,
+    backgroundColor: colors.gray_button,
+    borderRadius: 50,
+    paddingVertical: 13,
+    paddingHorizontal: 18,
     marginHorizontal: 20,
   },
   confirmShareButton: {
-    backgroundColor: "#0270ED",
-    borderRadius: 20,
-    padding: 10,
+    backgroundColor: colors.blue,
+    borderRadius: 50,
+    paddingVertical: 13,
+    paddingHorizontal: 18,
     marginHorizontal: 20,
+  },
+  fontwhite: {
+    color: colors.white,
+  },
+  fontblack: {
+    color: colors.black,
   },
 });

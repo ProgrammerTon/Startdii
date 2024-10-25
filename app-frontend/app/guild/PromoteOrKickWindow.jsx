@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
+import colors from "../../constants/color";
 
 const PromoteOrKickWindow = ({
   visible,
@@ -49,11 +50,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(145, 145, 145, 0.5)",
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
@@ -65,37 +66,37 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: colors.gray_button,
     paddingVertical: 10,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 10,
     marginRight: 10,
   },
   cancelButtonText: {
-    color: "#000000",
+    color: colors.black,
     fontSize: 16,
   },
   promoteButton: {
     flex: 1,
-    backgroundColor: "#4CAF50",
+    backgroundColor: colors.green,
     paddingVertical: 10,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 10,
     marginRight: 10,
   },
   promoteButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 16,
   },
   kickButton: {
     flex: 1,
-    backgroundColor: "#e6401f",
+    backgroundColor: colors.red,
     paddingVertical: 10,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 10,
   },
   kickButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 16,
   },
 });

@@ -72,7 +72,7 @@ const QuizGuildPage = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color={colors.green} />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Quiz</Text>
       </View>

@@ -13,6 +13,7 @@ import QuizChoice from "../../components/QuizChoice";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from "expo-router";
 import {Stack} from "expo-router";
+import colors from "../../constants/color";
 const { width, height } = Dimensions.get('window');
 
 export default function QuizFill({ questionData, onSubmit, questionNumber, totalQuestions  }) {
@@ -42,8 +43,8 @@ export default function QuizFill({ questionData, onSubmit, questionNumber, total
     <View style={styles.container}>
       <View style={styles.topPart}>
         <View style={styles.closeQuiz}>
-          <TouchableOpacity style={{backgroundColor: "#fff", borderRadius:30}} onPress={()=>setCloseQuiz(true)}>
-            <AntDesign name="closecircle" size={35} color="red" />
+          <TouchableOpacity style={{backgroundColor: colors.white, borderRadius:30}} onPress={()=>setCloseQuiz(true)}>
+            <AntDesign name="closecircle" size={35} color={colors.red} />
           </TouchableOpacity>
         </View>
         <View style={styles.quizNumber}>
@@ -67,12 +68,12 @@ export default function QuizFill({ questionData, onSubmit, questionNumber, total
         </View>
         <View>
           <TouchableOpacity style={styles.nextButton} onPress={() => onSubmit([userInput])}>
-            <Text style={{fontSize: 16, color: "#fff"}}> Next </Text>
+            <Text style={{fontSize: 16, color: colors.white}}> Next </Text>
           </TouchableOpacity>
         </View>
       </View>
       <Modal transparent={true} visible={closeQuiz}>
-        <View style={{flex: 1, backgroundColor: "#555555aa"}}>
+        <View style={{flex: 1, backgroundColor: "rgba(145, 145, 145, 0.5)"}}>
           <View style={styles.leaveQuizPopUp}>
             <View>
               <Text style={{fontSize: 20, fontWeight: "bold"}}> Do you want to Leave Quiz? </Text>
@@ -82,7 +83,7 @@ export default function QuizFill({ questionData, onSubmit, questionNumber, total
                 <Text style={{fontSize: 16, fontWeight: "bold"}}> Cancel </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.leaveQuizButton} onPress={() => router.back()}>
-                <Text style={{fontSize: 16, fontWeight: "bold", color: "#fff"}}> Leave </Text>
+                <Text style={{fontSize: 16, fontWeight: "bold", color: colors.white}}> Leave </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -95,7 +96,7 @@ export default function QuizFill({ questionData, onSubmit, questionNumber, total
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#eee",
+    backgroundColor: colors.gray_bg,
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: '1%',
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
   topPart:{
     height: height * 0.3,
     width: width,
-    backgroundColor: "#04B36E",
+    backgroundColor: colors.green,
   },
   bottomPart:{
     height: height * 0.7,
@@ -119,9 +120,9 @@ const styles = StyleSheet.create({
   },
   quizNumber:{
     alignSelf: "center",
-    backgroundColor: "#ddd",
-    padding:7,
-    paddingHorizontal:15,
+    backgroundColor: colors.gray_button,
+    padding: 8,
+    paddingHorizontal: 15,
     marginTop: -height * 0.2,
     marginBottom: height * 0.08,
     zIndex: 1,
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     //flex: 1,
     width: width * 0.9,
     height: height * 0.25,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -138,9 +139,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: width * 0.05,
     marginVertical: -height * 0.1,
     borderRadius:10,
-    borderWidth:2,
-    borderColor:"black",
-    borderStyle:"solid",
+    shadowColor: colors.gray_bgblur,
+    shadowOffset: [{ width: 0, height: 0 }],
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   textNumber:{
     fontSize: 20,
@@ -164,7 +167,7 @@ const styles = StyleSheet.create({
     paddingVertical:10,
     marginRight:20,
     marginVertical: -height * 0.15,
-    backgroundColor: "#0270ED", 
+    backgroundColor: colors.blue, 
     borderRadius:20,
     alignSelf: "flex-end",
   },
@@ -172,13 +175,13 @@ const styles = StyleSheet.create({
     height: 100,
     marginTop: 10,
     borderWidth: 3,
-    borderColor:"#04B36E", // Green
+    borderColor: colors.green,
     borderStyle:"solid",
     borderRadius:10,
     fontSize: 20,
     paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     justifyContent: "center",
     //niggaalignSelf: "center",
   },
@@ -193,7 +196,7 @@ const styles = StyleSheet.create({
     paddingVertical:10,
     marginVertical: 5,
     marginHorizontal: 20,
-    backgroundColor: "#bbb",
+    backgroundColor: colors.gray_button,
     paddingHorizontal: width * 0.05,
     borderRadius:20,
   },
@@ -202,12 +205,12 @@ const styles = StyleSheet.create({
     paddingVertical:10,
     marginVertical: 5,
     marginHorizontal: 20,
-    backgroundColor: "#F44D19",
+    backgroundColor: colors.red,
     paddingHorizontal: width * 0.05,
     borderRadius:20,
   },
   leaveQuizPopUp:{
-    backgroundColor: "#fff", 
+    backgroundColor: colors.white, 
     marginTop: height*0.4, 
     margin:50, 
     padding: 20, 
