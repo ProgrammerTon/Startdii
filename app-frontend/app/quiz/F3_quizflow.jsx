@@ -57,8 +57,16 @@ const QuizFlow = () => {
 
   const handleAnswerSubmit = (userAnswer) => {
     const correctAnswer = quizData[currentQuestion].answer;
-    const isCorrect =
-      JSON.stringify(correctAnswer) === JSON.stringify(userAnswer.map(Number));
+    //console.log(JSON.stringify(correctAnswer));
+    //console.log(JSON.stringify(userAnswer.map(Number)));
+    const correctAnswerArray = Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
+    const isCorrect = JSON.stringify(correctAnswerArray) === JSON.stringify(userAnswer.map(Number));
+    // if (quizData[currentQuestion].qtype === 'fill'){
+    //   console.log("YOU ARE FILL");
+    //   const correctAnswerArray = Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
+    //   console.log(JSON.stringify(correctAnswerArray));
+    //   isCorrect = JSON.stringify(correctAnswerArray) === JSON.stringify(userAnswer.map(Number));
+    // }
     const updatedAnswers = [...eachQuestionAnswers];
     updatedAnswers[currentQuestion] = isCorrect ? 1 : 0;
     setEachQuestionAnswers(updatedAnswers);

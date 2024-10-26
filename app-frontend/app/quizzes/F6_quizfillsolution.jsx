@@ -38,9 +38,17 @@ export default function QuizFillSolution() {
   const { questionData, questionAnswer, questionNumber, totalQuestions } = useLocalSearchParams();
   const parsedQuestionData = JSON.parse(questionData);
   const parsedQuestionAnswer = parseInt(JSON.parse(questionAnswer));
-
+  //parsedQuestionAnswer = isNaN(parsedQuestionAnswer) ? undefined : parsedQuestionAnswer;
+  const parsedCorrectQuestionAnswer = (parseInt(parsedQuestionData.answer === undefined) ? NaN : parseInt(parsedQuestionData.answer));
+  let isCorrectTrue = (parsedQuestionAnswer !== parsedCorrectQuestionAnswer);
+  if (isNaN(parsedCorrectQuestionAnswer) && isNaN(parsedQuestionAnswer)) {
+    console.log("This Question has NaN Answer and User input NaN Answer");
+    isCorrectTrue = false;
+  }
+  console.log("Correct or Not : ",isCorrectTrue);
   console.log("Question Data : ", parsedQuestionData);
   console.log("Array of users Answer: ", parsedQuestionAnswer);
+  console.log("Question Answer: ",parsedCorrectQuestionAnswer);
   console.log("QNum = ", questionNumber);
   console.log("Total =", totalQuestions);
   return (
@@ -64,19 +72,19 @@ export default function QuizFillSolution() {
       
       <View style={styles.bottomPart}>
         <View style={styles.choice}>
-          {parsedQuestionAnswer !== parseInt(parsedQuestionData.answer) &&
+          {isCorrectTrue &&
             <Text style={[fonts.EngSemiBold18, styles.textStyle]}>Your Answer :</Text>
           }
           <QuizChoice
             content={parsedQuestionAnswer}
             isSelected={true}
             onPress={() => (null)}
-            isCorrect={parsedQuestionAnswer === parseInt(parsedQuestionData.answer)}
+            isCorrect={!isCorrectTrue}
             isMultipleAnswer={false}
             isSolutionType={true}
             isFillType={true}
           />
-          {parsedQuestionAnswer !== parseInt(parsedQuestionData.answer) &&
+          {isCorrectTrue &&
             <View style={{ marginTop: 10 }}>
               <Text style={[fonts.EngSemiBold18, styles.textStyle]}>Corrected Answer :</Text>
               <QuizChoice
