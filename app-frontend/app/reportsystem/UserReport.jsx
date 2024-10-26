@@ -140,7 +140,7 @@ const ReportUserWindow = ({ visible, onClose, onSubmit,userId }) => {
         <View style={styles.modalContainer}>
           {/* Orange Header with rounded corners */}
           <View style={styles.header}>
-            <Text style={[fonts.EngBold18, styles.headerText]}>Report Note</Text>
+            <Text style={[fonts.EngBold18, styles.headerText]}>Report User</Text>
           </View>
           <View style={styles.modalContent}>
           {/* Select Reason */}
