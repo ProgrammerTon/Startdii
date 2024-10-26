@@ -102,10 +102,13 @@ const ArchiveMainPage = () => {
           }
         } else {
           if (ActiveFilter === "Favorite") {
+            //console.log("Quiz Favorite");
             const fav_quizzes = await getFavoriteQuiz(user._id);
+            console.log("",fav_quizzes.favorite_quizzes);
             setData(fav_quizzes.favorite_quizzes.reverse());
           } else {
             const quizs = await getQuiz(of, sortOrder, title, tags, ActiveFilter);
+            console.log("",quizs);
             if (quizs?.length !== 0) {
               setData(reset ? quizs : [...data, ...quizs]);
               setOffset(of + 1);
