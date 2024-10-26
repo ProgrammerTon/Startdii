@@ -504,7 +504,7 @@ export default function DressTest() {
             }
           }}
         >
-          <Entypo name="chevron-left" size={30} color={colors.pink} />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
         <Text style={[fonts.EngBold22, styles.headerText]}>Dressing Room</Text>
       </View>

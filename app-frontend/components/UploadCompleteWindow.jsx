@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Modal, TouchableWithoutFeedback, Pressable } from 'react-native';
+import colors from '../constants/color';
 
 const UploadCompleteWindow = ({ visible, onClose }) => {
   return (
@@ -25,20 +26,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: "rgba(145, 145, 145, 0.5)", 
   },
   modalText: {
     fontSize: 18,
     marginBottom: 15,
   },
   InteractButton: {
-    backgroundColor: '#f0f572',
+    backgroundColor: colors.yellow,
     paddingHorizontal: 30,
     paddingVertical: 30,
     borderRadius: 10,
   },
   InteractButtonText: {
-    color: '#000000',
+    color: colors.black,
     fontSize: 20,
   },
 });

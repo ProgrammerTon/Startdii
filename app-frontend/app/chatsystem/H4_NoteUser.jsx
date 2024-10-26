@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
-    color: "#000",
+    color: colors.black,
     fontWeight: "bold",
   },
   sourceList: {
