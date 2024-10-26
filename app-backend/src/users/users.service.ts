@@ -32,7 +32,9 @@ export class UsersService {
     user.roles = [Role.Customer];
     user.password = await this.hashPassword(user.password);
     const createdUser = new this.userModel(user);
-    await this.progressionsService.createGoalForNewUser(createdUser._id as ObjectId);
+    await this.progressionsService.createGoalForNewUser(
+      createdUser._id as ObjectId,
+    );
     return createdUser.save();
   }
 
@@ -196,18 +198,32 @@ export class UsersService {
   }
 
   async getFavoriteSources(userId: ObjectId) {
-    return await this.userModel
+    const data = await this.userModel
       .findById(userId)
       .select('favorite_sources')
-      .populate('favorite_sources')
+      .populate({
+        path: 'favorite_sources',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
       .exec();
+    console.log(data);
+    return data;
   }
 
   async getFavoriteQuizzes(userId: ObjectId) {
     return await this.userModel
       .findById(userId)
       .select('favorite_quizzes')
-      .populate('favorite_quizzes')
+      .populate({
+        path: 'favorite_quizzes',
+        populate: {
+          path: 'ownerId',
+          select: 'username',
+        },
+      })
       .exec();
   }
 
