@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
 import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const PromoteOrKickWindow = ({
   visible,
@@ -20,7 +21,7 @@ const PromoteOrKickWindow = ({
         <View style={styles.modalContainer}>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={[fonts.EngMedium16, styles.cancelButtonText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.promoteButton}
@@ -28,7 +29,7 @@ const PromoteOrKickWindow = ({
                 handlePromote(userId);
               }}
             >
-              <Text style={styles.promoteButtonText}>Promote</Text>
+              <Text style={[fonts.EngMedium16, styles.promoteButtonText]}>Promote</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.kickButton}
@@ -36,7 +37,7 @@ const PromoteOrKickWindow = ({
                 handleKick(userId);
               }}
             >
-              <Text style={styles.kickButtonText}>Kick</Text>
+              <Text style={[fonts.EngMedium16, styles.kickButtonText]}>Kick</Text>
             </TouchableOpacity>
           </View>
         </View>
