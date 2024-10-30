@@ -243,7 +243,7 @@ const EditNotePage = () => {
               style={styles.uploadButton}
               onPress={removeDocument}
             >
-              <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Cancel Upload</Text>
+              <Text style={[fonts.EngMedium16, styles.uploadButtonText]}>Cancel Upload</Text>
             </TouchableOpacity>
           ) : null}
         </View>
@@ -304,7 +304,8 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   content: {
-    padding: 20
+    padding: 20,
+    paddingBottom: 30
   },
   label: {
     fontSize: 16,
@@ -336,7 +337,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 10,
   },
   uploadButtonText: {
     color: colors.white,
@@ -344,6 +345,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingBottom: 30
   },
   resetButton: {
     height: 42,
