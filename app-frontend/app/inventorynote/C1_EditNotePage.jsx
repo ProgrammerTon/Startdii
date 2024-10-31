@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -18,7 +18,7 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import * as DocumentPicker from "expo-document-picker";
 import { Image } from "expo-image";
 import { uploadFile } from "../../services/MyFileService";
-import { findSource,updateSource } from "../../services/SourceService";
+import { findSource, updateSource } from "../../services/SourceService";
 import { useLocalSearchParams } from "expo-router";
 import { router } from "expo-router";
 import colors from "../../constants/color";
@@ -35,15 +35,16 @@ const EditNotePage = () => {
   const { user } = useGlobalContext();
   const [isModalVisible, setModalVisible] = useState(false);
   const [AddUploadWindowVisible, setAddUploadWindowVisible] = useState(false);
-  const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
+  const [AddErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] =
+    useState(false);
 
   useEffect(() => {
     const fetchSource = async () => {
-      const data = await findSource(sourceId); 
+      const data = await findSource(sourceId);
       if (data) {
         setName(data.title);
         setDescription(data.description);
-        setTag(data.tags.join(",")); 
+        setTag(data.tags.join(","));
         setContent(data.content);
       }
     };
@@ -85,23 +86,23 @@ const EditNotePage = () => {
   const Publish = async () => {
     if (isPublishing) return;
     setIsPublishing(true);
-  
+
     // Check if all the required fields are not null or empty
     if (!name || !description || !content || !tag) {
       Alert.alert("Error", "Please fill in all the fields.");
       setIsPublishing(false);
       return;
     }
-  
+
     const updatedData = {
       ...(name && { title: name }),
       ...(description && { description }),
       ...(content && { content }),
       ...(tag && { tags: tag.split(",") }),
     };
-  
+
     try {
-      const res = await updateSource(sourceId, updatedData); 
+      const res = await updateSource(sourceId, updatedData);
       if (res) {
         ShowUploadComplete();
       } else {
@@ -114,7 +115,7 @@ const EditNotePage = () => {
       setIsPublishing(false);
     }
   };
-  
+
   //---File Upload---//
   const [selectedDocuments, setSelectedDocuments] = useState([]);
 
@@ -182,7 +183,6 @@ const EditNotePage = () => {
         <Text style={[fonts.EngBold22, styles.headerText]}>Edit Note</Text>
       </View>
       <ScrollView style={styles.content}>
-
         <Text style={[fonts.EngSemiBold16, styles.label]}>Name</Text>
         <TextInput
           style={styles.input}
@@ -236,21 +236,27 @@ const EditNotePage = () => {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.uploadButton} onPress={pickDocuments}>
-            <Text style={[fonts.EngMedium16, styles.uploadButtonText]}>Upload</Text>
+            <Text style={[fonts.EngMedium16, styles.uploadButtonText]}>
+              Upload
+            </Text>
           </TouchableOpacity>
           {selectedDocuments.length >= 1 ? (
             <TouchableOpacity
               style={styles.uploadButton}
               onPress={removeDocument}
             >
-              <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Cancel Upload</Text>
+              <Text style={[fonts.EngMedium16, styles.resetButtonText]}>
+                Cancel Upload
+              </Text>
             </TouchableOpacity>
           ) : null}
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.resetButton} onPress={openModal}>
-            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Reset</Text>
+            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>
+              Reset
+            </Text>
           </TouchableOpacity>
           <RecheckBox
             visible={isModalVisible}
@@ -262,7 +268,9 @@ const EditNotePage = () => {
           />
 
           <TouchableOpacity style={styles.publishButton} onPress={Publish}>
-            <Text style={[fonts.EngMedium16, styles.publishButtonText]}>Publish</Text>
+            <Text style={[fonts.EngMedium16, styles.publishButtonText]}>
+              Publish
+            </Text>
           </TouchableOpacity>
           <ErrorEmptyFieldWindow
             visible={AddErrorEmptyFieldWindow}
@@ -304,7 +312,7 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   content: {
-    padding: 20
+    padding: 20,
   },
   label: {
     fontSize: 16,
