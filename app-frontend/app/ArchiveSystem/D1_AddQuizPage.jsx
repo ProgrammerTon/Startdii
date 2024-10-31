@@ -65,7 +65,6 @@ const AddQuizPage = () => {
         <Text style={[fonts.EngBold22, styles.headerText]}>Create Quiz</Text>
       </View>
       <ScrollView style={styles.content}>
-
         <Text style={[fonts.EngSemiBold16, styles.label]}>Name</Text>
         <TextInput
           style={styles.input}
@@ -93,7 +92,9 @@ const AddQuizPage = () => {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.resetButton} onPress={openModal}>
-            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Reset</Text>
+            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>
+              Reset
+            </Text>
           </TouchableOpacity>
           <RecheckBox
             visible={isModalVisible}
@@ -105,7 +106,9 @@ const AddQuizPage = () => {
           />
 
           <TouchableOpacity style={styles.publishButton} onPress={Next}>
-            <Text style={[fonts.EngMedium16, styles.publishButtonText]}>Next</Text>
+            <Text style={[fonts.EngMedium16, styles.publishButtonText]}>
+              Next
+            </Text>
           </TouchableOpacity>
           <ErrorEmptyFieldWindow
             visible={AddErrorEmptyFieldWindow}
@@ -143,7 +146,7 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   content: {
-    padding: 20
+    padding: 20,
   },
   label: {
     fontSize: 16,

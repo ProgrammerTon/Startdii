@@ -102,7 +102,7 @@ const AddNotePage = () => {
         return;
       }
       addUserExp(user._id, 80);
-      addGoalProgress(user._id, 'post_source')
+      addGoalProgress(user._id, "post_source");
       ShowUploadComplete();
       resetFields();
       setIsPublishing(false); // Reset state after successful submission
@@ -176,8 +176,6 @@ const AddNotePage = () => {
         <Text style={[fonts.EngBold22, styles.headerText]}>Create Note</Text>
       </View>
       <ScrollView style={styles.content}>
-        
-
         <Text style={[fonts.EngSemiBold16, styles.label]}>Name</Text>
         <TextInput
           style={styles.input}
@@ -231,21 +229,27 @@ const AddNotePage = () => {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.uploadButton} onPress={pickDocuments}>
-            <Text style={[fonts.EngMedium16, styles.uploadButtonText]}>Upload</Text>
+            <Text style={[fonts.EngMedium16, styles.uploadButtonText]}>
+              Upload
+            </Text>
           </TouchableOpacity>
           {selectedDocuments.length >= 1 ? (
             <TouchableOpacity
               style={styles.uploadButton}
               onPress={removeDocument}
             >
-              <Text style={[fonts.EngMedium16, styles.uploadButtonText]}>Cancel Upload</Text>
+              <Text style={[fonts.EngMedium16, styles.uploadButtonText]}>
+                Cancel Upload
+              </Text>
             </TouchableOpacity>
           ) : null}
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.resetButton} onPress={openModal}>
-            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Reset</Text>
+            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>
+              Reset
+            </Text>
           </TouchableOpacity>
           <RecheckBox
             visible={isModalVisible}
@@ -257,7 +261,9 @@ const AddNotePage = () => {
           />
 
           <TouchableOpacity style={styles.publishButton} onPress={Publish}>
-            <Text style={[fonts.EngMedium16, styles.publishButtonText]}>Publish</Text>
+            <Text style={[fonts.EngMedium16, styles.publishButtonText]}>
+              Publish
+            </Text>
           </TouchableOpacity>
           <ErrorEmptyFieldWindow
             visible={AddErrorEmptyFieldWindow}
@@ -300,7 +306,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   label: {
     fontSize: 16,
@@ -340,7 +346,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   resetButton: {
     height: 42,

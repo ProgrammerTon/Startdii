@@ -1,30 +1,40 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Modal, Alert } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { deleteSource } from '../../services/SourceService';
-import { router } from 'expo-router';
-import colors from '../../constants/color';
-import RecheckBox from '../../components/RecheckBox';
+import React, { useState } from "react";
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  Modal,
+  Alert,
+} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { deleteSource } from "../../services/SourceService";
+import { router } from "expo-router";
+import colors from "../../constants/color";
+import RecheckBox from "../../components/RecheckBox";
 
 const DeleteNoteComponent = ({ sourceId }) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const handleDelete = async () => {
     const result = await deleteSource(sourceId);
-    
+
     if (result) {
       Alert.alert("Success", "Source deleted successfully");
       router.back();
     } else {
       Alert.alert("Error", "An error occurred while deleting");
     }
-    
+
     setModalVisible(false);
   };
 
   return (
     <View>
-      <TouchableOpacity style={styles.deleteButton} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => setModalVisible(true)}
+      >
         <Ionicons name="trash-bin" size={19} color={colors.white} />
       </TouchableOpacity>
 
@@ -73,8 +83,8 @@ export default DeleteNoteComponent;
 
 const styles = StyleSheet.create({
   deleteButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: colors.red,
     paddingHorizontal: 9,
     paddingVertical: 9,
@@ -88,26 +98,26 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(145, 145, 145, 0.5)', // Dim background
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(145, 145, 145, 0.5)", // Dim background
   },
   modalContent: {
     width: 300,
     padding: 20,
     backgroundColor: colors.white,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
   },
   modalButton: {
     paddingVertical: 10,
@@ -123,6 +133,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.white,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

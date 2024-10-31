@@ -20,12 +20,13 @@ import RecheckBox from "../../components/RecheckBox";
 const { width, height } = Dimensions.get("window");
 
 const QuizDesEdit = () => {
-  const { quizId, } = useLocalSearchParams();
+  const { quizId } = useLocalSearchParams();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [loading, setLoading] = useState(true);
-  const [addErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] = useState(false);
+  const [addErrorEmptyFieldWindow, setAddErrorEmptyFieldWindow] =
+    useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const QuizDesEdit = () => {
   };
 
   const openModal = () => {
-    console.log("Opening modal");  
+    console.log("Opening modal");
     setModalVisible(true);
   };
 
@@ -73,13 +74,17 @@ const QuizDesEdit = () => {
 
   const nextStep = () => {
     // Validate that all fields are filled
-    if (title.trim() === "" || description.trim() === "" || tags.trim() === "") {
+    if (
+      title.trim() === "" ||
+      description.trim() === "" ||
+      tags.trim() === ""
+    ) {
       showErrorEmptyFieldWindow();
     } else {
       // Navigate to the next step (quiz questions edit page)
       router.push({
-        pathname: '/inventoryquiz/D2_QuizQuestionEdit',
-        params: { quizId, title, description, tags }
+        pathname: "/inventoryquiz/D2_QuizQuestionEdit",
+        params: { quizId, title, description, tags },
       });
     }
   };
@@ -104,7 +109,6 @@ const QuizDesEdit = () => {
         <Text style={[fonts.EngBold22, styles.headerText]}>Edit Quiz</Text>
       </View>
       <ScrollView style={styles.content}>
-
         <Text style={[fonts.EngSemiBold16, styles.label]}>Name</Text>
         <TextInput
           style={styles.input}
@@ -122,7 +126,9 @@ const QuizDesEdit = () => {
           multiline
         />
 
-        <Text style={[fonts.EngSemiBold16, styles.label]}>Tag (Use comma to seperate Tag. Ex. : KU,Mining)</Text>
+        <Text style={[fonts.EngSemiBold16, styles.label]}>
+          Tag (Use comma to seperate Tag. Ex. : KU,Mining)
+        </Text>
         <TextInput
           style={styles.input}
           value={tags}
@@ -132,7 +138,9 @@ const QuizDesEdit = () => {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.resetButton} onPress={openModal}>
-            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>Reset</Text>
+            <Text style={[fonts.EngMedium16, styles.resetButtonText]}>
+              Reset
+            </Text>
           </TouchableOpacity>
           <RecheckBox
             visible={isModalVisible}
@@ -189,7 +197,7 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   content: {
-    padding: 20
+    padding: 20,
   },
   loadingContainer: {
     flex: 1,
