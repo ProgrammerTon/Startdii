@@ -118,6 +118,11 @@ const ChatScreen = () => {
                 const fav = user?.favorite_sources?.includes(item?.source._id)
                   ? true
                   : false;
+                const datenow = new Date();
+                const createdAt = new Date(item?.source?.createdAt);
+                const diffTime = Math.abs(datenow - createdAt);
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const result = diffDays < 1 ? 1 : diffDays;
                 return (
                   <View>
                     <View
@@ -138,6 +143,7 @@ const ChatScreen = () => {
                       tags={item?.source.tags}
                       rating={item?.source.avg_rating_score}
                       isFavorite={fav}
+                      date={result}
                     />
                     <View
                       style={[
@@ -156,6 +162,11 @@ const ChatScreen = () => {
                 const fav = user?.favorite_quizzes?.includes(item?.quiz._id)
                   ? true
                   : false;
+                const datenow = new Date();
+                const createdAt = new Date(item?.quiz?.createdAt);
+                const diffTime = Math.abs(datenow - createdAt);
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const result = diffDays < 1 ? 1 : diffDays;
                 return (
                   <View>
                     <View
@@ -176,6 +187,7 @@ const ChatScreen = () => {
                       tags={item?.quiz.tags}
                       rating={item?.quiz.avg_rating_score}
                       isFavorite={fav}
+                      date={result}
                     />
                     <View
                       style={[
