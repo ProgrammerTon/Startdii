@@ -23,6 +23,8 @@ import {
   guildDetail,
 } from "../../services/GuildService";
 import Entypo from "@expo/vector-icons/Entypo";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 const { width, height } = Dimensions.get("window");
 
 const MemberScreen = () => {
@@ -139,7 +141,7 @@ const MemberScreen = () => {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Entypo name="chevron-left" size={30} color="#fca6cc" />
+          <Entypo name="chevron-left" size={30} color={colors.blue} />
         </TouchableOpacity>
         <Text style={styles.headerText}>MEMBER</Text>
       </View>
@@ -170,7 +172,7 @@ export default MemberScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: colors.gray_bg,
   },
   header: {
     height: height * 0.1,
@@ -180,23 +182,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fca6cc",
+    backgroundColor: colors.pink,
   },
   backButton: {
     position: "absolute",
     left: width * 0.05,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 20,
     padding: 5,
   },
   headerText: {
     fontSize: 20,
-    color: "#000",
+    color: colors.black,
     fontWeight: "bold",
   },
   memberContainer: {
     flex: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    // paddingHorizontal: 15,
+    paddingVertical: 20,
   },
 });

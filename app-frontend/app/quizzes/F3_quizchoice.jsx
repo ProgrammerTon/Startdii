@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginVertical: 5,
     marginHorizontal: 20,
-    backgroundColor: "#bbb",
+    backgroundColor: colors.gray_button,
     paddingHorizontal: width * 0.05,
     borderRadius: 20,
   },

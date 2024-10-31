@@ -1,5 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
+import colors from "../../constants/color";
+import fonts from "../../constants/font";
 
 const PromoteOrKickWindow = ({
   visible,
@@ -19,7 +21,7 @@ const PromoteOrKickWindow = ({
         <View style={styles.modalContainer}>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={[fonts.EngMedium16, styles.cancelButtonText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.promoteButton}
@@ -27,7 +29,7 @@ const PromoteOrKickWindow = ({
                 handlePromote(userId);
               }}
             >
-              <Text style={styles.promoteButtonText}>Promote</Text>
+              <Text style={[fonts.EngMedium16, styles.promoteButtonText]}>Promote</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.kickButton}
@@ -35,7 +37,7 @@ const PromoteOrKickWindow = ({
                 handleKick(userId);
               }}
             >
-              <Text style={styles.kickButtonText}>Kick</Text>
+              <Text style={[fonts.EngMedium16, styles.kickButtonText]}>Kick</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -49,11 +51,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(145, 145, 145, 0.5)",
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
@@ -65,37 +67,37 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: colors.gray_button,
     paddingVertical: 10,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 10,
     marginRight: 10,
   },
   cancelButtonText: {
-    color: "#000000",
+    color: colors.black,
     fontSize: 16,
   },
   promoteButton: {
     flex: 1,
-    backgroundColor: "#4CAF50",
+    backgroundColor: colors.green,
     paddingVertical: 10,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 10,
     marginRight: 10,
   },
   promoteButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 16,
   },
   kickButton: {
     flex: 1,
-    backgroundColor: "#e6401f",
+    backgroundColor: colors.red,
     paddingVertical: 10,
     alignItems: "center",
-    borderRadius: 5,
+    borderRadius: 10,
   },
   kickButtonText: {
-    color: "#ffffff",
+    color: colors.white,
     fontSize: 16,
   },
 });
